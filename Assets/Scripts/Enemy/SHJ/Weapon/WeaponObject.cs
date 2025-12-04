@@ -2,13 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-[CreateAssetMenu(menuName = "Enemy/Enemy Data", fileName = "New Enemy")]
-public class EnemyObject : ScriptableObject
+[CreateAssetMenu(menuName = "Weapon/EnemyWeapon Data", fileName = "New EnemyWeapon")]
+public class WeaponObject : ScriptableObject
 {
-
-    
-    
     [Header("외형")]
     public GameObject prefab;
     [Header("이름")]
@@ -18,10 +14,4 @@ public class EnemyObject : ScriptableObject
 
     [Header("이동속도")]
     public float moveSpeed;
-
-    [Header("공격패턴")]
-    public WeaponObject[] weapons;
-
-    
-
 }
