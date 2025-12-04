@@ -6,7 +6,7 @@ TextureImporter:
   serializedVersion: 12
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -37,13 +37,13 @@ TextureImporter:
     filterMode: 1
     aniso: 1
     mipBias: 0
-    wrapU: 0
-    wrapV: 0
+    wrapU: 1
+    wrapV: 1
     wrapW: 0
-  nPOTScale: 1
+  nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 0
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -52,9 +52,9 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 0
+  alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 0
+  textureType: 8
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -121,18 +121,3142 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1228
+        width: 1960
+        height: 489
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ffc231ee2418f943ba94ea38ddea617
+      internalID: 1137903532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1500
+        width: 2048
+        height: 536
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2badf7c63e91c84489d50d06cfd319db
+      internalID: 1296447253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1216
+        width: 8
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0267e8231b97f6438eb1b36452b5cf0
+      internalID: 1470857902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_3
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1227
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 626cf12af314cce4691789fe75d9f55e
+      internalID: 700113624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_4
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 1213
+        width: 13
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee95582975d2e3b4db986a896aa15a88
+      internalID: -2048379626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_5
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 1201
+        width: 61
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11abf537743f3bd4a844fb43ad3ff464
+      internalID: 1355371042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_6
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 1217
+        width: 28
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea95d45652734aa4ea55d36a4a989e4c
+      internalID: 2106416641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_7
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 1226
+        width: 4
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f66ee3e338a30dc4aa0b48069e789873
+      internalID: 1620810219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_8
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 1214
+        width: 47
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49050ae70d0f38140aec30fda5ff2773
+      internalID: 627504590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_9
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 1193
+        width: 51
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c122e98e4d4167e48bcfa0a1f54b52d3
+      internalID: -242090689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_10
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 1156
+        width: 426
+        height: 217
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65fbbe444c4a2874eacf3b0f06562cb1
+      internalID: 1736067884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_11
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 1215
+        width: 22
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c3a79f909a9a434fae0b2d954fa5933
+      internalID: -348136101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_12
+      rect:
+        serializedVersion: 2
+        x: 636
+        y: 1196
+        width: 33
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c98efd1518345d04cbf40369f7156120
+      internalID: -1311486514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_13
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 1211
+        width: 37
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c686243007fbb3f4e9719c9c1b04d606
+      internalID: -2060553045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_14
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 1216
+        width: 25
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2432a777fed650d4aa9041f283d7c366
+      internalID: -679265305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_15
+      rect:
+        serializedVersion: 2
+        x: 721
+        y: 1216
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 384399e5bef2ce64e8e4e2cde4bcbb04
+      internalID: -1491270428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_16
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 1217
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de15f9eadc8b7184385bc3aa5187b30e
+      internalID: -1999163618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_17
+      rect:
+        serializedVersion: 2
+        x: 748
+        y: 1217
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fccdbc91368d664084c33d02b05fa45
+      internalID: -230859144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_18
+      rect:
+        serializedVersion: 2
+        x: 756
+        y: 1226
+        width: 19
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0eb9f932ba9e49046b0d0e5d605a5e5f
+      internalID: 1096109475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_19
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 1227
+        width: 17
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67dc3bd8619d0b3418cc1eb0a7b8e467
+      internalID: 448093519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_20
+      rect:
+        serializedVersion: 2
+        x: 802
+        y: 1227
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88adcacfc3a5ba047b58e2bb713e74cf
+      internalID: -1445772736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_21
+      rect:
+        serializedVersion: 2
+        x: 816
+        y: 1225
+        width: 16
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: deb75ba337634484a8361a842ff6bb11
+      internalID: -1435098838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_22
+      rect:
+        serializedVersion: 2
+        x: 836
+        y: 1227
+        width: 12
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91e4b32cb06377e4bb03d6672baf22e1
+      internalID: 249831515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_23
+      rect:
+        serializedVersion: 2
+        x: 876
+        y: 1220
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7523042ba7647c14ba457f354e6907d9
+      internalID: -1041134054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_24
+      rect:
+        serializedVersion: 2
+        x: 887
+        y: 1021
+        width: 322
+        height: 292
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 342a165e0ffe62f4887f6e69ebfef8b3
+      internalID: -2073451527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_25
+      rect:
+        serializedVersion: 2
+        x: 1211
+        y: 1108
+        width: 91
+        height: 202
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 773c4af50dfe0924cbf4b1871951766d
+      internalID: -976268458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_26
+      rect:
+        serializedVersion: 2
+        x: 1290
+        y: 1176
+        width: 192
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 452f412e7fa8d6a43820f5b1defeb99c
+      internalID: -1759108119
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_27
+      rect:
+        serializedVersion: 2
+        x: 1420
+        y: 824
+        width: 588
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91a933f3e29833c469e52cc5319b7dcf
+      internalID: 1743467574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_28
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1218
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bffc3c473e7453742af3627c2465fa7a
+      internalID: -1700281996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_29
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 1211
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4684dfc9e872186468771ecd88689904
+      internalID: -1374718516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_30
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 1211
+        width: 15
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e96bf080c581e44881e47750acc3937
+      internalID: 1246199917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_31
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 1217
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f7d0a6aefdcbce4ea8f3618ddd958af
+      internalID: -1658582956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_32
+      rect:
+        serializedVersion: 2
+        x: 756
+        y: 1171
+        width: 43
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97448972bddaa014c9419f34a3270b71
+      internalID: 1905379976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_33
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 1218
+        width: 20
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f02f56ba6f7dbd4ebe0f33495aa1872
+      internalID: 1978398062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_34
+      rect:
+        serializedVersion: 2
+        x: 825
+        y: 1218
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1d6efcf46f172443be59d90408fc6c3
+      internalID: 1660020525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_35
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 1219
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5da00b64f517b094e88dd5458ccb60a3
+      internalID: -1034655728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_36
+      rect:
+        serializedVersion: 2
+        x: 856
+        y: 1216
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d004e81480f6b884f89b5b2c9b1a3661
+      internalID: 1428269955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_37
+      rect:
+        serializedVersion: 2
+        x: 141
+        y: 1210
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2805bd2ef1d3b3c41a3cb8d16e1f5fd8
+      internalID: -393873018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_38
+      rect:
+        serializedVersion: 2
+        x: 670
+        y: 1156
+        width: 72
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc308996659d2d64a993731e84ad1de5
+      internalID: -1236892921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_39
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 1210
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d51255f403fa5b14a95424eec447fac7
+      internalID: 898220655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_40
+      rect:
+        serializedVersion: 2
+        x: 746
+        y: 1208
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ec27ba0428e617438a1b36646dccf61
+      internalID: -2145382039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_41
+      rect:
+        serializedVersion: 2
+        x: 805
+        y: 1210
+        width: 5
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f16778e7fbf31c42a6265627c684195
+      internalID: 2129688359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_42
+      rect:
+        serializedVersion: 2
+        x: 814
+        y: 1215
+        width: 6
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df22b11fdf092224fb8d013b7f57a4c5
+      internalID: 553019800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_43
+      rect:
+        serializedVersion: 2
+        x: 822
+        y: 1210
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c5aa963eb1e5eed44966bdf1577e1cef
+      internalID: -942466778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_44
+      rect:
+        serializedVersion: 2
+        x: 836
+        y: 1189
+        width: 12
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12675a002165ebd4fb0f0ecf8b380115
+      internalID: 1964281124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_45
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 1206
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ade2b9463e0a745428dfb77f6e255754
+      internalID: -1339731115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_46
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 1211
+        width: 6
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1972395f8fa876e4d87d4ad52ff26ce2
+      internalID: -2082843378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_47
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 1207
+        width: 6
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13082c696846c3c46bdd9cc3b2af36c4
+      internalID: -590076962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_48
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 1208
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29af73ae1cff28748bccb7e6a2040e4d
+      internalID: -1579823615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_49
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 1209
+        width: 13
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ae159c8d78c64a418b106c96e3c145c
+      internalID: -85278824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_50
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 1194
+        width: 13
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56a8d84c001c6d94ebcfa5ae0d6a26f7
+      internalID: -527783001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_51
+      rect:
+        serializedVersion: 2
+        x: 619
+        y: 1197
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87e510a0b277331429c0741be0b64728
+      internalID: -1876539569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_52
+      rect:
+        serializedVersion: 2
+        x: 858
+        y: 1211
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44cd53e18db475c4bbc013d7ed98620d
+      internalID: -846250235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_53
+      rect:
+        serializedVersion: 2
+        x: 873
+        y: 1202
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0dce86c0c2751bb448c06aa1a449656d
+      internalID: -1103895518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_54
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 1200
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a75ce3623478c34429c108fc26ccb18f
+      internalID: -764331263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_55
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1200
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b88b7a7ce7c2bf418897a4d7efd44b8
+      internalID: -1137461311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_56
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 1192
+        width: 11
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04e46c0b953fa344ea41737455c0766d
+      internalID: 1164434874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_57
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 1157
+        width: 39
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9443bbb18b3645d49b795685f43922f4
+      internalID: 26347679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_58
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 1179
+        width: 13
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8076f70e99251b14ba9299fd69e62b75
+      internalID: -922752120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_59
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 1192
+        width: 15
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4dbf6cba177cbf04ebd7008b6dfb381a
+      internalID: -2129148011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_60
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 1197
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e6945afbb7630f4e9cd9b58f2b76e1c
+      internalID: 1033258181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_61
+      rect:
+        serializedVersion: 2
+        x: 738
+        y: 1200
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 383aedbedaa204d4e8b95a750264a591
+      internalID: -341586884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_62
+      rect:
+        serializedVersion: 2
+        x: 754
+        y: 1197
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e523f5bc42f58c2409d9b689bdda58e4
+      internalID: 1866088505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_63
+      rect:
+        serializedVersion: 2
+        x: 805
+        y: 1201
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a1a019eeb91d4b4f8a2db5701652c56
+      internalID: -1590274778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_64
+      rect:
+        serializedVersion: 2
+        x: 820
+        y: 1204
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d03f0dba4c01a74ea5f15a51d1f1afa
+      internalID: -337595405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_65
+      rect:
+        serializedVersion: 2
+        x: 825
+        y: 1201
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31a6efeccbfddfa4b88b8b0de391b864
+      internalID: -874382774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_66
+      rect:
+        serializedVersion: 2
+        x: 842
+        y: 1202
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 009aaf10990cf514e974406d7a7a66e0
+      internalID: 2033213240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_67
+      rect:
+        serializedVersion: 2
+        x: 854
+        y: 1199
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 928ecad4179bb4844820ef5c17f58b57
+      internalID: 1241548449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_68
+      rect:
+        serializedVersion: 2
+        x: 859
+        y: 1202
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8cd5eb7dd52ee6941aa409ba82195112
+      internalID: 1724241848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_69
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 1199
+        width: 5
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d753400cacafb6b4faa10199ee6c7822
+      internalID: -21027050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_70
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 1192
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7cccfb3a9c0fce44593feb3dbe12e8b9
+      internalID: 2016462296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_71
+      rect:
+        serializedVersion: 2
+        x: 738
+        y: 1181
+        width: 16
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 460c36073eefe1f46ac3a8f999d07d55
+      internalID: 846378448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_72
+      rect:
+        serializedVersion: 2
+        x: 806
+        y: 1175
+        width: 13
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 127bbed0cd560a341aeea5f5a05c5c22
+      internalID: -280307610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_73
+      rect:
+        serializedVersion: 2
+        x: 816
+        y: 1191
+        width: 17
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f37fa1934b7b654b9513e7c414ebbcf
+      internalID: 1151984456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_74
+      rect:
+        serializedVersion: 2
+        x: 874
+        y: 1199
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26d841b2b1481b04ea895b6437641273
+      internalID: -1709061740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_75
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 1180
+        width: 18
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c2e554568b9e374f92a5a84140dda5f
+      internalID: -868149220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_76
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 1164
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83210add95db1774686172c915ac5aff
+      internalID: 1392699614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_77
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 1162
+        width: 35
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9048bb32eead1ff4a83388631a94012b
+      internalID: -101692560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_78
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 1195
+        width: 11
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02d513ce872abea48bba0390f82e1a15
+      internalID: 613023439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_79
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 1176
+        width: 34
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e222b7b11e78cf1469f86e5ae8a29da8
+      internalID: -834825033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_80
+      rect:
+        serializedVersion: 2
+        x: 636
+        y: 1180
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1495c33cbc09d7429c04e3b4e8b2733
+      internalID: -181764866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_81
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 1181
+        width: 14
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 236a0329e01b7c94b8dad35dd3899594
+      internalID: -2081492850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_82
+      rect:
+        serializedVersion: 2
+        x: 873
+        y: 1189
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b19f9b134b833843a7a4321e5a11f82
+      internalID: 1608993894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_83
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 1185
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4d7d54dc3c60464ba2a2982471806ce
+      internalID: -2357434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_84
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1185
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bedde7cd23456c247bb131518bb6a115
+      internalID: 906678670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_85
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 1183
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 549f737006a840a4193300b811f37175
+      internalID: 1712921309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_86
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 1184
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad660e0aa4b60ff4cbee6075478b8a68
+      internalID: -208384896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_87
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 1175
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9b91393da1650c4aab1c797cd72b1fd
+      internalID: 1890044864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_88
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 1180
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3fcd61ea02de1604b96d9e0da1366c23
+      internalID: 2075966026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_89
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 1165
+        width: 17
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a764e4fe7bf48f644b1140487ebfc257
+      internalID: -1825306346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_90
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 1177
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c40c4ac81580984583acd81abf8b68a
+      internalID: 1633430757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_91
+      rect:
+        serializedVersion: 2
+        x: 652
+        y: 1164
+        width: 32
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee75df00b3d133f4791af62f51b5e960
+      internalID: 174617555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_92
+      rect:
+        serializedVersion: 2
+        x: 820
+        y: 1168
+        width: 14
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f90bd6835e9ed9478a3001b98366331
+      internalID: -1419052806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_93
+      rect:
+        serializedVersion: 2
+        x: 842
+        y: 1185
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37bc380db411ec748bb4ad6bc2b04649
+      internalID: -2055425048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_94
+      rect:
+        serializedVersion: 2
+        x: 852
+        y: 1175
+        width: 14
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69ca02f9fad2b05448bdd8e7a00b325c
+      internalID: -856937809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_95
+      rect:
+        serializedVersion: 2
+        x: 876
+        y: 1184
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4fb68e086b64cc4eb642f76df601ea6
+      internalID: 331788778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_96
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1177
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e77ea65c5588fc48be932918bd1f1e4
+      internalID: 335122418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_97
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 1175
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dae693f1ebd74e64ebb417b23f7b4c12
+      internalID: 1549363778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_98
+      rect:
+        serializedVersion: 2
+        x: 738
+        y: 1156
+        width: 34
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a10101fc8f7ebc43b4af58f5e02859d
+      internalID: -2116368564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_99
+      rect:
+        serializedVersion: 2
+        x: 750
+        y: 1179
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a90501784f51914bb9dbc29c1b21f5b
+      internalID: -315290931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_100
+      rect:
+        serializedVersion: 2
+        x: 773
+        y: 1166
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68809ca0955d48f4c87d60e8ba124a8f
+      internalID: -165562288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_101
+      rect:
+        serializedVersion: 2
+        x: 836
+        y: 1156
+        width: 12
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2028a57ba1e2cb4418aaeb3a503f0ea8
+      internalID: -1063939576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_102
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 1167
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9895fb96280443c428b7c2cf36a09bad
+      internalID: -1961554666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_103
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1156
+        width: 14
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3d474f65ecbb0f469aab2641cf6012f
+      internalID: -432091949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_104
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 1156
+        width: 30
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f5553a5ad02df44a9ce9d4066301444
+      internalID: -927486042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_105
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 1163
+        width: 19
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04ca147c2df4e8943aae258f559fbf6d
+      internalID: -67791136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_106
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 1164
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11ab79e33edfb7d40bb5149f37cbdb53
+      internalID: 2038318701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_107
+      rect:
+        serializedVersion: 2
+        x: 632
+        y: 1156
+        width: 19
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6703eadbc6bc3b44a7648cc3759010d
+      internalID: -1024166635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_108
+      rect:
+        serializedVersion: 2
+        x: 781
+        y: 1156
+        width: 18
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: deb7d9ba4f954454aa82de3ceb976372
+      internalID: -71778327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_109
+      rect:
+        serializedVersion: 2
+        x: 878
+        y: 1175
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31c46e2b4e1c3104fb6017a2da70424c
+      internalID: 843550469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_110
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 1156
+        width: 11
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ed817d12640ba54494735cb62c2497a
+      internalID: -2001069298
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_111
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 1167
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3987ae8a45a68347a30850845f10edb
+      internalID: -506153014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_112
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 1154
+        width: 17
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efe27fbc46d539240a6cce4f15923a99
+      internalID: -1332931677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_113
+      rect:
+        serializedVersion: 2
+        x: 805
+        y: 1148
+        width: 23
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3be7f2ccc43072d4893b9310ab48bb89
+      internalID: -1563261343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_114
+      rect:
+        serializedVersion: 2
+        x: 825
+        y: 1160
+        width: 10
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6b236d99a5c2174386528484795045b
+      internalID: 1410301533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_115
+      rect:
+        serializedVersion: 2
+        x: 854
+        y: 1156
+        width: 11
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d66987f9551e7949a71e793882ff6ef
+      internalID: -1425594309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_116
+      rect:
+        serializedVersion: 2
+        x: 873
+        y: 1167
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b90063bf3f7b7b2489b1b3cb4c7490e2
+      internalID: 1673140752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_117
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 1154
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b0dd376c7d6555449cc867f8b44d436
+      internalID: 1173933136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_118
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 1160
+        width: 6
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 605bf4c001a8ac543b3ca1473c898470
+      internalID: -1472260174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_119
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 1156
+        width: 9
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99b3f71df027bdb448ea6811baedf5e5
+      internalID: -1636428763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_120
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 1158
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e02ceeed42689f489f457d892817422
+      internalID: 2105039802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_121
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 1156
+        width: 20
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc36e4a67a4713e44aa1192e45673747
+      internalID: -1473289304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_122
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 1156
+        width: 18
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7cd324b3db4459644a0685dc99a4c2cf
+      internalID: 1103445851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_123
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 1156
+        width: 13
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19b997f41b31ed140a94566e5fe62111
+      internalID: -43017767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_124
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 1156
+        width: 13
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40673163b6e4ccb48b97f39add9e2639
+      internalID: 1988968882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_125
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 1156
+        width: 16
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fde3dcd0e2ff0342b06face5ef76f5b
+      internalID: -1789320789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_126
+      rect:
+        serializedVersion: 2
+        x: 649
+        y: 1156
+        width: 18
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10675b0313343fc4b96ac4683e3f5d49
+      internalID: -629675192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_127
+      rect:
+        serializedVersion: 2
+        x: 666
+        y: 1156
+        width: 16
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 944331dbfe544f34da7e8f7acdc5febf
+      internalID: 2128819695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_128
+      rect:
+        serializedVersion: 2
+        x: 701
+        y: 1148
+        width: 29
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4146f7fe49688a4daaba754ed5ad2c4
+      internalID: -1266328662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_129
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 1156
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88359d86940808441a013bd3406e3a86
+      internalID: 906960536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_130
+      rect:
+        serializedVersion: 2
+        x: 870
+        y: 1148
+        width: 9
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67519a429b70ed945ba4f575634ee941
+      internalID: 165168608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_131
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 1154
+        width: 9
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b866f5b4c9f847649b401afce835d81c
+      internalID: -1218359816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_132
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 1154
+        width: 11
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a53aced4c47fb0947811be060082faeb
+      internalID: -1058006195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_133
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 1148
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4dca700aa73a4584cab65b6ae3c865fe
+      internalID: 698244540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_134
+      rect:
+        serializedVersion: 2
+        x: 1214
+        y: 902
+        width: 252
+        height: 254
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de5c3b6025ba2f7429b17cd4d9a7133e
+      internalID: -1395289164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_135
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1781
+        height: 1152
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48349198fa78e7f46a1c9729e3cd6d81
+      internalID: -38827109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_136
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1120
+        width: 38
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83ba47468e5512d4eb4f803634333372
+      internalID: -959076811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_137
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 900
+        width: 120
+        height: 254
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40f316ec19b27fd438faf52f2962a6d4
+      internalID: -1514896536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_138
+      rect:
+        serializedVersion: 2
+        x: 1722
+        y: 0
+        width: 295
+        height: 893
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a90d1ebe3a4964049bdd6c2b3e823ba3
+      internalID: 2087354455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_139
+      rect:
+        serializedVersion: 2
+        x: 1973
+        y: 303
+        width: 65
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 53cb8a679e5d32d41aafdb724a522ac7
+      internalID: 1857855649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_140
+      rect:
+        serializedVersion: 2
+        x: 1973
+        y: 250
+        width: 67
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf170aaa64ef8974d85304532cc2d3f8
+      internalID: 1436173057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_141
+      rect:
+        serializedVersion: 2
+        x: 1888
+        y: 0
+        width: 136
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a36da8819ea24d4b824d2232ff5f418
+      internalID: -1390436246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: fe8222653a8af774fac1db8fd6ae4b70
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_0: 1137903532
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_1: 1296447253
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_10: 1736067884
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_100: -165562288
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_101: -1063939576
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_102: -1961554666
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_103: -432091949
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_104: -927486042
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_105: -67791136
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_106: 2038318701
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_107: -1024166635
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_108: -71778327
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_109: 843550469
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_11: -348136101
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_110: -2001069298
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_111: -506153014
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_112: -1332931677
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_113: -1563261343
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_114: 1410301533
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_115: -1425594309
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_116: 1673140752
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_117: 1173933136
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_118: -1472260174
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_119: -1636428763
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_12: -1311486514
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_120: 2105039802
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_121: -1473289304
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_122: 1103445851
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_123: -43017767
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_124: 1988968882
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_125: -1789320789
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_126: -629675192
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_127: 2128819695
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_128: -1266328662
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_129: 906960536
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_13: -2060553045
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_130: 165168608
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_131: -1218359816
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_132: -1058006195
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_133: 698244540
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_134: -1395289164
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_135: -38827109
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_136: -959076811
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_137: -1514896536
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_138: 2087354455
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_139: 1857855649
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_14: -679265305
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_140: 1436173057
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_141: -1390436246
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_15: -1491270428
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_16: -1999163618
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_17: -230859144
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_18: 1096109475
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_19: 448093519
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_2: 1470857902
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_20: -1445772736
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_21: -1435098838
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_22: 249831515
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_23: -1041134054
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_24: -2073451527
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_25: -976268458
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_26: -1759108119
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_27: 1743467574
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_28: -1700281996
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_29: -1374718516
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_3: 700113624
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_30: 1246199917
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_31: -1658582956
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_32: 1905379976
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_33: 1978398062
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_34: 1660020525
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_35: -1034655728
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_36: 1428269955
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_37: -393873018
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_38: -1236892921
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_39: 898220655
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_4: -2048379626
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_40: -2145382039
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_41: 2129688359
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_42: 553019800
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_43: -942466778
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_44: 1964281124
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_45: -1339731115
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_46: -2082843378
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_47: -590076962
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_48: -1579823615
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_49: -85278824
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_5: 1355371042
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_50: -527783001
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_51: -1876539569
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_52: -846250235
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_53: -1103895518
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_54: -764331263
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_55: -1137461311
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_56: 1164434874
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_57: 26347679
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_58: -922752120
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_59: -2129148011
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_6: 2106416641
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_60: 1033258181
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_61: -341586884
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_62: 1866088505
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_63: -1590274778
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_64: -337595405
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_65: -874382774
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_66: 2033213240
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_67: 1241548449
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_68: 1724241848
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_69: -21027050
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_7: 1620810219
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_70: 2016462296
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_71: 846378448
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_72: -280307610
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_73: 1151984456
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_74: -1709061740
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_75: -868149220
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_76: 1392699614
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_77: -101692560
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_78: 613023439
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_79: -834825033
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_8: 627504590
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_80: -181764866
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_81: -2081492850
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_82: 1608993894
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_83: -2357434
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_84: 906678670
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_85: 1712921309
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_86: -208384896
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_87: 1890044864
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_88: 2075966026
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_89: -1825306346
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_9: -242090689
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_90: 1633430757
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_91: 174617555
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_92: -1419052806
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_93: -2055425048
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_94: -856937809
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_95: 331788778
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_96: 335122418
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_97: 1549363778
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_98: -2116368564
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_99: -315290931
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

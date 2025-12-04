@@ -6,7 +6,7 @@ TextureImporter:
   serializedVersion: 12
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -37,13 +37,13 @@ TextureImporter:
     filterMode: 1
     aniso: 1
     mipBias: 0
-    wrapU: 0
-    wrapV: 0
+    wrapU: 1
+    wrapV: 1
     wrapW: 0
-  nPOTScale: 1
+  nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 0
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -52,9 +52,9 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 0
+  alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 0
+  textureType: 8
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -121,18 +121,1184 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 672
+        width: 210
+        height: 208
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ba2f4f2eba363b4f9531ca472c6aa66
+      internalID: 186131621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_1
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 812
+        width: 47
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47e7a521bf6208f44bffb95e907674c4
+      internalID: 247925234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_2
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 641
+        width: 212
+        height: 206
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbe43e5742b4d2946adeda630d9bbd10
+      internalID: 1410464693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_3
+      rect:
+        serializedVersion: 2
+        x: 615
+        y: 812
+        width: 41
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 313c9d71793b52340a23ea94c6e8b4f5
+      internalID: -382524500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_4
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 640
+        width: 211
+        height: 208
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2285cc3ee4240747a2909a313dc8cba
+      internalID: 1838282579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_5
+      rect:
+        serializedVersion: 2
+        x: 870
+        y: 640
+        width: 210
+        height: 208
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6f274651acdc154a950b860b2e7ca26
+      internalID: -1593047359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 456
+        width: 212
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c408eacdead97b41962e96e1676434e
+      internalID: 1637428261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_7
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 424
+        width: 422
+        height: 228
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74ece266cc5146d4bb73aad4c3666ed8
+      internalID: 2038676908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_8
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 628
+        width: 47
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a46a061d9d1a07543836d24b180d5589
+      internalID: -1204400339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_9
+      rect:
+        serializedVersion: 2
+        x: 615
+        y: 599
+        width: 77
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 167a2c8682cb73142af226003bb0ace1
+      internalID: -1423519628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_10
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 428
+        width: 207
+        height: 207
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f2ca252772124c46869073f3a536b47
+      internalID: 1233314509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_11
+      rect:
+        serializedVersion: 2
+        x: 828
+        y: 600
+        width: 77
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d75612b7e0cedd54fb5d57ff5b5c67dc
+      internalID: -1784061071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_12
+      rect:
+        serializedVersion: 2
+        x: 868
+        y: 428
+        width: 208
+        height: 206
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 239f9ed8558524f45b41df50e2a46b37
+      internalID: -550204672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_13
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 600
+        width: 72
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 923d34d9a8e66c54dbf043e982a0b462
+      internalID: 997114622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_14
+      rect:
+        serializedVersion: 2
+        x: 1083
+        y: 428
+        width: 204
+        height: 204
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb3c051875f5aec498f189f4c6b575ee
+      internalID: -558183403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_15
+      rect:
+        serializedVersion: 2
+        x: 1256
+        y: 600
+        width: 40
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6079b7da68164a24db3f2ee5aededb4c
+      internalID: -1679120645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 414
+        width: 42
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9476ecc1e5ae79745a29475971ff5a95
+      internalID: -1066245931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_17
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 228
+        width: 223
+        height: 226
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c541801804c2d54e836c2866f8af8a2
+      internalID: 2079606069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_18
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 414
+        width: 42
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b08d5909fb40ca447bf19f6f421e0ce3
+      internalID: 132365631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_19
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 228
+        width: 212
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7cb129273a59e7541b2219ff6778d671
+      internalID: -1313704029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_20
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 387
+        width: 55
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9990596adc351ce49a74e16c379e1b3e
+      internalID: -1214896706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_21
+      rect:
+        serializedVersion: 2
+        x: 615
+        y: 387
+        width: 77
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ea63bd1da7751e4d8e7b931a58c1eca
+      internalID: 2007910802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_22
+      rect:
+        serializedVersion: 2
+        x: 636
+        y: 428
+        width: 24
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c98374dcbfa385d4a82af5dab0d72499
+      internalID: 239851046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_23
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 428
+        width: 12
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40305f8ee9c9e7e46a9abbfa8eccaff9
+      internalID: -1673690148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_24
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 387
+        width: 93
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8371b1a4535b00d43bebb5f49622a272
+      internalID: -1645215589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_25
+      rect:
+        serializedVersion: 2
+        x: 1256
+        y: 387
+        width: 152
+        height: 157
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6c43cc4174e5b04680ffa2fdabd3351
+      internalID: 1432470033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_26
+      rect:
+        serializedVersion: 2
+        x: 459
+        y: 215
+        width: 208
+        height: 206
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3763ca8a648d2e446a3b0aef2e7f3ce5
+      internalID: 888280541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_27
+      rect:
+        serializedVersion: 2
+        x: 673
+        y: 0
+        width: 211
+        height: 422
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a90e243099f01c643a75902af30f7bda
+      internalID: -234914877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_28
+      rect:
+        serializedVersion: 2
+        x: 828
+        y: 387
+        width: 93
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 239725b526e17aa4091cfbf9ad536f66
+      internalID: -1123027038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_29
+      rect:
+        serializedVersion: 2
+        x: 884
+        y: 215
+        width: 209
+        height: 206
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64a5a523bbb28a247a35806fa2f25081
+      internalID: -1320601676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_30
+      rect:
+        serializedVersion: 2
+        x: 1099
+        y: 2
+        width: 209
+        height: 420
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f32ed0a40f9fcec499f8ac2c4e18e6b5
+      internalID: 1447696514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_31
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2
+        width: 225
+        height: 223
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d5312ec153bf444dbddf3bbcb865cc6
+      internalID: -767413039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 185
+        width: 42
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d70c8ae7c6d633c4f84aa7913cceb81e
+      internalID: -1563116315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_33
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 185
+        width: 85
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b6cc731f1f64ac44b59ee841d877e08
+      internalID: 1750822266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_34
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 2
+        width: 225
+        height: 223
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a4c18e4ca2c6ce44b44bbd25c0a38ee
+      internalID: 1780585191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_35
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 185
+        width: 45
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a20b83b8585d18747a42fb21ed64e902
+      internalID: 2050743922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_36
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 212
+        width: 55
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a2ada92d064dd34abe4efb6792b5c80
+      internalID: -131703510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_37
+      rect:
+        serializedVersion: 2
+        x: 631
+        y: 212
+        width: 41
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fcd283443b7b9d94199f3e7f00449966
+      internalID: -717790611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_38
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 174
+        width: 41
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d6c8a3706893b342a2cba9de249c69e
+      internalID: 1227814409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_39
+      rect:
+        serializedVersion: 2
+        x: 1057
+        y: 173
+        width: 77
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7cb66a716fcc0fe40b48ed394ffa7e6a
+      internalID: -1390483183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_40
+      rect:
+        serializedVersion: 2
+        x: 1270
+        y: 173
+        width: 77
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59871bd23a424844ab3bbba4d8611de8
+      internalID: -1094711683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_41
+      rect:
+        serializedVersion: 2
+        x: 1483
+        y: 174
+        width: 41
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2ab8a1c7d7a84648b8a8a7fc3c1586e
+      internalID: 692823639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_42
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 42
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 152530cc965df924186ca71adb27a786
+      internalID: 1663668124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_43
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 0
+        width: 85
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ed8b493190d87e409e45eeb2905d5b5
+      internalID: 1583762307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_44
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 0
+        width: 45
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3d6271dad7a176489731bd73846aa48
+      internalID: -838847033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_45
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 0
+        width: 208
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f107f28bbb166f4b86e7d436bfd2994
+      internalID: -1481185737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_46
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 0
+        width: 41
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a6c0234965080246a4f906ab64d69e3
+      internalID: 1025264705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_47
+      rect:
+        serializedVersion: 2
+        x: 886
+        y: 2
+        width: 207
+        height: 210
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f97cb3b2de933d4c94232aa170a3d3f
+      internalID: -1529036105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_48
+      rect:
+        serializedVersion: 2
+        x: 1057
+        y: 0
+        width: 77
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 683f1d876b5bc2e47b522275712d7f60
+      internalID: -757218956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_49
+      rect:
+        serializedVersion: 2
+        x: 1270
+        y: 0
+        width: 77
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89224bf884cdfe245b8edad7d066aba9
+      internalID: 1936649548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_50
+      rect:
+        serializedVersion: 2
+        x: 1308
+        y: 2
+        width: 210
+        height: 207
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cca99a0da59eaec4185998450ceb87dd
+      internalID: 1069408451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_51
+      rect:
+        serializedVersion: 2
+        x: 1483
+        y: 0
+        width: 41
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5186790b300182b41b11c5ed1ab8137a
+      internalID: -1385805506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_52
+      rect:
+        serializedVersion: 2
+        x: 1524
+        y: 0
+        width: 208
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 848ba257633a5ff40934910d86adf1b1
+      internalID: -1659801354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: ea6bdcec955f6a543a9fbc9e92fc37a6
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_0: 186131621
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_1: 247925234
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_10: 1233314509
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_11: -1784061071
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_12: -550204672
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_13: 997114622
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_14: -558183403
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_15: -1679120645
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_16: -1066245931
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_17: 2079606069
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_18: 132365631
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_19: -1313704029
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_2: 1410464693
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_20: -1214896706
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_21: 2007910802
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_22: 239851046
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_23: -1673690148
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_24: -1645215589
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_25: 1432470033
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_26: 888280541
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_27: -234914877
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_28: -1123027038
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_29: -1320601676
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_3: -382524500
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_30: 1447696514
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_31: -767413039
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_32: -1563116315
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_33: 1750822266
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_34: 1780585191
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_35: 2050743922
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_36: -131703510
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_37: -717790611
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_38: 1227814409
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_39: -1390483183
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_4: 1838282579
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_40: -1094711683
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_41: 692823639
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_42: 1663668124
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_43: 1583762307
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_44: -838847033
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_45: -1481185737
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_46: 1025264705
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_47: -1529036105
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_48: -757218956
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_49: 1936649548
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_5: -1593047359
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_50: 1069408451
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_51: -1385805506
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_52: -1659801354
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_6: 1637428261
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_7: 2038676908
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_8: -1204400339
+      sactx-0-2048x1024-ASTC 4x4-heroskill-b229b46d-00000000000000000000000000000000-4_9: -1423519628
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
