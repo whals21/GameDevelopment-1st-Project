@@ -6,9 +6,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy/Enemy Data", fileName = "New Enemy")]
 public class EnemyObject : ScriptableObject
 {
-
-    
-    
     [Header("����")]
     public GameObject prefab;
     [Header("�̸�")]
@@ -19,9 +16,12 @@ public class EnemyObject : ScriptableObject
     [Header("�̵��ӵ�")]
     public float moveSpeed;
 
+    [Header("������")]
+    public float contactDamage;  // ���� ������
+
+    [Header("���迭ġ")]
+    public int expValue;  // ġ�� �� ���迭ġ
+
     [Header("��������")]
     public WeaponObject[] weapons;
-
-    
-
 }

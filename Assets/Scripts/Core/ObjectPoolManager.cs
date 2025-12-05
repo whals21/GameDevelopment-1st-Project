@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 public class ObjectPoolManager : MonoBehaviour
 {
@@ -22,6 +21,7 @@ public class ObjectPoolManager : MonoBehaviour
 
     private void Awake()
     {
+        // 싱글톤
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -29,16 +29,28 @@ public class ObjectPoolManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
-        InitializePools();
     }
 
-    private void InitializePools()
+    private void Start()
     {
-        // 각 풀 초기화
+        // 풀 초기화
         enemyPool = new ObjectPool<Enemy>(enemyPrefab, enemyPoolSize, transform);
         projectilePool = new ObjectPool<Projectile>(projectilePrefab, projectilePoolSize, transform);
-        expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
+        //expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
+    }
+
+    // 제네릭 풀 가져오기
+    public ObjectPool<T> GetPool<T>() where T : MonoBehaviour
+    {
+        if (typeof(T) == typeof(Enemy))
+            return enemyPool as ObjectPool<T>;
+        else if (typeof(T) == typeof(Projectile))
+            return projectilePool as ObjectPool<T>;
+        //else if (typeof(T) == typeof(ExpGem))
+        //    return expGemPool as ObjectPool<T>;
+
+        Debug.LogError($"풀을 찾을 수 없음: {typeof(T).Name}");
+        return null;
     }
 
     // Enemy 가져오기
@@ -63,14 +75,14 @@ public class ObjectPoolManager : MonoBehaviour
         projectilePool.Return(projectile);
     }
 
-    // ExpGem 가져오기
+    // ExpGem 가져오기 (Week 1 Day 4-5)
     // public ExpGem GetExpGem()
     // {
     //     return expGemPool.Get();
     // }
-
-    // public void ReturnExpGem(ExpGem gem)
+    //
+    // public void ReturnExpGem(ExpGem expGem)
     // {
-    //     expGemPool.Return(gem);
+    //     expGemPool.Return(expGem);
     // }
 }

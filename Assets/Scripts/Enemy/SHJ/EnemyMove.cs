@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class EnemyMove : MonoBehaviour
 {
-    private EnemyBase main;
+    private Enemy main;
     
     private void Awake()
     {
-        main = GetComponent<EnemyBase>();
+        main = GetComponent<Enemy>();
        
     }
 
@@ -30,10 +30,10 @@ public class EnemyMove : MonoBehaviour
 
         Vector2 direction = (main.Target.position - transform.position).normalized;
 
-        // ÀÌµ¿
+        // ï¿½Ìµï¿½
         main.rb.velocity = direction * main.Data.moveSpeed;
 
-        // ÁÂ¿ì ¹ÝÀü
+        // ï¿½Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (direction.x > 0.01f)
             main.sr.flipX = false;
         else if (direction.x < -0.01f)

@@ -5,8 +5,8 @@ using UnityEngine;
 public class EnemyBase : MonoBehaviour
 {
     [Header("������ SO")]
-    [SerializeField] private Enemy enemyData;
-    public Enemy Data => enemyData;
+    [SerializeField] private EnemyObject enemyData;
+    public EnemyObject Data => enemyData;
 
 
     public int MaxHP => Data.EnemyHP;
