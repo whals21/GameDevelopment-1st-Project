@@ -9,17 +9,17 @@ public class EnemyObject : ScriptableObject
 
     
     
-    [Header("¿ÜÇü")]
+    [Header("ï¿½ï¿½ï¿½ï¿½")]
     public GameObject prefab;
-    [Header("ÀÌ¸§")]
-    public string EnemyName;     //ÀÌ¸§
-    [Header("Ã¼·Â")]
-    public int EnemyHP;          //ÇöÀç Ã¼·Â
+    [Header("ï¿½Ì¸ï¿½")]
+    public string EnemyName;     //ï¿½Ì¸ï¿½
+    [Header("Ã¼ï¿½ï¿½")]
+    public int EnemyHP;          //ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½
 
-    [Header("ÀÌµ¿¼Óµµ")]
+    [Header("ï¿½Ìµï¿½ï¿½Óµï¿½")]
     public float moveSpeed;
 
-    [Header("°ø°ÝÆÐÅÏ")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public WeaponObject[] weapons;
 
     

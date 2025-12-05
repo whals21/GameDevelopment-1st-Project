@@ -15,5 +15,9 @@ MonoBehaviour:
   prefab: {fileID: 2682184789590373286, guid: 6449a62f3a3c1d44a921cbc39dd04e3e, type: 3}
   EnemyName: 
   EnemyHP: 100
+<<<<<<< HEAD
   moveSpeed: 3.5
+=======
+  moveSpeed: 2
+>>>>>>> 6389f1a17c1e2c97992fa22ad494443bb07c549f
   weapons: []

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class Bullet : MonoBehaviour
 {
     [Header("Bullet Settings")]
     [SerializeField] private float speed = 10f;
@@ -30,7 +30,7 @@ public class Projectile : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
-            // Enemyï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+            // Enemy¿¡¼­ µ¥¹ÌÁö Ã³¸®
             Destroy(gameObject);
         }
     }

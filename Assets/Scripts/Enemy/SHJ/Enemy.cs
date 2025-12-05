@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBase : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     [Header("������ SO")]
     [SerializeField] private Enemy enemyData;
