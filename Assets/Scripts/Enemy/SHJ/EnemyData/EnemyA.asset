@@ -15,5 +15,5 @@ MonoBehaviour:
   prefab: {fileID: 2682184789590373286, guid: 6449a62f3a3c1d44a921cbc39dd04e3e, type: 3}
   EnemyName: 
   EnemyHP: 100
-  moveSpeed: 5
-  target: {fileID: 0}
+  moveSpeed: 3
+  weapons: []

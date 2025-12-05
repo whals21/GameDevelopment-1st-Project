@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBase : MonoBehaviour
+public class EnemyCore : MonoBehaviour
 {
     [Header("데이터 SO")]
     [SerializeField] private EnemyObject enemyData;
@@ -12,7 +12,18 @@ public class EnemyBase : MonoBehaviour
     public int MaxHP => Data.EnemyHP;
     [Header("체력")]
     [SerializeField] private int currentHP;
-    public int CurrentHP => currentHP;
+    public int CurrentHP 
+    { 
+        get => currentHP;
+        private set
+        {
+            // 이전 값 저장 (UI 갱신용)
+            int prevHP = currentHP;
+            currentHP = Mathf.Clamp(value, 0, MaxHP);
+
+            
+        }
+    }
 
     [Header("이동")]
     [SerializeField] private float moveSpeed;
