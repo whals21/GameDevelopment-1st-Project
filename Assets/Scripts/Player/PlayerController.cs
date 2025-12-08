@@ -20,7 +20,11 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         spriter = GetComponent<SpriteRenderer>();
+<<<<<<< HEAD
         anim = GetComponentInChildren<Animator>(); 
+=======
+        anim = GetComponentInChildren<Animator>();
+>>>>>>> dbe22004b2cc2de9197c89679d8bc0a9523a946f
         stats = GetComponent<PlayerStats>();
     }
 

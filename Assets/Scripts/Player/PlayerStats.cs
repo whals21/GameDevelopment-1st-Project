@@ -48,9 +48,13 @@ public class PlayerStats : MonoBehaviour
         currentExp += amount;
 
         // 경험치바 UI 갱신 로직이 있다면 여기서 호출
+<<<<<<< HEAD
         // if (PlayerHUD.Instance != null) ...
 
         // 현재 경험치가 필요 경험치(MaxExp)보다 많으면 레벨업
+=======
+
+>>>>>>> dbe22004b2cc2de9197c89679d8bc0a9523a946f
         if (currentExp >= MaxExp)
         {
             LevelUp();
@@ -61,8 +65,12 @@ public class PlayerStats : MonoBehaviour
     {
         currentExp -= MaxExp; // 남은 경험치 이월
         level++;
+<<<<<<< HEAD
         Debug.Log("레벨 업! 현재 레벨: " + level);
         // 여기서 스킬 선택창 띄우는 함수 호출 예정
+=======
+        // 스킬 선택창 띄울예정
+>>>>>>> dbe22004b2cc2de9197c89679d8bc0a9523a946f
     }
 
     public float MaxExp
@@ -102,6 +110,7 @@ public class PlayerStats : MonoBehaviour
     }
 
     public float Damage
+<<<<<<< HEAD
     { 
         get { return damage; } 
     }
@@ -114,5 +123,19 @@ public class PlayerStats : MonoBehaviour
     public int Level 
     { 
         get { return level; } 
+=======
+    {
+        get { return damage; }
+    }
+
+    public float Cooldown
+    {
+        get { return cooldown; }
+    }
+
+    public int Level
+    {
+        get { return level; }
+>>>>>>> dbe22004b2cc2de9197c89679d8bc0a9523a946f
     }
 }
