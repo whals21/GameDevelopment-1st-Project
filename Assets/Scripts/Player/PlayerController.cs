@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public Transform bodyTransform;
 
     [Header("모바일 조이스틱")]
-    // [SerializeField] private Joystick joyStick; 
+    [SerializeField] private VirtualJoystick joyStick;
 
     private Vector2 inputVec;
     private Rigidbody2D rb;
@@ -29,12 +29,11 @@ public class PlayerController : MonoBehaviour
         inputVec.x = Input.GetAxisRaw("Horizontal");
         inputVec.y = Input.GetAxisRaw("Vertical");
 
-        // 조이스틱
-        // if (joyStick != null && (inputVec.x == 0 && inputVec.y == 0))
-        // {
-        //     inputVec.x = joyStick.Horizontal;
-        //     inputVec.y = joyStick.Vertical;
-        // }
+        if (joyStick != null && (joyStick.Horizontal != 0 || joyStick.Vertical != 0))
+        {
+            inputVec.x = joyStick.Horizontal;
+            inputVec.y = joyStick.Vertical;
+        }
 
         if (inputVec.x != 0)
         {
@@ -43,8 +42,12 @@ public class PlayerController : MonoBehaviour
             bodyTransform.localScale = scale;
         }
 
-        //anim.SetBool("isRun", inputVec.magnitude > 0);
+        if (anim != null)
+        {
+            anim.SetBool("isRun", inputVec.magnitude > 0);
+        }
     }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("Enemy"))
