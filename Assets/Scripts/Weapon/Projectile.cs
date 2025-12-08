@@ -52,18 +52,18 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // if (collision.CompareTag("Enemy"))
-        // {
-        //     // 데미지 처리
-        //     Enemy enemy = collision.GetComponent<Enemy>();
-        //     if (enemy != null)
-        //     {
-        //         enemy.TakeDamage(damage);
-        //     }
+        if (collision.CompareTag("Enemy"))
+        {
+            // 데미지 처리
+            Enemy enemy = collision.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
 
-        //     // 풀로 반환
-        //     ReturnToPool();
-        // }
+            // 풀로 반환
+            ReturnToPool();
+        }
     }
 
     private void ReturnToPool()

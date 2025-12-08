@@ -39,20 +39,6 @@ public class ObjectPoolManager : MonoBehaviour
         //expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
     }
 
-    // 제네릭 풀 가져오기
-    public ObjectPool<T> GetPool<T>() where T : MonoBehaviour
-    {
-        if (typeof(T) == typeof(Enemy))
-            return enemyPool as ObjectPool<T>;
-        else if (typeof(T) == typeof(Projectile))
-            return projectilePool as ObjectPool<T>;
-        //else if (typeof(T) == typeof(ExpGem))
-        //    return expGemPool as ObjectPool<T>;
-
-        Debug.LogError($"풀을 찾을 수 없음: {typeof(T).Name}");
-        return null;
-    }
-
     // Enemy 가져오기
     public Enemy GetEnemy()
     {
@@ -85,4 +71,18 @@ public class ObjectPoolManager : MonoBehaviour
     // {
     //     expGemPool.Return(expGem);
     // }
+
+    // 제네릭 방식으로 풀 가져오기
+    public ObjectPool<T> GetPool<T>() where T : MonoBehaviour
+    {
+        if (typeof(T) == typeof(Enemy))
+            return enemyPool as ObjectPool<T>;
+        else if (typeof(T) == typeof(Projectile))
+            return projectilePool as ObjectPool<T>;
+        //else if (typeof(T) == typeof(ExpGem))
+        //    return expGemPool as ObjectPool<T>;
+
+        Debug.LogError($"ObjectPoolManager: 풀을 찾을 수 없음: {typeof(T).Name}");
+        return null;
+    }
 }
