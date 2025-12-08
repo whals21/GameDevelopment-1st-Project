@@ -3,13 +3,9 @@ using UnityEngine.UI;
 
 public class PlayerHUD : MonoBehaviour
 {
-<<<<<<< HEAD
-    // ¾îµð¼­µç PlayerHUD.Instance·Î ºÎ¸¦ ¼ö ÀÖ°Ô ¸¸µå´Â '½Ì±ÛÅæ'
-=======
->>>>>>> dbe22004b2cc2de9197c89679d8bc0a9523a946f
     public static PlayerHUD Instance;
 
-    [Header("UI ÄÄÆ÷³ÍÆ® ¿¬°á")]
+    [Header("UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½")]
     public Slider hpSlider;
 
     void Awake()
@@ -19,10 +15,6 @@ public class PlayerHUD : MonoBehaviour
 
     public void UpdateHp(float currentHp, float maxHp)
     {
-<<<<<<< HEAD
-        // ½½¶óÀÌ´õ´Â 0 ~ 1 »çÀÌÀÇ °ª(ºñÀ²)À¸·Î ¿òÁ÷ÀÓ
-=======
->>>>>>> dbe22004b2cc2de9197c89679d8bc0a9523a946f
         hpSlider.value = currentHp / maxHp;
     }
 }

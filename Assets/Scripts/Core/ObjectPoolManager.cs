@@ -7,7 +7,7 @@ public class ObjectPoolManager : MonoBehaviour
     [Header("Prefabs")]
     public Enemy enemyPrefab;
     public Projectile projectilePrefab;
-    //public ExpGem expGemPrefab;
+    public ExpGem expGemPrefab;
 
     [Header("Pool Sizes")]
     public int enemyPoolSize = 100;
@@ -17,7 +17,7 @@ public class ObjectPoolManager : MonoBehaviour
     // 풀들
     private ObjectPool<Enemy> enemyPool;
     private ObjectPool<Projectile> projectilePool;
-    //private ObjectPool<ExpGem> expGemPool;
+    private ObjectPool<ExpGem> expGemPool;
 
     private void Awake()
     {
@@ -61,16 +61,16 @@ public class ObjectPoolManager : MonoBehaviour
         projectilePool.Return(projectile);
     }
 
-    // ExpGem 가져오기 (Week 1 Day 4-5)
-    // public ExpGem GetExpGem()
-    // {
-    //     return expGemPool.Get();
-    // }
-    //
-    // public void ReturnExpGem(ExpGem expGem)
-    // {
-    //     expGemPool.Return(expGem);
-    // }
+    // ExpGem 가져오기
+    public ExpGem GetExpGem()
+    {
+        return expGemPool.Get();
+    }
+    
+    public void ReturnExpGem(ExpGem expGem)
+    {
+        expGemPool.Return(expGem);
+    }
 
     // 제네릭 방식으로 풀 가져오기
     public ObjectPool<T> GetPool<T>() where T : MonoBehaviour
@@ -79,8 +79,8 @@ public class ObjectPoolManager : MonoBehaviour
             return enemyPool as ObjectPool<T>;
         else if (typeof(T) == typeof(Projectile))
             return projectilePool as ObjectPool<T>;
-        //else if (typeof(T) == typeof(ExpGem))
-        //    return expGemPool as ObjectPool<T>;
+        else if (typeof(T) == typeof(ExpGem))
+           return expGemPool as ObjectPool<T>;
 
         Debug.LogError($"ObjectPoolManager: 풀을 찾을 수 없음: {typeof(T).Name}");
         return null;

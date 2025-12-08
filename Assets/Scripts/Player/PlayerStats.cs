@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    [Header("ÇÃ·¹ÀÌ¾î ´É·ÂÄ¡ ¼³Á¤")]
+    [Header("ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½É·ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] private float speed = 5f;
     [SerializeField] private float maxHp = 100f;
     [SerializeField] private float currentHp;
@@ -10,7 +10,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float damage = 10f;
     [SerializeField] private float cooldown = 1f;
 
-    [Header("¼ºÀå ½Ã½ºÅÛ")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½Ã½ï¿½ï¿½ï¿½")]
     [SerializeField] private int level = 1;
     [SerializeField] private float currentExp = 0;
     [SerializeField] private AnimationCurve expCurve;
@@ -19,7 +19,7 @@ public class PlayerStats : MonoBehaviour
     void Start()
     {
         currentHp = maxHp;
-        //½ÃÀÛ½Ã UI °»½Å
+        //ï¿½ï¿½ï¿½Û½ï¿½ UI ï¿½ï¿½ï¿½ï¿½
         if (PlayerHUD.Instance != null)
         {
             PlayerHUD.Instance.UpdateHp(currentHp, maxHp);
@@ -47,14 +47,7 @@ public class PlayerStats : MonoBehaviour
     {
         currentExp += amount;
 
-        // °æÇèÄ¡¹Ù UI °»½Å ·ÎÁ÷ÀÌ ÀÖ´Ù¸é ¿©±â¼­ È£Ãâ
-<<<<<<< HEAD
-        // if (PlayerHUD.Instance != null) ...
-
-        // ÇöÀç °æÇèÄ¡°¡ ÇÊ¿ä °æÇèÄ¡(MaxExp)º¸´Ù ¸¹À¸¸é ·¹º§¾÷
-=======
-
->>>>>>> dbe22004b2cc2de9197c89679d8bc0a9523a946f
+        // ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ UI ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½ï¿½ï¿½â¼­ È£ï¿½ï¿½
         if (currentExp >= MaxExp)
         {
             LevelUp();
@@ -63,21 +56,16 @@ public class PlayerStats : MonoBehaviour
 
     void LevelUp()
     {
-        currentExp -= MaxExp; // ³²Àº °æÇèÄ¡ ÀÌ¿ù
+        currentExp -= MaxExp; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½Ì¿ï¿½
         level++;
-<<<<<<< HEAD
-        Debug.Log("·¹º§ ¾÷! ÇöÀç ·¹º§: " + level);
-        // ¿©±â¼­ ½ºÅ³ ¼±ÅÃÃ¢ ¶ç¿ì´Â ÇÔ¼ö È£Ãâ ¿¹Á¤
-=======
-        // ½ºÅ³ ¼±ÅÃÃ¢ ¶ç¿ï¿¹Á¤
->>>>>>> dbe22004b2cc2de9197c89679d8bc0a9523a946f
+        // ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½Ã¢ ï¿½ï¿½ï¿¹ï¿½ï¿½
     }
 
     public float MaxExp
     {
         get
         {
-            if (expCurve == null || expCurve.length == 0) return 100 * level; // ¾ÈÀüÀåÄ¡
+            if (expCurve == null || expCurve.length == 0) return 100 * level; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡
             return expCurve.Evaluate(level);
         }
     }
@@ -88,7 +76,7 @@ public class PlayerStats : MonoBehaviour
     public void AddDamage(float amount) { damage += amount; }
     public void AddCooldown(float amount) { cooldown += amount; }
 
-    // [¿ÜºÎ Á¢±Ù¿ë]
+    // [ï¿½Üºï¿½ ï¿½ï¿½ï¿½Ù¿ï¿½]
     public float Speed
     {
         get { return speed; }
@@ -110,20 +98,6 @@ public class PlayerStats : MonoBehaviour
     }
 
     public float Damage
-<<<<<<< HEAD
-    { 
-        get { return damage; } 
-    }
-
-    public float Cooldown 
-    { 
-        get { return cooldown; } 
-    }
-
-    public int Level 
-    { 
-        get { return level; } 
-=======
     {
         get { return damage; }
     }
@@ -136,6 +110,5 @@ public class PlayerStats : MonoBehaviour
     public int Level
     {
         get { return level; }
->>>>>>> dbe22004b2cc2de9197c89679d8bc0a9523a946f
     }
 }

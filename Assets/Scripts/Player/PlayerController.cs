@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("ÂüÁ¶")]
+    [Header("ï¿½ï¿½ï¿½ï¿½")]
     private PlayerStats stats;
 
-    [Header("½Ã°¢ È¿°ú")]
+    [Header("ï¿½Ã°ï¿½ È¿ï¿½ï¿½")]
     public Transform bodyTransform;
 
-    [Header("¸ð¹ÙÀÏ Á¶ÀÌ½ºÆ½")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì½ï¿½Æ½")]
     // [SerializeField] private Joystick joyStick; 
 
     private Vector2 inputVec;
@@ -20,11 +20,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         spriter = GetComponent<SpriteRenderer>();
-<<<<<<< HEAD
-        anim = GetComponentInChildren<Animator>(); 
-=======
         anim = GetComponentInChildren<Animator>();
->>>>>>> dbe22004b2cc2de9197c89679d8bc0a9523a946f
         stats = GetComponent<PlayerStats>();
     }
 
@@ -33,7 +29,7 @@ public class PlayerController : MonoBehaviour
         inputVec.x = Input.GetAxisRaw("Horizontal");
         inputVec.y = Input.GetAxisRaw("Vertical");
 
-        // Á¶ÀÌ½ºÆ½
+        // ï¿½ï¿½ï¿½Ì½ï¿½Æ½
         // if (joyStick != null && (inputVec.x == 0 && inputVec.y == 0))
         // {
         //     inputVec.x = joyStick.Horizontal;
