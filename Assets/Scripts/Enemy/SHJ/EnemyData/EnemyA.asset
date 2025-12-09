@@ -16,6 +16,9 @@ MonoBehaviour:
   EnemyName: Enemy
   EnemyHP: 100
   moveSpeed: 2
+<<<<<<< HEAD
   contactDamage: 5
   expValue: 5
+=======
+>>>>>>> ec2f37cc668ac1985ad4568396afc5afa73be997
   weapons: []

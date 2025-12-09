@@ -8,8 +8,13 @@ public class PlayerController : MonoBehaviour
     [Header("ï¿½Ã°ï¿½ È¿ï¿½ï¿½")]
     public Transform bodyTransform;
 
+<<<<<<< HEAD
     [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì½ï¿½Æ½")]
     // [SerializeField] private Joystick joyStick; 
+=======
+    [Header("¸ð¹ÙÀÏ Á¶ÀÌ½ºÆ½")]
+    [SerializeField] private VirtualJoystick joyStick;
+>>>>>>> ec2f37cc668ac1985ad4568396afc5afa73be997
 
     private Vector2 inputVec;
     private Rigidbody2D rb;
@@ -29,12 +34,20 @@ public class PlayerController : MonoBehaviour
         inputVec.x = Input.GetAxisRaw("Horizontal");
         inputVec.y = Input.GetAxisRaw("Vertical");
 
+<<<<<<< HEAD
         // ï¿½ï¿½ï¿½Ì½ï¿½Æ½
         // if (joyStick != null && (inputVec.x == 0 && inputVec.y == 0))
         // {
         //     inputVec.x = joyStick.Horizontal;
         //     inputVec.y = joyStick.Vertical;
         // }
+=======
+        if (joyStick != null && (joyStick.Horizontal != 0 || joyStick.Vertical != 0))
+        {
+            inputVec.x = joyStick.Horizontal;
+            inputVec.y = joyStick.Vertical;
+        }
+>>>>>>> ec2f37cc668ac1985ad4568396afc5afa73be997
 
         if (inputVec.x != 0)
         {
@@ -43,8 +56,12 @@ public class PlayerController : MonoBehaviour
             bodyTransform.localScale = scale;
         }
 
-        //anim.SetBool("isRun", inputVec.magnitude > 0);
+        if (anim != null)
+        {
+            anim.SetBool("isRun", inputVec.magnitude > 0);
+        }
     }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("Enemy"))
@@ -55,7 +72,10 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector2 nextVec = inputVec.normalized * stats.Speed * Time.fixedDeltaTime;
+        Vector2 moveDist = Vector2.ClampMagnitude(inputVec, 1f);
+
+        Vector2 nextVec = moveDist * stats.Speed * Time.fixedDeltaTime;
+
         rb.MovePosition(rb.position + nextVec);
     }
 }
