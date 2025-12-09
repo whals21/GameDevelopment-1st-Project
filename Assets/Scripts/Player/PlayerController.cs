@@ -58,7 +58,10 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector2 nextVec = inputVec.normalized * stats.Speed * Time.fixedDeltaTime;
+        Vector2 moveDist = Vector2.ClampMagnitude(inputVec, 1f);
+
+        Vector2 nextVec = moveDist * stats.Speed * Time.fixedDeltaTime;
+
         rb.MovePosition(rb.position + nextVec);
     }
 }
