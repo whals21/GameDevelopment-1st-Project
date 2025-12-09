@@ -3,46 +3,46 @@ using UnityEngine.EventSystems;
 
 public class VirtualJoystick : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
-    [Header("UI ¿¬°á")]
+    [Header("UI ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] private RectTransform containerRect;
     [SerializeField] private RectTransform bgRect;
     [SerializeField] private RectTransform handleRect;
 
-    [Header("¼³Á¤")]
+    [Header("ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] private float joystickRadius = 100f;
 
-    // [¿ÜºÎ Á¢±Ù¿ë]
+    // [ï¿½Üºï¿½ ï¿½ï¿½ï¿½Ù¿ï¿½]
     private Vector2 inputVector;
     public float Horizontal { get { return inputVector.x; } }
     public float Vertical { get { return inputVector.y; } }
 
     void Start()
     {
-        // Á¶ÀÌ½ºÆ½ ¼û±â±â
+        // ï¿½ï¿½ï¿½Ì½ï¿½Æ½ ï¿½ï¿½ï¿½ï¿½ï¿½
         bgRect.gameObject.SetActive(false);
         inputVector = Vector2.zero;
     }
 
-    // È­¸é ¾îµðµç ÅÍÄ¡½Ã ¼ÒÈ¯
+    // È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½È¯
     public void OnPointerDown(PointerEventData eventData)
     {
-        // Á¶ÀÌ½ºÆ½ ¿ÀÇÂ
+        // ï¿½ï¿½ï¿½Ì½ï¿½Æ½ ï¿½ï¿½ï¿½ï¿½
         bgRect.gameObject.SetActive(true);
 
-        // ÅÍÄ¡ÇÑ À§Ä¡·Î ÀÌµ¿½ÃÅ°±â
+        // ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å°ï¿½ï¿½
         Vector2 localPoint;
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(containerRect, eventData.position, eventData.pressEventCamera, out localPoint))
         {
             bgRect.anchoredPosition = localPoint;
         }
 
-        // ÇÚµé À§Ä¡ ÃÊ±âÈ­ (Áß¾Ó)
+        // ï¿½Úµï¿½ ï¿½ï¿½Ä¡ ï¿½Ê±ï¿½È­ (ï¿½ß¾ï¿½)
         handleRect.anchoredPosition = Vector2.zero;
 
         OnDrag(eventData);
     }
 
-    // ÅÍÄ¡ ÁßÀÏ ¶§
+    // ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     public void OnDrag(PointerEventData eventData)
     {
         Vector2 localPoint;
@@ -50,17 +50,15 @@ public class VirtualJoystick : MonoBehaviour, IDragHandler, IPointerDownHandler,
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(bgRect, eventData.position, eventData.pressEventCamera, out localPoint))
         {
             localPoint = Vector2.ClampMagnitude(localPoint, joystickRadius);
-
             inputVector = localPoint / joystickRadius;
-
             handleRect.anchoredPosition = localPoint;
         }
     }
 
-    // ÅÍÄ¡ Á¾·á½Ã
+    // ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½
     public void OnPointerUp(PointerEventData eventData)
     {
-        // Á¶ÀÌ½ºÆ½ ¼û±â±â
+        // ï¿½ï¿½ï¿½Ì½ï¿½Æ½ ï¿½ï¿½ï¿½ï¿½ï¿½
         bgRect.gameObject.SetActive(false);
 
         inputVector = Vector2.zero;

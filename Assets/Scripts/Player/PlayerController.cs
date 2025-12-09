@@ -42,10 +42,10 @@ public class PlayerController : MonoBehaviour
             bodyTransform.localScale = scale;
         }
 
-        if (anim != null)
-        {
-            anim.SetBool("isRun", inputVec.magnitude > 0);
-        }
+        // if (anim != null)
+        // {
+        //     anim.SetBool("isRun", inputVec.magnitude > 0);
+        // }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
