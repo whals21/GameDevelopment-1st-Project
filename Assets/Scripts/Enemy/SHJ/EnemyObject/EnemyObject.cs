@@ -21,7 +21,6 @@ public class EnemyObject : ScriptableObject
 
     [Header("공격패턴")]
     public WeaponObject[] weapons;
-
     
 
 }
