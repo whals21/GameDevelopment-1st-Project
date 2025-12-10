@@ -3,7 +3,10 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [Header("총알 설정")]
-    [SerializeField] private float lifeTime = 3f;
+    [SerializeField] protected float lifeTime = 3f;
+
+    // 자식 클래스에서 재정의 가능한 수명 속성
+    protected virtual float LifeTime => lifeTime;
 
     // 런타임 데이터 (Init에서 설정)
     protected float damage;
@@ -39,7 +42,7 @@ public class Projectile : MonoBehaviour
     {
         // 수명 체크
         lifeTimer += Time.deltaTime;
-        if (lifeTimer >= lifeTime)
+        if (lifeTimer >= LifeTime)  // 가상 속성 사용
         {
             // 풀로 반환
             ReturnToPool();

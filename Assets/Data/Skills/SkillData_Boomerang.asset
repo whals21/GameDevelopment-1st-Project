@@ -18,15 +18,49 @@ MonoBehaviour:
   projectilePrefab: {fileID: 8415533593227436172, guid: 9561d25c70ebeb54e987de3a22f61946, type: 3}
   damage: 10
   cooldown: 3
-  projectileSpeed: 3
+  projectileSpeed: 7
   projectileCount: 1
   attackRange: 10
   levels:
   - level: 1
-    damageMultiplier: 10
-    cooldownMultiplier: 3
+    damageMultiplier: 2.4
+    cooldownMultiplier: 1
     additionalProjectiles: 0
-    projectileSpeedMultiplier: 3
-    upgradeDescription: 
+    projectileSpeedMultiplier: 1
+    projectileSizeMultiplier: 1
+    projectileScaleIncrease: 0
+    upgradeDescription: Throws 1 boomerang
+  - level: 1
+    damageMultiplier: 2.4
+    cooldownMultiplier: 1
+    additionalProjectiles: 1
+    projectileSpeedMultiplier: 1
+    projectileSizeMultiplier: 1
+    projectileScaleIncrease: 0
+    upgradeDescription: +1 boomerang
+  - level: 1
+    damageMultiplier: 4.8
+    cooldownMultiplier: 1
+    additionalProjectiles: 2
+    projectileSpeedMultiplier: 1
+    projectileSizeMultiplier: 1
+    projectileScaleIncrease: 0
+    upgradeDescription: Boomerang damage doubled
+  - level: 1
+    damageMultiplier: 4.8
+    cooldownMultiplier: 1
+    additionalProjectiles: 2
+    projectileSpeedMultiplier: 1
+    projectileSizeMultiplier: 1
+    projectileScaleIncrease: 0.6
+    upgradeDescription: Adds boomerang size
+  - level: 1
+    damageMultiplier: 6
+    cooldownMultiplier: 1
+    additionalProjectiles: 2
+    projectileSpeedMultiplier: 1
+    projectileSizeMultiplier: 1
+    projectileScaleIncrease: 1.2
+    upgradeDescription: Adds boomerang size, Adds boomerang damage
   evoSkill: {fileID: 0}
   evoRequirements: 

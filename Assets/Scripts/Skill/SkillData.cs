@@ -32,5 +32,7 @@ public class SkillLevel
     public float cooldownMultiplier = 1f;
     public int additionalProjectiles = 0;
     public float projectileSpeedMultiplier = 1f;
+    public float projectileSizeMultiplier = 1f;  // 투사체 크기 배수
+    public float projectileScaleIncrease = 0f;    // 레벨업 시 크기 증가량 (부메랑 4,5레벨용)
     public string upgradeDescription;
 }

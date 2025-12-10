@@ -15,6 +15,9 @@ public class SkillManager : MonoBehaviour
     #region Serialized Fields
     [Header("스킬 설정")]
     [SerializeField] private SkillData[] testSkills;
+
+    [Header("테스트용 스킬 레벨 설정")]
+    [SerializeField] private int[] testSkillLevels = new int[5];
     #endregion
 
     #region Private Fields
@@ -69,25 +72,51 @@ public class SkillManager : MonoBehaviour
         {
             if (testSkills[i] != null)
             {
-                EquipSkill(i, testSkills[i]);
+                // 테스트 스킬 레벨 설정 (인스펙터에서 직접 조정 가능)
+                int level = (i < testSkillLevels.Length) ? Mathf.Max(1, testSkillLevels[i]) : 1;
+                EquipSkill(i, testSkills[i], level);
             }
         }
     }
     #endregion
 
     #region Public API
-    public void EquipSkill(int slot, SkillData skill)
+    public void EquipSkill(int slot, SkillData skill, int level = 1)
     {
         if (!IsValidSlot(slot) || skill == null) return;
 
         equippedSkills[slot] = skill;
-        skillLevels[slot] = 1;
+        skillLevels[slot] = Mathf.Max(1, level);
         cooldownTimers[slot] = 0f;
     }
 
     public int GetSkillLevel(int slot) => IsValidSlot(slot) ? skillLevels[slot] : 0;
     public bool HasSkill(int slot) => IsValidSlot(slot) && equippedSkills[slot] != null;
     public int GetEquippedSkillCount() => equippedSkills.Count(skill => skill != null);
+
+    // 런타임에 스킬 레벨 설정 (인스펙터에서 테스트용)
+    [ContextMenu("Update Skill Levels From Inspector")]
+    public void UpdateSkillLevelsFromInspector()
+    {
+        for (int i = 0; i < MAX_SKILLS && i < testSkillLevels.Length; i++)
+        {
+            if (HasSkill(i) && testSkillLevels[i] != skillLevels[i])
+            {
+                skillLevels[i] = Mathf.Max(1, testSkillLevels[i]);
+                Debug.Log($"슬롯 {i}: 스킬 레벨을 {skillLevels[i]}로 업데이트");
+            }
+        }
+    }
+
+    // 런타임에 특정 스킬 레벨 설정
+    public void SetSkillLevel(int slot, int level)
+    {
+        if (HasSkill(slot))
+        {
+            skillLevels[slot] = Mathf.Max(1, level);
+            Debug.Log($"슬롯 {slot}: 스킬 레벨을 {level}로 설정");
+        }
+    }
     #endregion
 
     #region Combat System
@@ -162,6 +191,7 @@ public class SkillManager : MonoBehaviour
         // 스탯 계산
         float damage = skill.damage * GetDamageMultiplier(skill, level);
         float speed = skill.projectileSpeed * GetProjectileSpeedMultiplier(skill, level);
+        float sizeMultiplier = GetProjectileSizeMultiplier(skill, level);
 
         // 발사 방향 계산
         Vector2 direction = CalculateProjectileDirection(target, skill, level, index);
@@ -169,15 +199,15 @@ public class SkillManager : MonoBehaviour
         // 발사체 생성
         if (skill.projectilePrefab.GetComponent<BoomerangProjectile>() != null)
         {
-            SpawnSpecialProjectile(skill, damage, speed, direction);
+            SpawnSpecialProjectile(skill, damage, speed, direction, sizeMultiplier);
         }
         else
         {
-            SpawnRegularProjectile(skill, damage, speed, direction);
+            SpawnRegularProjectile(skill, damage, speed, direction, sizeMultiplier);
         }
     }
 
-    private void SpawnRegularProjectile(SkillData skill, float damage, float speed, Vector2 direction)
+    private void SpawnRegularProjectile(SkillData skill, float damage, float speed, Vector2 direction, float sizeMultiplier)
     {
         var projectile = ObjectPoolManager.Instance.GetProjectile();
         if (projectile == null)
@@ -190,14 +220,31 @@ public class SkillManager : MonoBehaviour
             projectile.gameObject.transform.position = transform.position;
         }
 
+        // 크기 조절
+        projectile.gameObject.transform.localScale = Vector3.one * sizeMultiplier;
+
         projectile.Init(damage, speed, direction);
     }
 
-    private void SpawnSpecialProjectile(SkillData skill, float damage, float speed, Vector2 direction)
+    private void SpawnSpecialProjectile(SkillData skill, float damage, float speed, Vector2 direction, float sizeMultiplier)
     {
-        var projectileObj = Instantiate(skill.projectilePrefab, transform.position, Quaternion.identity);
-        var boomerang = projectileObj.GetComponent<BoomerangProjectile>();
-        boomerang?.Init(damage, speed, direction);
+        // 부메랑도 오브젝트 풀에서 가져오기
+        var boomerang = ObjectPoolManager.Instance.GetBoomerang();
+        if (boomerang == null)
+        {
+            // 풀이 비어있으면 새로 생성
+            boomerang = Instantiate(skill.projectilePrefab).GetComponent<BoomerangProjectile>();
+        }
+        else
+        {
+            boomerang.gameObject.SetActive(true);
+            boomerang.transform.position = transform.position;
+        }
+
+        // 크기 조절
+        boomerang.transform.localScale = Vector3.one * sizeMultiplier;
+
+        boomerang.Init(damage, speed, direction);
     }
 
     private Vector2 CalculateProjectileDirection(Transform target, SkillData skill, int level, int index)
@@ -258,6 +305,29 @@ public class SkillManager : MonoBehaviour
     private float GetProjectileSpeedMultiplier(SkillData skill, int level)
     {
         return GetLevelData(skill, level)?.projectileSpeedMultiplier ?? 1f;
+    }
+
+    private float GetProjectileSizeMultiplier(SkillData skill, int level)
+    {
+        var levelData = GetLevelData(skill, level);
+        if (levelData == null) return 1f;
+
+        // 기본 크기 배수에 누적 증가량 더하기
+        return levelData.projectileSizeMultiplier + GetCumulativeScaleIncrease(skill, level);
+    }
+
+    private float GetCumulativeScaleIncrease(SkillData skill, int currentLevel)
+    {
+        if (skill?.levels == null) return 0f;
+
+        float totalIncrease = 0f;
+        // 현재 레벨까지의 모든 크기 증가량 누적
+        for (int i = 1; i <= currentLevel && i <= skill.levels.Length; i++)
+        {
+            totalIncrease += skill.levels[i - 1].projectileScaleIncrease;
+        }
+
+        return totalIncrease;
     }
 
     private SkillLevel GetLevelData(SkillData skill, int level)

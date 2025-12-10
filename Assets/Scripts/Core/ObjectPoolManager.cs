@@ -7,16 +7,19 @@ public class ObjectPoolManager : MonoBehaviour
     [Header("Prefabs")]
     public Enemy enemyPrefab;
     public Projectile projectilePrefab;
+    public BoomerangProjectile boomerangPrefab;
     public ExpGem expGemPrefab;
 
     [Header("Pool Sizes")]
     public int enemyPoolSize = 100;
     public int projectilePoolSize = 50;
+    public int boomerangPoolSize = 20;
     public int expGemPoolSize = 200;
 
     // 풀들
     private ObjectPool<Enemy> enemyPool;
     private ObjectPool<Projectile> projectilePool;
+    private ObjectPool<BoomerangProjectile> boomerangPool;
     private ObjectPool<ExpGem> expGemPool;
 
     private void Awake()
@@ -36,7 +39,8 @@ public class ObjectPoolManager : MonoBehaviour
         // 풀 초기화
         enemyPool = new ObjectPool<Enemy>(enemyPrefab, enemyPoolSize, transform);
         projectilePool = new ObjectPool<Projectile>(projectilePrefab, projectilePoolSize, transform);
-        //expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
+        boomerangPool = new ObjectPool<BoomerangProjectile>(boomerangPrefab, boomerangPoolSize, transform);
+        expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
     }
 
     // Enemy 가져오기
@@ -61,12 +65,23 @@ public class ObjectPoolManager : MonoBehaviour
         projectilePool.Return(projectile);
     }
 
+    // Boomerang 가져오기
+    public BoomerangProjectile GetBoomerang()
+    {
+        return boomerangPool.Get();
+    }
+
+    public void ReturnBoomerang(BoomerangProjectile boomerang)
+    {
+        boomerangPool.Return(boomerang);
+    }
+
     // ExpGem 가져오기
     public ExpGem GetExpGem()
     {
         return expGemPool.Get();
     }
-    
+
     public void ReturnExpGem(ExpGem expGem)
     {
         expGemPool.Return(expGem);

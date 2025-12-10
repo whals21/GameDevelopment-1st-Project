@@ -6,11 +6,14 @@ public class BoomerangProjectile : Projectile
     [SerializeField] private float returnSpeed = 20f;
     [SerializeField] private float maxDistance = 8f;
     [SerializeField] private float pickupRange = 0.5f;
-    [SerializeField] private float lifeTime = 10f;
+    // lifeTime은 부모 클래스의 필드를 사용 (Inspector에서는 Projectile 기본값 수정)
 
     private Vector3 startPosition;
     private bool isReturning = false;
     private Transform playerTransform;
+
+    // 부메랑의 수명은 10초
+    protected override float LifeTime => 10f;
 
     void Awake()
     {
@@ -96,13 +99,15 @@ public class BoomerangProjectile : Projectile
 
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
-        // 돌아올 때 플레이어 충돌
+        // 플레이어 충돌
         if (collision.CompareTag("Player") && isReturning)
         {
             ReturnToPool();
+            return;
         }
-        // 나갈 때 적 충돌
-        else if (collision.CompareTag("Enemy") && !isReturning)
+        
+        // 적 충돌 - 데미지
+        if (collision.CompareTag("Enemy"))
         {
             Enemy enemy = collision.GetComponent<Enemy>();
             if (enemy != null)
@@ -114,7 +119,7 @@ public class BoomerangProjectile : Projectile
 
     protected override void ReturnToPool()
     {
-        // Instantiate로 생성되었으므로 Destroy
-        Destroy(gameObject);
+        // 오브젝트 풀로 반환
+        ObjectPoolManager.Instance.ReturnBoomerang(this);
     }
 }
