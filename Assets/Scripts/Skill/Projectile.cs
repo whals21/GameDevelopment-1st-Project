@@ -6,12 +6,15 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float lifeTime = 3f;
 
     // 런타임 데이터 (Init에서 설정)
-    private float damage;
-    private float speed;
-    private Vector3 direction;
-    private float lifeTimer;
+    protected float damage;
+    protected float speed;
+    protected Vector3 direction;
+    protected float lifeTimer;
 
-    private Rigidbody2D rb;
+    // 프로퍼티 (자식 클래스에서 접근용)
+    public float Damage => damage;
+
+    protected Rigidbody2D rb;
 
     void Awake()
     {
@@ -26,18 +29,18 @@ public class Projectile : MonoBehaviour
         this.damage = damage;
         this.speed = speed;
         this.direction = direction.normalized;
-        this.lifeTimer = 0f;  // ← 타이머 리셋!
+        this.lifeTimer = 0f;  // 타이머 리셋!
 
         // 회전 설정
         transform.right = direction;
     }
 
-    void Update()
+    protected virtual void Update()
     {
         // 수명 체크
         lifeTimer += Time.deltaTime;
         if (lifeTimer >= lifeTime)
-        {   
+        {
             // 풀로 반환
             ReturnToPool();
         }
@@ -50,7 +53,7 @@ public class Projectile : MonoBehaviour
         rb.MovePosition(nextPos);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Enemy"))
         {
@@ -66,7 +69,7 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private void ReturnToPool()
+    protected virtual void ReturnToPool()
     {
         ObjectPoolManager.Instance.ReturnProjectile(this);
     }

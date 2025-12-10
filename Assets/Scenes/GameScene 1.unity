@@ -301,6 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc8bc05704771b54eacbc2edabfbf72a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 152268700}
 --- !u!4 &358683052
 Transform:
   m_ObjectHideFlags: 0
@@ -1122,7 +1123,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1396247405
 Transform:
   m_ObjectHideFlags: 0
@@ -1641,6 +1642,59 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1a09fba301299114b8f604bdf88747dc, type: 3}
+--- !u!1 &1922997240
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1922997242}
+  - component: {fileID: 1922997241}
+  m_Layer: 0
+  m_Name: SkillManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1922997241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1922997240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb09739cd64d0641830903e83869a30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equippedSkills:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  skillLevels: 0000000000000000000000000000000000000000
+  testSkills:
+  - {fileID: 11400000, guid: c572ab794d279304e8e9ce61aad30eda, type: 2}
+--- !u!4 &1922997242
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1922997240}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 152268700}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2054752140
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1701,12 +1755,19 @@ PrefabInstance:
       propertyPath: joyStick
       value: 
       objectReference: {fileID: 1025931603}
+    - target: {fileID: 8763636183649837663, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
+      propertyPath: m_Constraints
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 80163049629271, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1396247405}
+    - targetCorrespondingSourceObject: {fileID: 80163049629271, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1922997242}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
 --- !u!1 &2091226173
@@ -1771,27 +1832,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4520718086003468424, guid: a1dbe3d0a4cba5d4ba40b546c3f7ecad, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4520718086003468424, guid: a1dbe3d0a4cba5d4ba40b546c3f7ecad, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4520718086003468424, guid: a1dbe3d0a4cba5d4ba40b546c3f7ecad, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4520718086003468424, guid: a1dbe3d0a4cba5d4ba40b546c3f7ecad, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4520718086003468424, guid: a1dbe3d0a4cba5d4ba40b546c3f7ecad, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4520718086003468424, guid: a1dbe3d0a4cba5d4ba40b546c3f7ecad, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7230605873613563989, guid: a1dbe3d0a4cba5d4ba40b546c3f7ecad, type: 3}
       propertyPath: m_Name

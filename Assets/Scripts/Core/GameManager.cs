@@ -6,6 +6,9 @@ public class GameManager : MonoBehaviour
     // 싱글톤 인스턴스
     public static GameManager Instance { get; private set; }
 
+     // 플레이어 참조 
+    public Transform player;   
+
     // 게임 상태 열거형
     public enum GameState
     {
@@ -39,7 +42,13 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start()
-    {
+    {   
+         if (player == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+                player = playerObj.transform;
+        }
         StartGame();
     }
 
