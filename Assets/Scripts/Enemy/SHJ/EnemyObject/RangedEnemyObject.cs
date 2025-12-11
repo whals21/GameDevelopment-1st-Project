@@ -16,5 +16,7 @@ public class RangedEnemyObject : MonoBehaviour
 
     [Header("공격범위")]
     public float AttackRage;
+    public float Delay;
+
 
 }

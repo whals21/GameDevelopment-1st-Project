@@ -39,7 +39,15 @@ public class EnemyCore : MonoBehaviour
     public Collider2D col { get; private set; }
     private Ray2D ray;
     private RaycastHit2D hit;
-    
+
+
+        
+    public float AttackDelay => Data.attackDelay;
+    public float AttackRange => Data.attackRange;
+    public GameObject ProjectilePrefab => Data.projectilePrefab;
+    public Transform FirePoint => Data.firePoint != null ? Data.firePoint : transform;
+    public bool IsRanged => Data.isRanged;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -47,10 +55,21 @@ public class EnemyCore : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         currentHP = MaxHP;
         moveSpeed = Data.moveSpeed;
-        
-        
+
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (Target == null || AttackRange <= 0f) return;
+
+        Vector3 origin = FirePoint.position;
+        Vector3 dir = (Target.position - origin).normalized;
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawRay(origin, dir * AttackRange);
         
     }
+
     void Start()
     {
         
