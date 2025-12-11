@@ -12,10 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1312f4da8a095744984e1205152fe6b4, type: 3}
   m_Name: EnemyB
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   prefab: {fileID: 1947621436803290287, guid: 1a09fba301299114b8f604bdf88747dc, type: 3}
   EnemyName: Zombie
   EnemyHP: 100
   moveSpeed: 4
   contactDamage: 5
   expValue: 5
+=======
+  prefab: {fileID: 2682184789590373286, guid: 6449a62f3a3c1d44a921cbc39dd04e3e, type: 3}
+  EnemyName: 
+  EnemyHP: 50
+  moveSpeed: 2
+  isRanged: 0
+  projectilePrefab: {fileID: 0}
+  attackRange: 3
+  attackDelay: 2
+  firePoint: {fileID: 0}
+>>>>>>> 8f924e2fe6fe03403d31031d38a56b12d1632d97
   weapons: []
