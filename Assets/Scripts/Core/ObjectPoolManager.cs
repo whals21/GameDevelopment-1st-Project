@@ -39,10 +39,7 @@ public class ObjectPoolManager : MonoBehaviour
         // 풀 초기화
         enemyPool = new ObjectPool<Enemy>(enemyPrefab, enemyPoolSize, transform);
         projectilePool = new ObjectPool<Projectile>(projectilePrefab, projectilePoolSize, transform);
-<<<<<<< HEAD
         boomerangPool = new ObjectPool<BoomerangProjectile>(boomerangPrefab, boomerangPoolSize, transform);
-=======
->>>>>>> d4013644232af3a1be94e554bd3a47b1319467ea
         expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
     }
 
