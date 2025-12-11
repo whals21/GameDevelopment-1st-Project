@@ -11,6 +11,11 @@ public class ExpGem : MonoBehaviour
     private float magnetRange;
     private bool isBeingAttracted = false;
 
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
     // 오브젝트 풀링용 Init() 메서드
     public void Init(int expValue, Vector3 spawnPosition, float magnetRange)
     {
@@ -42,20 +47,16 @@ public class ExpGem : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            //GiveExpToPlayer();
+            // [수정]            
+            PlayerStats playerStats = collision.GetComponent<PlayerStats>();
+            if (playerStats != null)
+            {
+                playerStats.GainExp(expValue);
+            }
+
             ReturnToPool();
         }
     }
-
-    // 경험치 지급
-    // private void GiveExpToPlayer()
-    // {
-    //     PlayerStats playerStats = collision.GetComponent<PlayerStats>();
-    //     if (playerStats != null)
-    //     {
-    //         playerStats.GainExp(expValue);
-    //     }
-    // }
 
     // 오브젝트 풀로 반환
     private void ReturnToPool()

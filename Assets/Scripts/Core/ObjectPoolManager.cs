@@ -36,7 +36,7 @@ public class ObjectPoolManager : MonoBehaviour
         // 풀 초기화
         enemyPool = new ObjectPool<Enemy>(enemyPrefab, enemyPoolSize, transform);
         projectilePool = new ObjectPool<Projectile>(projectilePrefab, projectilePoolSize, transform);
-        //expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
+        expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
     }
 
     // Enemy 가져오기
