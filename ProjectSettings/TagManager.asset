@@ -3,13 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-<<<<<<< HEAD
-  - Enemy
-=======
-  - Close
-  - Ranged
->>>>>>> 8f924e2fe6fe03403d31031d38a56b12d1632d97
+  tags: []
   layers:
   - Default
   - TransparentFX
