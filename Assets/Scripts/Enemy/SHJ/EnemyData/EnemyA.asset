@@ -16,4 +16,9 @@ MonoBehaviour:
   EnemyName: 
   EnemyHP: 100
   moveSpeed: 3
+  isRanged: 0
+  projectilePrefab: {fileID: 0}
+  attackRange: 5
+  attackDelay: 2
+  firePoint: {fileID: 0}
   weapons: []
