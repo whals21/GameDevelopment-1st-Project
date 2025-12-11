@@ -3,18 +3,22 @@ using System.Collections.Generic;
 
 public class RangedShooter : MonoBehaviour
 {
-    [Header("원거리 적들 (직접 드래그)")]
-    [SerializeField] private EnemyCore[] rangedEnemies;  // 여기다가 원거리 적들 드래그!
+    [Header("적들 부모 오브젝트")]
+    [SerializeField] private Transform enemiesParent; // Enemys 빈 오브젝트 드래그 (모든 적들의 부모)
 
-    [Header("공유 총알 풀 컨테이너")]
-    [SerializeField] private Transform bulletPoolContainer; // EnemyBullet 오브젝트
+    [Header("총알 풀 컨테이너")]
+    [SerializeField] private Transform bulletPoolContainer; // EnemyBullet 오브젝트 (총알 풀)
 
-    private Queue<GameObject> bulletPool = new Queue<GameObject>();
-    private Dictionary<EnemyCore, float> lastShootTime = new Dictionary<EnemyCore, float>();
+    private Queue<GameObject> bulletPool = new Queue<GameObject>(); // 재사용할 총알 풀 (비활성화된 총알들)
+    private Dictionary<EnemyCore, float> lastShootTime = new Dictionary<EnemyCore, float>(); // 각 적별 마지막 발사 시간 (쿨타임 관리용)
+
+    // 실시간으로 원거리 적들 추적
+    private List<EnemyCore> rangedEnemies = new List<EnemyCore>(); // 현재 원거리 적 목록
 
     private void Awake()
     {
-        // 풀 초기화
+        // 게임 시작 시 총알 풀 초기화
+        // bulletPoolContainer의 모든 자식 총알을 비활성화하고 풀에 넣음
         foreach (Transform child in bulletPoolContainer)
         {
             child.gameObject.SetActive(false);
@@ -24,22 +28,48 @@ public class RangedShooter : MonoBehaviour
 
     private void Update()
     {
+        // 1. Enemys 아래 있는 원거리 적 목록 갱신
+        UpdateRangedEnemyList();
+
+        // 2. 각 원거리 적에 대해 발사 조건 확인 및 발사
         foreach (EnemyCore core in rangedEnemies)
         {
             if (core == null || !core.IsRanged || core.Target == null) continue;
 
-            // 쿨타임 체크
-            if (!CanShootNow(core)) continue;
+            if (!CanShootNow(core)) continue; // 쿨타임 체크
 
-            // 레이 체크 (EnemyCore에서 제공하는 방식 그대로)
-            if (CanSeePlayer(core))
+            if (CanSeePlayer(core)) // 레이로 플레이어 시야 확인
             {
-                ShootFrom(core);
-                lastShootTime[core] = Time.time;
+                ShootFrom(core); // 발사 실행
+                lastShootTime[core] = Time.time; // 발사 시간 기록
             }
         }
     }
 
+    // Enemys 아래 있는 모든 원거리 적을 주기적으로 갱신
+    // (매 프레임이 아니라 0.2초마다 한 번만 체크하여 성능 최적화)
+    private float updateInterval = 0.2f;
+    private float lastUpdateTime = 0f;
+    private void UpdateRangedEnemyList()
+    {
+        if (Time.time - lastUpdateTime < updateInterval) return;
+        lastUpdateTime = Time.time;
+
+        rangedEnemies.Clear();
+
+        if (enemiesParent == null) return;
+
+        foreach (Transform child in enemiesParent)
+        {
+            EnemyCore core = child.GetComponent<EnemyCore>();
+            if (core != null && core.IsRanged)
+            {
+                rangedEnemies.Add(core);
+            }
+        }
+    }
+
+    // 해당 적이 쿨타임이 끝났는지 확인
     private bool CanShootNow(EnemyCore core)
     {
         if (!lastShootTime.ContainsKey(core))
@@ -47,6 +77,7 @@ public class RangedShooter : MonoBehaviour
         return Time.time - lastShootTime[core] >= core.AttackDelay;
     }
 
+    // 레이캐스트를 사용해 플레이어가 시야에 있는지 확인 (벽 등 장애물 체크 포함)
     private bool CanSeePlayer(EnemyCore core)
     {
         Vector2 origin = core.FirePoint.position;
@@ -59,24 +90,28 @@ public class RangedShooter : MonoBehaviour
         Debug.DrawRay(origin, dir * core.AttackRange,
                      hit && hit.transform == core.Target ? Color.green : Color.red);
 
-        return hit && hit.transform == core.Target;
+        return hit.collider != null && hit.transform == core.Target;
     }
 
+    // 실제 발사 로직
+    // 풀에서 총알 하나 꺼내서 위치/방향 설정 후 활성화
     private void ShootFrom(EnemyCore core)
     {
         if (bulletPool.Count == 0) return;
 
         GameObject bullet = bulletPool.Dequeue();
 
-        // 각 적의 자식 Gun 아래 Bullet 템플릿에서 외형 복사 (선택사항)
+        // 각 적의 Gun/Bullet 외형 반영 (있으면 스프라이트 복사)
         Transform gun = core.transform.Find("Gun");
-        Transform templateBullet = gun?.Find("Bullet");
-        if (templateBullet != null)
+        if (gun != null)
         {
-            // 외형만 복사 (스프라이트 등)
-            var sr = bullet.GetComponent<SpriteRenderer>();
-            if (sr) sr.sprite = templateBullet.GetComponent<SpriteRenderer>().sprite;
-            // 필요하면 색상, 크기 등도 복사
+            Transform template = gun.Find("Bullet");
+            if (template != null)
+            {
+                var sr = bullet.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                    sr.sprite = template.GetComponent<SpriteRenderer>().sprite;
+            }
         }
 
         Vector3 dir = (core.Target.position - core.FirePoint.position).normalized;
@@ -87,6 +122,8 @@ public class RangedShooter : MonoBehaviour
         bullet.SetActive(true);
     }
 
+    // 총알이 사라지거나 플레이어와 충돌했을 때 호출
+    // 총알을 비활성화하고 풀에 다시 넣음 (재사용 준비)
     public void ReturnBullet(GameObject bullet)
     {
         bullet.SetActive(false);
