@@ -17,7 +17,7 @@ MonoBehaviour:
   EnemyHP: 100
   moveSpeed: 3
   isRanged: 0
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 927450996480703183, guid: cc86a1a48f46f1f4eb4264f87cabdb5f, type: 3}
   attackRange: 5
   attackDelay: 2
   firePoint: {fileID: 0}
