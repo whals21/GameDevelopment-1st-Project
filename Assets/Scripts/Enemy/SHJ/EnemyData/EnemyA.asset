@@ -15,14 +15,10 @@ MonoBehaviour:
   prefab: {fileID: 2682184789590373286, guid: 6449a62f3a3c1d44a921cbc39dd04e3e, type: 3}
   EnemyName: Enemy
   EnemyHP: 100
-<<<<<<< HEAD
-  moveSpeed: 2
-=======
   moveSpeed: 3
   isRanged: 0
   projectilePrefab: {fileID: 0}
   attackRange: 5
   attackDelay: 2
   firePoint: {fileID: 0}
->>>>>>> 8f924e2fe6fe03403d31031d38a56b12d1632d97
   weapons: []

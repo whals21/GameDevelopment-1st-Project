@@ -68,8 +68,8 @@ public class Enemy : MonoBehaviour
         enemyData = data;
         currentHP = data.EnemyHP;
         moveSpeed = data.moveSpeed;
-        contactDamage = data.contactDamage;
-        expValue = data.expValue;
+        //contactDamage = data.contactDamage;
+        //expValue = data.expValue;
 
         // 플레이어 재확인 (풀에서 재사용 시)
         if (target == null)

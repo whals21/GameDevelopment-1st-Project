@@ -16,26 +16,15 @@ public class EnemyObject : ScriptableObject
     [Header("ï¿½Ìµï¿½ï¿½Óµï¿½")]
     public float moveSpeed;
 
-<<<<<<< HEAD
-    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
-    public float contactDamage;  // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-
-    [Header("ï¿½ï¿½ï¿½è¿­Ä¡")]
-    public int expValue;  // Ä¡ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½è¿­Ä¡
+    [Header("=== ï¿½ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ===")]
+    public bool isRanged = false;                    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ï¿½?
+    public GameObject projectilePrefab;              // ï¿½ß»ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public float attackRange = 8f;                   // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½
+    public float attackDelay = 2f;                   // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½
+    public Transform firePoint;                      // ï¿½ß»ï¿½ ï¿½ï¿½Ä¡ (ï¿½ï¿½ï¿½ï¿½ï¿½Õ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°Å³ï¿½ ï¿½ï¿½Å¸ï¿½Ó¿ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½)
 
     [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public WeaponObject[] weapons;
-=======
-    [Header("=== ¿ø°Å¸® Àü¿ë ===")]
-    public bool isRanged = false;                    // ÀÌ ÀûÀÌ ¿ø°Å¸®ÀÎÁö?
-    public GameObject projectilePrefab;              // ¹ß»çÃ¼ ÇÁ¸®ÆÕ
-    public float attackRange = 8f;                   // °ø°Ý »ç°Å¸®
-    public float attackDelay = 2f;                   // °ø°Ý ÄðÅ¸ÀÓ
-    public Transform firePoint;                      // ¹ß»ç À§Ä¡ (ÇÁ¸®ÆÕ¿¡ ÁöÁ¤ÇÏ°Å³ª ·±Å¸ÀÓ¿¡¼­ Ã£À½)
-
-    [Header("°ø°ÝÆÐÅÏ")]
-    public WeaponObject[] weapons;
     
 
->>>>>>> 8f924e2fe6fe03403d31031d38a56b12d1632d97
 }
