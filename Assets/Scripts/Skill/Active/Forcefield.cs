@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Specialized;
 
 public class Forcefield : MonoBehaviour
 {
@@ -57,7 +58,7 @@ public class Forcefield : MonoBehaviour
      // 팔각형 모양 생성
      private void CreateOctagonShape()
      {
-        Vector2[] octagonPoints = new Vector2[8];
+        Vector3[] octagonPoints = new Vector3[8];
 
         // 8개의 점으로 팔각형 생성
         for (int i = 0; i < 8; i++)
@@ -65,29 +66,35 @@ public class Forcefield : MonoBehaviour
             float angle = i * Mathf.Deg2Rad / 4; // 45도 간격
             float x = radius * Mathf.Cos(angle) * radius;
             float y = radius * Mathf.Sin(angle) * radius;
-            octagonPoints[i] = new Vector2(x, y);
+            octagonPoints[i] = new Vector3(x, y, 0);
         }
 
         // PolygonCollider2D 설정
         if (polygonCollider != null)
         {
-            polygonCollider.points = octagonPoints;
+            Vector2[] colliderPoints = new Vector2[8];
+            for (int i = 0; i < 8; i++)
+            {
+                colliderPoints[i] = new Vector2(octagonPoints[i].x, octagonPoints[i].y);
+            }
+            polygonCollider.points = colliderPoints;
             polygonCollider.isTrigger = true;
         }
 
         // LineRenderer 설정 (시각적 효과)
         if (lineRenderer != null)
         {
-            lineRenderer.positionCount = octagonPoints.Length; 
+            lineRenderer.positionCount = octagonPoints.Length + 1; 
             lineRenderer.useWorldSpace = false; 
-            lineRenderer.startWidth = 0.1f;
-            lineRenderer.endWidth = 0.1f;
+            lineRenderer.startWidth = 0.2f;
+            lineRenderer.endWidth = 0.2f;
             lineRenderer.loop = true;
 
             for (int i = 0; i < octagonPoints.Length; i++)
             {
                 lineRenderer.SetPosition(i, octagonPoints[i]);
             }
+            lineRenderer.SetPosition(octagonPoints.Length, octagonPoints[0]); // 시작점으로 연결
         }
 
         // EdgeCollider2D 설정
@@ -140,15 +147,68 @@ public class Forcefield : MonoBehaviour
     public void Deactivate()
     {
         isActive = false;
-        StopAllCoroutines();
-        Destroy(gameObject);
+
+        // 시각적 효과 제거
+        if (lineRenderer != null)
+        {
+            lineRenderer.enabled = false;
+        }
+
+        // 콜라이더 비활성화
+        if (polygonCollider != null)
+        {
+            polygonCollider.enabled = false;
+        }
+
+        foreach (var edge in edgeColliders)
+        {
+            if (edge != null)
+            {
+                edge.enabled = false;
+            }
+        }
     }
 
     // 보호막 재활성화
+    public void Reactivate()
+    {
+        if (!isActive)
+        {
+            Init(damage, radius);
+        }
+    }
 
     // 반경 업데이트
+    public void UpdateRadius(float newRadius)
+    {
+        radius = newRadius;
+        CreateOctagonShape();
+    }
 
     // 데미지 업데이트
+    public void UpdateDamage(float newDamage)
+    {
+        damage = newDamage;
+        damagePerTick = damage * damageInterval;
+    }
 
     // 디버그용 Grizmos
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, radius);
+
+        // 팔각형 모양 그리기
+        Gizmos.color = Color.blue;
+        for (int i = 0; i < edgeColliders.Length; i++)
+        {
+            float angle1 = i * 45f * Mathf.Deg2Rad;
+            float angle2 = ((i + 1) % 8) * 45f * Mathf.Deg2Rad;
+
+            Vector3 p1 = transform.position + new Vector3(Mathf.Cos(angle1), Mathf.Sin(angle1), 0) * radius;
+            Vector3 p2 = transform.position + new Vector3(Mathf.Cos(angle2), Mathf.Sin(angle2), 0) * radius;
+
+            Gizmos.DrawLine(p1, p2);
+        }
+    }
 }
