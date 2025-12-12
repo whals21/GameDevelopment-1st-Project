@@ -4,11 +4,15 @@
 TagManager:
   serializedVersion: 2
 <<<<<<< HEAD
+<<<<<<< HEAD
   tags:
   - Enemy
 =======
   tags: []
 >>>>>>> cc57bb11ec739d1ede590b948cf404d1ed0e4c8d
+=======
+  tags: []
+>>>>>>> 0ca5fb900abd1a2861c8cac6660cc30eca417876
   layers:
   - Default
   - TransparentFX

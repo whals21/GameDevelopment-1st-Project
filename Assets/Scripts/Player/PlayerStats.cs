@@ -22,6 +22,7 @@ public class PlayerStats : MonoBehaviour
         if (PlayerHUD.Instance != null)
         {
             PlayerHUD.Instance.UpdateHp(currentHp, maxHp);
+            PlayerHUD.Instance.UpdateLevel(level);
         }
     }
 
@@ -69,6 +70,7 @@ public class PlayerStats : MonoBehaviour
         {
             PlayerHUD.Instance.UpdateExp(currentExp, MaxExp);
 
+            PlayerHUD.Instance.UpdateLevel(level);
             // 시퀀스 시작
             PlayerHUD.Instance.StartLevelUpSequence();
         }
