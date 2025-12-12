@@ -18,7 +18,7 @@ MonoBehaviour:
   moveSpeed: 3
   isRanged: 0
   projectilePrefab: {fileID: 927450996480703183, guid: cc86a1a48f46f1f4eb4264f87cabdb5f, type: 3}
-  attackRange: 5
-  attackDelay: 2
-  firePoint: {fileID: 0}
+  attackRange: 4
+  attackDelay: 1
+  firePoint: {fileID: 6779023673177729199, guid: 6449a62f3a3c1d44a921cbc39dd04e3e, type: 3}
   weapons: []

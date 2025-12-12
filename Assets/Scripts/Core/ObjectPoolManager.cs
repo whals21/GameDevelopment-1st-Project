@@ -6,6 +6,7 @@ public class ObjectPoolManager : MonoBehaviour
 
     [Header("Prefabs")]
     public Enemy enemyPrefab;
+    public EnemyBullet enemyBulletPrefab;  // <<<--- 추가
     public Projectile projectilePrefab;
     public BoomerangProjectile boomerangPrefab;
     public ExpGem expGemPrefab;
@@ -17,6 +18,7 @@ public class ObjectPoolManager : MonoBehaviour
     public int expGemPoolSize = 200;
 
     // 풀들
+    private ObjectPool<EnemyBullet> enemyBulletPool;// <<<--- 추가
     private ObjectPool<Enemy> enemyPool;
     private ObjectPool<Projectile> projectilePool;
     private ObjectPool<BoomerangProjectile> boomerangPool;
@@ -37,6 +39,7 @@ public class ObjectPoolManager : MonoBehaviour
     private void Start()
     {
         // 풀 초기화
+        enemyBulletPool = new ObjectPool<EnemyBullet>(enemyBulletPrefab, enemyPoolSize, transform);
         enemyPool = new ObjectPool<Enemy>(enemyPrefab, enemyPoolSize, transform);
         projectilePool = new ObjectPool<Projectile>(projectilePrefab, projectilePoolSize, transform);
         boomerangPool = new ObjectPool<BoomerangProjectile>(boomerangPrefab, boomerangPoolSize, transform);
@@ -52,6 +55,16 @@ public class ObjectPoolManager : MonoBehaviour
     public void ReturnEnemy(Enemy enemy)
     {
         enemyPool.Return(enemy);
+    }
+
+    // EnemyBullet 가져오기 및 반환  // <<<--- 추가
+    public EnemyBullet GetEnemyBullet()
+    {
+        return enemyBulletPool.Get();
+    }
+    public void ReturnEnemyBullet(EnemyBullet bullet)
+    {
+        enemyBulletPool.Return(bullet);
     }
 
     // Projectile 가져오기
@@ -92,6 +105,8 @@ public class ObjectPoolManager : MonoBehaviour
     {
         if (typeof(T) == typeof(Enemy))
             return enemyPool as ObjectPool<T>;
+        else if (typeof(T) == typeof(EnemyBullet))
+            return enemyBulletPool as ObjectPool<T>;
         else if (typeof(T) == typeof(Projectile))
             return projectilePool as ObjectPool<T>;
         else if (typeof(T) == typeof(ExpGem))

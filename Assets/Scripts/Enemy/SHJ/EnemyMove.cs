@@ -30,10 +30,10 @@ public class EnemyMove : MonoBehaviour
 
         Vector2 direction = (main.Target.position - transform.position).normalized;
 
-        // �̵�
+        
         main.rb.velocity = direction * main.Data.moveSpeed;
 
-        // �¿� ����
+       
         if (direction.x > 0.01f)
             main.sr.flipX = false;
         else if (direction.x < -0.01f)
