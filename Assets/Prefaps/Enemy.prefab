@@ -14,12 +14,8 @@ GameObject:
   - component: {fileID: 4958984733576996060}
   - component: {fileID: 6993977000040562556}
   - component: {fileID: 3679355159310101951}
-<<<<<<< HEAD
-  m_Layer: 6
-=======
   - component: {fileID: -1898594195702116983}
   m_Layer: 0
->>>>>>> cc57bb11ec739d1ede590b948cf404d1ed0e4c8d
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -181,6 +177,7 @@ MonoBehaviour:
   currentHP: 0
   moveSpeed: 0
   target: {fileID: 0}
+  point: {fileID: 6779023673177729199}
 --- !u!114 &3679355159310101951
 MonoBehaviour:
   m_ObjectHideFlags: 0
