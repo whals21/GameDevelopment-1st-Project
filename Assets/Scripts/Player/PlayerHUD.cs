@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class PlayerHUD : MonoBehaviour
 {
@@ -17,6 +18,13 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private GameObject levelUpEffectPrefab; // 레벨업 이펙트
     [SerializeField] private Transform playerTransform; // 이펙트 터질 위치
 
+    [Header("레벨 관련")]
+    [SerializeField] private TextMeshProUGUI levelText;
+
+    [Header("킬 카운트")]
+    [SerializeField] private TextMeshProUGUI killCountText;
+    private int kills = 0;
+
     void Awake()
     {
         Instance = this;
@@ -31,6 +39,25 @@ public class PlayerHUD : MonoBehaviour
     {
         if (expSlider != null) expSlider.value = currentExp / maxExp;
     }
+
+    public void UpdateLevel(int level)
+    {
+        if (levelText != null)
+        {
+            levelText.text = $"Lv.{level}";
+        }
+    }
+
+    public void AddKill()
+    {
+        kills++;
+
+        if (killCountText != null)
+        {
+            killCountText.text = $"Kills : {kills}";
+        }
+    }
+
     // 레벨업 시퀀스
     public void StartLevelUpSequence()
     {

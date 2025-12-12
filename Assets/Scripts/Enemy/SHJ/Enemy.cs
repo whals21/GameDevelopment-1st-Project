@@ -103,6 +103,11 @@ public class Enemy : MonoBehaviour
     // 사망 처리
     private void Die()
     {
+        if (PlayerHUD.Instance != null)
+        {
+            PlayerHUD.Instance.AddKill();
+        }
+
         // EnemySpawner에 알림
         EnemySpawner spawner = FindObjectOfType<EnemySpawner>();
         if (spawner != null)
