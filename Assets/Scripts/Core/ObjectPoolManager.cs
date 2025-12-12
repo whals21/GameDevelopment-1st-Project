@@ -8,18 +8,24 @@ public class ObjectPoolManager : MonoBehaviour
     public Enemy enemyPrefab;
     public Projectile projectilePrefab;
     public BoomerangProjectile boomerangPrefab;
+    public MolotovProjectile molotovPrefab;
+    public FireGround fireGroundPrefab;
     public ExpGem expGemPrefab;
 
     [Header("Pool Sizes")]
     public int enemyPoolSize = 100;
     public int projectilePoolSize = 50;
     public int boomerangPoolSize = 20;
+    public int molotovPoolSize = 30;
+    public int fireGroundPoolSize = 50;
     public int expGemPoolSize = 200;
 
     // 풀들
     private ObjectPool<Enemy> enemyPool;
     private ObjectPool<Projectile> projectilePool;
     private ObjectPool<BoomerangProjectile> boomerangPool;
+    private ObjectPool<MolotovProjectile> molotovPool;
+    private ObjectPool<FireGround> fireGroundPool;
     private ObjectPool<ExpGem> expGemPool;
 
     private void Awake()
@@ -40,6 +46,8 @@ public class ObjectPoolManager : MonoBehaviour
         enemyPool = new ObjectPool<Enemy>(enemyPrefab, enemyPoolSize, transform);
         projectilePool = new ObjectPool<Projectile>(projectilePrefab, projectilePoolSize, transform);
         boomerangPool = new ObjectPool<BoomerangProjectile>(boomerangPrefab, boomerangPoolSize, transform);
+        molotovPool = new ObjectPool<MolotovProjectile>(molotovPrefab, molotovPoolSize, transform);
+        fireGroundPool = new ObjectPool<FireGround>(fireGroundPrefab, fireGroundPoolSize, transform);
         expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
     }
 
@@ -74,6 +82,28 @@ public class ObjectPoolManager : MonoBehaviour
     public void ReturnBoomerang(BoomerangProjectile boomerang)
     {
         boomerangPool.Return(boomerang);
+    }
+
+    // Molotov 가져오기
+    public MolotovProjectile GetMolotov()
+    {
+        return molotovPool.Get();
+    }
+
+    public void ReturnMolotov(MolotovProjectile molotov)
+    {
+        molotovPool.Return(molotov);
+    }
+
+    // FireGround 가져오기
+    public FireGround GetFireGround()
+    {
+        return fireGroundPool.Get();
+    }
+
+    public void ReturnFireGround(FireGround fireGround)
+    {
+        fireGroundPool.Return(fireGround);
     }
 
     // ExpGem 가져오기

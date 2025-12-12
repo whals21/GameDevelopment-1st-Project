@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Linq;
+using System.Security.Principal;
+using UnityEngine;
 
 public class SkillManager : MonoBehaviour
 {
@@ -28,6 +29,9 @@ public class SkillManager : MonoBehaviour
     // 최적화: 적 리스트 캐싱
     private Enemy[] cachedEnemies;
     private float enemyCacheTimer;
+
+    // Forcefield 관련
+    private int forcefieldSlot = -1;
     #endregion
 
     #region Unity Lifecycle
@@ -39,7 +43,15 @@ public class SkillManager : MonoBehaviour
 
     void Start()
     {
+        // ForcefieldManager 초기화
+        if (ForcefieldManager.Instance == null)
+        {
+            GameObject forcefieldManagerObj = new GameObject("ForcefieldManager");
+            forcefieldManagerObj.AddComponent<ForcefieldManager>();
+        }
+
         EquipTestSkills();
+        UpdateForcefieldSkills();
     }
 
     void Update()
@@ -85,9 +97,26 @@ public class SkillManager : MonoBehaviour
     {
         if (!IsValidSlot(slot) || skill == null) return;
 
+        // 기존 Forcefield 스킬 제거
+        if (forcefieldSlot >= 0 && forcefieldSlot < MAX_SKILLS && equippedSkills[forcefieldSlot] != null)
+        {
+            if (equippedSkills[forcefieldSlot].name.Contains("Forcefield"))
+            {
+                //ForcefieldManager.Instance.UnEquipForcefieldSkill();
+                forcefieldSlot = -1;
+            }
+        }
+
         equippedSkills[slot] = skill;
         skillLevels[slot] = Mathf.Max(1, level);
         cooldownTimers[slot] = 0f;
+
+        // Forcefield 스킬 장착 
+        if (skill.name.Contains("Forcefield"))
+        {
+            forcefieldSlot = slot;
+            ForcefieldManager.Instance.EquipForcefieldSkill(skill, level);
+        }
     }
 
     public int GetSkillLevel(int slot) => IsValidSlot(slot) ? skillLevels[slot] : 0;
@@ -114,7 +143,30 @@ public class SkillManager : MonoBehaviour
         if (HasSkill(slot))
         {
             skillLevels[slot] = Mathf.Max(1, level);
+
+            // Forcefield 스킬인 경우 ForcefieldManager에 업데이트
+            if (slot == forcefieldSlot && ForcefieldManager.Instance != null)
+            {
+                ForcefieldManager.Instance.EquipForcefieldSkill(equippedSkills[slot], skillLevels[slot]);
+            }
             Debug.Log($"슬롯 {slot}: 스킬 레벨을 {level}로 설정");
+        }
+    }
+    #endregion
+
+    #region Forcefield Management
+    private void UpdateForcefieldSkills()
+    {
+        // 스킬에 Forcefield가 있는지 확인
+        for (int i = 0; i < MAX_SKILLS; i++)
+        {
+            if (HasSkill(i) && equippedSkills[i].name.Contains("Forcefield") ||
+                equippedSkills[i].skillName.Contains("Forcefield"))
+            {
+                forcefieldSlot = i;
+                ForcefieldManager.Instance.EquipForcefieldSkill(equippedSkills[i], skillLevels[i]);
+                break;
+            }
         }
     }
     #endregion
@@ -124,6 +176,9 @@ public class SkillManager : MonoBehaviour
     {
         for (int i = 0; i < MAX_SKILLS; i++)
         {
+            // Forcefield 스킬은 자동 공격에서 제외
+            if (i == forcefieldSlot) continue;
+
             if (HasSkill(i) && cooldownTimers[i] <= 0f)
             {
                 ExecuteSkill(i);
@@ -141,13 +196,17 @@ public class SkillManager : MonoBehaviour
 
         // 발사체 생성
         int projectileCount = GetProjectileCount(skill, level);
+        Debug.Log($"ExecuteSkill: 슬롯 {slot}, 스킬 {skill.name}, 레벨 {level}, 발사체 수 {projectileCount}");
+
         for (int i = 0; i < projectileCount; i++)
         {
             SpawnProjectile(skill, level, target, i);
         }
 
         // 쿨다운 설정
-        cooldownTimers[slot] = GetSkillCooldown(skill, level);
+        float cooldown = GetSkillCooldown(skill, level);
+        cooldownTimers[slot] = cooldown;
+        Debug.Log($"쿨다운 설정: {cooldown}초");
     }
 
     private Transform FindNearestEnemy()
@@ -193,16 +252,19 @@ public class SkillManager : MonoBehaviour
         float speed = skill.projectileSpeed * GetProjectileSpeedMultiplier(skill, level);
         float sizeMultiplier = GetProjectileSizeMultiplier(skill, level);
 
-        // 발사 방향 계산
-        Vector2 direction = CalculateProjectileDirection(target, skill, level, index);
-
         // 발사체 생성
         if (skill.projectilePrefab.GetComponent<BoomerangProjectile>() != null)
         {
-            SpawnSpecialProjectile(skill, damage, speed, direction, sizeMultiplier);
+            SpawnBoomerangProjectile(skill, damage, speed, sizeMultiplier);
+        }
+        else if (skill.projectilePrefab.GetComponent<MolotovProjectile>() != null)
+        {
+            SpawnMolotovProjectile(skill, damage, level, index);
         }
         else
         {
+            // 발사 방향 계산
+            Vector2 direction = CalculateProjectileDirection(target, skill, level, index);
             SpawnRegularProjectile(skill, damage, speed, direction, sizeMultiplier);
         }
     }
@@ -226,7 +288,7 @@ public class SkillManager : MonoBehaviour
         projectile.Init(damage, speed, direction);
     }
 
-    private void SpawnSpecialProjectile(SkillData skill, float damage, float speed, Vector2 direction, float sizeMultiplier)
+      private void SpawnBoomerangProjectile(SkillData skill, float damage, float speed, float sizeMultiplier)
     {
         // 부메랑도 오브젝트 풀에서 가져오기
         var boomerang = ObjectPoolManager.Instance.GetBoomerang();
@@ -244,7 +306,56 @@ public class SkillManager : MonoBehaviour
         // 크기 조절
         boomerang.transform.localScale = Vector3.one * sizeMultiplier;
 
+        // 방향은 계산해서 전달
+        Vector2 direction = Vector2.right; // 기본 오른쪽
         boomerang.Init(damage, speed, direction);
+    }
+
+    private void SpawnMolotovProjectile(SkillData skill, float damage, int level, int index)
+    {
+        // Molotov 오브젝트 풀에서 가져오기
+        var molotov = ObjectPoolManager.Instance.GetMolotov();
+        if (molotov == null)
+        {
+            // 풀이 비어있으면 새로 생성
+            molotov = Instantiate(skill.projectilePrefab).GetComponent<MolotovProjectile>();
+        }
+        else
+        {
+            molotov.gameObject.SetActive(true);
+            molotov.transform.position = transform.position;
+        }
+
+        // 목표 위치 계산 (플레이어 주변 랜덤 또는 균등 분배)
+        Vector3 targetPos = CalculateMolotovTargetPosition(level, index);
+
+        // Molotov 초기화
+        molotov.InitMolotov(damage, targetPos);
+    }
+
+    private Vector3 CalculateMolotovTargetPosition(int level, int index)
+    {
+        // 레벨에 따른 발사 수
+        int molotovCount = 2 + (level - 1); // 레벨 1: 2개, 레벨 2: 3개, ...
+
+        if (molotovCount == 1)
+        {
+            // 가장 가까운 적 위치
+            var nearestEnemy = FindNearestEnemy();
+            if (nearestEnemy != null)
+            {
+                return nearestEnemy.position;
+            }
+            return transform.position + Vector3.forward * 5f;
+        }
+
+        // 원형으로 분배
+        float angleStep = 360f / molotovCount;
+        float angle = angleStep * index;
+        float radius = 5f; // 플레이어로부터의 거리
+
+        Vector3 offset = Quaternion.Euler(0, 0, angle) * Vector3.right * radius;
+        return transform.position + offset;
     }
 
     private Vector2 CalculateProjectileDirection(Transform target, SkillData skill, int level, int index)
@@ -269,6 +380,9 @@ public class SkillManager : MonoBehaviour
     {
         for (int i = 0; i < MAX_SKILLS; i++)
         {
+            // Forcefield 스킬은 쿨다운 적용 안함
+            if (i == forcefieldSlot) continue;
+
             if (cooldownTimers[i] > 0f)
             {
                 cooldownTimers[i] = Mathf.Max(0f, cooldownTimers[i] - Time.deltaTime);
@@ -280,7 +394,16 @@ public class SkillManager : MonoBehaviour
     #region Stats Calculation
     private int GetProjectileCount(SkillData skill, int level)
     {
-        if (skill == null || level <= 1) return 1;
+        if (skill == null) return 1;
+
+        // Molotov 특별 처리: 레벨에 따라 2, 3, 4, 5, 6개
+        if (skill.projectilePrefab != null && skill.projectilePrefab.GetComponent<MolotovProjectile>() != null)
+        {
+            return Mathf.Max(2, 1 + level); // 레벨 1: 2개, 레벨 2: 3개, ...
+        }
+
+        // 일반 스킬 처리
+        if (level <= 1) return skill.projectileCount;
 
         var levelData = GetLevelData(skill, level);
         return skill.projectileCount + (levelData?.additionalProjectiles ?? 0);

@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: SkillData_Boomerang
   m_EditorClassIdentifier: 
   skillName: Boomerang
-  description: "\uBD80\uBA54\uB791"
+  description: "\uD50C\uB808\uC774\uC5B4\uC5D0\uAC8C \uB418\uB3CC\uC544\uC624\uB294\uBD80\uBA54\uB791\uC744
+    \uB358\uC9D1\uB2C8\uB2E4."
   icon: {fileID: -296531900, guid: 588e67d28d255e44ab3588abcda2252f, type: 3}
   projectilePrefab: {fileID: 8415533593227436172, guid: 9561d25c70ebeb54e987de3a22f61946, type: 3}
   damage: 10

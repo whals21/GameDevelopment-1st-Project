@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8297aba9e983e844d902c72f1395ee46, type: 3}
+  m_Name: SkillData_Molotov
+  m_EditorClassIdentifier: 
+  skillName: Molotov
+  description: "\uD50C\uB808\uC774\uC5B4 \uC8FC\uBCC0\uC5D0 \uD654\uC5FC\uBCD1\uC744
+    \uB358\uC838 \uC9C0\uBA74\uC5D0 \uD654\uC5FC \uC9C0\uB300\uB97C \uC0DD\uC131\uD569\uB2C8\uB2E4."
+  icon: {fileID: 21300000, guid: e79e2c23f52f47c438b3c8d766f28f0f, type: 3}
+  projectilePrefab: {fileID: 450080195829217704, guid: a4aef69ec8369ba4f91a7a7a49f0fdb6, type: 3}
+  damage: 20
+  cooldown: 3
+  projectileSpeed: 5
+  projectileCount: 2
+  attackRange: 10
+  levels:
+  - level: 1
+    damageMultiplier: 0.6
+    cooldownMultiplier: 1
+    additionalProjectiles: 0
+    projectileSpeedMultiplier: 0
+    projectileSizeMultiplier: 0
+    projectileScaleIncrease: 0
+    upgradeDescription: "2\uAC1C\uC758 \uD654\uC5FC\uBCD1 \uB358\uC9D0"
+  - level: 2
+    damageMultiplier: 0.8
+    cooldownMultiplier: 1
+    additionalProjectiles: 1
+    projectileSpeedMultiplier: 0
+    projectileSizeMultiplier: 0
+    projectileScaleIncrease: 0
+    upgradeDescription: "3\uAC1C\uC758 \uD654\uC5FC\uBCD1 \uB358\uC9D0, \uD654\uC5FC
+      \uBC94\uC704 \uD655\uB300 "
+  - level: 3
+    damageMultiplier: 0.9
+    cooldownMultiplier: 1
+    additionalProjectiles: 2
+    projectileSpeedMultiplier: 0
+    projectileSizeMultiplier: 0
+    projectileScaleIncrease: 0
+    upgradeDescription: "4\uAC1C\uC758 \uD654\uC5FC\uBCD1 \uB358\uC9D0, \uD654\uC5FC
+      \uBC94\uC704 \uD655\uB300"
+  - level: 4
+    damageMultiplier: 1.1
+    cooldownMultiplier: 1
+    additionalProjectiles: 3
+    projectileSpeedMultiplier: 0
+    projectileSizeMultiplier: 0
+    projectileScaleIncrease: 0
+    upgradeDescription: "5\uAC1C\uC758 \uD654\uC5FC\uBCD1 \uB358\uC9D0, \uD654\uC5FC
+      \uBC94\uC704 \uD655\uB300"
+  - level: 5
+    damageMultiplier: 1.2
+    cooldownMultiplier: 1
+    additionalProjectiles: 4
+    projectileSpeedMultiplier: 0
+    projectileSizeMultiplier: 0
+    projectileScaleIncrease: 0
+    upgradeDescription: "6\uAC1C\uC758 \uD654\uC5FC\uBCD1 \uB358\uC9D0, \uD654\uC5FC
+      \uBC94\uC704 \uD655\uB300"
+  evoSkill: {fileID: 0}
+  evoRequirements: 

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7034265404049139814}
   - component: {fileID: 39298195614949708}
   - component: {fileID: 4117259537834710758}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Boomerang
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -164,3 +164,4 @@ MonoBehaviour:
   lifeTime: 3
   returnSpeed: 15
   maxDistance: 7
+  pickupRange: 0.5
