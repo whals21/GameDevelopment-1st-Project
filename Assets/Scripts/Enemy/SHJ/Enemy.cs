@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Enemy : MonoBehaviour
 {
     [Header("������ SO")]
@@ -32,7 +33,17 @@ public class Enemy : MonoBehaviour
     public SpriteRenderer sr { get; private set; }
     public Animator anim { get; private set; }
     public Collider2D col { get; private set; }
-    
+
+    public float AttackDelay => Data.attackDelay;
+    public float AttackRange => Data.attackRange;
+    public GameObject ProjectilePrefab => Data.projectilePrefab;
+    public Transform FirePoint => Data.firePoint != null ? Data.firePoint : transform;
+    public bool IsRanged => Data.isRanged;
+
+    public bool IsRange => Data.attackRange > 0f;
+
+    public Transform point;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -56,6 +67,8 @@ public class Enemy : MonoBehaviour
         // {
         //     Debug.LogError("Enemy: Player 태그를 가진 오브젝트를 찾을 수 없습니다!");
         // }
+
+       
     }
     void Start()
     {
@@ -85,8 +98,27 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
 
+        if (playerObj == null)
+        {
+            target = null;
+            return;
+        }
+
+        // FirePoint 기준으로 거리 계산 → 범위가 몬스터/FirePoint 따라감
+        float distance = Vector2.Distance(FirePoint.position, playerObj.transform.position);
+
+        if (distance <= AttackRange)
+        {
+            target = playerObj.transform;  // 범위 안: target = 플레이어
+        }
+        else
+        {
+            target = null;  // 범위 밖: target 해제
+        }
     }
+   
 
     // 데미지 받기
     public void TakeDamage(float damage)
@@ -115,7 +147,16 @@ public class Enemy : MonoBehaviour
         // gem.transform.position = transform.position;
         // gem.Init(expValue);
 
-        // 풀로 반환
+        // 풀로 반환    
         ObjectPoolManager.Instance.ReturnEnemy(this);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (!IsRange) return;
+
+        Transform center = point != null ? point : transform;
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(center.position, AttackRange);
     }
 }

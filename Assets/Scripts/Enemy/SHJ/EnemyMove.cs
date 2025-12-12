@@ -9,6 +9,10 @@ public class EnemyMove : MonoBehaviour
     private void Awake()
     {
         main = GetComponent<Enemy>();
+<<<<<<< HEAD
+=======
+       
+>>>>>>> cc57bb11ec739d1ede590b948cf404d1ed0e4c8d
     }
 
     // Update is called once per frame
@@ -29,10 +33,10 @@ public class EnemyMove : MonoBehaviour
 
         Vector2 direction = (main.Target.position - transform.position).normalized;
 
-        // �̵�
+        
         main.rb.velocity = direction * main.Data.moveSpeed;
 
-        // �¿� ����
+       
         if (direction.x > 0.01f)
             main.sr.flipX = false;
         else if (direction.x < -0.01f)
