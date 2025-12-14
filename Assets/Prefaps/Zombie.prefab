@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1584939568400528160}
   - component: {fileID: 4378353355049202463}
   - component: {fileID: 3455504915911372228}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Zombie
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -149,6 +149,7 @@ MonoBehaviour:
   currentHP: 0
   moveSpeed: 0
   target: {fileID: 0}
+  point: {fileID: 0}
 --- !u!114 &4378353355049202463
 MonoBehaviour:
   m_ObjectHideFlags: 0

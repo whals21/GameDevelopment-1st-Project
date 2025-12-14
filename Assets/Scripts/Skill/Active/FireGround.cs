@@ -103,6 +103,9 @@ public class FireGround : MonoBehaviour
 
     private void ReturnToPool()
     {
+        // CancelInvoke() 호출하여 중복 반환 방지
+        CancelInvoke();
+
         if (ObjectPoolManager.Instance != null)
         {
             ObjectPoolManager.Instance.ReturnFireGround(this);

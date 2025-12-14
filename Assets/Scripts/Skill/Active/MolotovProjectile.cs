@@ -37,10 +37,10 @@ public class MolotovProjectile : Projectile
         startPosition = transform.position;
         targetPosition = targetPos;
 
-        // 포물선 비행 시간 계산
+        // 포물선 비행 시간 계산 (2D 좌표계 수정)
         float horizontalDistance = Vector2.Distance(new Vector2(startPosition.x, startPosition.y),
                                                    new Vector2(targetPos.x, targetPos.y));
-        travelTime = Mathf.Max(0.5f, horizontalDistance / 5f); // 최소 0.5초 비행, 5는 수평 속도
+        travelTime = Mathf.Max(0.5f, horizontalDistance / 5f); // 최소 0.5초 보장, 5는 수평 속도
 
         elapsedTime = 0f;
         hasHitGround = false;
@@ -115,12 +115,27 @@ public class MolotovProjectile : Projectile
     {
         if (ObjectPoolManager.Instance != null)
         {
+            
             FireGround fireGround = ObjectPoolManager.Instance.GetFireGround();
             if (fireGround != null)
             {
                 fireGround.transform.position = transform.position;
                 fireGround.Init(damage * 0.5f, 5f); // 지속 데미지는 50%
             }
+            else
+            {
+                Debug.LogWarning("FireGround를 생성할 수 없습니다. 풀이 초기화되지 않았거나 프리팹이 할당되지 않았습니다.");
+
+                // 대안: 직접 생성 (임시 방편)
+                GameObject fireGroundObj = new GameObject("FireGround_Emergency");
+                FireGround emergencyFireGround = fireGroundObj.AddComponent<FireGround>();
+                emergencyFireGround.transform.position = transform.position;
+                emergencyFireGround.Init(damage * 0.5f, 5f);
+            }
+        }
+        else
+        {
+            Debug.LogError("ObjectPoolManager 인스턴스가 null입니다!");
         }
     }
 

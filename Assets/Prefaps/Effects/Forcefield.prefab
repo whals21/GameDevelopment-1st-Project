@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5041042893671110953}
   - component: {fileID: 9080979092615150794}
   - component: {fileID: 5334173512999865780}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Forcefield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,5 +202,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 256
   damageInterval: 0.2

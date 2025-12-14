@@ -1,6 +1,5 @@
-using System.Linq;
-using System.Security.Principal;
 using UnityEngine;
+using System.Linq;
 
 public class SkillManager : MonoBehaviour
 {
@@ -31,7 +30,7 @@ public class SkillManager : MonoBehaviour
     private float enemyCacheTimer;
 
     // Forcefield 관련
-    private int forcefieldSlot = -1;
+    private int forcefieldSlot = -1; // Forcefield가 장착된 슬롯
     #endregion
 
     #region Unity Lifecycle
@@ -51,7 +50,7 @@ public class SkillManager : MonoBehaviour
         }
 
         EquipTestSkills();
-        UpdateForcefieldSkills();
+        UpdateForcefieldSkills(); // Forcefield 스킬들 확인 및 활성화
     }
 
     void Update()
@@ -97,12 +96,12 @@ public class SkillManager : MonoBehaviour
     {
         if (!IsValidSlot(slot) || skill == null) return;
 
-        // 기존 Forcefield 스킬 제거
+        // 기존 Forcefield 스킬 해제
         if (forcefieldSlot >= 0 && forcefieldSlot < MAX_SKILLS && equippedSkills[forcefieldSlot] != null)
         {
             if (equippedSkills[forcefieldSlot].name.Contains("Forcefield"))
             {
-                //ForcefieldManager.Instance.UnEquipForcefieldSkill();
+                ForcefieldManager.Instance.UnequipForcefield();
                 forcefieldSlot = -1;
             }
         }
@@ -111,12 +110,14 @@ public class SkillManager : MonoBehaviour
         skillLevels[slot] = Mathf.Max(1, level);
         cooldownTimers[slot] = 0f;
 
-        // Forcefield 스킬 장착 
-        if (skill.name.Contains("Forcefield"))
+        // Forcefield 스킬 확인 및 장착
+        if (skill.name.Contains("Forcefield") || skill.skillName.Contains("Forcefield"))
         {
             forcefieldSlot = slot;
-            ForcefieldManager.Instance.EquipForcefieldSkill(skill, level);
+            ForcefieldManager.Instance.EquipForcefield(skill, level);
         }
+
+        Debug.Log($"슬롯 {slot}: {skill.name} (레벨 {level}) 장착 완료");
     }
 
     public int GetSkillLevel(int slot) => IsValidSlot(slot) ? skillLevels[slot] : 0;
@@ -144,11 +145,12 @@ public class SkillManager : MonoBehaviour
         {
             skillLevels[slot] = Mathf.Max(1, level);
 
-            // Forcefield 스킬인 경우 ForcefieldManager에 업데이트
+            // Forcefield 스킬인 경우 ForcefieldManager도 업데이트
             if (slot == forcefieldSlot && ForcefieldManager.Instance != null)
             {
-                ForcefieldManager.Instance.EquipForcefieldSkill(equippedSkills[slot], skillLevels[slot]);
+                ForcefieldManager.Instance.UpdateForcefieldLevel(level);
             }
+
             Debug.Log($"슬롯 {slot}: 스킬 레벨을 {level}로 설정");
         }
     }
@@ -157,15 +159,17 @@ public class SkillManager : MonoBehaviour
     #region Forcefield Management
     private void UpdateForcefieldSkills()
     {
-        // 스킬에 Forcefield가 있는지 확인
+        // 모든 스킬을 확인하여 Forcefield가 있는지 체크
         for (int i = 0; i < MAX_SKILLS; i++)
         {
-            if (HasSkill(i) && equippedSkills[i].name.Contains("Forcefield") ||
-                equippedSkills[i].skillName.Contains("Forcefield"))
+            if (HasSkill(i) && equippedSkills[i] != null)
             {
-                forcefieldSlot = i;
-                ForcefieldManager.Instance.EquipForcefieldSkill(equippedSkills[i], skillLevels[i]);
-                break;
+                if (equippedSkills[i].name.Contains("Forcefield") || equippedSkills[i].skillName.Contains("Forcefield"))
+                {
+                    forcefieldSlot = i;
+                    ForcefieldManager.Instance.EquipForcefield(equippedSkills[i], skillLevels[i]);
+                    break;
+                }
             }
         }
     }
@@ -176,7 +180,7 @@ public class SkillManager : MonoBehaviour
     {
         for (int i = 0; i < MAX_SKILLS; i++)
         {
-            // Forcefield 스킬은 자동 공격에서 제외
+            // Forcefield는 쿨타임이 없으므로 건너뛰기
             if (i == forcefieldSlot) continue;
 
             if (HasSkill(i) && cooldownTimers[i] <= 0f)
@@ -261,6 +265,10 @@ public class SkillManager : MonoBehaviour
         {
             SpawnMolotovProjectile(skill, damage, level, index);
         }
+        else if (skill.projectilePrefab.GetComponent<BrickProjectile>() != null)
+        {
+            SpawnBrickProjectile(skill, damage, speed, index);
+        }
         else
         {
             // 발사 방향 계산
@@ -333,6 +341,62 @@ public class SkillManager : MonoBehaviour
         molotov.InitMolotov(damage, targetPos);
     }
 
+    private void SpawnBrickProjectile(SkillData skill, float damage, float speed, int index)
+    {
+        // Brick 오브젝트 풀에서 가져오기
+        var brick = ObjectPoolManager.Instance.GetBrick();
+        if (brick == null)
+        {
+            // 풀이 비어있으면 새로 생성
+            brick = Instantiate(skill.projectilePrefab).GetComponent<BrickProjectile>();
+        }
+        else
+        {
+            brick.gameObject.SetActive(true);
+            brick.transform.position = transform.position;
+        }
+
+        // Brick 발사 방향 계산 (플레이어 주변 원형 분산)
+        int projectileCount = GetProjectileCount(skill, GetCurrentSkillLevel(skill));
+        Vector2 direction;
+
+        // 플레이어 주변으로 원형 분산 발사
+        float angleStep = 360f / projectileCount; // 360도 등분
+        float angle = angleStep * index;
+
+        // 약간의 무작위성 추가로 자연스러움
+        angle += Random.Range(-10f, 10f);
+
+        direction = Quaternion.Euler(0, 0, angle) * Vector2.right;
+
+        // Brick 초기화
+        brick.InitBrick(damage, speed, direction);
+    }
+
+    private int GetCurrentSkillLevel(SkillData skill)
+    {
+        for (int i = 0; i < equippedSkills.Length; i++)
+        {
+            if (equippedSkills[i] == skill)
+            {
+                return skillLevels[i];
+            }
+        }
+        return 1; // 기본값
+    }
+
+    private Vector2 CalculateBrickDirection(int index, int totalCount)
+    {
+        // Brick을 원형으로 균등 분배
+        float angleStep = 360f / totalCount;
+        float angle = angleStep * index;
+
+        // 무작위 방향으로 약간 변화 추가 (자연스러움)
+        angle += Random.Range(-15f, 15f);
+
+        return Quaternion.Euler(0, 0, angle) * Vector2.right;
+    }
+
     private Vector3 CalculateMolotovTargetPosition(int level, int index)
     {
         // 레벨에 따른 발사 수
@@ -380,7 +444,7 @@ public class SkillManager : MonoBehaviour
     {
         for (int i = 0; i < MAX_SKILLS; i++)
         {
-            // Forcefield 스킬은 쿨다운 적용 안함
+            // Forcefield는 쿨타임이 없으므로 건너뛰기
             if (i == forcefieldSlot) continue;
 
             if (cooldownTimers[i] > 0f)
@@ -411,8 +475,20 @@ public class SkillManager : MonoBehaviour
 
     private float GetSkillCooldown(SkillData skill, int level)
     {
-        if (skill == null) return 1f;
-        return skill.cooldown * GetCooldownMultiplier(skill, level);
+        if (skill == null) return 3f; // 기본 3초
+
+        // 임시방편: Molotov는 항상 3초 쿨다운
+        if (skill.projectilePrefab != null && skill.projectilePrefab.GetComponent<MolotovProjectile>() != null)
+        {
+            Debug.Log($"Molotov 쿨다운: 3초");
+            return 3f;
+        }
+
+        float cooldown = skill.cooldown * GetCooldownMultiplier(skill, level);
+        Debug.Log($"일반 스킬 쿨다운: {cooldown}초 (기본: {skill.cooldown}, 배수: {GetCooldownMultiplier(skill, level)})");
+
+        // 최소 1초 보장
+        return Mathf.Max(1f, cooldown);
     }
 
     private float GetDamageMultiplier(SkillData skill, int level)
@@ -422,7 +498,13 @@ public class SkillManager : MonoBehaviour
 
     private float GetCooldownMultiplier(SkillData skill, int level)
     {
-        return GetLevelData(skill, level)?.cooldownMultiplier ?? 1f;
+        var levelData = GetLevelData(skill, level);
+        float multiplier = levelData?.cooldownMultiplier ?? 1f;
+
+        // 0이면 1로 대체 (쿨다운이 0초가 되는 것 방지)
+        if (multiplier <= 0) multiplier = 1f;
+
+        return multiplier;
     }
 
     private float GetProjectileSpeedMultiplier(SkillData skill, int level)

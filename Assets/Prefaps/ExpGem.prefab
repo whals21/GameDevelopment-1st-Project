@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9154708810091488077}
   - component: {fileID: 6398599297641667370}
   - component: {fileID: 7788130250008709110}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: ExpGem
   m_TagString: Untagged
   m_Icon: {fileID: 0}

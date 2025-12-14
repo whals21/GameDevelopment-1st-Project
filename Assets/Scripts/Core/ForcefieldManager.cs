@@ -2,22 +2,29 @@ using UnityEngine;
 
 public class ForcefieldManager : MonoBehaviour
 {
+    #region Singleton
     public static ForcefieldManager Instance { get; private set; }
+    #endregion
 
-    [Header("º¸È£¸· ¼³Á¤")]
+    #region Serialized Fields
+    [Header("ë³´í˜¸ë§‰ ì„¤ì •")]
     [SerializeField] private GameObject forcefieldPrefab;
-    [SerializeField] private Transform forcefieldParent;
+    [SerializeField] private Transform forcefieldParent; // ë³´í˜¸ë§‰ë“¤ì˜ ë¶€ëª¨ Transform
+    #endregion
 
+    #region Private Fields
     private Forcefield[] activeForcefields;
     private SkillData forcefieldSkill;
     private int forcefieldLevel = 0;
     private bool isForcefieldActive = false;
 
-    // ·¹º§º° ¼³Á¤
-    private readonly float[] baseRadius = { 3f, 3.5f, 3f, 3.5f, 4f };
-    private readonly float[] outerRadius = { 0f, 0f, 4f, 4.5f, 5f };
+    // ë ˆë²¨ë³„ ì„¤ì •
+    private readonly float[] baseRadius = { 1f, 1.5f, 1.5f, 1.75f, 2f };
+    private readonly float[] outerRadius = { 0f, 0f, 2f, 2.25f, 2.5f };
     private readonly float[] damageMultipliers = { 1f, 1.5f, 2f, 2.25f, 2.5f };
+    #endregion
 
+    #region Unity Lifecycle
     private void Awake()
     {
         SetupSingleton();
@@ -25,13 +32,12 @@ public class ForcefieldManager : MonoBehaviour
 
     private void Update()
     {
-        // ÇÃ·¹ÀÌ¾î À§Ä¡¸¦ µû¶ó º¸È£¸· À§Ä¡ ¾÷µ¥ÀÌÆ®
-        if (isForcefieldActive && activeForcefields != null)
-        {
-            UpdateForcefieldPositions();
-        }
+        // ë³´í˜¸ë§‰ì€ ì´ì œ í”Œë ˆì´ì–´ì˜ ìì‹ìœ¼ë¡œ ì„¤ì •ë˜ì–´ ìë™ìœ¼ë¡œ ë”°ë¼ë‹¤ë‹ˆë¯€ë¡œ Update í˜¸ì¶œ ë¶ˆí•„ìš”
+        // í•„ìš”í•œ ê²½ìš° ë‹¤ë¥¸ ë¡œì§ì„ ì—¬ê¸°ì— ì¶”ê°€í•  ìˆ˜ ìˆìŒ
     }
+    #endregion
 
+    #region Initialization
     private void SetupSingleton()
     {
         if (Instance == null)
@@ -42,91 +48,122 @@ public class ForcefieldManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
 
-    //º¸È£¸· ½ºÅ³ ÀåÂø
-    public void EquipForcefieldSkill(SkillData skill, int level)
+        // ë¶€ëª¨ Transformì´ ì—†ìœ¼ë©´ ìƒì„±
+        if (forcefieldParent == null)
+        {
+            forcefieldParent = new GameObject("Forcefields").transform;
+            forcefieldParent.SetParent(transform);
+        }
+    }
+    #endregion
+
+    #region Public API
+    // ë³´í˜¸ë§‰ ìŠ¤í‚¬ ì¥ì°©
+    public void EquipForcefield(SkillData skill, int level)
     {
         forcefieldSkill = skill;
         forcefieldLevel = level;
 
         if (skill != null && level > 0)
         {
-            ActivateForcefields();
+            ActivateForcefield();
+        }
+        else
+        {
+            DeactivateForcefield();
         }
     }
 
-    // º¸È£¸· ·¹º§ ¾÷µ¥ÀÌÆ®
+    // ë³´í˜¸ë§‰ ë ˆë²¨ ì—…ë°ì´íŠ¸
     public void UpdateForcefieldLevel(int newLevel)
     {
         if (newLevel != forcefieldLevel && forcefieldSkill != null)
         {
-            DeactivateForcefields();
+            DeactivateForcefield();
             forcefieldLevel = newLevel;
-         
-            if(newLevel > 0)
+            if (newLevel > 0)
             {
-                ActivateForcefields();
+                ActivateForcefield();
             }
         }
-    }   
+    }
 
-    // º¸È£¸· ÇØÁ¦
+    // ë³´í˜¸ë§‰ í•´ì œ
     public void UnequipForcefield()
     {
-        DeactivateForcefields();
+        DeactivateForcefield();
         forcefieldSkill = null;
         forcefieldLevel = 0;
     }
+    #endregion
 
-    // º¸È£¸· È°¼ºÈ­
-    private void ActivateForcefields()
+    #region Forcefield Management
+    // ë³´í˜¸ë§‰ í™œì„±í™”
+    private void ActivateForcefield()
     {
-        if (forcefieldPrefab == null || forcefieldParent == null)
+        if (forcefieldPrefab == null)
         {
-            Debug.LogError("ForcefieldManager: Forcefield prefab or parent is not assigned.");
+            Debug.LogError("ForcefieldManager: Forcefield í”„ë¦¬íŒ¹ì´ ì„¤ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!");
             return;
         }
-        // ·¹º§¿¡ µû¸¥ º¸È£¸· °³¼ö °áÁ¤
+
+        // ë ˆë²¨ì— ë”°ë¥¸ ë³´í˜¸ë§‰ ê°œìˆ˜ ê²°ì •
         int fieldCount = (forcefieldLevel >= 3) ? 2 : 1;
         activeForcefields = new Forcefield[fieldCount];
 
-        // º¸È£¸· »ı¼º
+        // ë³´í˜¸ë§‰ ìƒì„±
         for (int i = 0; i < fieldCount; i++)
         {
-            GameObject fieldObj = Instantiate(forcefieldPrefab, forcefieldParent);
+            GameObject fieldObj = Instantiate(forcefieldPrefab);
             activeForcefields[i] = fieldObj.GetComponent<Forcefield>();
 
             if (activeForcefields[i] == null)
             {
-                Debug.LogError("ForcefieldManager: Forcefield component not found on prefab.");
+                Debug.LogError("ForcefieldManager: Forcefield ì»´í¬ë„ŒíŠ¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤!");
+                continue;
             }
-            
-            // ¹İ°æ ¼³Á¤
+
+            // í”Œë ˆì´ì–´ì˜ ìì‹ìœ¼ë¡œ ì„¤ì •í•˜ì—¬ ìë™ìœ¼ë¡œ ë”°ë¼ë‹¤ë‹ˆê²Œ í•¨
+            if (GameManager.Instance != null && GameManager.Instance.player != null)
+            {
+                fieldObj.transform.SetParent(GameManager.Instance.player.transform);
+                fieldObj.transform.localPosition = Vector3.zero;
+                Debug.Log($"Forcefield {i}ë¥¼ í”Œë ˆì´ì–´ì˜ ìì‹ìœ¼ë¡œ ì„¤ì •í•¨");
+            }
+            else
+            {
+                // í”Œë ˆì´ì–´ê°€ ì—†ì„ ê²½ìš° ForcefieldParentë¥¼ ì‚¬ìš©
+                fieldObj.transform.SetParent(forcefieldParent);
+                Debug.LogWarning("ForcefieldManager: í”Œë ˆì´ì–´ë¥¼ ì°¾ì„ ìˆ˜ ì—†ì–´ ForcefieldParentë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.");
+            }
+
+            // ë°˜ê²½ ì„¤ì •
             float radius = (i == 0) ? baseRadius[forcefieldLevel - 1] : outerRadius[forcefieldLevel - 1];
 
-            // µ¥¹ÌÁö °è»ê
+            // ë°ë¯¸ì§€ ê³„ì‚°
             float baseDamage = forcefieldSkill.damage;
             float damageMultiplier = damageMultipliers[forcefieldLevel - 1];
             float damage = baseDamage * damageMultiplier;
 
-            // ÃÊ±âÈ­
+            // ì´ˆê¸°í™”
             activeForcefields[i].Init(damage, radius);
         }
+
         isForcefieldActive = true;
     }
 
-    // º¸È£¸· ºñÈ°¼ºÈ­
-    private void DeactivateForcefields()
+    // ë³´í˜¸ë§‰ ë¹„í™œì„±í™”
+    private void DeactivateForcefield()
     {
         if (activeForcefields != null)
         {
-            foreach (var forcefield in activeForcefields)
+            foreach (var field in activeForcefields)
             {
-                if (forcefield != null)
+                if (field != null)
                 {
-                    forcefield.Deactivate();
-                    Destroy(forcefield.gameObject);
+                    field.Deactivate();
+                    Destroy(field.gameObject);
                 }
             }
         }
@@ -135,18 +172,48 @@ public class ForcefieldManager : MonoBehaviour
         isForcefieldActive = false;
     }
 
-
-    // º¸È£¸· À§Ä¡ ¾÷µ¥ÀÌÆ® (ÇÃ·¹ÀÌ¾î À§Ä¡¿¡ ¸ÂÃã)
+    // ë³´í˜¸ë§‰ ìœ„ì¹˜ ì—…ë°ì´íŠ¸ (í”Œë ˆì´ì–´ ë”°ë¼ë‹¤ë‹˜)
     private void UpdateForcefieldPositions()
     {
-        Vector3 playerPosition = GameManager.Instance.player.transform.position;
+        Vector3 playerPosition = GameManager.Instance != null ?
+            GameManager.Instance.player.transform.position :
+            Vector3.zero;
 
-        foreach (var forcefield in activeForcefields)
+        foreach (var field in activeForcefields)
         {
-            if (forcefield != null)
+            if (field != null)
             {
-                forcefield.transform.position = playerPosition;
+                // UpdatePosition ë©”ì„œë“œë¥¼ í†µí•´ ìœ„ì¹˜ ë° LineRenderer ì—…ë°ì´íŠ¸
+                field.UpdatePosition(playerPosition);
             }
         }
     }
+    #endregion
+
+    #region Utility
+    // í˜„ì¬ ë³´í˜¸ë§‰ ë°ë¯¸ì§€ ê°€ì ¸ì˜¤ê¸°
+    public float GetCurrentDamage()
+    {
+        if (!isForcefieldActive || forcefieldSkill == null || forcefieldLevel <= 0)
+            return 0f;
+
+        return forcefieldSkill.damage * damageMultipliers[forcefieldLevel - 1];
+    }
+
+    // í˜„ì¬ ë³´í˜¸ë§‰ ë°˜ê²½ë“¤ ê°€ì ¸ì˜¤ê¸°
+    public Vector2 GetCurrentRadii()
+    {
+        if (!isForcefieldActive || forcefieldLevel <= 0)
+            return Vector2.zero;
+
+        if (forcefieldLevel >= 3)
+        {
+            return new Vector2(baseRadius[forcefieldLevel - 1], outerRadius[forcefieldLevel - 1]);
+        }
+        else
+        {
+            return new Vector2(baseRadius[forcefieldLevel - 1], 0f);
+        }
+    }
+    #endregion
 }

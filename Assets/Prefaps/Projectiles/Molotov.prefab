@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 755436916886488931}
   - component: {fileID: 2173804081278305494}
   - component: {fileID: 4576463527513854616}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Molotov
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,7 +167,7 @@ MonoBehaviour:
   groundCheckDistance: 0.5
   groundLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 2048
 --- !u!1 &947767974282073461
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6147993822594346414}
   - component: {fileID: 5851447231473261487}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}

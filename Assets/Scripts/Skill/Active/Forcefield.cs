@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Specialized;
 
 public class Forcefield : MonoBehaviour
 {
@@ -8,28 +7,32 @@ public class Forcefield : MonoBehaviour
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private float damageInterval = 0.2f; // 초당 데미지 횟수
 
-    private float radius;
     private float damage;
+    private float radius;
     private float damagePerTick;
     private bool isActive = false;
 
     // 컴포넌트
     private PolygonCollider2D polygonCollider;
     private LineRenderer lineRenderer;
-    private EdgeCollider2D[] edgeColliders;
+    private EdgeCollider2D[] edgeColliders; // 8개의 엣지로 팔각형 구성
 
     private void Awake()
     {
-        // 컴포넌트 초기화
+        // 컴포넌트 캐싱 및 초기화
         polygonCollider = GetComponent<PolygonCollider2D>();
         lineRenderer = GetComponent<LineRenderer>();
 
-        // EdgeColider2D 배열 초기화
-        edgeColliders = new EdgeCollider2D[8];
-        for (int i = 0; i < edgeColliders.Length; i++)
+        // EdgeCollider2D 배열 초기화 및 설정
+        int edgeCount = 8;
+        edgeColliders = new EdgeCollider2D[edgeCount];
+
+        for (int i = 0; i < edgeCount; i++)
         {
-            edgeColliders[i] = new GameObject("Edge _{i}").AddComponent<EdgeCollider2D>();
-            edgeColliders[i].transform.SetParent(transform);
+            GameObject edgeObj = new GameObject($"Edge_{i}");
+            edgeObj.transform.SetParent(transform);
+
+            edgeColliders[i] = edgeObj.AddComponent<EdgeCollider2D>();
             edgeColliders[i].isTrigger = true;
         }
     }
@@ -39,7 +42,7 @@ public class Forcefield : MonoBehaviour
     {
         this.damage = damage;
         this.radius = radius;
-        this.damagePerTick = damage * damageInterval; //초당 데미지를 틱당 데미지로 변환
+        this.damagePerTick = damage * damageInterval; // 초당 데미지를 틱당 데미지로 변환
 
         // 팔각형 생성
         CreateOctagonShape();
@@ -55,70 +58,93 @@ public class Forcefield : MonoBehaviour
         }
     }
 
-     // 팔각형 모양 생성
-     private void CreateOctagonShape()
-     {
-        Vector3[] octagonPoints = new Vector3[8];
+    // 팔각형 모양 생성
+    private void CreateOctagonShape()
+    {
+        // 팔각형 설정 상수화
+        const int OCTAGON_SIDES = 8;
+        const float ANGLE_STEP = 45f;
 
-        // 8개의 점으로 팔각형 생성
-        for (int i = 0; i < 8; i++)
+        // 로컬 좌표로 팔각형 점 계산 (한 번만 계산하면 됨)
+        Vector3[] octagonPoints = new Vector3[OCTAGON_SIDES];
+        Vector2[] colliderPoints = new Vector2[OCTAGON_SIDES];
+
+        for (int i = 0; i < OCTAGON_SIDES; i++)
         {
-            float angle = i * Mathf.Deg2Rad / 4; // 45도 간격
-            float x = radius * Mathf.Cos(angle) * radius;
-            float y = radius * Mathf.Sin(angle) * radius;
+            float angleRad = i * ANGLE_STEP * Mathf.Deg2Rad;
+            float x = Mathf.Cos(angleRad) * radius;
+            float y = Mathf.Sin(angleRad) * radius;
+
             octagonPoints[i] = new Vector3(x, y, 0);
+            colliderPoints[i] = new Vector2(x, y);
         }
 
-        // PolygonCollider2D 설정
-        if (polygonCollider != null)
-        {
-            Vector2[] colliderPoints = new Vector2[8];
-            for (int i = 0; i < 8; i++)
-            {
-                colliderPoints[i] = new Vector2(octagonPoints[i].x, octagonPoints[i].y);
-            }
-            polygonCollider.points = colliderPoints;
-            polygonCollider.isTrigger = true;
-        }
+        // LineRenderer 설정 (로컬 좌표 사용 - 자동으로 객체 따라다님)
+        SetupLineRenderer(octagonPoints);
 
-        // LineRenderer 설정 (시각적 효과)
-        if (lineRenderer != null)
-        {
-            lineRenderer.positionCount = octagonPoints.Length + 1; 
-            lineRenderer.useWorldSpace = false; 
-            lineRenderer.startWidth = 0.2f;
-            lineRenderer.endWidth = 0.2f;
-            lineRenderer.loop = true;
-
-            for (int i = 0; i < octagonPoints.Length; i++)
-            {
-                lineRenderer.SetPosition(i, octagonPoints[i]);
-            }
-            lineRenderer.SetPosition(octagonPoints.Length, octagonPoints[0]); // 시작점으로 연결
-        }
+        // PolygonCollider2D 설정 (로컬 좌표)
+        SetupPolygonCollider(colliderPoints);
 
         // EdgeCollider2D 설정
+        SetupEdgeColliders(colliderPoints);
+    }
+
+    // LineRenderer 설정 분리
+    private void SetupLineRenderer(Vector3[] octagonPoints)
+    {
+        if (lineRenderer == null) return;
+
+        lineRenderer.useWorldSpace = false; // 로컬 좌표 사용으로 변경!
+        lineRenderer.positionCount = octagonPoints.Length; // 8개 점만 필요 (loop이 자동 연결)
+        lineRenderer.startWidth = 0.3f; // 더 잘 보이도록 너비 증가
+        lineRenderer.endWidth = 0.3f;
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        lineRenderer.startColor = new Color(0f, 0.5f, 1f, 0.8f); // 더 선명한 파란색
+        lineRenderer.endColor = new Color(0f, 0.5f, 1f, 0.8f);
+        lineRenderer.loop = true; // 자동으로 시작점으로 연결
+        lineRenderer.sortingOrder = 10; // 렌더링 순서 설정
+
+        // 로컬 좌표로 점 설정 (객체가 이동하면 자동으로 월드 좌표로 변환됨)
+        for (int i = 0; i < octagonPoints.Length; i++)
+        {
+            lineRenderer.SetPosition(i, octagonPoints[i]);
+        }
+    }
+
+    // PolygonCollider2D 설정 분리
+    private void SetupPolygonCollider(Vector2[] colliderPoints)
+    {
+        if (polygonCollider == null) return;
+
+        polygonCollider.points = colliderPoints;
+        polygonCollider.isTrigger = true;
+    }
+
+    // EdgeCollider2D 설정 분리
+    private void SetupEdgeColliders(Vector2[] colliderPoints)
+    {
+        const float EDGE_RADIUS = 0.1f;
+
         for (int i = 0; i < edgeColliders.Length; i++)
         {
+            if (edgeColliders[i] == null) continue;
+
             Vector2[] edgePoints = new Vector2[2];
-            edgePoints[0] = octagonPoints[i];
-            edgePoints[1] = octagonPoints[(i + 1) % octagonPoints.Length]; // 다음 점과 연결
+            edgePoints[0] = colliderPoints[i];
+            edgePoints[1] = colliderPoints[(i + 1) % edgeColliders.Length]; // 다음 점과 연결
 
             edgeColliders[i].points = edgePoints;
-            edgeColliders[i].edgeRadius = 0.1f;
+            edgeColliders[i].edgeRadius = EDGE_RADIUS;
+
+            // 부메랑 통과를 위해 일시적으로 비활성화
+            edgeColliders[i].enabled = false;
         }
-     }
+    }
 
     // 시각적 효과 설정
     private void SetupVisualEffect()
     {
-        if (lineRenderer != null)
-        {
-            // 색상 및 머티리얼 설정
-            lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-            lineRenderer.startColor = Color.cyan; 
-            lineRenderer.endColor = Color.cyan;
-        }
+        // CreateOctagonShape에서 모든 설정을 처리하므로 이 메서드는 비워둠
     }
 
     // 데미지 코루틴
@@ -143,7 +169,7 @@ public class Forcefield : MonoBehaviour
         }
     }
 
-    // 보호막 비활성화
+    // 비활성화
     public void Deactivate()
     {
         isActive = false;
@@ -169,7 +195,7 @@ public class Forcefield : MonoBehaviour
         }
     }
 
-    // 보호막 재활성화
+    // 재활성화
     public void Reactivate()
     {
         if (!isActive)
@@ -185,6 +211,13 @@ public class Forcefield : MonoBehaviour
         CreateOctagonShape();
     }
 
+    // 위치 업데이트 (로컬 좨표이므로 Transform만 변경하면 됨)
+    public void UpdatePosition(Vector3 newPosition)
+    {
+        transform.position = newPosition;
+        // CreateOctagonShape() 호출할 필요 없음 - 로컬 좌표이므로 자동으로 따라다님
+    }
+
     // 데미지 업데이트
     public void UpdateDamage(float newDamage)
     {
@@ -192,21 +225,21 @@ public class Forcefield : MonoBehaviour
         damagePerTick = damage * damageInterval;
     }
 
-    // 디버그용 Grizmos
+    // 디버그용 Gizmo
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.cyan;
+        Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, radius);
 
-        // 팔각형 모양 그리기
-        Gizmos.color = Color.blue;
-        for (int i = 0; i < edgeColliders.Length; i++)
+        // 팔각형 그리기
+        Gizmos.color = Color.cyan;
+        for (int i = 0; i < 8; i++)
         {
             float angle1 = i * 45f * Mathf.Deg2Rad;
             float angle2 = ((i + 1) % 8) * 45f * Mathf.Deg2Rad;
 
-            Vector3 p1 = transform.position + new Vector3(Mathf.Cos(angle1), Mathf.Sin(angle1), 0) * radius;
-            Vector3 p2 = transform.position + new Vector3(Mathf.Cos(angle2), Mathf.Sin(angle2), 0) * radius;
+            Vector3 p1 = transform.position + new Vector3(Mathf.Cos(angle1) * radius, Mathf.Sin(angle1) * radius, 0);
+            Vector3 p2 = transform.position + new Vector3(Mathf.Cos(angle2) * radius, Mathf.Sin(angle2) * radius, 0);
 
             Gizmos.DrawLine(p1, p2);
         }
