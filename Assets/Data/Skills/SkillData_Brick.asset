@@ -18,7 +18,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: dcba742e7126976449eea145fcb28168, type: 3}
   projectilePrefab: {fileID: 6695559934035842656, guid: 2b5271b524d4e384a856caa10d8b8baa, type: 3}
   damage: 20
-  cooldown: 0.1
+  cooldown: 0.3
   projectileSpeed: 15
   projectileCount: 1
   attackRange: 10

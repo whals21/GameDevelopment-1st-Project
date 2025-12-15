@@ -72,6 +72,17 @@ public class SoccerBallProjectile : Projectile
         // Rigidbody 설정
         SetupRigidbody();
 
+        // 이전 코루틴 정리 - 풀링에서 재사용될 때 남아있는 코루틴 방지
+        StopAllCoroutines();
+
+        // SpriteRenderer 알파 강제 초기화 - 풀링 문제 방지
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            Color color = spriteRenderer.color;
+            spriteRenderer.color = new Color(color.r, color.g, color.b, 1f);
+        }
+
         // 초기 회전 설정
         if (currentDirection != Vector3.zero)
         {
@@ -320,6 +331,9 @@ public class SoccerBallProjectile : Projectile
     // 재발사 시각적 효과
     private void CreateRecalculateEffect()
     {
+        // 이미 비활성화된 오브젝트에서는 실행하지 않음
+        if (hasDeactivated) return;
+
         // 파티클 효과 생성
         if (Resources.Load("Effects/TeleportEffect") != null)
         {
@@ -330,7 +344,7 @@ public class SoccerBallProjectile : Projectile
 
         // 간단한 시각적 효과 (스프라이트 투명도 변화)
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-        if (spriteRenderer != null)
+        if (spriteRenderer != null && !hasDeactivated)
         {
             StartCoroutine(FlashEffect(spriteRenderer));
         }
@@ -339,14 +353,30 @@ public class SoccerBallProjectile : Projectile
     // 깜빡임 효과
     private IEnumerator FlashEffect(SpriteRenderer renderer)
     {
+        // 시작 시 상태 체크
+        if (hasDeactivated || renderer == null) yield break;
+
         Color originalColor = renderer.color;
 
         for (int i = 0; i < 3; i++)
         {
+            // 루프 시작마다 상태 체크
+            if (hasDeactivated || renderer == null) break;
+
             renderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0.3f);
             yield return new WaitForSeconds(0.1f);
+
+            // 대기 후 상태 체크
+            if (hasDeactivated || renderer == null) break;
+
             renderer.color = originalColor;
             yield return new WaitForSeconds(0.1f);
+        }
+
+        // 최종적으로 원본 색상으로 복구 보장
+        if (renderer != null && !hasDeactivated)
+        {
+            renderer.color = originalColor;
         }
     }
 
@@ -356,8 +386,23 @@ public class SoccerBallProjectile : Projectile
         if (hasDeactivated) return;
         hasDeactivated = true;
 
-        // 시각적 효과
-        CreateRecalculateEffect();
+        // 모든 코루틴 중지 - FlashEffect가 중간에 멈출 경우 대비
+        StopAllCoroutines();
+
+        // SpriteRenderer 알파 강제 복구 - 반투명 상태 방지
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            Color color = spriteRenderer.color;
+            spriteRenderer.color = new Color(color.r, color.g, color.b, 1f);
+        }
+
+        // Rigidbody 초기화
+        if (rb != null)
+        {
+            rb.velocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+        }
 
         // 오브젝트 풀로 반환
         ObjectPoolManager.Instance.ReturnSoccerBall(this);
