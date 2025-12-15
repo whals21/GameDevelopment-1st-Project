@@ -131,9 +131,22 @@ public class Enemy : MonoBehaviour
         return distance <= AttackRange;
     }
     // 데미지 받기
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, bool isCritical = false)
     {
         currentHP -= (int)damage;
+
+        if (ObjectPoolManager.Instance != null)
+        {
+            // 매니저에게 요청
+            DamageText text = ObjectPoolManager.Instance.GetDamageText();
+
+            // 텍스트가 정상적으로 왔다면?
+            if (text != null)
+            {
+                // 데미지 값, 크리티컬 여부, 위치를 알려주며 초기화
+                text.Init(damage, isCritical, transform.position);
+            }
+        }
 
         if (currentHP <= 0)
         {

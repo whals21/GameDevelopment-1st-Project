@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerHUD : MonoBehaviour
 {
@@ -23,6 +24,11 @@ public class PlayerHUD : MonoBehaviour
 
     [Header("킬 카운트")]
     [SerializeField] private TextMeshProUGUI killCountText;
+
+    [Header("게임 상태 UI")]
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private GameObject victoryPanel;
     private int kills = 0;
 
     void Awake()
@@ -104,4 +110,54 @@ public class PlayerHUD : MonoBehaviour
         // 게임 재개
         Time.timeScale = 1f;
     }
+
+    // 일시 정지 창 켜기
+    public void TogglePauseUI()
+    {
+        // 토글식
+        bool isActive = !pausePanel.activeSelf;
+        pausePanel.SetActive(isActive);
+
+        // 창이 켜지면 시간 정지, 꺼지면 시간 재개
+        Time.timeScale = isActive ? 0f : 1f;
+    }
+
+    // 게임 오버 창 켜기
+    public void ShowGameOverUI()
+    {
+        gameOverPanel.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+    // 승리 창 켜기
+    public void ShowVictoryUI()
+    {
+        victoryPanel.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+    // 다시하기 (현재 씬 재로딩)
+    public void OnClickRestart()
+    {
+        Time.timeScale = 1f;
+        // 현재 씬의 이름을 가져와서 재시작
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    // 게임 종료
+    public void OnClickQuit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; // 유니티에서 정지
+#else
+            Application.Quit(); // 실제 빌드된 게임 끄기
+#endif
+    }
+
+    // 계속하기
+    public void OnClickResume()
+    {
+        TogglePauseUI();
+    }
+
 }

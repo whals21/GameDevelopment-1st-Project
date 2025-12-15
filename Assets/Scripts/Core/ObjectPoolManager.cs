@@ -14,6 +14,7 @@ public class ObjectPoolManager : MonoBehaviour
     public FireGround fireGroundPrefab;
     public SoccerBallProjectile soccerBallPrefab;
     public ExpGem expGemPrefab;
+    public DamageText damageTextPrefab;
 
     [Header("Pool Sizes")]
     public int enemyPoolSize = 100;
@@ -25,6 +26,7 @@ public class ObjectPoolManager : MonoBehaviour
     public int fireGroundPoolSize = 50;
     public int soccerBallPoolSize = 20;
     public int expGemPoolSize = 200;
+    public int damageTextPoolSize = 50;
 
     // 풀들
     private ObjectPool<Enemy> enemyPool;
@@ -36,13 +38,18 @@ public class ObjectPoolManager : MonoBehaviour
     private ObjectPool<FireGround> fireGroundPool;
     private ObjectPool<SoccerBallProjectile> soccerBallPool;
     private ObjectPool<ExpGem> expGemPool;
+    private ObjectPool<DamageText> damageTextPool;
 
     // 유효성 검사 캐시
     private bool isInitialized = false;
     private readonly string[] requiredPrefabs = {
         "enemyPrefab", "enemyBulletPrefab", "projectilePrefab",
         "boomerangPrefab", "molotovPrefab", "brickPrefab",
+<<<<<<< HEAD
         "fireGroundPrefab", "soccerBallPrefab", "expGemPrefab"
+=======
+        "fireGroundPrefab", "expGemPrefab", "damageTextPrefab"
+>>>>>>> d4c1de9a473cccaca0c1bf1a5919cfa44d8b0604
     };
 
     private void Awake()
@@ -54,7 +61,7 @@ public class ObjectPoolManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
@@ -77,6 +84,7 @@ public class ObjectPoolManager : MonoBehaviour
         fireGroundPool = new ObjectPool<FireGround>(fireGroundPrefab, fireGroundPoolSize, transform);
         soccerBallPool = new ObjectPool<SoccerBallProjectile>(soccerBallPrefab, soccerBallPoolSize, transform);
         expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
+        damageTextPool = new ObjectPool<DamageText>(damageTextPrefab, damageTextPoolSize, transform);
 
         isInitialized = true;
     }
@@ -179,6 +187,16 @@ public class ObjectPoolManager : MonoBehaviour
     public ExpGem GetExpGem()
     {
         return expGemPool.Get();
+    }
+        
+    // DamageText 가져오기 및 반환
+    public DamageText GetDamageText()
+    {
+        return damageTextPool.Get();
+    }
+    public void ReturnDamageText(DamageText text)
+    {
+        damageTextPool.Return(text);
     }
 
     public void ReturnExpGem(ExpGem expGem)
