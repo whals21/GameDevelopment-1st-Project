@@ -93,33 +93,43 @@ public class Enemy : MonoBehaviour
                 target = player.transform;
             }
         }
-    }
 
-    // Update is called once per frame
-    void Update()
+        FindPlayer();
+    }
+    private void FindPlayer()
     {
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-
-        if (playerObj == null)
+        if (playerObj != null)
         {
-            target = null;
-            return;
-        }
-
-        // FirePoint 기준으로 거리 계산 → 범위가 몬스터/FirePoint 따라감
-        float distance = Vector2.Distance(FirePoint.position, playerObj.transform.position);
-
-        if (distance <= AttackRange)
-        {
-            target = playerObj.transform;  // 범위 안: target = 플레이어
+            target = playerObj.transform;
         }
         else
         {
-            target = null;  // 범위 밖: target 해제
+            target = null;
+            Debug.LogWarning("Enemy: Player를 찾을 수 없습니다!");
         }
     }
-   
+    // Update is called once per frame
+    void Update()
+    {
+        if (target != null && target.gameObject == null)
+        {
+            target = null;
+        }
 
+       
+       
+
+
+    }
+
+    public bool IsPlayerInAttackRange()
+    {
+        if (target == null) return false;
+
+        float distance = Vector2.Distance(FirePoint.position, target.position);
+        return distance <= AttackRange;
+    }
     // 데미지 받기
     public void TakeDamage(float damage)
     {
