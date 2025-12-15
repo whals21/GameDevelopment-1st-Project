@@ -58,9 +58,7 @@ public class BoomerangProjectile : Projectile
         currentSpeed = speed;
         currentDirection = direction;
 
-        // 디버그 로그
-        Debug.Log($"부메랑 초기화: 발사 방향={direction}, 속도={speed}, 최대거리={maxDistance}");
-    }
+            }
 
     // 컴포넌트 초기화 분리
     private void InitializeComponents()
@@ -118,7 +116,6 @@ public class BoomerangProjectile : Projectile
             if (Vector3.Distance(startPosition, transform.position) >= maxDistance)
             {
                 isReturning = true;
-                Debug.Log($"부메랑 복귀 시작: 현재위치={transform.position}, 시작위치={startPosition}, 거리={Vector3.Distance(startPosition, transform.position)}");
             }
         }
     }
@@ -156,11 +153,9 @@ public class BoomerangProjectile : Projectile
             if (player != null)
             {
                 playerTransform = player.transform;
-                Debug.Log($"플레이어 재찾기 성공: 위치={playerTransform.position}");
             }
             else
             {
-                Debug.LogError("플레이어를 찾을 수 없습니다!");
                 return false;
             }
         }

@@ -78,8 +78,7 @@ public class SoccerBallProjectile : Projectile
             transform.right = currentDirection;
         }
 
-        Debug.Log($"축구공 초기화 완료: 방향={currentDirection}, 속도={currentSpeed}, 전달받은 speed={speed}, 최대 튕김={maxBounces}");
-    }
+            }
 
     // Rigidbody 설정
     private void SetupRigidbody()
@@ -97,10 +96,6 @@ public class SoccerBallProjectile : Projectile
     {
         if (hasDeactivated || isRecalculating)
         {
-            if (isRecalculating && Time.frameCount % 60 == 0)
-            {
-                Debug.Log("축구공 재계산 중 - 이동 중단");
-            }
             return;
         }
 
@@ -131,15 +126,8 @@ public class SoccerBallProjectile : Projectile
     // 이동 처리
     private void HandleMovement()
     {
-        // 디버그 로그 추가
-        if (Time.frameCount % 60 == 0) // 60프레임에 한 번만 로그 출력
-        {
-            Debug.Log($"축구공 이동: 현재위치={transform.position}, 방향={currentDirection}, 속도={currentSpeed}");
-        }
-
         if (currentSpeed <= 0f)
         {
-            Debug.LogWarning("축구공 속도가 0입니다!");
             return;
         }
 
@@ -170,7 +158,6 @@ public class SoccerBallProjectile : Projectile
 
         if (outOfBounds)
         {
-            Debug.Log($"축구공 화면 밖: {viewportPos}");
             StartCoroutine(RecalculateLaunch());
         }
     }
@@ -178,17 +165,14 @@ public class SoccerBallProjectile : Projectile
     // 재발사 처리
     private IEnumerator RecalculateLaunch()
     {
-        Debug.Log("재발사 코루틴 시작");
         if (currentRelaunchCount >= maxRelaunchCount)
         {
-            Debug.Log("최대 재발사 횟수 도달, 축구공 제거");
             DeactivateProjectile();
             yield break;
         }
 
         isRecalculating = true;
         currentSpeed = 0f;
-        Debug.Log("재발사 상태: 속도 0으로 설정");
 
         // 시각적 효과 (선택적)
         CreateRecalculateEffect();
@@ -196,12 +180,9 @@ public class SoccerBallProjectile : Projectile
         yield return new WaitForSeconds(0.1f);
 
         // 새로운 발사 계산
-        Debug.Log("PerformRelaunch 호출 전");
         PerformRelaunch();
-        Debug.Log("PerformRelaunch 호출 후");
 
         isRecalculating = false;
-        Debug.Log("재발사 상태 종료, 이동 재개");
     }
 
     // 재발사 실행
@@ -222,14 +203,12 @@ public class SoccerBallProjectile : Projectile
         {
             Vector3 targetDirection = (nearestEnemy.transform.position - transform.position).normalized;
             currentDirection = targetDirection;
-            Debug.Log($"새 타겟 지정: {nearestEnemy.name}");
         }
         else
         {
             // 적이 없으면 랜덤 방향
             float randomAngle = Random.Range(0f, 360f);
             currentDirection = Quaternion.Euler(0, 0, randomAngle) * Vector3.right;
-            Debug.Log($"랜덤 방향 발사: {randomAngle}°");
         }
 
         // 속도 설정 (재발사할 때마다 약간 감소)
@@ -237,8 +216,6 @@ public class SoccerBallProjectile : Projectile
 
         // 튕김 횟수 초기화
         currentBounces = 0;
-
-        Debug.Log($"재발사 #{currentRelaunchCount}: 방향={currentDirection}, 속도={currentSpeed}");
     }
 
     // 가장 가까운 적 찾기
@@ -306,8 +283,6 @@ public class SoccerBallProjectile : Projectile
             currentBounces++;
             lastBounceTime = Time.time;
 
-            Debug.Log($"적 충돌: {enemy.name}, 튕김 #{currentBounces}");
-
             // 튕김 방향 계산
             Vector3 collisionNormal = (transform.position - collision.transform.position).normalized;
             currentDirection = CalculateBounceDirection(currentDirection, collisionNormal);
@@ -315,7 +290,6 @@ public class SoccerBallProjectile : Projectile
             // 최대 튕김 횟수 체크
             if (currentBounces >= maxBounces)
             {
-                Debug.Log("최대 튕김 횟수 도달, 축구공 제거");
                 DeactivateProjectile();
             }
         }
@@ -335,8 +309,6 @@ public class SoccerBallProjectile : Projectile
         }
 
         currentDirection = CalculateBounceDirection(currentDirection, collisionNormal);
-
-        Debug.Log($"환경 충돌: {collision.name}, 튕김 #{currentBounces}");
 
         // 최대 튕김 횟수 체크
         if (currentBounces >= maxBounces)
