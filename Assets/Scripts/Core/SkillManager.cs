@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Linq;
+using System.Collections.Specialized;
 
 public class SkillManager : MonoBehaviour
 {
@@ -269,6 +270,10 @@ public class SkillManager : MonoBehaviour
         {
             SpawnBrickProjectile(skill, damage, speed, index);
         }
+        else if (skill.projectilePrefab.GetComponent<SoccerBallProjectile>() != null)
+        {
+            SpawnSoccerBallProjectile(skill, damage, speed, index);
+        }
         else
         {
             // 발사 방향 계산
@@ -436,6 +441,40 @@ public class SkillManager : MonoBehaviour
         float currentAngle = startAngle + (angleStep * index);
 
         return Quaternion.Euler(0, 0, currentAngle) * baseDirection;
+    }
+
+    private void SpawnSoccerBallProjectile(SkillData skill, float damage, float speed, int index)
+    {
+        // SoccerBall 오브젝트 풀에서 가져오기
+        var soccerBall = ObjectPoolManager.Instance.GetSoccerBall();
+
+        if (soccerBall == null)
+        {
+            // 풀이 비어있으면 새로 생성
+            soccerBall = Instantiate(skill.projectilePrefab).GetComponent<SoccerBallProjectile>();
+        }
+        else
+        {
+            soccerBall.gameObject.SetActive(true);
+            soccerBall.transform.position = transform.position;
+        }
+
+        // 가장 가까운 적 찾기
+        Transform nearestEnemy = FindNearestEnemy();
+        Vector2 direction;
+
+        if (nearestEnemy != null)
+        {
+            direction = CalculateProjectileDirection(nearestEnemy, skill, GetCurrentSkillLevel(skill), 0);
+        }
+        else
+        {
+            // 적이 없으면 랜덤 방향
+            float randomAngle = Random.Range(0f, 360f);
+            direction = Quaternion.Euler(0, 0, randomAngle) * Vector2.right;
+        }
+
+        soccerBall.InitSoccerBall(damage, speed, direction);
     }
     #endregion
 

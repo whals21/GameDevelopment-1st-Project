@@ -49,7 +49,7 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         // 물리 기반 이동
         Vector2 nextPos = rb.position + (Vector2)direction * speed * Time.fixedDeltaTime;

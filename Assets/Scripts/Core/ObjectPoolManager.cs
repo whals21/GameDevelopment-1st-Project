@@ -12,6 +12,7 @@ public class ObjectPoolManager : MonoBehaviour
     public MolotovProjectile molotovPrefab;
     public BrickProjectile brickPrefab;
     public FireGround fireGroundPrefab;
+    public SoccerBallProjectile soccerBallPrefab;
     public ExpGem expGemPrefab;
 
     [Header("Pool Sizes")]
@@ -22,6 +23,7 @@ public class ObjectPoolManager : MonoBehaviour
     public int molotovPoolSize = 30;
     public int brickPoolSize = 30;
     public int fireGroundPoolSize = 50;
+    public int soccerBallPoolSize = 20;
     public int expGemPoolSize = 200;
 
     // 풀들
@@ -32,6 +34,7 @@ public class ObjectPoolManager : MonoBehaviour
     private ObjectPool<MolotovProjectile> molotovPool;
     private ObjectPool<BrickProjectile> brickPool;
     private ObjectPool<FireGround> fireGroundPool;
+    private ObjectPool<SoccerBallProjectile> soccerBallPool;
     private ObjectPool<ExpGem> expGemPool;
 
     // 유효성 검사 캐시
@@ -39,7 +42,7 @@ public class ObjectPoolManager : MonoBehaviour
     private readonly string[] requiredPrefabs = {
         "enemyPrefab", "enemyBulletPrefab", "projectilePrefab",
         "boomerangPrefab", "molotovPrefab", "brickPrefab",
-        "fireGroundPrefab", "expGemPrefab"
+        "fireGroundPrefab", "soccerBallPrefab", "expGemPrefab"
     };
 
     private void Awake()
@@ -72,6 +75,7 @@ public class ObjectPoolManager : MonoBehaviour
         molotovPool = new ObjectPool<MolotovProjectile>(molotovPrefab, molotovPoolSize, transform);
         brickPool = new ObjectPool<BrickProjectile>(brickPrefab, brickPoolSize, transform);
         fireGroundPool = new ObjectPool<FireGround>(fireGroundPrefab, fireGroundPoolSize, transform);
+        soccerBallPool = new ObjectPool<SoccerBallProjectile>(soccerBallPrefab, soccerBallPoolSize, transform);
         expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
 
         isInitialized = true;
@@ -156,6 +160,19 @@ public class ObjectPoolManager : MonoBehaviour
     {
         if (!ValidatePoolInitialized(fireGroundPool, "FireGround")) return;
         fireGroundPool.Return(fireGround);
+    }
+
+    // SoccerBall 가져오기
+    public SoccerBallProjectile GetSoccerBall()
+    {
+        if (!ValidatePoolInitialized(soccerBallPool, "SoccerBall")) return null;
+        return soccerBallPool.Get();
+    }
+
+    public void ReturnSoccerBall(SoccerBallProjectile soccerBall)
+    {
+        if (!ValidatePoolInitialized(soccerBallPool, "SoccerBall")) return;
+        soccerBallPool.Return(soccerBall);
     }
 
     // ExpGem 가져오기

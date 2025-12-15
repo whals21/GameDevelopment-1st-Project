@@ -836,6 +836,7 @@ MonoBehaviour:
   molotovPrefab: {fileID: 4576463527513854616, guid: a4aef69ec8369ba4f91a7a7a49f0fdb6, type: 3}
   brickPrefab: {fileID: 2772579272930128702, guid: 2b5271b524d4e384a856caa10d8b8baa, type: 3}
   fireGroundPrefab: {fileID: 5442096530452227084, guid: 8664922d214edbb4aa247e3cd2eac423, type: 3}
+  soccerBallPrefab: {fileID: 3415185044716646700, guid: 645c060876d5faf48a2c962b0021cd59, type: 3}
   expGemPrefab: {fileID: 7788130250008709110, guid: d04fe200f24b89d45b06f31c646c4ddc, type: 3}
   enemyPoolSize: 20
   enemyBulletPoolSize: 50
@@ -844,6 +845,7 @@ MonoBehaviour:
   molotovPoolSize: 10
   brickPoolSize: 30
   fireGroundPoolSize: 20
+  soccerBallPoolSize: 10
   expGemPoolSize: 30
 --- !u!4 &255546948
 Transform:
@@ -854,7 +856,7 @@ Transform:
   m_GameObject: {fileID: 255546946}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.08926155, y: 1.344964, z: -0.03712987}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -899,7 +901,7 @@ Transform:
   m_GameObject: {fileID: 358683050}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.08926155, y: 1.344964, z: -0.03712987}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1192,7 +1194,8 @@ MonoBehaviour:
   testSkills:
   - {fileID: 11400000, guid: c572ab794d279304e8e9ce61aad30eda, type: 2}
   - {fileID: 11400000, guid: 03c824939e70fe74487d8faf94f8d95e, type: 2}
-  testSkillLevels: 0100000001000000
+  - {fileID: 11400000, guid: 123144d3296859f42882134b76631da9, type: 2}
+  testSkillLevels: 010000000100000001000000
 --- !u!1 &517112956
 GameObject:
   m_ObjectHideFlags: 0
@@ -1614,7 +1617,7 @@ Transform:
   m_GameObject: {fileID: 658782164}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.13655472, y: -0.05752517, z: -9.93418}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2375,7 +2378,7 @@ Transform:
   m_GameObject: {fileID: 1377424391}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.3007385, y: 4.094964, z: -0.03712987}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3635,6 +3638,10 @@ PrefabInstance:
     - target: {fileID: 4638851744700249820, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
       propertyPath: expCurve.m_Curve.Array.data[1].value
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5394401799811958980, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5677011920690725320, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
       propertyPath: m_Sprite
