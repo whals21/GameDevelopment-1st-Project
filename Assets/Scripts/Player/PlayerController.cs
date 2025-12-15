@@ -26,6 +26,15 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            // 창 키거나 끄기
+            if (PlayerHUD.Instance != null)
+            {
+                PlayerHUD.Instance.TogglePauseUI();
+            }
+        }
+
         inputVec.x = Input.GetAxisRaw("Horizontal");
         inputVec.y = Input.GetAxisRaw("Vertical");
 

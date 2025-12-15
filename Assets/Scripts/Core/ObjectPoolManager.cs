@@ -13,6 +13,7 @@ public class ObjectPoolManager : MonoBehaviour
     public BrickProjectile brickPrefab;
     public FireGround fireGroundPrefab;
     public ExpGem expGemPrefab;
+    public DamageText damageTextPrefab;
 
     [Header("Pool Sizes")]
     public int enemyPoolSize = 100;
@@ -23,6 +24,7 @@ public class ObjectPoolManager : MonoBehaviour
     public int brickPoolSize = 30;
     public int fireGroundPoolSize = 50;
     public int expGemPoolSize = 200;
+    public int damageTextPoolSize = 50;
 
     // 풀들
     private ObjectPool<Enemy> enemyPool;
@@ -33,13 +35,14 @@ public class ObjectPoolManager : MonoBehaviour
     private ObjectPool<BrickProjectile> brickPool;
     private ObjectPool<FireGround> fireGroundPool;
     private ObjectPool<ExpGem> expGemPool;
+    private ObjectPool<DamageText> damageTextPool;
 
     // 유효성 검사 캐시
     private bool isInitialized = false;
     private readonly string[] requiredPrefabs = {
         "enemyPrefab", "enemyBulletPrefab", "projectilePrefab",
         "boomerangPrefab", "molotovPrefab", "brickPrefab",
-        "fireGroundPrefab", "expGemPrefab"
+        "fireGroundPrefab", "expGemPrefab", "damageTextPrefab"
     };
 
     private void Awake()
@@ -51,7 +54,7 @@ public class ObjectPoolManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
@@ -73,6 +76,7 @@ public class ObjectPoolManager : MonoBehaviour
         brickPool = new ObjectPool<BrickProjectile>(brickPrefab, brickPoolSize, transform);
         fireGroundPool = new ObjectPool<FireGround>(fireGroundPrefab, fireGroundPoolSize, transform);
         expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
+        damageTextPool = new ObjectPool<DamageText>(damageTextPrefab, damageTextPoolSize, transform);
 
         isInitialized = true;
     }
@@ -162,6 +166,16 @@ public class ObjectPoolManager : MonoBehaviour
     public ExpGem GetExpGem()
     {
         return expGemPool.Get();
+    }
+        
+    // DamageText 가져오기 및 반환
+    public DamageText GetDamageText()
+    {
+        return damageTextPool.Get();
+    }
+    public void ReturnDamageText(DamageText text)
+    {
+        damageTextPool.Return(text);
     }
 
     public void ReturnExpGem(ExpGem expGem)

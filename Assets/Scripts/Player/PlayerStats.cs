@@ -39,7 +39,15 @@ public class PlayerStats : MonoBehaviour
 
         if (currentHp <= 0)
         {
-            // Die(); 
+            currentHp = 0;
+
+            // 게임오버
+            if (PlayerHUD.Instance != null)
+            {
+                PlayerHUD.Instance.ShowGameOverUI();
+            }
+
+            // gameObject.SetActive(false); // 플레이어가 아예 사라짐
         }
     }
 
