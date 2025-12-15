@@ -45,7 +45,7 @@ public class BoomerangProjectile : Projectile
     }
 
     // 부메랑 초기화
-    public new void Init(float damage, float speed, Vector2 direction)
+    public void Init(float damage, float speed, Vector2 direction)
     {
         base.Init(damage, speed, direction);
         startPosition = transform.position;

@@ -4,7 +4,6 @@ public class MolotovProjectile : Projectile
 {
     [Header("화염병 설정")]
     [SerializeField] private float arcHeight = 3f;
-    [SerializeField] private float groundCheckDistance = 0.5f;
     [SerializeField] private LayerMask groundLayer;
 
     private Vector3 startPosition;

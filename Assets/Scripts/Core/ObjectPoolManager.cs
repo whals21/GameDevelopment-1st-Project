@@ -45,11 +45,8 @@ public class ObjectPoolManager : MonoBehaviour
     private readonly string[] requiredPrefabs = {
         "enemyPrefab", "enemyBulletPrefab", "projectilePrefab",
         "boomerangPrefab", "molotovPrefab", "brickPrefab",
-<<<<<<< HEAD
-        "fireGroundPrefab", "soccerBallPrefab", "expGemPrefab"
-=======
-        "fireGroundPrefab", "expGemPrefab", "damageTextPrefab"
->>>>>>> d4c1de9a473cccaca0c1bf1a5919cfa44d8b0604
+        "fireGroundPrefab", "soccerBallPrefab", "expGemPrefab",
+        "damageTextPrefab"
     };
 
     private void Awake()
@@ -61,7 +58,7 @@ public class ObjectPoolManager : MonoBehaviour
             return;
         }
         Instance = this;
-        //DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
@@ -188,16 +185,6 @@ public class ObjectPoolManager : MonoBehaviour
     {
         return expGemPool.Get();
     }
-        
-    // DamageText 가져오기 및 반환
-    public DamageText GetDamageText()
-    {
-        return damageTextPool.Get();
-    }
-    public void ReturnDamageText(DamageText text)
-    {
-        damageTextPool.Return(text);
-    }
 
     public void ReturnExpGem(ExpGem expGem)
     {
@@ -213,6 +200,16 @@ public class ObjectPoolManager : MonoBehaviour
     public void ReturnEnemyBullet(EnemyBullet enemyBullet)
     {
         enemyBulletPool.Return(enemyBullet);
+    }
+
+    // DamageText 가져오기 및 반환
+    public DamageText GetDamageText()
+    {
+        return damageTextPool.Get();
+    }
+    public void ReturnDamageText(DamageText text)
+    {
+        damageTextPool.Return(text);
     }
 
     // 풀 초기화 상태 유효성 검사

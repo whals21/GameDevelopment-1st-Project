@@ -27,11 +27,10 @@ public class SoccerBallProjectile : Projectile
     private bool isRecalculating = false;
     private float lastBounceTime = 0f;
     private bool hasDeactivated = false;
-    private Rigidbody2D rb;
 
     protected void Awake()
     {
-        // 컴포넌트 캐싱
+        // 컴포넌트 캐싱 - 부모의 rb 필드 사용
         rb = GetComponent<Rigidbody2D>();
         if (rb == null) rb = GetComponentInParent<Rigidbody2D>();
 

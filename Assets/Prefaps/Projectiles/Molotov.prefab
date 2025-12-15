@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5655411170149501880
 Transform:
   m_ObjectHideFlags: 0
@@ -164,7 +164,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeTime: 3
   arcHeight: 3
-  groundCheckDistance: 0.5
   groundLayer:
     serializedVersion: 2
     m_Bits: 2048
