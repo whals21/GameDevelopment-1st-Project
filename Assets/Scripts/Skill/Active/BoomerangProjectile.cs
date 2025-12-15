@@ -221,7 +221,20 @@ public class BoomerangProjectile : Projectile
     // 투사체 비활성화
     private void DeactivateProjectile()
     {
+        // 상태 초기화
+        isReturning = false;
+        currentSpeed = 0;
+        currentDirection = Vector2.zero;
+        hasDeactivated = false;
+        
+        // Rigidbody 초기화
+        if (rb != null) {
+            rb.velocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+        }
         if (hasDeactivated) return;
+
         hasDeactivated = true;
 
         // 오브젝트 풀로 반환

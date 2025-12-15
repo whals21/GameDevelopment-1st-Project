@@ -630,7 +630,7 @@ GameObject:
   m_Component:
   - component: {fileID: 245890897}
   - component: {fileID: 245890898}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ForcefieldManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -840,7 +840,7 @@ MonoBehaviour:
   enemyPoolSize: 20
   enemyBulletPoolSize: 50
   projectilePoolSize: 10
-  boomerangPoolSize: 10
+  boomerangPoolSize: 5
   molotovPoolSize: 10
   brickPoolSize: 30
   fireGroundPoolSize: 20
@@ -1155,7 +1155,7 @@ GameObject:
   m_Component:
   - component: {fileID: 467470623}
   - component: {fileID: 467470624}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1192,9 +1192,7 @@ MonoBehaviour:
   testSkills:
   - {fileID: 11400000, guid: c572ab794d279304e8e9ce61aad30eda, type: 2}
   - {fileID: 11400000, guid: 03c824939e70fe74487d8faf94f8d95e, type: 2}
-  - {fileID: 11400000, guid: e7eea4080a4ac0d44b4af315794027d3, type: 2}
-  - {fileID: 11400000, guid: a6cafa6fc9a50ef4b9fedba48ac5c0e8, type: 2}
-  testSkillLevels: 01000000010000000100000001000000
+  testSkillLevels: 0100000001000000
 --- !u!1 &517112956
 GameObject:
   m_ObjectHideFlags: 0
@@ -3574,6 +3572,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 334100863541843005, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 887328692891924250, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
       propertyPath: expSlider
       value: 
@@ -3598,6 +3600,22 @@ PrefabInstance:
       propertyPath: levelUpEffectPrefab
       value: 
       objectReference: {fileID: 3873436107480539376, guid: 6c095d6d55a4ee242b2e399d701e03be, type: 3}
+    - target: {fileID: 1197500203847484051, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3141985131861494937, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3456085627953318950, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4503336282757308843, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4638851744700249820, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
       propertyPath: currentExp
       value: 1
@@ -3634,14 +3652,26 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6549215505908734107, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6612509182124898902, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6649337744726778215, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7498828718251387944, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
       propertyPath: joyStick
       value: 
       objectReference: {fileID: 1025931603}
+    - target: {fileID: 7656789618253846964, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8763636183649837663, guid: 541c0f8a8eae0644d88343e42c94a39b, type: 3}
       propertyPath: m_Constraints
       value: 4
