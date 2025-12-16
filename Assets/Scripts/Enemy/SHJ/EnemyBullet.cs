@@ -71,7 +71,7 @@ public class EnemyBullet : MonoBehaviour
     {
         yield return new WaitForSeconds(lifeTime);
 
-        // 지정된 시간이 지나면 강제로 반환 (안전장치)
+        // 지정된 시간이 지나면 강제로 반환
         if (!isReturned)
             ReturnToPool();
     }

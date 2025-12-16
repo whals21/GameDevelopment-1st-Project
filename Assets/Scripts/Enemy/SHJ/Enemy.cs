@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static ActtackManager;
 
 
 public class Enemy : MonoBehaviour
@@ -34,15 +35,17 @@ public class Enemy : MonoBehaviour
     public Animator anim { get; private set; }
     public Collider2D col { get; private set; }
 
-    public float AttackDelay => Data.attackDelay;
-    public float AttackRange => Data.attackRange;
+    [SerializeField] public float AttackDelay;
+    public float Delay=> Data.attackDelay;
+    [SerializeField] private float AttackRange;
+    public float Range => Data.attackRange;
     public GameObject ProjectilePrefab => Data.projectilePrefab;
     public Transform FirePoint => Data.firePoint != null ? Data.firePoint : transform;
     public bool IsRanged => Data.isRanged;
 
     public bool IsRange => Data.attackRange > 0f;
 
-    public Transform point;
+   public Transform point;
 
     private void Awake()
     {
@@ -68,7 +71,7 @@ public class Enemy : MonoBehaviour
         //     Debug.LogError("Enemy: Player 태그를 가진 오브젝트를 찾을 수 없습니다!");
         // }
 
-       
+        point = transform;
     }
     void Start()
     {
@@ -78,12 +81,15 @@ public class Enemy : MonoBehaviour
     // 오브젝트 풀에서 가져올 때 호출 
     public void Init(EnemyObject data)
     {
+        
         enemyData = data;
         currentHP = data.EnemyHP;
         moveSpeed = data.moveSpeed;
         //contactDamage = data.contactDamage;
         //expValue = data.expValue;
 
+        AttackRange = data.attackRange;
+        AttackDelay = data.attackDelay;
         // 플레이어 재확인 (풀에서 재사용 시)
         if (target == null)
         {
@@ -93,10 +99,10 @@ public class Enemy : MonoBehaviour
                 target = player.transform;
             }
         }
-
+        point = transform;
         FindPlayer();
     }
-    private void FindPlayer()
+    public void FindPlayer()
     {
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
@@ -126,7 +132,6 @@ public class Enemy : MonoBehaviour
     public bool IsPlayerInAttackRange()
     {
         if (target == null) return false;
-
         float distance = Vector2.Distance(FirePoint.position, target.position);
         return distance <= AttackRange;
     }

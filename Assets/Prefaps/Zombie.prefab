@@ -149,7 +149,7 @@ MonoBehaviour:
   currentHP: 0
   moveSpeed: 0
   target: {fileID: 0}
-  point: {fileID: 0}
+  point: {fileID: 3167148244008038146}
 --- !u!114 &4378353355049202463
 MonoBehaviour:
   m_ObjectHideFlags: 0
