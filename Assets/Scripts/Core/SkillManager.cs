@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections.Specialized;
+using System.Security.Cryptography;
 
 public class SkillManager : MonoBehaviour
 {
@@ -181,10 +182,20 @@ public class SkillManager : MonoBehaviour
     {
         for (int i = 0; i < MAX_SKILLS; i++)
         {
+            if (!HasSkill(i)) continue;
+
             // Forcefield는 쿨타임이 없으므로 건너뛰기
             if (i == forcefieldSlot) continue;
 
-            if (HasSkill(i) && cooldownTimers[i] <= 0f)
+            // Guardian과 Forcefield는 지속적인 스킬이므로 쿨다운 체크 조정
+            var skill = equippedSkills[i];
+            if (skill.skillType == SkillType.Guardian || skill.skillType == SkillType.Forcefield)
+            {
+                // 지속 스킬은 첫 실행 이후에는 주기적으로 체크하지 않음
+                if (cooldownTimers[i] > 0f) continue;
+            }
+
+            if (cooldownTimers[i] <= 0f)
             {
                 ExecuteSkill(i);
             }
@@ -195,13 +206,40 @@ public class SkillManager : MonoBehaviour
     {
         var skill = equippedSkills[slot];
         var level = skillLevels[slot];
-        var target = FindNearestEnemy();
 
+        // 스킬 타입에 따른 분기 처리
+        switch (skill.skillType)
+        {
+            case SkillType.Projectile:
+                ExecuteProjectileSkill(skill, level, slot);
+                break;
+
+            case SkillType.Guardian:
+                ExecuteGuardianSkill(skill, level, slot);
+                break;
+
+            case SkillType.Forcefield:
+                ExecuteForcefieldSkill(skill, level, slot);
+                break;
+
+            case SkillType.Special:
+                ExecuteSpecialSkill(skill, level, slot);
+                break;
+
+            default:
+                Debug.LogWarning($"알 수 없는 스킬 타입: {skill.skillType}");
+                break;
+        }
+    }
+
+    private void ExecuteProjectileSkill(SkillData skill, int level, int slot)
+    {
+        var target = FindNearestEnemy();
         if (target == null) return;
 
         // 발사체 생성
         int projectileCount = GetProjectileCount(skill, level);
-        Debug.Log($"ExecuteSkill: 슬롯 {slot}, 스킬 {skill.name}, 레벨 {level}, 발사체 수 {projectileCount}");
+        Debug.Log($"ExecuteProjectileSkill: 슬롯 {slot}, 스킬 {skill.name}, 레벨 {level}, 발사체 수 {projectileCount}");
 
         for (int i = 0; i < projectileCount; i++)
         {
@@ -212,6 +250,81 @@ public class SkillManager : MonoBehaviour
         float cooldown = GetSkillCooldown(skill, level);
         cooldownTimers[slot] = cooldown;
         Debug.Log($"쿨다운 설정: {cooldown}초");
+    }
+
+    private void ExecuteGuardianSkill(SkillData skill, int level, int slot)
+    {
+        Debug.Log($"ExecuteGuardianSkill: 슬롯 {slot}, 스킬 {skill.name}, 레벨 {level}");
+
+        // 가디언 스킬 컴포넌트 찾기 또는 생성
+        GameObject guardianObj = GameObject.Find(skill.skillName);
+        GuardianSkill guardianSkill = null;
+
+        if (guardianObj != null)
+        {
+            guardianSkill = guardianObj.GetComponent<GuardianSkill>();
+        }
+        else
+        {
+            // 새로운 가디언 오브젝트 생성
+            if (skill.skillObjectPrefab != null)
+            {
+                guardianObj = Instantiate(skill.skillObjectPrefab, transform);
+                guardianObj.name = skill.skillName;
+                guardianSkill = guardianObj.GetComponent<GuardianSkill>();
+            }
+        }
+
+        if (guardianSkill != null)
+        {
+            // 레벨 설정
+            guardianSkill.SetLevel(level);
+
+            // 활성화 (이미 활성화되어 있으면 레벨업만)
+            if (!guardianSkill.IsGuardianActive())
+            {
+                guardianSkill.ActivateGuardian();
+            }
+            else
+            {
+                // 이미 활성화된 상태면 레벨업 처리
+                guardianSkill.UpgradeGuardian();
+            }
+        }
+        else
+        {
+            Debug.LogError($"가디언 스킬을 찾을 수 없습니다: {skill.skillName}");
+        }
+
+        // Guardian은 지속시간이 있으므로 쿨다운이 다름
+        // 일단 기본 쿨다운 적용 (필요시 조정)
+        float cooldown = GetSkillCooldown(skill, level);
+        cooldownTimers[slot] = cooldown;
+    }
+
+    private void ExecuteForcefieldSkill(SkillData skill, int level, int slot)
+    {
+        // 기존 ForcefieldManager와 연동 (이미 구현되어 있을 것)
+        Debug.Log($"ExecuteForcefieldSkill: 슬롯 {slot}, 스킬 {skill.name}, 레벨 {level}");
+
+        // ForcefieldManager로 위임
+        if (ForcefieldManager.Instance != null)
+        {
+            ForcefieldManager.Instance.EquipForcefield(skill, level);
+        }
+    }
+
+    private void ExecuteSpecialSkill(SkillData skill, int level, int slot)
+    {
+        // 특수 스킬 처리 (확장용)
+        Debug.Log($"ExecuteSpecialSkill: 슬롯 {slot}, 스킬 {skill.name}, 레벨 {level}");
+
+        // 특수 스킬에 따른 개별 처리
+        if (skill.skillObjectPrefab != null)
+        {
+            GameObject specialObj = Instantiate(skill.skillObjectPrefab);
+            // 스킬별 특수 초기화 로직
+        }
     }
 
     private Transform FindNearestEnemy()
@@ -320,7 +433,9 @@ public class SkillManager : MonoBehaviour
         boomerang.transform.localScale = Vector3.one * sizeMultiplier;
 
         // 방향은 계산해서 전달
-        Vector2 direction = Vector2.right; // 기본 오른쪽
+        Transform target = FindNearestEnemy();
+        Vector2 direction = CalculateProjectileDirection(target, skill, GetCurrentSkillLevel(skill), 0);
+
         boomerang.Init(damage, speed, direction);
     }
 
@@ -361,18 +476,19 @@ public class SkillManager : MonoBehaviour
             brick.transform.position = transform.position;
         }
 
-        // Brick 발사 방향 계산 (플레이어 주변 원형 분산)
+        // Brick 발사 방향 계산 (플레이어 위쪽으로 원형 분산)
         int projectileCount = GetProjectileCount(skill, GetCurrentSkillLevel(skill));
         Vector2 direction;
 
-        // 플레이어 주변으로 원형 분산 발사
+        // 위쪽 중심으로 원형 분산 발사
         float angleStep = 360f / projectileCount; // 360도 등분
         float angle = angleStep * index;
 
         // 약간의 무작위성 추가로 자연스러움
         angle += Random.Range(-10f, 10f);
 
-        direction = Quaternion.Euler(0, 0, angle) * Vector2.right;
+        // 위쪽(90도)을 기준으로 분산
+        direction = Quaternion.Euler(0, 0, 90f + angle) * Vector2.right;
 
         // Brick 초기화
         brick.InitBrick(damage, speed, direction);

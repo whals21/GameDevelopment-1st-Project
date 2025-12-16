@@ -15,6 +15,7 @@ public class ObjectPoolManager : MonoBehaviour
     public SoccerBallProjectile soccerBallPrefab;
     public ExpGem expGemPrefab;
     public DamageText damageTextPrefab;
+    public GuardianTop guardianTopPrefab;
 
     [Header("Pool Sizes")]
     public int enemyPoolSize = 100;
@@ -27,6 +28,7 @@ public class ObjectPoolManager : MonoBehaviour
     public int soccerBallPoolSize = 20;
     public int expGemPoolSize = 200;
     public int damageTextPoolSize = 50;
+    public int guardianTopPoolSize = 20;
 
     // 풀들
     private ObjectPool<Enemy> enemyPool;
@@ -39,6 +41,7 @@ public class ObjectPoolManager : MonoBehaviour
     private ObjectPool<SoccerBallProjectile> soccerBallPool;
     private ObjectPool<ExpGem> expGemPool;
     private ObjectPool<DamageText> damageTextPool;
+    private ObjectPool<GuardianTop> guardianTopPool;
 
     // 유효성 검사 캐시
     private bool isInitialized = false;
@@ -46,7 +49,7 @@ public class ObjectPoolManager : MonoBehaviour
         "enemyPrefab", "enemyBulletPrefab", "projectilePrefab",
         "boomerangPrefab", "molotovPrefab", "brickPrefab",
         "fireGroundPrefab", "soccerBallPrefab", "expGemPrefab",
-        "damageTextPrefab"
+        "damageTextPrefab", "guardianTopPrefab"
     };
 
     private void Awake()
@@ -82,6 +85,7 @@ public class ObjectPoolManager : MonoBehaviour
         soccerBallPool = new ObjectPool<SoccerBallProjectile>(soccerBallPrefab, soccerBallPoolSize, transform);
         expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
         damageTextPool = new ObjectPool<DamageText>(damageTextPrefab, damageTextPoolSize, transform);
+        guardianTopPool = new ObjectPool<GuardianTop>(guardianTopPrefab, guardianTopPoolSize, transform);
 
         isInitialized = true;
     }
@@ -210,6 +214,25 @@ public class ObjectPoolManager : MonoBehaviour
     public void ReturnDamageText(DamageText text)
     {
         damageTextPool.Return(text);
+    }
+
+    // GuardianTop 가져오기 및 반환
+    public GuardianTop GetGuardianTop()
+    {
+        if (!ValidatePoolInitialized(guardianTopPool, "GuardianTop")) return null;
+        return guardianTopPool.Get();
+    }
+
+    public void ReturnGuardianTop(GuardianTop top)
+    {
+        if (!ValidatePoolInitialized(guardianTopPool, "GuardianTop")) return;
+
+        // 톱날 재사용을 위한 리셋
+        if (top != null)
+        {
+            top.ResetForReuse();
+            guardianTopPool.Return(top);
+        }
     }
 
     // 풀 초기화 상태 유효성 검사

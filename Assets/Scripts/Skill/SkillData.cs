@@ -1,5 +1,14 @@
 using UnityEngine;
 
+// 스킬 타입 정의
+public enum SkillType
+{
+    Projectile,  // 일반 투사체 스킬 (축구공, 부메랑 등)
+    Guardian,    // 가디언 스킬
+    Forcefield,  // 포스필드 스킬
+    Special      // 기타 특수 스킬
+}
+
 [CreateAssetMenu(menuName = "Skill/Skill Data")]
 public class SkillData : ScriptableObject
 {
@@ -7,7 +16,13 @@ public class SkillData : ScriptableObject
     public string skillName;
     public string description;
     public Sprite icon;
-    public GameObject projectilePrefab;  // 발사체 프리팹
+
+    [Header("스킬 타입")]
+    public SkillType skillType = SkillType.Projectile;
+
+    [Header("프리팹 설정")]
+    public GameObject projectilePrefab;  // 발사체 프리팹 (Projectile 타입)
+    public GameObject skillObjectPrefab; // 스킬 오브젝트 프리팹 (Guardian/Forcefield/Special 타입)
 
     [Header("스탯")]
     public float damage = 10f;

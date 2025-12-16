@@ -1184,6 +1184,7 @@ MonoBehaviour:
   soccerBallPrefab: {fileID: 3415185044716646700, guid: 645c060876d5faf48a2c962b0021cd59, type: 3}
   expGemPrefab: {fileID: 7788130250008709110, guid: d04fe200f24b89d45b06f31c646c4ddc, type: 3}
   damageTextPrefab: {fileID: 6261605996551218003, guid: 18335dd4c60200f478b546865573ecec, type: 3}
+  guardianTopPrefab: {fileID: 956449345279957988, guid: f8cae82349e6cc14196d7fbdc5b3f2d5, type: 3}
   enemyPoolSize: 20
   enemyBulletPoolSize: 50
   projectilePoolSize: 10
@@ -1194,6 +1195,7 @@ MonoBehaviour:
   soccerBallPoolSize: 10
   expGemPoolSize: 30
   damageTextPoolSize: 50
+  guardianTopPoolSize: 10
 --- !u!4 &255546948
 Transform:
   m_ObjectHideFlags: 0
@@ -1672,12 +1674,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testSkills:
-  - {fileID: 11400000, guid: c572ab794d279304e8e9ce61aad30eda, type: 2}
-  - {fileID: 11400000, guid: 03c824939e70fe74487d8faf94f8d95e, type: 2}
-  - {fileID: 11400000, guid: 123144d3296859f42882134b76631da9, type: 2}
-  - {fileID: 11400000, guid: a6cafa6fc9a50ef4b9fedba48ac5c0e8, type: 2}
-  - {fileID: 11400000, guid: e7eea4080a4ac0d44b4af315794027d3, type: 2}
-  testSkillLevels: 0100000001000000010000000100000001000000
+  - {fileID: 11400000, guid: 7786192be52354c41be96a3b26fd9863, type: 2}
+  testSkillLevels: 05000000
 --- !u!1 &517112956
 GameObject:
   m_ObjectHideFlags: 0

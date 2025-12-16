@@ -28,6 +28,10 @@ public class BrickProjectile : Projectile
     private const float MAX_OFFSCREEN_Y = -10f;
     private const float MAX_OFFSCREEN_X = 20f;
 
+    // 튕김 관련 상수
+    private const float BOUNCE_DAMPING = 0.7f;  // 튕길 때 속도 감소율
+    private const float BOUNCE_MIN_SPEED = 3f;  // 최소 튕김 속도
+
     protected void Awake()
     {
         // 부모의 Awake()가 private이므로 직접 호출 불가능
@@ -49,12 +53,10 @@ public class BrickProjectile : Projectile
         // 탕탕특공대 스타일 수직 발사 설정
         Vector3 launchDirection = direction.normalized;
 
-        // 수직 상승 + 약간의 수평 이동
-        Vector3 upwardDirection = new Vector3(launchDirection.x * HORIZONTAL_SPEED_RATIO, 1f, 0).normalized;
-
-        // 초기 속도 설정 (상수 사용)
-        horizontalVelocity = upwardDirection * DEFAULT_INITIAL_SPEED * HORIZONTAL_SPEED_RATIO;
-        verticalVelocity = DEFAULT_INITIAL_SPEED * VERTICAL_SPEED_RATIO;
+        // 발사 방향에 따른 수평/수직 속도 분배
+        // 기본적으로 위쪽으로 발사하지만, 방향에 따라 수평 속도도 반영
+        horizontalVelocity = new Vector3(launchDirection.x * speed * 0.5f, 0, 0);
+        verticalVelocity = speed * 0.8f; // 대부분의 속도는 수직 상승에 사용
 
         isRising = true;
         hasActivatedGravity = false;
@@ -90,15 +92,9 @@ public class BrickProjectile : Projectile
     }
 
     
-    // 부모의 Update를 오버라이드하여 탕탕특공대 스타일 물리 로직 사용
+    // 부모의 Update를 오버라이드하여 중력 기반 물리 로직 사용
     protected override void Update()
     {
-        if (hasHitGround)
-        {
-            // 지면에 도달했으면 아무것도 하지 않음
-            return;
-        }
-
         // 중력 기반 물리 이동
         if (isRising)
         {
@@ -138,12 +134,6 @@ public class BrickProjectile : Projectile
             }
         }
 
-        // 지면 충돌 체크
-        if (transform.position.y <= MIN_GROUND_HEIGHT)
-        {
-            OnHitGround();
-        }
-
         // 수명 체크
         lifeTimer += Time.deltaTime;
         if (lifeTimer >= LifeTime)
@@ -158,18 +148,21 @@ public class BrickProjectile : Projectile
         }
     }
 
-    // 지면 충돌 처리 (Molotov 스타일)
+    // 지면 충돌 처리 - 튕김 효과로 변경
     private void OnHitGround()
     {
-        if (hasHitGround) return;
-
-        hasHitGround = true;
+        // 튕김 횟수 제한이 있다면 여기서 체크
+        isRising = false;
+        hasActivatedGravity = true;
 
         // 지면 충돌 이펙트
         CreateGroundImpactEffect();
 
-        // 즉시 비활성화
-        DeactivateProjectile();
+        // 수직 속도를 반사하여 튕김 효과 구현
+        verticalVelocity = -verticalVelocity * BOUNCE_DAMPING;
+
+        // 지면에 닿았을 때 약간의 수직 속도 추가로 튕어오름
+        verticalVelocity = Mathf.Max(verticalVelocity, BOUNCE_MIN_SPEED);
     }
 
     // 부모의 OnTriggerEnter2D를 오버라이드

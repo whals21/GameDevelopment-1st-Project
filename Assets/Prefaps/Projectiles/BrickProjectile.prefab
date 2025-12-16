@@ -161,7 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d120bcb54fa814eb28909716cc4aa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 3
+  lifeTime: 8
   knockbackForce: 5
   maxHits: 3
   groundLayer:
