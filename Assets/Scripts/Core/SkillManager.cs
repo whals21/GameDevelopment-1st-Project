@@ -706,4 +706,29 @@ public class SkillManager : MonoBehaviour
     #region Utility
     private bool IsValidSlot(int slot) => slot >= 0 && slot < MAX_SKILLS;
     #endregion
+    public void UnlockOrUpgradeSkill(SkillData skillToUp)
+    {
+        if (skillToUp == null) return;
+
+        // 보유중인 스킬인지 확인 (있으면 레벨업)
+        for (int i = 0; i < MAX_SKILLS; i++)
+        {
+            if (equippedSkills[i] == skillToUp)
+            {
+                int currentLevel = skillLevels[i];
+                SetSkillLevel(i, currentLevel + 1); // 레벨업 후 종료
+                return;
+            }
+        }
+
+        // 없는 스킬이라면? 빈 슬롯 찾아서 새로 배우기
+        for (int i = 0; i < MAX_SKILLS; i++)
+        {
+            if (equippedSkills[i] == null) // 빈 슬롯 찾기
+            {
+                EquipSkill(i, skillToUp, 1); // 1레벨로 장착후 종료
+                return;
+            }
+        }
+    }
 }

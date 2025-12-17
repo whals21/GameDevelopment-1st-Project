@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da598cf3fae59f849a222a52cc59b7ea, type: 3}
+  m_Name: Data_Boomerang
+  m_EditorClassIdentifier: 
+  skillData: {fileID: 11400000, guid: c572ab794d279304e8e9ce61aad30eda, type: 2}
+  itemName: "\uBD80\uBA54\uB791"
+  itemDesc: "\uBD80\uBA54\uB791\uC744 \uB358\uC838\uC11C \uC801\uC5D0\uAC8C \uD53C\uD574\uB97C
+    \uC785\uD798."
+  itemIcon: {fileID: -296531900, guid: 588e67d28d255e44ab3588abcda2252f, type: 3}
