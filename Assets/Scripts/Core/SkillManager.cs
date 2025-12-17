@@ -16,6 +16,10 @@ public class SkillManager : MonoBehaviour
 
     #region Serialized Fields
     [Header("스킬 설정")]
+
+    [Tooltip("모든 스킬 데이터 - 모든 스킬 데이터를 가져오기 위해 사용")]
+    [SerializeField] private SkillData[] allSkills;
+    
     [SerializeField] private SkillData[] testSkills;
 
     [Header("테스트용 스킬 레벨 설정")]
