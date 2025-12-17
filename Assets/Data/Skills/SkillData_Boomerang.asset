@@ -16,7 +16,9 @@ MonoBehaviour:
   description: "\uD50C\uB808\uC774\uC5B4\uC5D0\uAC8C \uB418\uB3CC\uC544\uC624\uB294\uBD80\uBA54\uB791\uC744
     \uB358\uC9D1\uB2C8\uB2E4."
   icon: {fileID: -296531900, guid: 588e67d28d255e44ab3588abcda2252f, type: 3}
+  skillType: 0
   projectilePrefab: {fileID: 8415533593227436172, guid: 9561d25c70ebeb54e987de3a22f61946, type: 3}
+  skillObjectPrefab: {fileID: 0}
   damage: 10
   cooldown: 3
   projectileSpeed: 7
@@ -53,15 +55,15 @@ MonoBehaviour:
     additionalProjectiles: 2
     projectileSpeedMultiplier: 1
     projectileSizeMultiplier: 1
-    projectileScaleIncrease: 0.6
+    projectileScaleIncrease: 0.25
     upgradeDescription: Adds boomerang size
   - level: 1
     damageMultiplier: 6
     cooldownMultiplier: 1
-    additionalProjectiles: 2
+    additionalProjectiles: 3
     projectileSpeedMultiplier: 1
     projectileSizeMultiplier: 1
-    projectileScaleIncrease: 1.2
+    projectileScaleIncrease: 0.5
     upgradeDescription: Adds boomerang size, Adds boomerang damage
   evoSkill: {fileID: 0}
   evoRequirements: 

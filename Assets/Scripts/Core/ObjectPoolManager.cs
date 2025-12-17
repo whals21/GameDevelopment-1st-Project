@@ -63,11 +63,12 @@ public class ObjectPoolManager : MonoBehaviour
         // 싱글톤
         if (Instance != null && Instance != this)
         {
+            Debug.LogWarning("ObjectPoolManager 이미 존재 - 중복 오브젝트 파괴");
             Destroy(gameObject);
             return;
         }
         Instance = this;
-        //DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
