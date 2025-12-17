@@ -14,6 +14,9 @@ public class DamageText : MonoBehaviour
     [SerializeField] private Color normalColor = Color.white;
     [SerializeField] private float normalSize = 30f;
 
+    [Header("스타일 (플레이어 피격)")]
+    [SerializeField] private Color playerColor = Color.magenta;
+
     [Header("스타일 (크리티컬)")]
     [SerializeField] private Color critColor = Color.red;
     [SerializeField] private float critSize = 45f;
@@ -22,7 +25,7 @@ public class DamageText : MonoBehaviour
     private Color initialColor;
 
     // 풀에서 꺼낼 때 호출될 초기화 함수
-    public void Init(float damage, bool isCritical, Vector3 position)
+    public void Init(float damage, bool isCritical, Vector3 position, bool isPlayer = false)
     {
         timer = 0;
         transform.position = position + Vector3.up * 0.5f; // Enemy 머리 위
@@ -32,8 +35,17 @@ public class DamageText : MonoBehaviour
         textMesh.text = damage.ToString("F0");
 
         // 스타일 적용
-        if (isCritical)
+        if (isPlayer)
         {
+            // 플레이어 피격
+            textMesh.color = playerColor;
+            textMesh.fontSize = normalSize;
+            textMesh.fontStyle = FontStyles.Bold;
+            initialColor = playerColor;
+        }
+        else if (isCritical)
+        {
+            // 적 크리티컬 피격
             textMesh.color = critColor;
             textMesh.fontSize = critSize;
             textMesh.fontStyle = FontStyles.Bold;
@@ -41,6 +53,7 @@ public class DamageText : MonoBehaviour
         }
         else
         {
+            // 적 일반 피격
             textMesh.color = normalColor;
             textMesh.fontSize = normalSize;
             textMesh.fontStyle = FontStyles.Normal;

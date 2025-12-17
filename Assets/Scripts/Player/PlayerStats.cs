@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float currentExp = 0;
     [SerializeField] private AnimationCurve expCurve;
 
+    private bool isInvincible = false;
+
     void Start()
     {
         currentHp = maxHp;
@@ -28,6 +31,8 @@ public class PlayerStats : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        if (isInvincible) return;
+
         currentHp -= damage;
 
         if (currentHp < 0) currentHp = 0;
@@ -35,6 +40,20 @@ public class PlayerStats : MonoBehaviour
         if (PlayerHUD.Instance != null)
         {
             PlayerHUD.Instance.UpdateHp(currentHp, maxHp);
+        }
+
+        if (ObjectPoolManager.Instance != null)
+        {
+            DamageText text = ObjectPoolManager.Instance.GetDamageText();
+            if (text != null)
+            {
+                text.Init(damage, false, transform.position, true);
+            }
+        }
+
+        if (currentHp > 0) // 아직 살아있을 때만 무적 실행
+        {
+            StartCoroutine(InvincibleRoutine());
         }
 
         if (currentHp <= 0)
@@ -49,6 +68,15 @@ public class PlayerStats : MonoBehaviour
 
             // gameObject.SetActive(false); // 플레이어가 아예 사라짐
         }
+    }
+
+    IEnumerator InvincibleRoutine()
+    {
+        isInvincible = true; // 무적 켜기
+
+        yield return new WaitForSeconds(0.5f); // 2. 0.5초 기다리기
+
+        isInvincible = false;
     }
 
     public void GainExp(int amount)
@@ -73,14 +101,18 @@ public class PlayerStats : MonoBehaviour
 
         Debug.Log($"레벨 업 현재 레벨: {level}");
 
-        // 경험치바 갱신
         if (PlayerHUD.Instance != null)
         {
             PlayerHUD.Instance.UpdateExp(currentExp, MaxExp);
-
             PlayerHUD.Instance.UpdateLevel(level);
-            // 시퀀스 시작
-            PlayerHUD.Instance.StartLevelUpSequence();
+
+            // PlayerHUD.Instance.StartLevelUpSequence(); 
+        }
+
+        // 레벨업 매니저 호출
+        if (LevelUpManager.Instance != null)
+        {
+            LevelUpManager.Instance.ShowLevelUp();
         }
     }
     public float MaxExp
