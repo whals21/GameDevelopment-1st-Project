@@ -6,6 +6,7 @@ public enum SkillType
     Projectile,  // 일반 투사체 스킬 (축구공, 부메랑 등)
     Guardian,    // 가디언 스킬
     Forcefield,  // 포스필드 스킬
+    Drone,       // 드론 스킬
     Special      // 기타 특수 스킬
 }
 

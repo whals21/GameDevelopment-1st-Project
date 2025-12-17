@@ -11,14 +11,12 @@ public class BrickProjectile : Projectile
 
     private int currentHits = 0;
     private bool hasDeactivated = false;
-    private bool hasHitGround = false;
 
     // 탕탕특공대 스타일 물리 변수
     private Vector3 horizontalVelocity;
     private float verticalVelocity;
     private readonly float gravity = 15f;
     private bool isRising = true;
-    private bool hasActivatedGravity = false;
 
     // 상수 정의
     private const float DEFAULT_INITIAL_SPEED = 12f;
@@ -59,7 +57,6 @@ public class BrickProjectile : Projectile
         verticalVelocity = speed * 0.8f; // 대부분의 속도는 수직 상승에 사용
 
         isRising = true;
-        hasActivatedGravity = false;
 
         SetupComponents();
         ResetState();
@@ -88,7 +85,6 @@ public class BrickProjectile : Projectile
     {
         currentHits = 0;
         hasDeactivated = false;
-        hasHitGround = false;
     }
 
     
@@ -115,7 +111,6 @@ public class BrickProjectile : Projectile
             if (verticalVelocity <= 0)
             {
                 isRising = false;
-                hasActivatedGravity = true;
             }
         }
         else
@@ -153,7 +148,6 @@ public class BrickProjectile : Projectile
     {
         // 튕김 횟수 제한이 있다면 여기서 체크
         isRising = false;
-        hasActivatedGravity = true;
 
         // 지면 충돌 이펙트
         CreateGroundImpactEffect();
@@ -229,7 +223,6 @@ public class BrickProjectile : Projectile
         if (hasDeactivated) return;
 
         hasDeactivated = true;
-        hasHitGround = true; // 추가적인 업데이트 방지
 
         // 오브젝트 풀로 반환
         ObjectPoolManager.Instance.ReturnBrick(this);

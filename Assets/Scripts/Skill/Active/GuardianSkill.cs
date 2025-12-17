@@ -7,7 +7,6 @@ public class GuardianSkill : MonoBehaviour
     [Header("가디언 설정")]
     [SerializeField] private GameObject topPrefab;
     [SerializeField] private Transform playerTransform;
-    [SerializeField] private float activationRadius = 5f;
     [SerializeField] private float reactivateDelay = 1f;
 
     [Header("레벨별 설정")]

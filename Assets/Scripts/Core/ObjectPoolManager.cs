@@ -16,6 +16,8 @@ public class ObjectPoolManager : MonoBehaviour
     public ExpGem expGemPrefab;
     public DamageText damageTextPrefab;
     public GuardianTop guardianTopPrefab;
+    public Drone dronePrefab;
+    public MissileProjectile missilePrefab;
 
     [Header("Pool Sizes")]
     public int enemyPoolSize = 100;
@@ -29,6 +31,8 @@ public class ObjectPoolManager : MonoBehaviour
     public int expGemPoolSize = 200;
     public int damageTextPoolSize = 50;
     public int guardianTopPoolSize = 20;
+    public int dronePoolSize = 5;
+    public int missilePoolSize = 50;
 
     // 풀들
     private ObjectPool<Enemy> enemyPool;
@@ -42,6 +46,8 @@ public class ObjectPoolManager : MonoBehaviour
     private ObjectPool<ExpGem> expGemPool;
     private ObjectPool<DamageText> damageTextPool;
     private ObjectPool<GuardianTop> guardianTopPool;
+    private ObjectPool<Drone> dronePool;
+    private ObjectPool<MissileProjectile> missilePool;
 
     // 유효성 검사 캐시
     private bool isInitialized = false;
@@ -86,6 +92,8 @@ public class ObjectPoolManager : MonoBehaviour
         expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
         damageTextPool = new ObjectPool<DamageText>(damageTextPrefab, damageTextPoolSize, transform);
         guardianTopPool = new ObjectPool<GuardianTop>(guardianTopPrefab, guardianTopPoolSize, transform);
+        dronePool = new ObjectPool<Drone>(dronePrefab, dronePoolSize, transform);
+        missilePool = new ObjectPool<MissileProjectile>(missilePrefab, missilePoolSize, transform);
 
         isInitialized = true;
     }
@@ -228,11 +236,38 @@ public class ObjectPoolManager : MonoBehaviour
         if (!ValidatePoolInitialized(guardianTopPool, "GuardianTop")) return;
 
         // 톱날 재사용을 위한 리셋
-        if (top != null)
-        {
-            top.ResetForReuse();
-            guardianTopPool.Return(top);
-        }
+        top.ResetForReuse();
+        guardianTopPool.Return(top);
+    }
+
+    // 드론 풀링
+    public Drone GetDrone()
+    {
+        if (!ValidatePoolInitialized(dronePool, "Drone")) return null;
+        return dronePool.Get();
+    }
+
+    public void ReturnDrone(Drone drone)
+    {
+        if (!ValidatePoolInitialized(dronePool, "Drone")) return;
+
+        drone.Deactivate();
+        dronePool.Return(drone);
+    }
+
+    // 미사일 풀링
+    public MissileProjectile GetMissile()
+    {
+        if (!ValidatePoolInitialized(missilePool, "MissileProjectile")) return null;
+        return missilePool.Get();
+    }
+
+    public void ReturnMissile(MissileProjectile missile)
+    {
+        if (!ValidatePoolInitialized(missilePool, "MissileProjectile")) return;
+
+        missile.gameObject.SetActive(false);
+        missilePool.Return(missile);
     }
 
     // 풀 초기화 상태 유효성 검사

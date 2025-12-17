@@ -16,10 +16,6 @@ public class SkillManager : MonoBehaviour
 
     #region Serialized Fields
     [Header("스킬 설정")]
-
-    [Tooltip("모든 스킬 데이터 - 모든 스킬 데이터를 가져오기 위해 사용")]
-    [SerializeField] private SkillData[] allSkills;
-    
     [SerializeField] private SkillData[] testSkills;
 
     [Header("테스트용 스킬 레벨 설정")]
@@ -37,6 +33,9 @@ public class SkillManager : MonoBehaviour
 
     // Forcefield 관련
     private int forcefieldSlot = -1; // Forcefield가 장착된 슬롯
+
+    // Drone 관련
+    private DroneSkill droneSkillInstance; // 드론 스킬 인스턴스
     #endregion
 
     #region Unity Lifecycle
@@ -191,9 +190,9 @@ public class SkillManager : MonoBehaviour
             // Forcefield는 쿨타임이 없으므로 건너뛰기
             if (i == forcefieldSlot) continue;
 
-            // Guardian과 Forcefield는 지속적인 스킬이므로 쿨다운 체크 조정
+            // Guardian, Forcefield, Drone은 지속적인 스킬이므로 쿨다운 체크 조정
             var skill = equippedSkills[i];
-            if (skill.skillType == SkillType.Guardian || skill.skillType == SkillType.Forcefield)
+            if (skill.skillType == SkillType.Guardian || skill.skillType == SkillType.Forcefield || skill.skillType == SkillType.Drone)
             {
                 // 지속 스킬은 첫 실행 이후에는 주기적으로 체크하지 않음
                 if (cooldownTimers[i] > 0f) continue;
@@ -224,6 +223,10 @@ public class SkillManager : MonoBehaviour
 
             case SkillType.Forcefield:
                 ExecuteForcefieldSkill(skill, level, slot);
+                break;
+
+            case SkillType.Drone:
+                ExecuteDroneSkill(skill, level, slot);
                 break;
 
             case SkillType.Special:
@@ -316,6 +319,52 @@ public class SkillManager : MonoBehaviour
         {
             ForcefieldManager.Instance.EquipForcefield(skill, level);
         }
+    }
+
+    private void ExecuteDroneSkill(SkillData skill, int level, int slot)
+    {
+        Debug.Log($"ExecuteDroneSkill: 슬롯 {slot}, 스킬 {skill.name}, 레벨 {level}");
+
+        // 드론 스킬 프리팹에서 DroneSkill 컴포넌트 찾기
+        DroneSkill droneSkill = null;
+
+        if (droneSkillInstance == null)
+        {
+            if (skill.skillObjectPrefab != null)
+            {
+                GameObject droneSkillObj = Instantiate(skill.skillObjectPrefab, transform);
+                droneSkill = droneSkillObj.GetComponent<DroneSkill>();
+
+                if (droneSkill != null)
+                {
+                    // PlayerController에서 플레이어 Transform 찾기
+                    var playerController = FindObjectOfType<PlayerController>();
+                    Transform player = playerController != null ? playerController.transform : null;
+
+                    droneSkill.SetPlayerTransform(player);
+                    droneSkillInstance = droneSkill;
+                }
+            }
+        }
+        else
+        {
+            droneSkill = droneSkillInstance;
+        }
+
+        if (droneSkill != null)
+        {
+            // 먼저 SkillData 설정
+            droneSkill.SetSkillData(skill);
+            droneSkill.InitializeDroneSkill(level);
+        }
+        else
+        {
+            Debug.LogError("DroneSkill 컴포넌트를 찾을 수 없습니다!");
+        }
+
+        // 쿨다운 설정 (드론 스킬은 자체 쿨다운을 관리하지만, 스킬 시스템에서도 관리)
+        float cooldown = GetSkillCooldown(skill, level);
+        cooldownTimers[slot] = cooldown;
     }
 
     private void ExecuteSpecialSkill(SkillData skill, int level, int slot)
