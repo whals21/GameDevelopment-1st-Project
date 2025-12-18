@@ -755,6 +755,22 @@ public class SkillManager : MonoBehaviour
     #region Utility
     private bool IsValidSlot(int slot) => slot >= 0 && slot < MAX_SKILLS;
     #endregion
+        public int GetSkillLevel(SkillData data)
+    {
+        if (data == null) return 0;
+
+        // 보유중인 스킬 검사
+        for (int i = 0; i < equippedSkills.Length; i++)
+        {
+            // 데이터가 똑같은 게 있으면
+            if (equippedSkills[i] == data)
+            {
+                return skillLevels[i]; // 그 스킬의 레벨을 반환
+            }
+        }
+        return 0; // 없으면 0레벨
+    }
+
     public void UnlockOrUpgradeSkill(SkillData skillToUp)
     {
         if (skillToUp == null) return;
