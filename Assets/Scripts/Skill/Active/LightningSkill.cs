@@ -21,6 +21,7 @@ public class LightningSkill : MonoBehaviour
     [Header("타겟팅")]
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private float strikeDelay = 0.15f;
+    [SerializeField] private float attackRange = 15f; 
     #endregion
 
     #region Private Fields
@@ -148,7 +149,11 @@ public class LightningSkill : MonoBehaviour
     /// </summary>
     private void LoadSkillData()
     {
-        if (skillData == null) return;
+        if (skillData == null)
+        {
+            Debug.LogWarning("LightningSkill: SkillData가 null입니다!");
+            return;
+        }
 
         // 레벨별 데이터 가져오기
         var levelData = GetLevelData(currentLevel);
@@ -157,6 +162,11 @@ public class LightningSkill : MonoBehaviour
             damage = baseDamage * levelData.damageMultiplier;
             cooldownTime = baseCooldown * levelData.cooldownMultiplier;
             lightningCount = baseLightningCount + levelData.additionalProjectiles;
+
+            // 디버그: SkillData 기반 로그
+            Debug.Log($"LightningSkill Lv.{currentLevel} (SkillData): " +
+                     $"기본번호={baseLightningCount}, 추가번호={levelData.additionalProjectiles}, " +
+                     $"총번호={lightningCount}");
         }
         else
         {
@@ -164,6 +174,11 @@ public class LightningSkill : MonoBehaviour
             damage = baseDamage + (damageIncreasePerLevel * (currentLevel - 1));
             cooldownTime = baseCooldown - (cooldownReductionPerLevel * (currentLevel - 1));
             lightningCount = baseLightningCount + (currentLevel - 1);
+
+            // 디버그: 기본값 로그
+            Debug.Log($"LightningSkill Lv.{currentLevel} (기본값): " +
+                     $"기본번호={baseLightningCount}, 레벨보정={currentLevel - 1}, " +
+                     $"총번호={lightningCount}");
         }
 
         // 최소/최대값 제한
@@ -274,15 +289,25 @@ public class LightningSkill : MonoBehaviour
     {
         List<Enemy> targets = new List<Enemy>();
 
+        // 디버그: 사용 가능한 적 수
+        Debug.Log($"LightningSkill: 타겟팅 시작 - 사용 가능한 적: {availableEnemies.Length}명, " +
+                 $"발동할 번개 수: {lightningCount}");
+
         // 모든 적 중에서 무작위로 선택
         System.Random random = new System.Random();
         Enemy[] shuffledEnemies = availableEnemies.OrderBy(x => random.Next()).ToArray();
 
-        for (int i = 0; i < lightningCount && i < shuffledEnemies.Length; i++)
+        int actualStrikes = Mathf.Min(lightningCount, shuffledEnemies.Length);
+        for (int i = 0; i < actualStrikes; i++)
         {
             targets.Add(shuffledEnemies[i]);
+
+            // 디버그: 선택된 적 정보
+            Debug.Log($"LightningSkill: 타겟 {i + 1}/{actualStrikes} 선택 - " +
+                     $"적: {shuffledEnemies[i]?.name}");
         }
 
+        Debug.Log($"LightningSkill: 최종 {targets.Count}개의 타겟 선택 완료");
         return targets.ToArray();
     }
 
@@ -311,7 +336,7 @@ public class LightningSkill : MonoBehaviour
     }
 
     /// <summary>
-    /// 적 캐시 업데이트
+    /// 적 캐시 업데이트 (사정거리 제한 적용)
     /// </summary>
     private void UpdateEnemyCache()
     {
@@ -319,9 +344,16 @@ public class LightningSkill : MonoBehaviour
         if (enemyCacheTimer >= ENEMY_CACHE_INTERVAL)
         {
             enemyCacheTimer = 0f;
+
+            // 플레이어 위치 기준으로 사정거리 내의 적만 탐색
+            Vector3 playerPosition = transform.position; // LightningSkill이 플레이어를 따라다닌다고 가정
             cachedEnemies = FindObjectsOfType<Enemy>()
-                .Where(e => e.gameObject.activeInHierarchy)
+                .Where(e => e.gameObject.activeInHierarchy &&
+                       Vector3.Distance(playerPosition, e.transform.position) <= attackRange)
                 .ToArray();
+
+            // 디버그: 사정거리 내 적 수 로그
+            Debug.Log($"LightningSkill: 사정거리 {attackRange}m 내 적 {cachedEnemies.Length}명 발견");
         }
     }
     #endregion
@@ -332,12 +364,14 @@ public class LightningSkill : MonoBehaviour
         if (!isActive) return;
 
         // 디버그 정보 표시
-        GUILayout.BeginArea(new Rect(10, 200, 300, 150));
+        GUILayout.BeginArea(new Rect(10, 200, 300, 180));
         GUILayout.Label($"Lightning Skill Lv.{currentLevel}");
         GUILayout.Label($"Damage: {damage:F1}");
         GUILayout.Label($"Lightning Count: {lightningCount}");
+        GUILayout.Label($"Attack Range: {attackRange}m");
         GUILayout.Label($"Cooldown: {cooldownTime:F1}s");
         GUILayout.Label($"Next Strike: {currentCooldown:F1}s");
+        GUILayout.Label($"Enemies in Range: {(cachedEnemies?.Length ?? 0)}");
         GUILayout.EndArea();
     }
     #endregion

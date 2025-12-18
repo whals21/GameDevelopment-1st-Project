@@ -2085,7 +2085,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4c6d575040ee95a4c86777352535a479, type: 2}
   - {fileID: 11400000, guid: c572ab794d279304e8e9ce61aad30eda, type: 2}
   - {fileID: 11400000, guid: a85d2257edfbf3d42a89f4faacc60ead, type: 2}
-  testSkillLevels: 010000000100000005000000
+  testSkillLevels: 010000000100000001000000
 --- !u!1 &517112956
 GameObject:
   m_ObjectHideFlags: 0

@@ -56,3 +56,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   strikeDelay: 0.15
+  attackRange: 8
