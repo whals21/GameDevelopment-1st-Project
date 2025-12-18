@@ -45,8 +45,11 @@ public class Enemy : MonoBehaviour
 
     public bool IsRange => Data.attackRange > 0f;
 
-   public Transform point;
+    public Transform point;
+    [SerializeField] private int tier;
 
+    GameManager gameManager;
+    DataManager dataManager;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -161,6 +164,23 @@ public class Enemy : MonoBehaviour
         {
             spawner.OnEnemyDied();
         }
+
+
+
+        // 경험치 드랍 (Instantiate로 바로 생성)
+        if (GameManager.Instance != null && GameManager.Instance.dataManager != null)
+        {
+             tier = GameManager.Instance.currentTierIndex;
+
+            GameObject gemPrefab = GameManager.Instance.dataManager.expDropObject.expGemPrefabs[tier];
+
+            if (gemPrefab != null)
+            {
+                Instantiate(gemPrefab, transform.position, Quaternion.identity);
+            }
+        }
+
+
 
         // 경험치 드롭 (나중에 구현)
         // ExpGem gem = ObjectPoolManager.Instance.GetExpGem();
