@@ -6,7 +6,7 @@ TextureImporter:
   serializedVersion: 12
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -37,24 +37,24 @@ TextureImporter:
     filterMode: 1
     aniso: 1
     mipBias: 0
-    wrapU: 0
-    wrapV: 0
+    wrapU: 1
+    wrapV: 1
     wrapW: 0
-  nPOTScale: 1
+  nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 0
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 128
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 0
+  alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 0
+  textureType: 8
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -121,18 +121,216 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 542
+        width: 240
+        height: 482
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd5bd9e9fa7a7564f9cc05db91fca822
+      internalID: -1433410374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_1
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 532
+        width: 51
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f6ac8c0a80417b4c9e5af1079318add
+      internalID: -1449718666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_2
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 556
+        width: 228
+        height: 468
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04880e36ee9b5c849bc12400a715c066
+      internalID: 110406233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_3
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 572
+        width: 192
+        height: 452
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f6fdbd667d0f194990c67f4d0b137c5
+      internalID: 1260062555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_4
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 284
+        width: 316
+        height: 740
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0192caf6d4ea27a4fa34b48e69655335
+      internalID: 1534821960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 540
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 756564c177f28c64eaa4f1d03f565f00
+      internalID: 346164649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_6
+      rect:
+        serializedVersion: 2
+        x: 232
+        y: 64
+        width: 471
+        height: 496
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e2c4bb8ec64d6f40ae2869b6ba1a165
+      internalID: 1905170690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 228
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cca8c43a1c76cd64abc3305ca1f530e4
+      internalID: -1425769091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_8
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 4
+        width: 144
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 591a6736d4481394d9303b931c7763d9
+      internalID: -1671433412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: d2a852f8655701b48afbd1b2ee15e278
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_0: -1433410374
+      FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_1: -1449718666
+      FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_2: 110406233
+      FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_3: 1260062555
+      FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_4: 1534821960
+      FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_5: 346164649
+      FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_6: 1905170690
+      FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_7: -1425769091
+      FXAtlas_LuoLei_Blue-086b66d85a5007b47a8c1438292fc068-1_8: -1671433412
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

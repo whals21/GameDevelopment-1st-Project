@@ -18,6 +18,7 @@ public class ObjectPoolManager : MonoBehaviour
     public GuardianTop guardianTopPrefab;
     public Drone dronePrefab;
     public MissileProjectile missilePrefab;
+    public LightningStrike lightningPrefab;
 
     [Header("Pool Sizes")]
     public int enemyPoolSize = 100;
@@ -33,6 +34,7 @@ public class ObjectPoolManager : MonoBehaviour
     public int guardianTopPoolSize = 20;
     public int dronePoolSize = 5;
     public int missilePoolSize = 50;
+    public int lightningPoolSize = 30;
 
     // 풀들
     private ObjectPool<Enemy> enemyPool;
@@ -48,6 +50,7 @@ public class ObjectPoolManager : MonoBehaviour
     private ObjectPool<GuardianTop> guardianTopPool;
     private ObjectPool<Drone> dronePool;
     private ObjectPool<MissileProjectile> missilePool;
+    private ObjectPool<LightningStrike> lightningPool;
 
     // 유효성 검사 캐시
     private bool isInitialized = false;
@@ -95,6 +98,7 @@ public class ObjectPoolManager : MonoBehaviour
         guardianTopPool = new ObjectPool<GuardianTop>(guardianTopPrefab, guardianTopPoolSize, transform);
         dronePool = new ObjectPool<Drone>(dronePrefab, dronePoolSize, transform);
         missilePool = new ObjectPool<MissileProjectile>(missilePrefab, missilePoolSize, transform);
+        lightningPool = new ObjectPool<LightningStrike>(lightningPrefab, lightningPoolSize, transform);
 
         isInitialized = true;
     }
@@ -269,6 +273,29 @@ public class ObjectPoolManager : MonoBehaviour
 
         missile.gameObject.SetActive(false);
         missilePool.Return(missile);
+    }
+
+    // 번개 풀링
+    public LightningStrike GetLightning()
+    {
+        if (!ValidatePoolInitialized(lightningPool, "LightningStrike")) return null;
+
+        LightningStrike lightning = lightningPool.Get();
+        if (lightning != null)
+        {
+            // 오브젝트 활성화 (통합 접근 방식에서는 간단한 활성화만 충분)
+            lightning.gameObject.SetActive(true);
+        }
+
+        return lightning;
+    }
+
+    public void ReturnLightning(LightningStrike lightning)
+    {
+        if (!ValidatePoolInitialized(lightningPool, "LightningStrike")) return;
+
+        lightning.gameObject.SetActive(false);
+        lightningPool.Return(lightning);
     }
 
     // 풀 초기화 상태 유효성 검사

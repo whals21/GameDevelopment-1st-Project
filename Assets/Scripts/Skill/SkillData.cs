@@ -7,6 +7,7 @@ public enum SkillType
     Guardian,    // 가디언 스킬
     Forcefield,  // 포스필드 스킬
     Drone,       // 드론 스킬
+    Lightning,   // 번개 스킬
     Special      // 기타 특수 스킬
 }
 

@@ -3,7 +3,6 @@ using UnityEngine;
 public class Drone : MonoBehaviour
 {
     [Header("드론 설정")]
-    [SerializeField] private float baseFollowSpeed = 5f;
     [SerializeField] private float followDistance = 2f;
     [SerializeField] private Vector3 followOffset = Vector3.up;
 

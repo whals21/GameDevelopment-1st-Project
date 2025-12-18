@@ -16,7 +16,6 @@ public class DroneSkill : MonoBehaviour
     [SerializeField] private float baseCooldown = 3f;
     [SerializeField] private float baseDamage = 8f;
     [SerializeField] private float baseSpeed = 15f;
-    [SerializeField] private float baseSize = 0.8f;  // 기본 미사일 크기 배수
 
     [Header("발사 설정")]
     [SerializeField] private float fireRate = 30f;  // 발사 방향 회전 속도 (도/초)

@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8297aba9e983e844d902c72f1395ee46, type: 3}
+  m_Name: SkillData_Lightning Strike
+  m_EditorClassIdentifier: 
+  skillName: Lightning Strike
+  description: "\uAC15\uB825\uD55C \uBC88\uAC1C\uB97C \uC18C\uD658\uD558\uC5EC \uC801\uB4E4\uC5D0\uAC8C
+    \uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4."
+  icon: {fileID: 21300000, guid: 9f8a782cc33ac4d41a24e46c01b56bc1, type: 3}
+  skillType: 4
+  projectilePrefab: {fileID: 0}
+  skillObjectPrefab: {fileID: 2424363981006457382, guid: 40535ab098af62b4398ddb924cb6c7ae, type: 3}
+  damage: 10
+  cooldown: 3
+  projectileSpeed: 15
+  projectileCount: 1
+  attackRange: 10
+  levels:
+  - level: 1
+    damageMultiplier: 1
+    cooldownMultiplier: 1
+    additionalProjectiles: 0
+    projectileSpeedMultiplier: 0
+    projectileSizeMultiplier: 0
+    projectileScaleIncrease: 0
+    upgradeDescription: 
+  - level: 2
+    damageMultiplier: 1.2
+    cooldownMultiplier: 0.9
+    additionalProjectiles: 1
+    projectileSpeedMultiplier: 0
+    projectileSizeMultiplier: 0
+    projectileScaleIncrease: 0
+    upgradeDescription: 
+  - level: 3
+    damageMultiplier: 1.4
+    cooldownMultiplier: 0.8
+    additionalProjectiles: 2
+    projectileSpeedMultiplier: 0
+    projectileSizeMultiplier: 0
+    projectileScaleIncrease: 0
+    upgradeDescription: 
+  - level: 4
+    damageMultiplier: 1.6
+    cooldownMultiplier: 0.7
+    additionalProjectiles: 3
+    projectileSpeedMultiplier: 0
+    projectileSizeMultiplier: 0
+    projectileScaleIncrease: 0
+    upgradeDescription: 
+  - level: 5
+    damageMultiplier: 1.8
+    cooldownMultiplier: 0.6
+    additionalProjectiles: 4
+    projectileSpeedMultiplier: 0
+    projectileSizeMultiplier: 0
+    projectileScaleIncrease: 0
+    upgradeDescription: 
+  evoSkill: {fileID: 0}
+  evoRequirements: 

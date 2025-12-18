@@ -3,7 +3,6 @@ using UnityEngine;
 public class MissileProjectile : Projectile
 {
     [Header("미사일 설정")]
-    [SerializeField] private float missileSpeed = 15f;
     [SerializeField] private GameObject explosionEffect;
 
     private float currentLifeTime;

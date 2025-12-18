@@ -229,6 +229,10 @@ public class SkillManager : MonoBehaviour
                 ExecuteDroneSkill(skill, level, slot);
                 break;
 
+            case SkillType.Lightning:
+                ExecuteLightningSkill(skill, level, slot);
+                break;
+
             case SkillType.Special:
                 ExecuteSpecialSkill(skill, level, slot);
                 break;
@@ -363,6 +367,46 @@ public class SkillManager : MonoBehaviour
         }
 
         // 쿨다운 설정 (드론 스킬은 자체 쿨다운을 관리하지만, 스킬 시스템에서도 관리)
+        float cooldown = GetSkillCooldown(skill, level);
+        cooldownTimers[slot] = cooldown;
+    }
+
+    private void ExecuteLightningSkill(SkillData skill, int level, int slot)
+    {
+        Debug.Log($"ExecuteLightningSkill: 슬롯 {slot}, 스킬 {skill.name}, 레벨 {level}");
+
+        // 번개 스킬 오브젝트 생성
+        GameObject lightningSkillObj;
+
+        // 프리팹이 있으면 사용, 없으면 새로 생성
+        if (skill.skillObjectPrefab != null)
+        {
+            lightningSkillObj = Instantiate(skill.skillObjectPrefab);
+        }
+        else
+        {
+            // 기본 번개 스킬 오브젝트 생성
+            lightningSkillObj = new GameObject("LightningSkill_" + slot);
+            lightningSkillObj.AddComponent<LightningSkill>();
+        }
+
+        // 부모 설정
+        lightningSkillObj.transform.SetParent(transform);
+
+        // LightningSkill 컴포넌트 설정
+        LightningSkill lightningSkill = lightningSkillObj.GetComponent<LightningSkill>();
+        if (lightningSkill != null)
+        {
+            // 먼저 SkillData 설정
+            lightningSkill.SetSkillData(skill);
+            lightningSkill.SetLevel(level);
+        }
+        else
+        {
+            Debug.LogError("LightningSkill 컴포넌트를 찾을 수 없습니다!");
+        }
+
+        // 쿨다운 설정 (번개 스킬은 자체 쿨다운을 관리하지만, 스킬 시스템에서도 관리)
         float cooldown = GetSkillCooldown(skill, level);
         cooldownTimers[slot] = cooldown;
     }
