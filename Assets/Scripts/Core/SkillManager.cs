@@ -755,7 +755,7 @@ public class SkillManager : MonoBehaviour
     #region Utility
     private bool IsValidSlot(int slot) => slot >= 0 && slot < MAX_SKILLS;
     #endregion
-        public int GetSkillLevel(SkillData data)
+    public int GetSkillLevel(SkillData data)
     {
         if (data == null) return 0;
 

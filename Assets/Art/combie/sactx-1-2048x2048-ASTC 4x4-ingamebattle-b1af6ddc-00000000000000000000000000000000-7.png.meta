@@ -3113,7 +3113,7 @@ TextureImporter:
         width: 325
         height: 682
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3121,6 +3121,27 @@ TextureImporter:
       bones: []
       spriteID: 38de99e252cb73b4998234a881d2fb18
       internalID: -1710883009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_143
+      rect:
+        serializedVersion: 2
+        x: 1982
+        y: 1955
+        width: 62
+        height: 65
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db129222f3940544fbd61ef948d464ee
+      internalID: -810800103
       vertices: []
       indices: 
       edges: []
@@ -3186,6 +3207,7 @@ TextureImporter:
       sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_140: 1436173057
       sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_141: -1390436246
       sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_142: -1710883009
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_143: -810800103
       sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_15: -1491270428
       sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_16: -1999163618
       sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_17: -230859144
