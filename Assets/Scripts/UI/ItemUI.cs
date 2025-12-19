@@ -4,22 +4,39 @@ using TMPro;
 
 public class ItemUI : MonoBehaviour
 {
+    [Header("UI 연결")]
     [SerializeField] private Image iconImg;
     [SerializeField] private TextMeshProUGUI nameTxt;
     [SerializeField] private TextMeshProUGUI descTxt;
 
+    [Header("별 시스템")]
+    [SerializeField] private Image[] stars;
+
     private ItemData data;
 
-    // 매니저가 정보를 넣어주는 함수
-    public void SetItem(ItemData newItem)
+    public void SetItem(ItemData newItem, int nextLevel, string desc)
     {
         data = newItem;
+
+        // 기본 정보
         iconImg.sprite = newItem.itemIcon;
         nameTxt.text = newItem.itemName;
-        descTxt.text = newItem.itemDesc;
+        descTxt.text = desc;
+
+        // 별 갯수 조절
+        for (int i = 0; i < stars.Length; i++)
+        {
+            if (i < nextLevel)
+            {
+                stars[i].gameObject.SetActive(true); // 켜기
+            }
+            else
+            {
+                stars[i].gameObject.SetActive(false); // 끄기
+            }
+        }
     }
 
-    // 버튼 클릭 시 실행 (Inspector의 OnClick에 연결해야 함)
     public void OnClick()
     {
         if (LevelUpManager.Instance != null)
