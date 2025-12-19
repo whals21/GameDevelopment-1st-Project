@@ -80,19 +80,27 @@ public class Drone : MonoBehaviour
 
     private void Update()
     {
+        // Time.timeScale이 0이면 동작하지 않음
+        if (Time.timeScale == 0f) return;
+
+        if (!isActive || playerTransform == null) return;
+
+        // 플레이어 방향으로 회전은 Update에서 처리 (부드러운 회전을 위해)
+        RotateToPlayer();
+    }
+
+    private void FixedUpdate()
+    {
         if (!isActive || playerTransform == null) return;
 
         // 목표 위치 업데이트
         UpdateTargetPosition();
 
         // 부드러운 이동
-        MoveToTarget();
+        MoveToTargetFixed();
 
         // 호버링 효과
-        UpdateHover();
-
-        // 플레이어 방향으로 회전
-        RotateToPlayer();
+        UpdateHoverFixed();
     }
 
     private void UpdateTargetPosition()
@@ -116,7 +124,7 @@ public class Drone : MonoBehaviour
 
     private void MoveToTarget()
     {
-        // 부드러운 추적 이동
+        // 부드러운 추적 이동 (Update용)
         Vector3 direction = (targetPosition - transform.position).normalized;
         float distance = Vector3.Distance(transform.position, targetPosition);
 
@@ -135,10 +143,42 @@ public class Drone : MonoBehaviour
         }
     }
 
+    private void MoveToTargetFixed()
+    {
+        // 부드러운 추적 이동 (FixedUpdate용)
+        Vector3 direction = (targetPosition - transform.position).normalized;
+        float distance = Vector3.Distance(transform.position, targetPosition);
+
+        if (distance > 0.1f)
+        {
+            Vector3 newPosition = Vector3.MoveTowards(
+                transform.position,
+                targetPosition,
+                followSpeed * Time.fixedDeltaTime
+            );
+            transform.position = newPosition + hoverOffset;
+        }
+        else
+        {
+            transform.position = targetPosition + hoverOffset;
+        }
+    }
+
     private void UpdateHover()
     {
-        // 작은 호버링 움직임 (범위 축소)
+        // 작은 호버링 움직임 (Update용)
         hoverTime += Time.deltaTime * 2f;
+        hoverOffset = new Vector3(
+            Mathf.Sin(hoverTime) * 0.05f,  // 0.1f → 0.05f로 축소
+            Mathf.Cos(hoverTime * 1.5f) * 0.05f,  // 0.1f → 0.05f로 축소
+            0
+        );
+    }
+
+    private void UpdateHoverFixed()
+    {
+        // 작은 호버링 움직임 (FixedUpdate용)
+        hoverTime += Time.fixedDeltaTime * 2f;
         hoverOffset = new Vector3(
             Mathf.Sin(hoverTime) * 0.05f,  // 0.1f → 0.05f로 축소
             Mathf.Cos(hoverTime * 1.5f) * 0.05f,  // 0.1f → 0.05f로 축소

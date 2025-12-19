@@ -23,7 +23,6 @@ public class BoomerangProjectile : MonoBehaviour
     private Vector2 returnDirection; // 반대 방향 저장
     private float lifeTimer = 0f;
     private bool isReturning = false;
-    private bool hasDamaged = false;
     private const float ENEMY_DAMAGE_INTERVAL = 0.5f; // 같은 적에게 데미지를 주는 간격
 
     private void Awake()
@@ -46,28 +45,6 @@ public class BoomerangProjectile : MonoBehaviour
         }
         boomerangCollider.isTrigger = true;
         boomerangCollider.radius = 0.3f;
-    }
-
-    public void Init(float damage, float speed, Vector2 direction)
-    {
-        this.damage = (int)damage;
-        throwSpeed = speed;
-        throwDirection = direction.normalized;
-        returnDirection = -throwDirection;  // 핵심: 반대 방향!
-        
-        // 플레이어 자동 찾기
-        if (playerTransform == null)
-        {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null) playerTransform = player.transform;
-        }
-        
-        startPosition = transform.position;
-        
-        if (rb != null)
-        {
-            rb.velocity = throwDirection * throwSpeed;
-        }
     }
 
     private void OnEnable()
@@ -104,6 +81,46 @@ public class BoomerangProjectile : MonoBehaviour
 
         // 회전 애니메이션
         UpdateRotation();
+    }
+
+    /// <summary>
+    /// 초기화 메서드 (SkillManager 호출용)
+    /// </summary>
+    public void Init(float damage, float speed, Vector2 direction)
+    {
+        // 값 설정
+        this.damage = (int)damage;
+        throwSpeed = speed;
+        throwDirection = direction.normalized;
+
+        // 반대 방향 저장 (핵심 변경!)
+        returnDirection = -throwDirection;
+
+        // 플레이어 찾기 (SkillManager는 player를 넘기지 않음)
+        if (playerTransform == null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                playerTransform = player.transform;
+            }
+        }
+
+        startPosition = transform.position;
+
+        // Rigidbody 초기 속도 설정
+        if (rb != null)
+        {
+            rb.velocity = throwDirection * throwSpeed;
+        }
+
+        // 트레일 효과 시작
+        if (trailRenderer != null)
+        {
+            trailRenderer.Clear();
+        }
+
+        Debug.Log($"Boomerang Init: damage={damage}, speed={speed}, direction={direction}");
     }
 
     /// <summary>
@@ -158,7 +175,6 @@ public class BoomerangProjectile : MonoBehaviour
     private void StartReturning()
     {
         isReturning = true;
-        hasDamaged = false; // 돌아올 때 다시 데미지를 줄 수 있도록 리셋
 
         // 속도 즉시 변경
         if (rb != null)
@@ -192,7 +208,6 @@ public class BoomerangProjectile : MonoBehaviour
     {
         lifeTimer = 0f;
         isReturning = false;
-        hasDamaged = false;
 
         if (rb != null)
         {
@@ -211,7 +226,7 @@ public class BoomerangProjectile : MonoBehaviour
         // 오브젝트 풀에 반환
         if (ObjectPoolManager.Instance != null)
         {
-            ObjectPoolManager.Instance.ReturnBoomerang(this as BoomerangProjectile);
+            ObjectPoolManager.Instance.ReturnBoomerang(this);
         }
         else
         {

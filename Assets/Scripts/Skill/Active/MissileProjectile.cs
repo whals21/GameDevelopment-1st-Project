@@ -61,7 +61,7 @@ public class MissileProjectile : Projectile
         transform.Translate(transform.right * speed * Time.deltaTime);
 
         // 미사일이 이동 방향으로 회전
-        UpdateMissileRotation();
+        //UpdateMissileRotation();
     }
 
     private void UpdateMissileRotation()
@@ -155,9 +155,6 @@ public class MissileProjectile : Projectile
     public void SetDirection(Vector2 direction)
     {
         moveDirection = direction.normalized;
-
-        // 초기 회전 각도 설정
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle + 90f);
+        transform.right = moveDirection;
     }
 }

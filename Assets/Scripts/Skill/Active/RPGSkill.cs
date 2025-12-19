@@ -16,7 +16,6 @@ public class RPGSkill : MonoBehaviour
     [SerializeField] private float baseDamage = 20f;
     [SerializeField] private int baseProjectileCount = 1;
     [SerializeField] private float cooldownReductionPerLevel = 0.2f;
-    [SerializeField] private float damageIncreasePerLevel = 5f;
 
     [Header("발사 설정")]
     [SerializeField] private LayerMask enemyLayer;
@@ -292,12 +291,14 @@ public class RPGSkill : MonoBehaviour
     /// </summary>
     private IEnumerator FireProjectilesSequence()
     {
-        for (int i = 0; i < projectileCount; i++)
+        int strikesToSpawn = Mathf.Min(projectileCount, 1);
+
+        for (int i = 0; i < strikesToSpawn; i++)
         {
             FireSingleProjectile(i);
 
-            // 발사 간 딜레이 (0.1초)
-            if (i < projectileCount - 1)
+            // 발사 간 딜레이
+            if (i < strikesToSpawn - 1)
             {
                 yield return new WaitForSeconds(0.1f);
             }

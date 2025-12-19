@@ -198,7 +198,7 @@ public class DroneSkill : MonoBehaviour
         if (missile == null)
         {
             GameObject missileObj = new GameObject("Missile");
-            missileObj.transform.SetParent(transform);
+            //missileObj.transform.SetParent(transform);
             missile = missileObj.AddComponent<MissileProjectile>();
         }
         else
