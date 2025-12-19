@@ -19,6 +19,8 @@ public class ObjectPoolManager : MonoBehaviour
     public Drone dronePrefab;
     public MissileProjectile missilePrefab;
     public LightningStrike lightningPrefab;
+    public RPGProjectile rpgPrefab; 
+    public RPGExplosion rpgExplosionPrefab; 
 
     [Header("Pool Sizes")]
     public int enemyPoolSize = 100;
@@ -35,6 +37,8 @@ public class ObjectPoolManager : MonoBehaviour
     public int dronePoolSize = 5;
     public int missilePoolSize = 50;
     public int lightningPoolSize = 30;
+    public int rpgPoolSize = 10;
+    public int rpgExplosionPoolSize = 10;
 
     // 풀들
     private ObjectPool<Enemy> enemyPool;
@@ -51,6 +55,8 @@ public class ObjectPoolManager : MonoBehaviour
     private ObjectPool<Drone> dronePool;
     private ObjectPool<MissileProjectile> missilePool;
     private ObjectPool<LightningStrike> lightningPool;
+    private ObjectPool<RPGProjectile> rpgPool;
+    private ObjectPool<RPGExplosion> rpgExplosionPool;
 
     // 유효성 검사 캐시
     private bool isInitialized = false;
@@ -58,7 +64,7 @@ public class ObjectPoolManager : MonoBehaviour
         "enemyPrefab", "enemyBulletPrefab", "projectilePrefab",
         "boomerangPrefab", "molotovPrefab", "brickPrefab",
         "fireGroundPrefab", "soccerBallPrefab", "expGemPrefab",
-        "damageTextPrefab", "guardianTopPrefab"
+        "damageTextPrefab", "guardianTopPrefab", "rpgPrefab", "rpgExplosionPrefab"
     };
 
     private void Awake()
@@ -99,7 +105,8 @@ public class ObjectPoolManager : MonoBehaviour
         dronePool = new ObjectPool<Drone>(dronePrefab, dronePoolSize, transform);
         missilePool = new ObjectPool<MissileProjectile>(missilePrefab, missilePoolSize, transform);
         lightningPool = new ObjectPool<LightningStrike>(lightningPrefab, lightningPoolSize, transform);
-
+        rpgPool = new ObjectPool<RPGProjectile>(rpgPrefab, rpgPoolSize, transform);
+        rpgExplosionPool = new ObjectPool<RPGExplosion>(rpgExplosionPrefab, rpgExplosionPoolSize, transform);
         isInitialized = true;
     }
 
@@ -298,6 +305,32 @@ public class ObjectPoolManager : MonoBehaviour
         lightningPool.Return(lightning);
     }
 
+    // RPG 풀링
+    public RPGProjectile GetRPG()
+    {
+        if (!ValidatePoolInitialized(rpgPool, "RPGProjectile")) return null;
+        return rpgPool.Get();
+    }
+    public void ReturnRPG(RPGProjectile rpg)
+    {
+        if (!ValidatePoolInitialized(rpgPool, "RPGProjectile")) return;
+        rpg.gameObject.SetActive(false);
+        rpgPool.Return(rpg);
+    }
+
+    // RPGExplosion 풀링
+    public RPGExplosion GetRPGExplosion()
+    {
+        if (!ValidatePoolInitialized(rpgExplosionPool, "RPGExplosion")) return null;
+        return rpgExplosionPool.Get();
+    }
+    public void ReturnRPGExplosion(RPGExplosion rpgExplosion)
+    {
+        if (!ValidatePoolInitialized(rpgExplosionPool, "RPGExplosion")) return;
+        rpgExplosion.gameObject.SetActive(false);
+        rpgExplosionPool.Return(rpgExplosion);
+    }
+
     // 풀 초기화 상태 유효성 검사
     private bool ValidatePoolInitialized<T>(ObjectPool<T> pool, string poolName) where T : MonoBehaviour
     {
@@ -325,6 +358,10 @@ public class ObjectPoolManager : MonoBehaviour
             return projectilePool as ObjectPool<T>;
         else if (typeof(T) == typeof(ExpGem))
            return expGemPool as ObjectPool<T>;
+        else if (typeof(T) == typeof(RPGProjectile))
+            return rpgPool as ObjectPool<T>;
+        else if (typeof(T) == typeof(RPGExplosion))
+            return rpgExplosionPool as ObjectPool<T>;
 
         Debug.LogError($"ObjectPoolManager: 풀을 찾을 수 없음: {typeof(T).Name}");
         return null;
