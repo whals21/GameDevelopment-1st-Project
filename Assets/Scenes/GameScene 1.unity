@@ -828,7 +828,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061fabe366a7fd34e85f68b0a1875d33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 6993977000040562556, guid: 6449a62f3a3c1d44a921cbc39dd04e3e, type: 3}
+  enemyPrefabs:
+  - {fileID: 6993977000040562556, guid: 6449a62f3a3c1d44a921cbc39dd04e3e, type: 3}
+  - {fileID: 6993977000040562556, guid: 1e875666d0471dd4c9967f09869301c9, type: 3}
+  - {fileID: 6993977000040562556, guid: 43daf11a75d25aa4d9670e21bcf012ab, type: 3}
   enemyBulletPrefab: {fileID: 4502965934056652856, guid: d14ca3873114bcb4da7216eab8fed7af, type: 3}
   projectilePrefab: {fileID: 2350686407022641144, guid: cc86a1a48f46f1f4eb4264f87cabdb5f, type: 3}
   boomerangPrefab: {fileID: 4117259537834710758, guid: 9561d25c70ebeb54e987de3a22f61946, type: 3}
@@ -836,7 +839,7 @@ MonoBehaviour:
   brickPrefab: {fileID: 2772579272930128702, guid: 2b5271b524d4e384a856caa10d8b8baa, type: 3}
   fireGroundPrefab: {fileID: 5442096530452227084, guid: 8664922d214edbb4aa247e3cd2eac423, type: 3}
   expGemPrefab: {fileID: 7788130250008709110, guid: d04fe200f24b89d45b06f31c646c4ddc, type: 3}
-  enemyPoolSize: 20
+  enemyPoolSizes: 0c0000000c0000000c000000
   enemyBulletPoolSize: 50
   projectilePoolSize: 10
   boomerangPoolSize: 5
@@ -844,6 +847,11 @@ MonoBehaviour:
   brickPoolSize: 30
   fireGroundPoolSize: 20
   expGemPoolSize: 30
+  expGemPoolSizePerTier: 50
+  enemyTypes:
+  - {fileID: 11400000, guid: 5f5ecb3b1f76d92489921c7b11288a09, type: 2}
+  - {fileID: 11400000, guid: 70d92edc6412928498cd87b70772d3b8, type: 2}
+  - {fileID: 11400000, guid: 5ed5596caaacb4d42b43e68fd143f31e, type: 2}
 --- !u!4 &255546948
 Transform:
   m_ObjectHideFlags: 0

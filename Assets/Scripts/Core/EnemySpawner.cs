@@ -40,18 +40,26 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private void SpawnEnemy()
+    private void SpawnEnemy()   //12/19
     {
-        // 랜덤으로 적 종류 선택
-        EnemyObject selectedEnemyData = enemyTypes[Random.Range(0, enemyTypes.Length)];
+        int prefabIndex = Random.Range(0, ObjectPoolManager.Instance.enemyPrefabs.Length);
 
-        // 플레이어 주변 랜덤 위치 (화면 밖)
+        
+        EnemyObject selectedSO = null;
+        if (prefabIndex < ObjectPoolManager.Instance.enemyTypes.Length)
+            selectedSO = ObjectPoolManager.Instance.enemyTypes[prefabIndex];
+        // 위치 설정
+        Enemy enemy = ObjectPoolManager.Instance.GetEnemy(prefabIndex);
+        if (enemy == null) return;
+
+        // 위치 설정
         Vector2 spawnPos = GetRandomSpawnPosition();
-
-        // 오브젝트 풀에서 가져오기
-        Enemy enemy = ObjectPoolManager.Instance.GetEnemy();
         enemy.transform.position = spawnPos;
-        enemy.Init(selectedEnemyData);
+        enemy.gameObject.SetActive(true);
+
+        // SO로 초기화 → 여기서 속성값 세팅됨
+        if (selectedSO != null)
+            enemy.Init(selectedSO);
 
         currentEnemyCount++;
     }

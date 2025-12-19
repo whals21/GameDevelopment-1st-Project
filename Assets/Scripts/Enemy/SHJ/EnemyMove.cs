@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyMove : MonoBehaviour
@@ -25,16 +26,14 @@ public class EnemyMove : MonoBehaviour
             main.rb.velocity = Vector2.zero;
             return;
         }
-        
+
+        float distance = Vector2.Distance(transform.position, main.Target.position);
+
         // 공격 범위 안에 있고, 원거리 에너미라면 → 멈춤
-        if (main.IsRange && main.IsPlayerInAttackRange())
+        if (main.IsRange && distance <= main.StopDistance)
         {
             main.rb.velocity = Vector2.zero;
-
-            if (shooter != null)
-            {
-                shooter.TriggerAttack();  // 이 호출로 Shooter 코루틴 재시작 → 발사 진행
-            }
+            shooter.TryShoot();
             return;
         }
 

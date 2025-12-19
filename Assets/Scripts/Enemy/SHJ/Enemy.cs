@@ -45,8 +45,13 @@ public class Enemy : MonoBehaviour
 
     public bool IsRange => Data.attackRange > 0f;
 
+    [SerializeField] private float stopDistance = 3f;
+    public float StopDistance => stopDistance;
+
     public Transform point;
     [SerializeField] private int tier;
+
+    public int PoolIndex { get; private set; }
 
     GameManager gameManager;
     DataManager dataManager;
@@ -84,7 +89,8 @@ public class Enemy : MonoBehaviour
     // 오브젝트 풀에서 가져올 때 호출 
     public void Init(EnemyObject data)
     {
-        
+        PoolIndex = data.poolIndex; // ★ 이 줄이 핵심
+
         enemyData = data;
         currentHP = data.EnemyHP;
         moveSpeed = data.moveSpeed;
@@ -104,6 +110,9 @@ public class Enemy : MonoBehaviour
         }
         point = transform;
         FindPlayer();
+
+        EnemyShooter shooter = GetComponent<EnemyShooter>();
+        
     }
     public void FindPlayer()
     {
@@ -136,7 +145,7 @@ public class Enemy : MonoBehaviour
     {
         if (target == null) return false;
         float distance = Vector2.Distance(FirePoint.position, target.position);
-        return distance <= AttackRange;
+        return distance <= Range;
     }
     // 데미지 받기
     public void TakeDamage(float damage)
@@ -153,32 +162,29 @@ public class Enemy : MonoBehaviour
     // 사망 처리
     private void Die()
     {
+        PlayerHUD.Instance?.AddKill();
+
         if (PlayerHUD.Instance != null)
         {
             PlayerHUD.Instance.AddKill();
         }
 
         // EnemySpawner에 알림
-        EnemySpawner spawner = FindObjectOfType<EnemySpawner>();
-        if (spawner != null)
+        if (GameManager.Instance != null)
         {
-            spawner.OnEnemyDied();
-        }
+            int tier = GameManager.Instance.currentTierIndex;
 
-
-
-        // 경험치 드랍 (Instantiate로 바로 생성)
-        if (GameManager.Instance != null && GameManager.Instance.dataManager != null)
-        {
-             tier = GameManager.Instance.currentTierIndex;
-
-            GameObject gemPrefab = GameManager.Instance.dataManager.expDropObject.expGemPrefabs[tier];
-
-            if (gemPrefab != null)
+            ExpGem gem = ObjectPoolManager.Instance.GetExpGem(tier);
+            if (gem != null)
             {
-                Instantiate(gemPrefab, transform.position, Quaternion.identity);
+                gem.transform.position = transform.position;
             }
         }
+
+
+
+       
+      
 
 
 
@@ -197,6 +203,6 @@ public class Enemy : MonoBehaviour
 
         Transform center = point != null ? point : transform;
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(center.position, AttackRange);
+        Gizmos.DrawWireSphere(center.position, Range);
     }
 }
