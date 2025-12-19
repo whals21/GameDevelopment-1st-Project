@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbfefc6f0672d544a8db1151740f38a9, type: 3}
+  m_Name: ExpDropObject
+  m_EditorClassIdentifier: 
+  timeExp:
+  - 30
+  - 60
+  - 60
+  expValues: 0a0000003200000064000000
+  expGemPrefabs:
+  - {fileID: 8238552834587993004, guid: d04fe200f24b89d45b06f31c646c4ddc, type: 3}
+  - {fileID: 8238552834587993004, guid: cc11bf8752cfc2943bd54726479078ad, type: 3}
+  - {fileID: 8238552834587993004, guid: da7ae7e70b9f09d469847eb76cc49475, type: 3}

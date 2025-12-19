@@ -4,66 +4,46 @@ using UnityEngine;
 public class EnemyShooter : MonoBehaviour
 {
     private Enemy enemy;
-
+    private float lastShootTime = -999f;
     private void Awake()
     {
         enemy = GetComponent<Enemy>();
 
-        // 근거리 몬스터면 작동 안 함
-        if (!enemy.IsRange)
-        {
-            enabled = false;
-            return;
-        }
+       
+        
     }
-
-    private void Update()
+    public void TryShoot()
     {
+        if (!enemy.IsRange) return;
         if (enemy.Target == null) return;
 
-        // 범위 체크: enemy.point 기준으로 거리 계산
-        float distance = Vector2.Distance(enemy.point.position, enemy.Target.position);
+        // 쿨타임 체크
+        if (Time.time < lastShootTime + enemy.AttackDelay)
+            return;
 
-        if (distance <= enemy.AttackRange)
-        {
-            StopAllCoroutines();
-            StartCoroutine(ShootRoutine());
-        }
+        Shoot();
+        lastShootTime = Time.time;
     }
-
-    private IEnumerator ShootRoutine()
+    private void Start()
     {
-        while (true)
-        {
-            if (!enemy.IsRange)
-            {
-                yield break;
-            }
-
-            // 풀에서 EnemyBullet 가져와서 발사
-            EnemyBullet bullet = ObjectPoolManager.Instance.GetEnemyBullet();
-
-            if (bullet != null)
-            {
-                bullet.transform.position = enemy.point.position;
-
-                // ★ 타겟 방향으로 회전시키기
-                Vector2 dir = (enemy.Target.position - enemy.point.position).normalized;
-                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                bullet.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-                bullet.gameObject.SetActive(true);
-            }
-
-            yield return new WaitForSeconds(enemy.AttackDelay);
-
-            // 딜레이 후에도 enemy.point 기준으로 범위 체크
-            if (enemy.Target == null ||
-                !enemy.IsRange ||
-                Vector2.Distance(enemy.point.position, enemy.Target.position) > enemy.AttackRange)
-            {
-                yield break;
-            }
-        }
+        
     }
+
+    // 모든 로직이 여기 안에 있음. Update() 필요 없음!
+    private void Shoot()
+    {
+        Debug.Log("[EnemyShooter] Shoot!");
+
+        EnemyBullet bullet = ObjectPoolManager.Instance.GetEnemyBullet();
+        if (bullet == null) return;
+
+        bullet.transform.position = enemy.point.position;
+
+        Vector2 dir = (enemy.Target.position - enemy.point.position).normalized;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        bullet.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+        bullet.gameObject.SetActive(true);
+    }
+   
 }

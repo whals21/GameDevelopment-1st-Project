@@ -22,9 +22,9 @@ public class EnemyObject : ScriptableObject
     public float attackRange = 8f;                   // ���� ��Ÿ�
     public float attackDelay = 2f;                   // ���� ��Ÿ��
     public Transform firePoint;                      // �߻� ��ġ (�����տ� �����ϰų� ��Ÿ�ӿ��� ã��)
-
+        
     [Header("��������")]
     public WeaponObject[] weapons;
-    
+    public int poolIndex;
 
 }

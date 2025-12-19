@@ -29,6 +29,9 @@ public class GameManager : MonoBehaviour
     public event Action<GameState> OnGameStateChanged;
     public event Action<float> OnGameTimeUpdated;
 
+    [Header("드랍경험치")] //<----12/17 추가함
+    public DataManager dataManager;
+    public int currentTierIndex = 0;
     private void Awake()
     {
         // 싱글톤 패턴
@@ -59,6 +62,7 @@ public class GameManager : MonoBehaviour
             GameTime += Time.deltaTime;
             OnGameTimeUpdated?.Invoke(GameTime);
         }
+        UpdateCurrentTier();
     }
 
     // 게임 시작
@@ -104,5 +108,28 @@ public class GameManager : MonoBehaviour
     {
         CurrentState = newState;
         OnGameStateChanged?.Invoke(newState);
+    }
+
+    //<----12/17 추가함
+    private void UpdateCurrentTier()
+    {
+        int newTier = 0;
+
+        for (int i = 0; i < dataManager.expDropObject.timeExp.Length; i++)
+        {
+            if (GameTime > dataManager.expDropObject.timeExp[i])
+            {
+                newTier = i + 1;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        // 프리팹 배열 길이 제한만 남김
+        newTier = Mathf.Min(newTier, dataManager.expDropObject.expGemPrefabs.Length - 1);
+
+        currentTierIndex = newTier;
     }
 }

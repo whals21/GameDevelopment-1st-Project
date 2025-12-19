@@ -1,11 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
+using static EnemyEnum;
 
 public class ObjectPoolManager : MonoBehaviour
 {
     public static ObjectPoolManager Instance { get; private set; }
 
     [Header("Prefabs")]
-    public Enemy enemyPrefab;
+    public Enemy[] enemyPrefabs; //12/18
     public EnemyBullet enemyBulletPrefab;
     public Projectile projectilePrefab;
     public BoomerangProjectile boomerangPrefab;
@@ -23,7 +25,7 @@ public class ObjectPoolManager : MonoBehaviour
     public RPGExplosion rpgExplosionPrefab; 
 
     [Header("Pool Sizes")]
-    public int enemyPoolSize = 100;
+    public int[] enemyPoolSizes = new int[] { };    //12/18
     public int enemyBulletPoolSize = 50;
     public int projectilePoolSize = 50;
     public int boomerangPoolSize = 20;
@@ -40,8 +42,9 @@ public class ObjectPoolManager : MonoBehaviour
     public int rpgPoolSize = 10;
     public int rpgExplosionPoolSize = 10;
 
+    public int expGemPoolSizePerTier = 50; //<---12/18추가 된거임
     // 풀들
-    private ObjectPool<Enemy> enemyPool;
+    private List<ObjectPool<Enemy>> enemyPools = new List<ObjectPool<Enemy>>(); //12/18
     private ObjectPool<EnemyBullet> enemyBulletPool;
     private ObjectPool<Projectile> projectilePool;
     private ObjectPool<BoomerangProjectile> boomerangPool;
@@ -58,10 +61,20 @@ public class ObjectPoolManager : MonoBehaviour
     private ObjectPool<RPGProjectile> rpgPool;
     private ObjectPool<RPGExplosion> rpgExplosionPool;
 
+    //12/18추가 되었음
+    private List<ObjectPool<ExpGem>> expGemPools = new List<ObjectPool<ExpGem>>();  //리스트 활성화
+    private DataManager dataManager;    //경험치 담겨져있음
+    private int lastTierCount = 0; // 이전에 생성된 티어 수 추적
+    private Dictionary<EnemyObject, ObjectPool<Enemy>> enemyPoolsBySO = new Dictionary<EnemyObject, ObjectPool<Enemy>>();
+    [Header("Enemy Objects (SO)")]
+    public EnemyObject[] enemyTypes;
+    //
+
     // 유효성 검사 캐시
     private bool isInitialized = false;
     private readonly string[] requiredPrefabs = {
-        "enemyPrefab", "enemyBulletPrefab", "projectilePrefab",
+        //"enemyPrefab"//12/18
+        "enemyBulletPrefab", "projectilePrefab",
         "boomerangPrefab", "molotovPrefab", "brickPrefab",
         "fireGroundPrefab", "soccerBallPrefab", "expGemPrefab",
         "damageTextPrefab", "guardianTopPrefab", "rpgPrefab", "rpgExplosionPrefab"
@@ -83,7 +96,13 @@ public class ObjectPoolManager : MonoBehaviour
     private void Start()
     {
         InitializePools();
+
+        
     }
+
+
+
+
 
     // 풀 초기화 분리
     private void InitializePools()
@@ -91,7 +110,7 @@ public class ObjectPoolManager : MonoBehaviour
         ValidateRequiredPrefabs();
 
         // 풀 초기화
-        enemyPool = new ObjectPool<Enemy>(enemyPrefab, enemyPoolSize, transform);
+        //enemyPool = new ObjectPool<Enemy>(enemyPrefab, enemyPoolSize, transform);//12/18
         enemyBulletPool = new ObjectPool<EnemyBullet>(enemyBulletPrefab, enemyBulletPoolSize, transform);
         projectilePool = new ObjectPool<Projectile>(projectilePrefab, projectilePoolSize, transform);
         boomerangPool = new ObjectPool<BoomerangProjectile>(boomerangPrefab, boomerangPoolSize, transform);
@@ -108,8 +127,95 @@ public class ObjectPoolManager : MonoBehaviour
         rpgPool = new ObjectPool<RPGProjectile>(rpgPrefab, rpgPoolSize, transform);
         rpgExplosionPool = new ObjectPool<RPGExplosion>(rpgExplosionPrefab, rpgExplosionPoolSize, transform);
         isInitialized = true;
+
+
+        //12/18
+        ExpInitialize();
+        EnemysList();
     }
 
+    //12/18
+    private void ExpInitialize()    //내가 바로 경험치 그거임
+    {
+        dataManager = FindObjectOfType<DataManager>();
+        if (dataManager == null)
+        {
+            Debug.LogError("ObjectPoolManager: DataManager를 찾을 수 없습니다!");
+            return;
+        }
+        if (dataManager.expDropObject == null)
+        {
+            Debug.LogError("ObjectPoolManager: DataManager에 ExpDropObject가 할당되지 않았습니다!");
+            return;
+        }
+        //내용물 확인 안하면 저거 뜬다
+        // ExpStart 내용 여기로 이동
+        expGemPools.Clear();//청소
+        lastTierCount = 0;
+
+        if (expGemPrefab != null)
+        {
+            expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
+        }
+
+        // 티어 풀 생성
+        if (dataManager.expDropObject.expGemPrefabs != null)
+        {
+            foreach (GameObject prefabGO in dataManager.expDropObject.expGemPrefabs)
+            {
+                if (prefabGO != null)
+                {
+                    ExpGem prefab = prefabGO.GetComponent<ExpGem>();
+                    if (prefab != null)
+                    {
+                        var pool = new ObjectPool<ExpGem>(prefab, expGemPoolSizePerTier, transform);
+                        expGemPools.Add(pool);
+                    }
+                    else
+                    {
+                        expGemPools.Add(null);
+                    }
+                }
+                else
+                {
+                    expGemPools.Add(null);
+                }
+            }
+        }
+
+      
+    }
+
+    private void EnemysList()
+    {
+        enemyPoolsBySO.Clear();
+
+        for (int i = 0; i < enemyPrefabs.Length; i++)
+        {
+            if (enemyPrefabs[i] != null)
+            {
+                int size = (enemyPoolSizes != null && i < enemyPoolSizes.Length) ? enemyPoolSizes[i] : 50;
+                ObjectPool<Enemy> pool = new ObjectPool<Enemy>(enemyPrefabs[i], size, transform);
+                enemyPools.Add(pool);
+
+                // SO와 풀 연결
+                if (i < enemyTypes.Length)
+                    enemyPoolsBySO[enemyTypes[i]] = pool;
+            }
+        }
+    }
+
+    // SO 기반으로 Enemy 가져오기
+    public Enemy GetEnemy(EnemyObject so)
+    {
+        if (!enemyPoolsBySO.ContainsKey(so))
+        {
+            Debug.LogError("풀 없음: " + so.name);
+            return null;
+        }
+
+        return enemyPoolsBySO[so].Get();
+    }
     // 필수 프리팹 유효성 검사
     private void ValidateRequiredPrefabs()
     {
@@ -124,14 +230,42 @@ public class ObjectPoolManager : MonoBehaviour
     }
 
     // Enemy 가져오기
-    public Enemy GetEnemy()
+    public Enemy GetEnemy(int index)
     {
-        return enemyPool.Get();
+        if (!isInitialized)
+        {
+            Debug.LogError("Enemy Pool 아직 초기화 안 됨");
+            return null;
+        }
+
+        if (index < 0 || index >= enemyPools.Count)
+        {
+            Debug.LogError($"잘못된 poolIndex: {index}");
+            return null;
+        }
+
+        if (enemyPools[index] == null)
+        {
+            Debug.LogError($"enemyPools[{index}] NULL");
+            return null;
+        }
+
+        return enemyPools[index].Get();
     }
 
-    public void ReturnEnemy(Enemy enemy)
-    {
-        enemyPool.Return(enemy);
+   public void ReturnEnemy(Enemy enemy)//12/19
+   {
+        if (enemy == null) return;
+
+        int index = enemy.PoolIndex;
+
+        if (index < 0 || index >= enemyPools.Count)
+        {
+            Debug.LogError($"ReturnEnemy 실패: 잘못된 PoolIndex {index}");
+            return;
+        }
+
+        enemyPools[index].Return(enemy);
     }
 
     // Projectile 가져오기
@@ -208,12 +342,49 @@ public class ObjectPoolManager : MonoBehaviour
     public ExpGem GetExpGem()
     {
         return expGemPool.Get();
+
+
+    }
+
+    //12/18추가 된 것
+    public ExpGem GetExpGem(int tierIndex)
+    {
+        if (expGemPools == null || tierIndex < 0 || tierIndex >= expGemPools.Count || expGemPools[tierIndex] == null)
+        {
+            // 티어 풀 없으면 기본 풀 사용 (fallback)
+            Debug.LogWarning($"티어 {tierIndex} 풀 없음. 기본 ExpGem 사용");
+            return expGemPool.Get();
+        }
+
+        return expGemPools[tierIndex].Get();
     }
 
     public void ReturnExpGem(ExpGem expGem)
     {
+        //expGemPool.Return(expGem);
+
+        //12/18 수정된것
+        if (expGem == null) return;
+
+        // 티어별 풀에 반환 시도
+        if (dataManager != null && dataManager.expDropObject != null && dataManager.expDropObject.expGemPrefabs != null)
+        {
+            for (int i = 0; i < dataManager.expDropObject.expGemPrefabs.Length; i++)
+            {
+                if (dataManager.expDropObject.expGemPrefabs[i] != null &&
+                    expGem.name.Contains(dataManager.expDropObject.expGemPrefabs[i].name + "(Clone)"))
+                {
+                    expGemPools[i]?.Return(expGem);
+                    return;
+                }
+            }
+        }
+
+        // 못 찾으면 기본 풀에 반환
         expGemPool.Return(expGem);
     }
+
+
 
     // EnemyBullet 가져오기 및 반환 (팀원 코드 지원용)
     public EnemyBullet GetEnemyBullet()
@@ -353,7 +524,7 @@ public class ObjectPoolManager : MonoBehaviour
     public ObjectPool<T> GetPool<T>() where T : MonoBehaviour
     {
         if (typeof(T) == typeof(Enemy))
-            return enemyPool as ObjectPool<T>;
+            return enemyPools as ObjectPool<T>; //<12/18
         else if (typeof(T) == typeof(Projectile))
             return projectilePool as ObjectPool<T>;
         else if (typeof(T) == typeof(ExpGem))

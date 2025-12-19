@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static ActtackManager;
 
 
 public class Enemy : MonoBehaviour
@@ -34,16 +35,26 @@ public class Enemy : MonoBehaviour
     public Animator anim { get; private set; }
     public Collider2D col { get; private set; }
 
-    public float AttackDelay => Data.attackDelay;
-    public float AttackRange => Data.attackRange;
+    [SerializeField] public float AttackDelay;
+    public float Delay=> Data.attackDelay;
+    [SerializeField] private float AttackRange;
+    public float Range => Data.attackRange;
     public GameObject ProjectilePrefab => Data.projectilePrefab;
     public Transform FirePoint => Data.firePoint != null ? Data.firePoint : transform;
     public bool IsRanged => Data.isRanged;
 
     public bool IsRange => Data.attackRange > 0f;
 
-    public Transform point;
+    [SerializeField] private float stopDistance = 3f;
+    public float StopDistance => stopDistance;
 
+    public Transform point;
+    [SerializeField] private int tier;
+
+    public int PoolIndex { get; private set; }
+
+    GameManager gameManager;
+    DataManager dataManager;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -57,18 +68,18 @@ public class Enemy : MonoBehaviour
         //     moveSpeed = Data.moveSpeed;
         // }
 
-        // // 플레이어 자동 찾기 (null 체크)
-        // GameObject player = GameObject.FindGameObjectWithTag("Player");
-        // if (player != null)
-        // {
-        //     target = player.transform;
-        // }
-        // else
-        // {
-        //     Debug.LogError("Enemy: Player 태그를 가진 오브젝트를 찾을 수 없습니다!");
-        // }
+        // 플레이어 자동 찾기 (null 체크)
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            target = player.transform;
+        }
+        else
+        {
+            Debug.LogError("Enemy: Player 태그를 가진 오브젝트를 찾을 수 없습니다!");
+        }
 
-       
+        point = transform;
     }
     void Start()
     {
@@ -78,12 +89,16 @@ public class Enemy : MonoBehaviour
     // 오브젝트 풀에서 가져올 때 호출 
     public void Init(EnemyObject data)
     {
+        PoolIndex = data.poolIndex; // ★ 이 줄이 핵심
+
         enemyData = data;
         currentHP = data.EnemyHP;
         moveSpeed = data.moveSpeed;
         //contactDamage = data.contactDamage;
         //expValue = data.expValue;
 
+        AttackRange = data.attackRange;
+        AttackDelay = data.attackDelay;
         // 플레이어 재확인 (풀에서 재사용 시)
         if (target == null)
         {
@@ -93,10 +108,13 @@ public class Enemy : MonoBehaviour
                 target = player.transform;
             }
         }
-
+        point = transform;
         FindPlayer();
+
+        EnemyShooter shooter = GetComponent<EnemyShooter>();
+        
     }
-    private void FindPlayer()
+    public void FindPlayer()
     {
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
@@ -126,9 +144,8 @@ public class Enemy : MonoBehaviour
     public bool IsPlayerInAttackRange()
     {
         if (target == null) return false;
-
         float distance = Vector2.Distance(FirePoint.position, target.position);
-        return distance <= AttackRange;
+        return distance <= Range;
     }
     // 데미지 받기
     public void TakeDamage(float damage, bool isCritical = false)
@@ -158,17 +175,31 @@ public class Enemy : MonoBehaviour
     // 사망 처리
     private void Die()
     {
+        PlayerHUD.Instance?.AddKill();
+
         if (PlayerHUD.Instance != null)
         {
             PlayerHUD.Instance.AddKill();
         }
 
         // EnemySpawner에 알림
-        EnemySpawner spawner = FindObjectOfType<EnemySpawner>();
-        if (spawner != null)
+        if (GameManager.Instance != null)
         {
-            spawner.OnEnemyDied();
+            int tier = GameManager.Instance.currentTierIndex;
+
+            ExpGem gem = ObjectPoolManager.Instance.GetExpGem(tier);
+            if (gem != null)
+            {
+                gem.transform.position = transform.position;
+            }
         }
+
+
+
+       
+      
+
+
 
         // 경험치 드롭 (나중에 구현)
         // ExpGem gem = ObjectPoolManager.Instance.GetExpGem();
@@ -185,6 +216,6 @@ public class Enemy : MonoBehaviour
 
         Transform center = point != null ? point : transform;
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(center.position, AttackRange);
+        Gizmos.DrawWireSphere(center.position, Range);
     }
 }
