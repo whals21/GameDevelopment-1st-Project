@@ -8,17 +8,23 @@ public class BossController : MonoBehaviour
 {
     private BossState currentState;
     [SerializeField] int MonsterNumber;
+    
     [SerializeField] private BossPattern bossPattern;
     private BossScriptsObject myData;
     public BossScriptsObject Data => myData;
     private SpriteRenderer sr;
-    private Transform target;
+    public Transform target;
     public Rigidbody2D rb;
     public Rigidbody2D RB => rb;
-    public float[] damage => bossPattern.damage;      //패턴의 데미지
-    public float[] attackRange => bossPattern.attackRange; //패턴에 따른 범위
-    public float delayAfter => bossPattern.delayAfter;    //이 공격 후 기다릴 시간
-    BossAttack[] bossAttacks => bossPattern.bossAttacks;   //공격패턴
+    public int CurrentPatternIndex { get; private set; }            //나 없으면 보스 패턴 몇번째 놈 쓰는지 니들 모름
+
+    public GameObject CurrentBulletPrefab => bossPattern.bulletPrefab[CurrentPatternIndex];
+
+    public float CurrentAttackRayLength => bossPattern.attackRayLength[CurrentPatternIndex];
+    public int CurrentBulletCount => bossPattern.bulletCount[CurrentPatternIndex];
+    public float CurrentAttackRange => bossPattern.attackRange[CurrentPatternIndex]; //패턴에 따른 범위
+    public float CurrentDamage =>  bossPattern.damage[CurrentPatternIndex];    //이 공격 후 기다릴 시간
+    BossAttack bossAttacks => bossPattern.bossAttacks[CurrentPatternIndex];   //공격패턴
 
 
 
@@ -30,6 +36,7 @@ public class BossController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         SetState(new BossMove(this));
+        
     }
     void Update()
     {
@@ -49,5 +56,8 @@ public class BossController : MonoBehaviour
     }
 
     // Update is called once per frame
-  
+    public void SetPattern(int index)
+    {
+        CurrentPatternIndex = index;
+    }
 }
