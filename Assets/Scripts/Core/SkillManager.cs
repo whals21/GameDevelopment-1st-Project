@@ -54,6 +54,17 @@ public class SkillManager : MonoBehaviour
             forcefieldManagerObj.AddComponent<ForcefieldManager>();
         }
 
+        Debug.Log($"SkillManager Instance: {SkillManager.Instance != null}");
+        Debug.Log($"ObjectPoolManager Instance: {ObjectPoolManager.Instance != null}");
+        
+        var rpgSkill = GetComponent<RPGSkill>();
+        if (rpgSkill != null)
+        {
+            Debug.Log($"RPG Skill Active: {rpgSkill.IsActive}");
+            Debug.Log($"RPG Skill Data: {rpgSkill.SkillData != null}");
+            Debug.Log($"RPG Skill Level: {rpgSkill.CurrentLevel}");
+        }
+
         EquipTestSkills();
         UpdateForcefieldSkills(); // Forcefield 스킬들 확인 및 활성화
     }

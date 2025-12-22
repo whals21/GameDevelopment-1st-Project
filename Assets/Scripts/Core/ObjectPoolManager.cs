@@ -205,17 +205,17 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
-    // SO 기반으로 Enemy 가져오기
-    public Enemy GetEnemy(EnemyObject so)
-    {
-        if (!enemyPoolsBySO.ContainsKey(so))
-        {
-            Debug.LogError("풀 없음: " + so.name);
-            return null;
-        }
+    // // SO 기반으로 Enemy 가져오기
+    // public Enemy GetEnemy(EnemyObject so)
+    // {
+    //     if (!enemyPoolsBySO.ContainsKey(so))
+    //     {
+    //         Debug.LogError("풀 없음: " + so.name);
+    //         return null;
+    //     }
 
-        return enemyPoolsBySO[so].Get();
-    }
+    //     return enemyPoolsBySO[so].Get();
+    // }
     // 필수 프리팹 유효성 검사
     private void ValidateRequiredPrefabs()
     {

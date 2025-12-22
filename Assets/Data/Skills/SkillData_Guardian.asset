@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: SkillData_Guardian
   m_EditorClassIdentifier: 
   skillName: Guardian
-  description: 
+  description: "\uD68C\uC804\uD558\uB294 \uD1B1\uB0A0\uC744 \uD50C\uB9AC\uC774\uC5B4
+    \uC8FC\uBCC0\uC5D0 \uC0DD\uC131"
   icon: {fileID: 21300000, guid: a10d36fcd6b2dc846b543716576446aa, type: 3}
   skillType: 1
   projectilePrefab: {fileID: 0}

@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8297aba9e983e844d902c72f1395ee46, type: 3}
   m_Name: SkillData_RPGSkill
   m_EditorClassIdentifier: 
-  skillName: 
-  description: 
+  skillName: RPG
+  description: "\uD3ED\uBC1C\uD558\uB294 \uBBF8\uC0AC\uC77C\uC744 \uBC1C\uC0AC"
   icon: {fileID: 21300000, guid: f9cfc692def9c324490f56654ea6be2b, type: 3}
   skillType: 0
   projectilePrefab: {fileID: 3448858134203080111, guid: 6feb03b39d1b63a45b2b912f4055e630, type: 3}
-  skillObjectPrefab: {fileID: 0}
+  skillObjectPrefab: {fileID: 5031693375446562043, guid: 1fc81325c70bda6469b5c523f24b25ee, type: 3}
   damage: 10
   cooldown: 1
   projectileSpeed: 15
@@ -31,7 +31,7 @@ MonoBehaviour:
     projectileSpeedMultiplier: 0
     projectileSizeMultiplier: 0
     projectileScaleIncrease: 0
-    upgradeDescription: 
+    upgradeDescription: "\uBBF8\uC0AC\uC77C 1\uAC1C"
   - level: 2
     damageMultiplier: 4
     cooldownMultiplier: 0.9
@@ -39,7 +39,7 @@ MonoBehaviour:
     projectileSpeedMultiplier: 0
     projectileSizeMultiplier: 0
     projectileScaleIncrease: 0
-    upgradeDescription: 
+    upgradeDescription: "\uB370\uBBF8\uC9C0 \uC99D\uAC00, \uCFE8\uD0C0\uC784 \uAC10\uC18C "
   - level: 3
     damageMultiplier: 4
     cooldownMultiplier: 0.8
@@ -47,7 +47,7 @@ MonoBehaviour:
     projectileSpeedMultiplier: 0
     projectileSizeMultiplier: 0
     projectileScaleIncrease: 0
-    upgradeDescription: 
+    upgradeDescription: "\uBBF8\uC0AC\uC77C 2\uAC1C, \uCFE8\uD0C0\uC784 \uAC10\uC18C"
   - level: 4
     damageMultiplier: 6
     cooldownMultiplier: 0.7
@@ -55,7 +55,7 @@ MonoBehaviour:
     projectileSpeedMultiplier: 0
     projectileSizeMultiplier: 0
     projectileScaleIncrease: 0
-    upgradeDescription: 
+    upgradeDescription: "\uB370\uBBF8\uC9C0 \uC99D\uAC00, \uCFE8\uD0C0\uC784 \uAC10\uC18C"
   - level: 5
     damageMultiplier: 6
     cooldownMultiplier: 0.6
@@ -63,6 +63,6 @@ MonoBehaviour:
     projectileSpeedMultiplier: 0
     projectileSizeMultiplier: 0
     projectileScaleIncrease: 0
-    upgradeDescription: 
+    upgradeDescription: "\uBBF8\uC0AC\uC77C 3\uAC1C, \uCFE8\uD0C0\uC784 \uAC10\uC18C"
   evoSkill: {fileID: 0}
   evoRequirements: 

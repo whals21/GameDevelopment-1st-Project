@@ -1,13 +1,16 @@
 using UnityEngine;
 using System;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
     // 싱글톤 인스턴스
     public static GameManager Instance { get; private set; }
 
-     // 플레이어 참조 
-    public Transform player;   
+    // 플레이어 참조 
+    public Transform player; 
+    // 레벨업 매니저 참조
+    public LevelUpManager levelUpManager;
 
     // 게임 상태 열거형
     public enum GameState
@@ -32,6 +35,7 @@ public class GameManager : MonoBehaviour
     [Header("드랍경험치")] //<----12/17 추가함
     public DataManager dataManager;
     public int currentTierIndex = 0;
+
     private void Awake()
     {
         // 싱글톤 패턴
@@ -45,14 +49,11 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start()
-    {   
-         if (player == null)
-        {
-            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-            if (playerObj != null)
-                player = playerObj.transform;
-        }
+    {
         StartGame();
+
+        // 게임 시작 시 한 번만 레벨업 UI 표시
+        StartCoroutine(ShowInitialLevelUp());
     }
 
     private void Update()
@@ -62,7 +63,6 @@ public class GameManager : MonoBehaviour
             GameTime += Time.deltaTime;
             OnGameTimeUpdated?.Invoke(GameTime);
         }
-        UpdateCurrentTier();
     }
 
     // 게임 시작
@@ -71,6 +71,20 @@ public class GameManager : MonoBehaviour
         ChangeState(GameState.Playing);
         IsGameRunning = true;
         GameTime = 0f;
+    }
+
+    // 초기 레벨업 UI 표시 코루틴
+    private IEnumerator ShowInitialLevelUp()
+    {
+        // 1초 대기하여 모든 컴포넌트가 초기화될 때까지 기다림
+        yield return new WaitForSeconds(3f);
+
+        // LevelUpManager의 ShowLevelUp 메서드 호출
+        if (levelUpManager != null)
+        {
+            levelUpManager.ShowLevelUp();
+            Debug.Log("초기 레벨업 팝업을 표시합니다.");
+        }
     }
 
     // 게임 일시정지
@@ -108,28 +122,5 @@ public class GameManager : MonoBehaviour
     {
         CurrentState = newState;
         OnGameStateChanged?.Invoke(newState);
-    }
-
-    //<----12/17 추가함
-    private void UpdateCurrentTier()
-    {
-        int newTier = 0;
-
-        for (int i = 0; i < dataManager.expDropObject.timeExp.Length; i++)
-        {
-            if (GameTime > dataManager.expDropObject.timeExp[i])
-            {
-                newTier = i + 1;
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        // 프리팹 배열 길이 제한만 남김
-        newTier = Mathf.Min(newTier, dataManager.expDropObject.expGemPrefabs.Length - 1);
-
-        currentTierIndex = newTier;
     }
 }

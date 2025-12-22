@@ -15,15 +15,17 @@ MonoBehaviour:
   skillName: SoccerBall
   description: "\uCD95\uAD6C\uACF5 1\uAC1C"
   icon: {fileID: 21300000, guid: 2911eccbfaa621e4ebd62865bf46d878, type: 3}
+  skillType: 0
   projectilePrefab: {fileID: 2833595241435535384, guid: 645c060876d5faf48a2c962b0021cd59, type: 3}
-  damage: 10
+  skillObjectPrefab: {fileID: 0}
+  damage: 24
   cooldown: 5
   projectileSpeed: 15
   projectileCount: 1
   attackRange: 10
   levels:
   - level: 1
-    damageMultiplier: 0
+    damageMultiplier: 1
     cooldownMultiplier: 1
     additionalProjectiles: 0
     projectileSpeedMultiplier: 0

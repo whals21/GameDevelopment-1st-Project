@@ -267,7 +267,7 @@ public class SoccerBallProjectile : Projectile
         if (Time.time - lastBounceTime < minBounceInterval) return;
 
         // 적 충돌 처리
-        if (collision.CompareTag("Enemy"))
+        if ((enemyLayer & (1 << collision.gameObject.layer)) != 0)
         {
             HandleEnemyCollision(collision);
             return;

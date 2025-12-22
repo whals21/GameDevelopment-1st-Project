@@ -51,11 +51,10 @@ MonoBehaviour:
   baseDamage: 20
   baseProjectileCount: 1
   cooldownReductionPerLevel: 0.2
-  damageIncreasePerLevel: 5
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256
   projectileSpeed: 8
   spreadAngle: 15
-  attackRange: 15
+  attackRange: 8
   targetUpdateInterval: 0.5

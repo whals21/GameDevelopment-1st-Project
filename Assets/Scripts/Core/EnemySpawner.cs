@@ -35,7 +35,7 @@ public class EnemySpawner : MonoBehaviour
         spawnTimer += Time.deltaTime;
         if (spawnTimer >= spawnInterval)
         {
-            SpawnEnemy();
+            SpawnEnemy2();
             spawnTimer = 0f;
         }
     }
@@ -61,6 +61,20 @@ public class EnemySpawner : MonoBehaviour
         if (selectedSO != null)
             enemy.Init(selectedSO);
 
+        currentEnemyCount++;
+    }
+
+    private void SpawnEnemy2()
+    {
+        EnemyObject selectedEnemyData = enemyTypes[Random.Range(0, enemyTypes.Length)];
+        Enemy enemy = ObjectPoolManager.Instance.GetEnemy(selectedEnemyData.poolIndex);
+        
+        if (enemy == null) return;
+        
+        // 초기화
+        enemy.gameObject.SetActive(true);
+        enemy.Init(selectedEnemyData);  // Init으로 모든 필드 초기화
+        enemy.transform.position = GetRandomSpawnPosition();
         currentEnemyCount++;
     }
 

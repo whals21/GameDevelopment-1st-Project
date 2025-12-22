@@ -161,10 +161,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca750170b5d60774b86d1cd346ad0c6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 3
+  throwSpeed: 12
   returnSpeed: 15
   maxDistance: 7
+  lifeTime: 3
   pickupRange: 0.5
-  ignoreLayers:
+  damage: 20
+  enemyLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 256
+  rotationSpeed: 720
+  trailRenderer: {fileID: 0}

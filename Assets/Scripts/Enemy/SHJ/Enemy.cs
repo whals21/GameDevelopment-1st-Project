@@ -60,13 +60,14 @@ public class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         anim = GetComponentInChildren<Animator>();
+        col = GetComponent<Collider2D>();
 
-        // // enemyData가 할당되어 있는 경우에만 초기화
-        // if (enemyData != null)
-        // {
-        //     currentHP = MaxHP;
-        //     moveSpeed = Data.moveSpeed;
-        // }
+        // enemyData가 할당되어 있는 경우에만 초기화
+        if (enemyData != null)
+        {
+            currentHP = MaxHP;
+            moveSpeed = Data.moveSpeed;
+        }
 
         // 플레이어 자동 찾기 (null 체크)
         GameObject player = GameObject.FindGameObjectWithTag("Player");
