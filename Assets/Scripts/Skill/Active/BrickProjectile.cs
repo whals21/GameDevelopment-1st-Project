@@ -5,9 +5,7 @@ public class BrickProjectile : Projectile
     [Header("벽돌 특성")]
     [SerializeField] private float knockbackForce = 5f;
     [SerializeField] private int maxHits = 3; // 내구도 (최대 충돌 횟수)
-    [SerializeField] private LayerMask groundLayer;
     [SerializeField] private GameObject impactEffect;
-    [SerializeField] private LayerMask enemyLayer;
 
     private int currentHits = 0;
     private bool hasDeactivated = false;
@@ -171,7 +169,7 @@ public class BrickProjectile : Projectile
             if (enemy != null)
             {
                 // 데미지 적용
-                enemy.TakeDamage(damage);
+                enemy.TakeDamage(Damage);
                 currentHits++;
 
                 

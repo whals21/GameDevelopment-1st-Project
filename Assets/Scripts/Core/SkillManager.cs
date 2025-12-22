@@ -1,7 +1,5 @@
 using UnityEngine;
 using System.Linq;
-using System.Collections.Specialized;
-using System.Security.Cryptography;
 
 public class SkillManager : MonoBehaviour
 {
@@ -20,6 +18,12 @@ public class SkillManager : MonoBehaviour
 
     [Header("테스트용 스킬 레벨 설정")]
     [SerializeField] private int[] testSkillLevels = new int[5];
+
+    [Header("패시브 스킬 테스트")]
+    [SerializeField] public PassiveSkillData[] testPassiveSkills;
+
+    [Header("테스트용 패시브 스킬 레벨 설정")]
+    [SerializeField] public int[] testPassiveSkillLevels = new int[5];
     #endregion
 
     #region Private Fields
@@ -36,6 +40,10 @@ public class SkillManager : MonoBehaviour
 
     // Drone 관련
     private DroneSkill droneSkillInstance; // 드론 스킬 인스턴스
+
+    // 패시브 스킬 관련 (외부에서 설정)
+    private float globalDamageMultiplier = 1f;     // 전체 데미지 배수
+    private float globalCooldownMultiplier = 1f;   // 전체 쿨다운 배수
     #endregion
 
     #region Unity Lifecycle
@@ -218,226 +226,465 @@ public class SkillManager : MonoBehaviour
 
     private void ExecuteSkill(int slot)
     {
-        var skill = equippedSkills[slot];
-        var level = skillLevels[slot];
+        // 슬롯 유효성 검사
+        if (!ValidateSkillSlot(slot, out SkillData skill, out int level))
+        {
+            LogError($"ExecuteSkill: 슬롯 {slot} 유효성 검증 실패");
+            return;
+        }
+
+        // 스킬 실행 시작 로그
+        LogSkill($"ExecuteSkill 시작", skill, level, slot);
 
         // 스킬 타입에 따른 분기 처리
-        switch (skill.skillType)
+        bool success = false;
+        try
         {
-            case SkillType.Projectile:
-                ExecuteProjectileSkill(skill, level, slot);
-                break;
+            switch (skill.skillType)
+            {
+                case SkillType.Projectile:
+                    success = ExecuteProjectileSkill(skill, level, slot);
+                    break;
 
-            case SkillType.Guardian:
-                ExecuteGuardianSkill(skill, level, slot);
-                break;
+                case SkillType.Guardian:
+                    success = ExecuteGuardianSkill(skill, level, slot);
+                    break;
 
-            case SkillType.Forcefield:
-                ExecuteForcefieldSkill(skill, level, slot);
-                break;
+                case SkillType.Forcefield:
+                    success = ExecuteForcefieldSkill(skill, level, slot);
+                    break;
 
-            case SkillType.Drone:
-                ExecuteDroneSkill(skill, level, slot);
-                break;
+                case SkillType.Drone:
+                    success = ExecuteDroneSkill(skill, level, slot);
+                    break;
 
-            case SkillType.Lightning:
-                ExecuteLightningSkill(skill, level, slot);
-                break;
+                case SkillType.Lightning:
+                    success = ExecuteLightningSkill(skill, level, slot);
+                    break;
 
-            case SkillType.Special:
-                ExecuteSpecialSkill(skill, level, slot);
-                break;
+                case SkillType.RPG:
+                    success = ExecuteRPGSkill(skill, level, slot);
+                    break;
 
-            default:
-                Debug.LogWarning($"알 수 없는 스킬 타입: {skill.skillType}");
-                break;
+                case SkillType.Special:
+                    success = ExecuteSpecialSkill(skill, level, slot);
+                    break;
+
+                default:
+                    LogError($"ExecuteSkill: 알 수 없는 스킬 타입 {skill.skillType}");
+                    break;
+            }
         }
-    }
-
-    private void ExecuteProjectileSkill(SkillData skill, int level, int slot)
-    {
-        var target = FindNearestEnemy();
-        if (target == null) return;
-
-        // 발사체 생성
-        int projectileCount = GetProjectileCount(skill, level);
-        Debug.Log($"ExecuteProjectileSkill: 슬롯 {slot}, 스킬 {skill.name}, 레벨 {level}, 발사체 수 {projectileCount}");
-
-        for (int i = 0; i < projectileCount; i++)
+        catch (System.Exception ex)
         {
-            SpawnProjectile(skill, level, target, i);
+            LogError($"ExecuteSkill: 스킬 실행 중 예외 발생 - {ex.Message}");
+            success = false;
         }
 
-        // 쿨다운 설정
-        float cooldown = GetSkillCooldown(skill, level);
-        cooldownTimers[slot] = cooldown;
-        Debug.Log($"쿨다운 설정: {cooldown}초");
-    }
-
-    private void ExecuteGuardianSkill(SkillData skill, int level, int slot)
-    {
-        Debug.Log($"ExecuteGuardianSkill: 슬롯 {slot}, 스킬 {skill.name}, 레벨 {level}");
-
-        // 가디언 스킬 컴포넌트 찾기 또는 생성
-        GameObject guardianObj = GameObject.Find(skill.skillName);
-        GuardianSkill guardianSkill = null;
-
-        if (guardianObj != null)
+        // 실행 결과 로깅
+        if (success)
         {
-            guardianSkill = guardianObj.GetComponent<GuardianSkill>();
+            LogSkill($"ExecuteSkill 성공", skill, level, slot);
         }
         else
         {
-            // 새로운 가디언 오브젝트 생성
-            if (skill.skillObjectPrefab != null)
-            {
-                guardianObj = Instantiate(skill.skillObjectPrefab, transform);
-                guardianObj.name = skill.skillName;
-                guardianSkill = guardianObj.GetComponent<GuardianSkill>();
-            }
+            LogError($"ExecuteSkill: 스킬 실행 실패 - 스킬: {skill?.skillName ?? "Unknown"} (타입: {skill?.skillType}) [슬롯{slot}]");
         }
+    }
 
-        if (guardianSkill != null)
+    private bool ExecuteProjectileSkill(SkillData skill, int level, int slot)
+    {
+        try
         {
-            // 레벨 설정
-            guardianSkill.SetLevel(level);
-
-            // 활성화 (이미 활성화되어 있으면 레벨업만)
-            if (!guardianSkill.IsGuardianActive())
+            // 목표 탐지
+            var target = FindNearestEnemy();
+            if (target == null)
             {
-                guardianSkill.ActivateGuardian();
+                // 적이 없는 것은 실패가 아닌 정상적인 상황, 쿨다운만 설정하고 성공으로 처리
+                LogWarning($"ExecuteProjectileSkill: 적이 없어 발사 생략");
+                float noTargetCooldown = GetSkillCooldown(skill, level);
+                cooldownTimers[slot] = noTargetCooldown;
+                return true; // 적이 없는 것은 실패가 아님
+            }
+
+            // 발사체 생성
+            int projectileCount = GetProjectileCount(skill, level);
+            LogSkill($"발사체 {projectileCount}개 발사 예정", skill, level, slot);
+
+            int successCount = 0;
+            for (int i = 0; i < projectileCount; i++)
+            {
+                if (SpawnProjectile(skill, level, target, i))
+                {
+                    successCount++;
+                }
+            }
+
+            // 발사 결과 검증
+            if (successCount == 0)
+            {
+                LogError($"ExecuteProjectileSkill: 모든 발사체 생성 실패");
+                return false;
+            }
+
+            if (successCount < projectileCount)
+            {
+                LogWarning($"ExecuteProjectileSkill: 일부 발사체만 생성됨 ({successCount}/{projectileCount})");
+            }
+
+            // 쿨다운 설정
+            float cooldown = GetSkillCooldown(skill, level);
+            cooldownTimers[slot] = cooldown;
+            LogSkill($"발사체 {successCount}개 발사 완료, 쿨다운 {cooldown:F1}초 설정", skill, level, slot);
+
+            return true;
+        }
+        catch (System.Exception ex)
+        {
+            LogError($"ExecuteProjectileSkill: 예외 발생 - {ex.Message}");
+            return false;
+        }
+    }
+
+    private bool ExecuteGuardianSkill(SkillData skill, int level, int slot)
+    {
+        try
+        {
+            LogSkill("가디언 스킬 실행 시작", skill, level, slot);
+
+            // 가디언 스킬 컴포넌트 찾기 또는 생성
+            GameObject guardianObj = GameObject.Find(skill.skillName);
+            GuardianSkill guardianSkill = null;
+
+            if (guardianObj != null)
+            {
+                guardianSkill = guardianObj.GetComponent<GuardianSkill>();
             }
             else
             {
-                // 이미 활성화된 상태면 레벨업 처리
-                guardianSkill.UpgradeGuardian();
-            }
-        }
-        else
-        {
-            Debug.LogError($"가디언 스킬을 찾을 수 없습니다: {skill.skillName}");
-        }
-
-        // Guardian은 지속시간이 있으므로 쿨다운이 다름
-        // 일단 기본 쿨다운 적용 (필요시 조정)
-        float cooldown = GetSkillCooldown(skill, level);
-        cooldownTimers[slot] = cooldown;
-    }
-
-    private void ExecuteForcefieldSkill(SkillData skill, int level, int slot)
-    {
-        // 기존 ForcefieldManager와 연동 (이미 구현되어 있을 것)
-        Debug.Log($"ExecuteForcefieldSkill: 슬롯 {slot}, 스킬 {skill.name}, 레벨 {level}");
-
-        // ForcefieldManager로 위임
-        if (ForcefieldManager.Instance != null)
-        {
-            ForcefieldManager.Instance.EquipForcefield(skill, level);
-        }
-    }
-
-    private void ExecuteDroneSkill(SkillData skill, int level, int slot)
-    {
-        Debug.Log($"ExecuteDroneSkill: 슬롯 {slot}, 스킬 {skill.name}, 레벨 {level}");
-
-        // 드론 스킬 프리팹에서 DroneSkill 컴포넌트 찾기
-        DroneSkill droneSkill = null;
-
-        if (droneSkillInstance == null)
-        {
-            if (skill.skillObjectPrefab != null)
-            {
-                GameObject droneSkillObj = Instantiate(skill.skillObjectPrefab, transform);
-                droneSkill = droneSkillObj.GetComponent<DroneSkill>();
-
-                if (droneSkill != null)
+                // 새로운 가디언 오브젝트 생성
+                if (skill.skillObjectPrefab != null)
                 {
-                    // PlayerController에서 플레이어 Transform 찾기
-                    var playerController = FindObjectOfType<PlayerController>();
-                    Transform player = playerController != null ? playerController.transform : null;
-
-                    droneSkill.SetPlayerTransform(player);
-                    droneSkillInstance = droneSkill;
+                    guardianObj = Instantiate(skill.skillObjectPrefab, transform);
+                    guardianObj.name = skill.skillName;
+                    guardianSkill = guardianObj.GetComponent<GuardianSkill>();
+                }
+                else
+                {
+                    LogError("ExecuteGuardianSkill: 스킬 오브젝트 프리팹이 null");
+                    return false;
                 }
             }
-        }
-        else
-        {
-            droneSkill = droneSkillInstance;
-        }
 
-        if (droneSkill != null)
-        {
-            // 먼저 SkillData 설정
-            droneSkill.SetSkillData(skill);
-            droneSkill.InitializeDroneSkill(level);
-        }
-        else
-        {
-            Debug.LogError("DroneSkill 컴포넌트를 찾을 수 없습니다!");
-        }
+            if (guardianSkill != null)
+            {
+                // 레벨 설정
+                guardianSkill.SetLevel(level);
 
-        // 쿨다운 설정 (드론 스킬은 자체 쿨다운을 관리하지만, 스킬 시스템에서도 관리)
-        float cooldown = GetSkillCooldown(skill, level);
-        cooldownTimers[slot] = cooldown;
+                // 활성화 (이미 활성화되어 있으면 레벨업만)
+                if (!guardianSkill.IsGuardianActive())
+                {
+                    guardianSkill.ActivateGuardian();
+                    LogSkill("가디언 스킬 새로 활성화", skill, level, slot);
+                }
+                else
+                {
+                    // 이미 활성화된 상태면 레벨업 처리
+                    guardianSkill.UpgradeGuardian();
+                    LogSkill("가디언 스킬 레벨업", skill, level, slot);
+                }
+
+                // Guardian은 지속시간이 있으므로 쿨다운 설정
+                float cooldown = GetSkillCooldown(skill, level);
+                cooldownTimers[slot] = cooldown;
+                return true;
+            }
+            else
+            {
+                LogError($"ExecuteGuardianSkill: 가디언 스킬 컴포넌트를 찾을 수 없음: {skill.skillName}");
+                return false;
+            }
+        }
+        catch (System.Exception ex)
+        {
+            LogError($"ExecuteGuardianSkill: 예외 발생 - {ex.Message}");
+            return false;
+        }
     }
 
-    private void ExecuteLightningSkill(SkillData skill, int level, int slot)
+    private bool ExecuteForcefieldSkill(SkillData skill, int level, int slot)
     {
-        Debug.Log($"ExecuteLightningSkill: 슬롯 {slot}, 스킬 {skill.name}, 레벨 {level}");
-
-        // 번개 스킬 오브젝트 생성
-        GameObject lightningSkillObj;
-
-        // 프리팹이 있으면 사용, 없으면 새로 생성
-        if (skill.skillObjectPrefab != null)
+        try
         {
-            lightningSkillObj = Instantiate(skill.skillObjectPrefab);
-        }
-        else
-        {
-            // 기본 번개 스킬 오브젝트 생성
-            lightningSkillObj = new GameObject("LightningSkill_" + slot);
-            lightningSkillObj.AddComponent<LightningSkill>();
-        }
+            LogSkill("포스필드 스킬 실행 시작", skill, level, slot);
 
-        // 부모 설정
-        lightningSkillObj.transform.SetParent(transform);
-
-        // LightningSkill 컴포넌트 설정
-        LightningSkill lightningSkill = lightningSkillObj.GetComponent<LightningSkill>();
-        if (lightningSkill != null)
-        {
-            // 먼저 SkillData 설정
-            lightningSkill.SetSkillData(skill);
-            lightningSkill.SetLevel(level);
+            // ForcefieldManager로 위임
+            if (ForcefieldManager.Instance != null)
+            {
+                ForcefieldManager.Instance.EquipForcefield(skill, level);
+                LogSkill("포스필드 스킬 장착 완료", skill, level, slot);
+                return true;
+            }
+            else
+            {
+                LogError("ExecuteForcefieldSkill: ForcefieldManager.Instance가 null");
+                return false;
+            }
         }
-        else
+        catch (System.Exception ex)
         {
-            Debug.LogError("LightningSkill 컴포넌트를 찾을 수 없습니다!");
+            LogError($"ExecuteForcefieldSkill: 예외 발생 - {ex.Message}");
+            return false;
         }
-
-        // 쿨다운 설정 (번개 스킬은 자체 쿨다운을 관리하지만, 스킬 시스템에서도 관리)
-        float cooldown = GetSkillCooldown(skill, level);
-        cooldownTimers[slot] = cooldown;
     }
 
-    private void ExecuteSpecialSkill(SkillData skill, int level, int slot)
+    private bool ExecuteDroneSkill(SkillData skill, int level, int slot)
     {
-        // 특수 스킬 처리 (확장용)
-        Debug.Log($"ExecuteSpecialSkill: 슬롯 {slot}, 스킬 {skill.name}, 레벨 {level}");
-
-        // 특수 스킬에 따른 개별 처리
-        if (skill.skillObjectPrefab != null)
+        try
         {
-            GameObject specialObj = Instantiate(skill.skillObjectPrefab);
-            // 스킬별 특수 초기화 로직
+            LogSkill("드론 스킬 실행 시작", skill, level, slot);
+
+            // 드론 스킬 프리팹에서 DroneSkill 컴포넌트 찾기
+            DroneSkill droneSkill = null;
+
+            if (droneSkillInstance == null)
+            {
+                if (skill.skillObjectPrefab != null)
+                {
+                    GameObject droneSkillObj = Instantiate(skill.skillObjectPrefab, transform);
+                    droneSkill = droneSkillObj.GetComponent<DroneSkill>();
+
+                    if (droneSkill != null)
+                    {
+                        // PlayerController에서 플레이어 Transform 찾기
+                        var playerController = FindObjectOfType<PlayerController>();
+                        Transform player = playerController != null ? playerController.transform : null;
+
+                        if (player == null)
+                        {
+                            LogError("ExecuteDroneSkill: 플레이어 Transform을 찾을 수 없음");
+                        }
+
+                        droneSkill.SetPlayerTransform(player);
+                        droneSkillInstance = droneSkill;
+                        LogSkill("드론 스킬 인스턴스 새로 생성", skill, level, slot);
+                    }
+                    else
+                    {
+                        LogError("ExecuteDroneSkill: DroneSkill 컴포넌트를 프리팹에서 찾을 수 없음");
+                        return false;
+                    }
+                }
+                else
+                {
+                    LogError("ExecuteDroneSkill: 스킬 오브젝트 프리팹이 null");
+                    return false;
+                }
+            }
+            else
+            {
+                droneSkill = droneSkillInstance;
+            }
+
+            if (droneSkill != null)
+            {
+                // 먼저 SkillData 설정
+                droneSkill.SetSkillData(skill);
+                droneSkill.InitializeDroneSkill(level);
+                LogSkill("드론 스킬 초기화 완료", skill, level, slot);
+
+                // 쿨다운 설정 (드론 스킬은 자체 쿨다운을 관리하지만, 스킬 시스템에서도 관리)
+                float cooldown = GetSkillCooldown(skill, level);
+                cooldownTimers[slot] = cooldown;
+                return true;
+            }
+            else
+            {
+                LogError("ExecuteDroneSkill: DroneSkill 인스턴스를 생성할 수 없음");
+                return false;
+            }
+        }
+        catch (System.Exception ex)
+        {
+            LogError($"ExecuteDroneSkill: 예외 발생 - {ex.Message}");
+            return false;
+        }
+    }
+
+    private bool ExecuteLightningSkill(SkillData skill, int level, int slot)
+    {
+        try
+        {
+            LogSkill("번개 스킬 실행 시작", skill, level, slot);
+
+            // 번개 스킬 오브젝트 생성
+            GameObject lightningSkillObj;
+
+            // 프리팹이 있으면 사용, 없으면 새로 생성
+            if (skill.skillObjectPrefab != null)
+            {
+                lightningSkillObj = Instantiate(skill.skillObjectPrefab);
+            }
+            else
+            {
+                // 기본 번개 스킬 오브젝트 생성
+                lightningSkillObj = new GameObject("LightningSkill_" + slot);
+                lightningSkillObj.AddComponent<LightningSkill>();
+            }
+
+            // 부모 설정
+            lightningSkillObj.transform.SetParent(transform);
+
+            // LightningSkill 컴포넌트 설정
+            LightningSkill lightningSkill = lightningSkillObj.GetComponent<LightningSkill>();
+            if (lightningSkill != null)
+            {
+                // 먼저 SkillData 설정
+                lightningSkill.SetSkillData(skill);
+                lightningSkill.SetLevel(level);
+                LogSkill("번개 스킬 오브젝트 생성 및 설정 완료", skill, level, slot);
+
+                // 쿨다운 설정 (번개 스킬은 자체 쿨다운을 관리하지만, 스킬 시스템에서도 관리)
+                float cooldown = GetSkillCooldown(skill, level);
+                cooldownTimers[slot] = cooldown;
+                return true;
+            }
+            else
+            {
+                LogError("ExecuteLightningSkill: LightningSkill 컴포넌트를 찾을 수 없음");
+                Destroy(lightningSkillObj); // 실패한 오브젝트 정리
+                return false;
+            }
+        }
+        catch (System.Exception ex)
+        {
+            LogError($"ExecuteLightningSkill: 예외 발생 - {ex.Message}");
+            return false;
+        }
+    }
+
+    private bool ExecuteRPGSkill(SkillData skill, int level, int slot)
+    {
+        try
+        {
+            LogSkill("RPG 스킬 실행 시작", skill, level, slot);
+
+            // RPG 스킬 프리팹에서 RPGSkill 컴포넌트 찾기
+            RPGSkill rpgSkill = null;
+            GameObject rpgSkillObj = GameObject.Find(skill.skillName);
+
+            if (rpgSkillObj != null)
+            {
+                rpgSkill = rpgSkillObj.GetComponent<RPGSkill>();
+            }
+            else
+            {
+                // 새로운 RPG 스킬 오브젝트 생성
+                if (skill.skillObjectPrefab != null)
+                {
+                    rpgSkillObj = Instantiate(skill.skillObjectPrefab, transform);
+                    rpgSkillObj.name = skill.skillName;
+                    rpgSkill = rpgSkillObj.GetComponent<RPGSkill>();
+                }
+                else
+                {
+                    LogError("ExecuteRPGSkill: 스킬 오브젝트 프리팹이 null");
+                    return false;
+                }
+            }
+
+            if (rpgSkill != null)
+            {
+                // 레벨 설정
+                rpgSkill.SetLevel(level);
+
+                // 스킬 데이터 설정
+                rpgSkill.SetSkillData(skill);
+
+                // 활성화
+                if (!rpgSkill.IsActive)
+                {
+                    rpgSkill.SetActive(true);
+                    LogSkill("RPG 스킬 활성화됨", skill, level, slot);
+                }
+                else
+                {
+                    LogSkill("RPG 스킬 이미 활성화됨", skill, level, slot);
+                }
+
+                // 쿨다운 설정
+                float cooldown = GetSkillCooldown(skill, level);
+                cooldownTimers[slot] = cooldown;
+                return true;
+            }
+            else
+            {
+                LogError($"ExecuteRPGSkill: RPG 스킬 컴포넌트를 찾을 수 없음: {skill.skillName}");
+                return false;
+            }
+        }
+        catch (System.Exception ex)
+        {
+            LogError($"ExecuteRPGSkill: 예외 발생 - {ex.Message}");
+            return false;
+        }
+    }
+
+    private bool ExecuteSpecialSkill(SkillData skill, int level, int slot)
+    {
+        try
+        {
+            LogSkill("특수 스킬 실행 시작", skill, level, slot);
+
+            // 특수 스킬에 따른 개별 처리
+            if (skill.skillObjectPrefab != null)
+            {
+                GameObject specialObj = Instantiate(skill.skillObjectPrefab);
+                if (specialObj != null)
+                {
+                    // 부모 설정
+                    specialObj.transform.SetParent(transform);
+
+                    // 스킬별 특수 초기화 로직 (확장용)
+                    // TODO: 특수 스킬별 구현 필요
+
+                    LogSkill("특수 스킬 오브젝트 생성 완료", skill, level, slot);
+
+                    // 쿨다운 설정
+                    float cooldown = GetSkillCooldown(skill, level);
+                    cooldownTimers[slot] = cooldown;
+                    return true;
+                }
+                else
+                {
+                    LogError("ExecuteSpecialSkill: 특수 스킬 오브젝트 생성 실패");
+                    return false;
+                }
+            }
+            else
+            {
+                LogError("ExecuteSpecialSkill: 스킬 오브젝트 프리팹이 null");
+                return false;
+            }
+        }
+        catch (System.Exception ex)
+        {
+            LogError($"ExecuteSpecialSkill: 예외 발생 - {ex.Message}");
+            return false;
         }
     }
 
     private Transform FindNearestEnemy()
     {
-        if (cachedEnemies == null || cachedEnemies.Length == 0) return null;
+        if (cachedEnemies == null || cachedEnemies.Length == 0)
+        {
+            // 디버그용: 적이 없는 상황 로깅 (너무 많이 출력되지 않도록 주기적으로만)
+            if (Time.frameCount % 60 == 0) // 60프레임마다 한 번만 로그
+            {
+                LogWarning("FindNearestEnemy: 적 캐시가 비어있음");
+            }
+            return null;
+        }
 
         Transform nearest = null;
         float minDistance = float.MaxValue;
@@ -469,137 +716,205 @@ public class SkillManager : MonoBehaviour
     #endregion
 
     #region Projectile Spawning
-    private void SpawnProjectile(SkillData skill, int level, Transform target, int index)
+    private bool SpawnProjectile(SkillData skill, int level, Transform target, int index)
     {
-        if (skill?.projectilePrefab == null) return;
+        try
+        {
+            if (skill?.projectilePrefab == null)
+            {
+                LogError("SpawnProjectile: 스킬 또는 프리팹이 null");
+                return false;
+            }
 
-        // 스탯 계산
-        float damage = skill.damage * GetDamageMultiplier(skill, level);
-        float speed = skill.projectileSpeed * GetProjectileSpeedMultiplier(skill, level);
-        float sizeMultiplier = GetProjectileSizeMultiplier(skill, level);
+            // 스탯 계산 (패시브 스킬 효과 포함)
+            float damage = skill.damage * GetFinalDamageMultiplier(skill, level);
+            float speed = skill.projectileSpeed * GetProjectileSpeedMultiplier(skill, level);
+            float sizeMultiplier = GetProjectileSizeMultiplier(skill, level);
 
-        // 발사체 생성
-        if (skill.projectilePrefab.GetComponent<BoomerangProjectile>() != null)
-        {
-            SpawnBoomerangProjectile(skill, damage, speed, sizeMultiplier);
+            // 발사체 생성
+            if (skill.projectilePrefab.GetComponent<BoomerangProjectile>() != null)
+            {
+                return SpawnBoomerangProjectile(skill, damage, speed, sizeMultiplier);
+            }
+            else if (skill.projectilePrefab.GetComponent<MolotovProjectile>() != null)
+            {
+                return SpawnMolotovProjectile(skill, damage, level, index);
+            }
+            else if (skill.projectilePrefab.GetComponent<BrickProjectile>() != null)
+            {
+                return SpawnBrickProjectile(skill, damage, speed, index);
+            }
+            else if (skill.projectilePrefab.GetComponent<SoccerBallProjectile>() != null)
+            {
+                return SpawnSoccerBallProjectile(skill, damage, speed, index);
+            }
+            else
+            {
+                // 발사 방향 계산
+                Vector2 direction = CalculateProjectileDirection(target, skill, level, index);
+                return SpawnRegularProjectile(skill, damage, speed, direction, sizeMultiplier);
+            }
         }
-        else if (skill.projectilePrefab.GetComponent<MolotovProjectile>() != null)
+        catch (System.Exception ex)
         {
-            SpawnMolotovProjectile(skill, damage, level, index);
-        }
-        else if (skill.projectilePrefab.GetComponent<BrickProjectile>() != null)
-        {
-            SpawnBrickProjectile(skill, damage, speed, index);
-        }
-        else if (skill.projectilePrefab.GetComponent<SoccerBallProjectile>() != null)
-        {
-            SpawnSoccerBallProjectile(skill, damage, speed, index);
-        }
-        else
-        {
-            // 발사 방향 계산
-            Vector2 direction = CalculateProjectileDirection(target, skill, level, index);
-            SpawnRegularProjectile(skill, damage, speed, direction, sizeMultiplier);
+            LogError($"SpawnProjectile: 예외 발생 - {ex.Message}");
+            return false;
         }
     }
 
-    private void SpawnRegularProjectile(SkillData skill, float damage, float speed, Vector2 direction, float sizeMultiplier)
+    private bool SpawnRegularProjectile(SkillData skill, float damage, float speed, Vector2 direction, float sizeMultiplier)
     {
-        var projectile = ObjectPoolManager.Instance.GetProjectile();
-        if (projectile == null)
+        try
         {
-            projectile = Instantiate(skill.projectilePrefab).GetComponent<Projectile>();
+            var projectile = ObjectPoolManager.Instance.GetProjectile();
+            if (projectile == null)
+            {
+                projectile = Instantiate(skill.projectilePrefab).GetComponent<Projectile>();
+                if (projectile == null)
+                {
+                    LogError("SpawnRegularProjectile: Projectile 컴포넌트 생성 실패");
+                    return false;
+                }
+            }
+            else
+            {
+                projectile.gameObject.SetActive(true);
+                projectile.gameObject.transform.position = transform.position;
+            }
+
+            // 크기 조절
+            projectile.gameObject.transform.localScale = Vector3.one * sizeMultiplier;
+
+            projectile.Init(damage, speed, direction);
+            return true;
         }
-        else
+        catch (System.Exception ex)
         {
-            projectile.gameObject.SetActive(true);
-            projectile.gameObject.transform.position = transform.position;
+            LogError($"SpawnRegularProjectile: 예외 발생 - {ex.Message}");
+            return false;
         }
-
-        // 크기 조절
-        projectile.gameObject.transform.localScale = Vector3.one * sizeMultiplier;
-
-        projectile.Init(damage, speed, direction);
     }
 
-      private void SpawnBoomerangProjectile(SkillData skill, float damage, float speed, float sizeMultiplier)
+    private bool SpawnBoomerangProjectile(SkillData skill, float damage, float speed, float sizeMultiplier)
     {
-        // 부메랑도 오브젝트 풀에서 가져오기
-        var boomerang = ObjectPoolManager.Instance.GetBoomerang();
-        if (boomerang == null)
+        try
         {
-            // 풀이 비어있으면 새로 생성
-            boomerang = Instantiate(skill.projectilePrefab).GetComponent<BoomerangProjectile>();
+            // 부메랑도 오브젝트 풀에서 가져오기
+            var boomerang = ObjectPoolManager.Instance.GetBoomerang();
+            if (boomerang == null)
+            {
+                // 풀이 비어있으면 새로 생성
+                boomerang = Instantiate(skill.projectilePrefab).GetComponent<BoomerangProjectile>();
+                if (boomerang == null)
+                {
+                    LogError("SpawnBoomerangProjectile: BoomerangProjectile 컴포넌트 생성 실패");
+                    return false;
+                }
+            }
+            else
+            {
+                boomerang.gameObject.SetActive(true);
+                boomerang.transform.position = transform.position;
+            }
+
+            // 크기 조절
+            boomerang.transform.localScale = Vector3.one * sizeMultiplier;
+
+            // 방향은 계산해서 전달
+            Transform target = FindNearestEnemy();
+            Vector2 direction = CalculateProjectileDirection(target, skill, GetCurrentSkillLevel(skill), 0);
+
+            boomerang.Init(damage, speed, direction);
+            return true;
         }
-        else
+        catch (System.Exception ex)
         {
-            boomerang.gameObject.SetActive(true);
-            boomerang.transform.position = transform.position;
+            LogError($"SpawnBoomerangProjectile: 예외 발생 - {ex.Message}");
+            return false;
         }
-
-        // 크기 조절
-        boomerang.transform.localScale = Vector3.one * sizeMultiplier;
-
-        // 방향은 계산해서 전달
-        Transform target = FindNearestEnemy();
-        Vector2 direction = CalculateProjectileDirection(target, skill, GetCurrentSkillLevel(skill), 0);
-
-        boomerang.Init(damage, speed, direction);
     }
 
-    private void SpawnMolotovProjectile(SkillData skill, float damage, int level, int index)
+    private bool SpawnMolotovProjectile(SkillData skill, float damage, int level, int index)
     {
-        // Molotov 오브젝트 풀에서 가져오기
-        var molotov = ObjectPoolManager.Instance.GetMolotov();
-        if (molotov == null)
+        try
         {
-            // 풀이 비어있으면 새로 생성
-            molotov = Instantiate(skill.projectilePrefab).GetComponent<MolotovProjectile>();
+            // Molotov 오브젝트 풀에서 가져오기
+            var molotov = ObjectPoolManager.Instance.GetMolotov();
+            if (molotov == null)
+            {
+                // 풀이 비어있으면 새로 생성
+                molotov = Instantiate(skill.projectilePrefab).GetComponent<MolotovProjectile>();
+                if (molotov == null)
+                {
+                    LogError("SpawnMolotovProjectile: MolotovProjectile 컴포넌트 생성 실패");
+                    return false;
+                }
+            }
+            else
+            {
+                molotov.gameObject.SetActive(true);
+                molotov.transform.position = transform.position;
+            }
+
+            // 목표 위치 계산 (플레이어 주변 랜덤 또는 균등 분배)
+            Vector3 targetPos = CalculateMolotovTargetPosition(level, index);
+
+            // Molotov 초기화
+            molotov.InitMolotov(damage, targetPos);
+            return true;
         }
-        else
+        catch (System.Exception ex)
         {
-            molotov.gameObject.SetActive(true);
-            molotov.transform.position = transform.position;
+            LogError($"SpawnMolotovProjectile: 예외 발생 - {ex.Message}");
+            return false;
         }
-
-        // 목표 위치 계산 (플레이어 주변 랜덤 또는 균등 분배)
-        Vector3 targetPos = CalculateMolotovTargetPosition(level, index);
-
-        // Molotov 초기화
-        molotov.InitMolotov(damage, targetPos);
     }
 
-    private void SpawnBrickProjectile(SkillData skill, float damage, float speed, int index)
+    private bool SpawnBrickProjectile(SkillData skill, float damage, float speed, int index)
     {
-        // Brick 오브젝트 풀에서 가져오기
-        var brick = ObjectPoolManager.Instance.GetBrick();
-        if (brick == null)
+        try
         {
-            // 풀이 비어있으면 새로 생성
-            brick = Instantiate(skill.projectilePrefab).GetComponent<BrickProjectile>();
+            // Brick 오브젝트 풀에서 가져오기
+            var brick = ObjectPoolManager.Instance.GetBrick();
+            if (brick == null)
+            {
+                // 풀이 비어있으면 새로 생성
+                brick = Instantiate(skill.projectilePrefab).GetComponent<BrickProjectile>();
+                if (brick == null)
+                {
+                    LogError("SpawnBrickProjectile: BrickProjectile 컴포넌트 생성 실패");
+                    return false;
+                }
+            }
+            else
+            {
+                brick.gameObject.SetActive(true);
+                brick.transform.position = transform.position;
+            }
+
+            // Brick 발사 방향 계산 (플레이어 위쪽으로 원형 분산)
+            int projectileCount = GetProjectileCount(skill, GetCurrentSkillLevel(skill));
+            Vector2 direction;
+
+            // 위쪽 중심으로 원형 분산 발사
+            float angleStep = 360f / projectileCount; // 360도 등분
+            float angle = angleStep * index;
+
+            // 약간의 무작위성 추가로 자연스러움
+            angle += Random.Range(-10f, 10f);
+
+            // 위쪽(90도)을 기준으로 분산
+            direction = Quaternion.Euler(0, 0, 90f + angle) * Vector2.right;
+
+            // Brick 초기화
+            brick.InitBrick(damage, speed, direction);
+            return true;
         }
-        else
+        catch (System.Exception ex)
         {
-            brick.gameObject.SetActive(true);
-            brick.transform.position = transform.position;
+            LogError($"SpawnBrickProjectile: 예외 발생 - {ex.Message}");
+            return false;
         }
-
-        // Brick 발사 방향 계산 (플레이어 위쪽으로 원형 분산)
-        int projectileCount = GetProjectileCount(skill, GetCurrentSkillLevel(skill));
-        Vector2 direction;
-
-        // 위쪽 중심으로 원형 분산 발사
-        float angleStep = 360f / projectileCount; // 360도 등분
-        float angle = angleStep * index;
-
-        // 약간의 무작위성 추가로 자연스러움
-        angle += Random.Range(-10f, 10f);
-
-        // 위쪽(90도)을 기준으로 분산
-        direction = Quaternion.Euler(0, 0, 90f + angle) * Vector2.right;
-
-        // Brick 초기화
-        brick.InitBrick(damage, speed, direction);
     }
 
     private int GetCurrentSkillLevel(SkillData skill)
@@ -667,38 +982,52 @@ public class SkillManager : MonoBehaviour
         return Quaternion.Euler(0, 0, currentAngle) * baseDirection;
     }
 
-    private void SpawnSoccerBallProjectile(SkillData skill, float damage, float speed, int index)
+    private bool SpawnSoccerBallProjectile(SkillData skill, float damage, float speed, int index)
     {
-        // SoccerBall 오브젝트 풀에서 가져오기
-        var soccerBall = ObjectPoolManager.Instance.GetSoccerBall();
-
-        if (soccerBall == null)
+        try
         {
-            // 풀이 비어있으면 새로 생성
-            soccerBall = Instantiate(skill.projectilePrefab).GetComponent<SoccerBallProjectile>();
-        }
-        else
-        {
-            soccerBall.gameObject.SetActive(true);
-            soccerBall.transform.position = transform.position;
-        }
+            // SoccerBall 오브젝트 풀에서 가져오기
+            var soccerBall = ObjectPoolManager.Instance.GetSoccerBall();
 
-        // 가장 가까운 적 찾기
-        Transform nearestEnemy = FindNearestEnemy();
-        Vector2 direction;
+            if (soccerBall == null)
+            {
+                // 풀이 비어있으면 새로 생성
+                soccerBall = Instantiate(skill.projectilePrefab).GetComponent<SoccerBallProjectile>();
+                if (soccerBall == null)
+                {
+                    LogError("SpawnSoccerBallProjectile: SoccerBallProjectile 컴포넌트 생성 실패");
+                    return false;
+                }
+            }
+            else
+            {
+                soccerBall.gameObject.SetActive(true);
+                soccerBall.transform.position = transform.position;
+            }
 
-        if (nearestEnemy != null)
-        {
-            direction = CalculateProjectileDirection(nearestEnemy, skill, GetCurrentSkillLevel(skill), 0);
-        }
-        else
-        {
-            // 적이 없으면 랜덤 방향
-            float randomAngle = Random.Range(0f, 360f);
-            direction = Quaternion.Euler(0, 0, randomAngle) * Vector2.right;
-        }
+            // 가장 가까운 적 찾기
+            Transform nearestEnemy = FindNearestEnemy();
+            Vector2 direction;
 
-        soccerBall.InitSoccerBall(damage, speed, direction);
+            if (nearestEnemy != null)
+            {
+                direction = CalculateProjectileDirection(nearestEnemy, skill, GetCurrentSkillLevel(skill), 0);
+            }
+            else
+            {
+                // 적이 없으면 랜덤 방향
+                float randomAngle = Random.Range(0f, 360f);
+                direction = Quaternion.Euler(0, 0, randomAngle) * Vector2.right;
+            }
+
+            soccerBall.InitSoccerBall(damage, speed, direction);
+            return true;
+        }
+        catch (System.Exception ex)
+        {
+            LogError($"SpawnSoccerBallProjectile: 예외 발생 - {ex.Message}");
+            return false;
+        }
     }
     #endregion
 
@@ -747,7 +1076,7 @@ public class SkillManager : MonoBehaviour
             return 3f;
         }
 
-        float cooldown = skill.cooldown * GetCooldownMultiplier(skill, level);
+        float cooldown = skill.cooldown * GetFinalCooldownMultiplier(skill, level);
         Debug.Log($"일반 스킬 쿨다운: {cooldown}초 (기본: {skill.cooldown}, 배수: {GetCooldownMultiplier(skill, level)})");
 
         // 최소 1초 보장
@@ -807,6 +1136,74 @@ public class SkillManager : MonoBehaviour
     }
     #endregion
 
+    #region Validation & Logging
+    /// <summary>
+    /// 스킬 슬롯 유효성 검사
+    /// </summary>
+    /// <param name="slot">검사할 슬롯</param>
+    /// <param name="skill">출력할 스킬 데이터</param>
+    /// <param name="level">출력할 스킬 레벨</param>
+    /// <returns>유효한 슬롯이면 true</returns>
+    private bool ValidateSkillSlot(int slot, out SkillData skill, out int level)
+    {
+        skill = null;
+        level = 1;
+
+        if (!IsValidSlot(slot))
+        {
+            LogError($"ValidateSkillSlot: 잘못된 슬롯 {slot}");
+            return false;
+        }
+
+        skill = equippedSkills[slot];
+        if (skill == null)
+        {
+            LogError($"ValidateSkillSlot: 슬롯 {slot}에 스킬이 없음");
+            return false;
+        }
+
+        level = skillLevels[slot];
+        if (level <= 0)
+        {
+            LogError($"ValidateSkillSlot: 슬롯 {slot}의 스킬 레벨이 0 이하 ({level})");
+            level = 1;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// 스킬 관련 로그 출력
+    /// </summary>
+    /// <param name="message">로그 메시지</param>
+    /// <param name="skill">스킬 데이터</param>
+    /// <param name="level">스킬 레벨</param>
+    /// <param name="slot">슬롯 번호</param>
+    private void LogSkill(string message, SkillData skill, int level, int slot = -1)
+    {
+        string slotInfo = slot >= 0 ? $"[슬롯{slot}] " : "";
+        Debug.Log($"[SkillManager] {slotInfo}{message}: {skill?.skillName ?? "Unknown"} (레벨 {level})");
+    }
+
+    /// <summary>
+    /// 에러 로그 출력
+    /// </summary>
+    /// <param name="message">에러 메시지</param>
+    private void LogError(string message)
+    {
+        Debug.LogError($"[SkillManager] {message}");
+    }
+
+    /// <summary>
+    /// 경고 로그 출력
+    /// </summary>
+    /// <param name="message">경고 메시지</param>
+    private void LogWarning(string message)
+    {
+        Debug.LogWarning($"[SkillManager] {message}");
+    }
+    #endregion
+
     #region Utility
     private bool IsValidSlot(int slot) => slot >= 0 && slot < MAX_SKILLS;
     #endregion
@@ -851,4 +1248,287 @@ public class SkillManager : MonoBehaviour
             }
         }
     }
+
+    #region Passive Skill Integration
+    /// <summary>
+    /// 전체 데미지 배수 설정 (패시브 스킬용)
+    /// </summary>
+    /// <param name="multiplier">데미지 배수 (1.0 = 100%)</param>
+    public void SetDamageMultiplier(float multiplier)
+    {
+        globalDamageMultiplier = Mathf.Max(0.1f, multiplier);
+        Debug.Log($"[SkillManager] 전체 데미지 배수가 {globalDamageMultiplier:F2}(으)로 설정됨");
+    }
+
+    /// <summary>
+    /// 전체 쿨다운 배수 설정 (패시브 스킬용)
+    /// </summary>
+    /// <param name="multiplier">쿨다운 배수 (1.0 = 100%)</param>
+    public void SetCooldownMultiplier(float multiplier)
+    {
+        globalCooldownMultiplier = Mathf.Max(0.1f, multiplier);
+        Debug.Log($"[SkillManager] 전체 쿨다운 배수가 {globalCooldownMultiplier:F2}(으)로 설정됨");
+    }
+
+    /// <summary>
+    /// 패시브 스킬이 적용된 실제 데미지 배수 반환
+    /// </summary>
+    /// <param name="skill">스킬 데이터</param>
+    /// <param name="level">스킬 레벨</param>
+    /// <returns>최종 데미지 배수</returns>
+    public float GetFinalDamageMultiplier(SkillData skill, int level)
+    {
+        float baseMultiplier = GetDamageMultiplier(skill, level);
+        return baseMultiplier * globalDamageMultiplier;
+    }
+
+    /// <summary>
+    /// 패시브 스킬이 적용된 실제 쿨다운 배수 반환
+    /// </summary>
+    /// <param name="skill">스킬 데이터</param>
+    /// <param name="level">스킬 레벨</param>
+    /// <returns>최종 쿨다운 배수</returns>
+    public float GetFinalCooldownMultiplier(SkillData skill, int level)
+    {
+        float baseMultiplier = GetCooldownMultiplier(skill, level);
+        return baseMultiplier * globalCooldownMultiplier;
+    }
+
+    /// <summary>
+    /// 현재 전체 데미지 배수 반환
+    /// </summary>
+    /// <returns>전체 데미지 배수</returns>
+    public float GetGlobalDamageMultiplier()
+    {
+        return globalDamageMultiplier;
+    }
+
+    /// <summary>
+    /// 현재 전체 쿨다운 배수 반환
+    /// </summary>
+    /// <returns>전체 쿨다운 배수</returns>
+    public float GetGlobalCooldownMultiplier()
+    {
+        return globalCooldownMultiplier;
+    }
+    #endregion
+
+    #region 패시브 스킬 테스트 기능
+    /// <summary>
+    /// 테스트용 패시브 스킬들을 자동으로 등록합니다
+    /// </summary>
+    [ContextMenu("테스트 패시브 스킬 등록")]
+    public void RegisterTestPassiveSkills()
+    {
+        if (testPassiveSkills == null || testPassiveSkills.Length == 0)
+        {
+            Debug.LogWarning("[SkillManager] 테스트 패시브 스킬이 설정되지 않았습니다.");
+            return;
+        }
+
+        if (PassiveSkillManager.Instance == null)
+        {
+            Debug.LogError("[SkillManager] PassiveSkillManager.Instance를 찾을 수 없습니다.");
+            return;
+        }
+
+        Debug.Log($"[SkillManager] {testPassiveSkills.Length}개의 테스트 패시브 스킬을 등록합니다...");
+
+        int successCount = 0;
+        for (int i = 0; i < testPassiveSkills.Length; i++)
+        {
+            var passiveSkill = testPassiveSkills[i];
+            if (passiveSkill != null)
+            {
+                // Inspector에서 설정한 레벨 사용 (없으면 최대 레벨로 설정)
+                int targetLevel = GetTestPassiveSkillLevel(i);
+                if (targetLevel <= 0) targetLevel = passiveSkill.maxLevel;
+                if (targetLevel > passiveSkill.maxLevel) targetLevel = passiveSkill.maxLevel;
+
+                // 목표 레벨까지 스킬 획득 반복
+                for (int level = 1; level <= targetLevel; level++)
+                {
+                    bool success = PassiveSkillManager.Instance.TryAcquireSkill(passiveSkill.passiveType);
+                    if (success)
+                    {
+                        Debug.Log($"[SkillManager] 테스트 패시브 스킬 등록 성공: {passiveSkill.skillName} Lv.{level}");
+                    }
+                    else
+                    {
+                        if (level == 1)
+                        {
+                            Debug.LogWarning($"[SkillManager] 테스트 패시브 스킬 등록 실패: {passiveSkill.skillName}");
+                        }
+                        else
+                        {
+                            Debug.LogError($"[SkillManager] 테스트 패시브 스킬 레벨업 실패: {passiveSkill.skillName} Lv.{level}");
+                        }
+                        break;
+                    }
+                }
+
+                if (PassiveSkillManager.Instance.GetSkillLevel(passiveSkill.passiveType) == targetLevel)
+                {
+                    successCount++;
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"[SkillManager] 테스트 패시브 스킬 배열의 {i}번째 항목이 null입니다.");
+            }
+        }
+
+        Debug.Log($"[SkillManager] 테스트 패시브 스킬 등록 완료: {successCount}/{testPassiveSkills.Length}개 성공");
+
+        // 현재 패시브 스킬 상태 출력
+        var ownedSkills = PassiveSkillManager.Instance.GetAllOwnedSkills();
+        Debug.Log($"[SkillManager] 현재 보유한 패시브 스킬: {ownedSkills.Count}개");
+        foreach (var kvp in ownedSkills)
+        {
+            Debug.Log($"  - {kvp.Key}: Lv.{kvp.Value}");
+        }
+    }
+
+    /// <summary>
+    /// 특정 테스트 패시브 스킬을 등록합니다
+    /// </summary>
+    /// <param name="index">testPassiveSkills 배열의 인덱스</param>
+    [ContextMenu("테스트 패시브 스킬 첫 번째 항목 등록")]
+    public void RegisterFirstTestPassiveSkill()
+    {
+        RegisterTestPassiveSkillByIndex(0);
+    }
+
+    /// <summary>
+    /// 인덱스를 사용하여 특정 테스트 패시브 스킬을 등록합니다
+    /// </summary>
+    /// <param name="index">testPassiveSkills 배열의 인덱스</param>
+    public void RegisterTestPassiveSkillByIndex(int index)
+    {
+        if (testPassiveSkills == null || index < 0 || index >= testPassiveSkills.Length)
+        {
+            Debug.LogError($"[SkillManager] 유효하지 않은 테스트 패시브 스킬 인덱스: {index}");
+            return;
+        }
+
+        var passiveSkill = testPassiveSkills[index];
+        if (passiveSkill == null)
+        {
+            Debug.LogError($"[SkillManager] 인덱스 {index}의 테스트 패시브 스킬이 null입니다.");
+            return;
+        }
+
+        if (PassiveSkillManager.Instance == null)
+        {
+            Debug.LogError("[SkillManager] PassiveSkillManager.Instance를 찾을 수 없습니다.");
+            return;
+        }
+
+        // Inspector에서 설정한 레벨까지 등록
+        int targetLevel = GetTestPassiveSkillLevel(index);
+        if (targetLevel <= 0) targetLevel = 1; // 최소 1레벨
+        if (targetLevel > passiveSkill.maxLevel) targetLevel = passiveSkill.maxLevel;
+
+        int currentLevel = PassiveSkillManager.Instance.GetSkillLevel(passiveSkill.passiveType);
+
+        // 현재 레벨에서 목표 레벨까지 등록 반복
+        for (int level = currentLevel + 1; level <= targetLevel; level++)
+        {
+            bool success = PassiveSkillManager.Instance.TryAcquireSkill(passiveSkill.passiveType);
+            if (!success)
+            {
+                Debug.LogWarning($"[SkillManager] 테스트 패시브 스킬 레벨업 실패: {passiveSkill.skillName} Lv.{level}");
+                break;
+            }
+        }
+
+        currentLevel = PassiveSkillManager.Instance.GetSkillLevel(passiveSkill.passiveType);
+        Debug.Log($"[SkillManager] 테스트 패시브 스킬 등록 성공: {passiveSkill.skillName} (현재 Lv.{currentLevel})");
+    }
+
+    /// <summary>
+    /// 테스트용 패시브 스킬 레벨을 가져옵니다
+    /// </summary>
+    /// <param name="index">testPassiveSkills 배열의 인덱스</param>
+    /// <returns>설정된 레벨 (0이면 기본값 사용)</returns>
+    private int GetTestPassiveSkillLevel(int index)
+    {
+        if (testPassiveSkillLevels == null || index < 0 || index >= testPassiveSkillLevels.Length)
+            return 0;
+
+        return testPassiveSkillLevels[index];
+    }
+
+    /// <summary>
+    /// 모든 테스트 패시브 스킬을 제거합니다 (PassiveSkillManager 초기화)
+    /// </summary>
+    [ContextMenu("모든 테스트 패시브 스킬 제거")]
+    public void ClearAllTestPassiveSkills()
+    {
+        if (PassiveSkillManager.Instance == null)
+        {
+            Debug.LogError("[SkillManager] PassiveSkillManager.Instance를 찾을 수 없습니다.");
+            return;
+        }
+
+        PassiveSkillManager.Instance.ResetAllPassiveSkills();
+        Debug.Log("[SkillManager] 모든 테스트 패시브 스킬이 제거되었습니다.");
+    }
+
+    /// <summary>
+    /// 현재 설정된 테스트 패시브 스킬 목록을 출력합니다
+    /// </summary>
+    [ContextMenu("테스트 패시브 스킬 목록 출력")]
+    public void PrintTestPassiveSkills()
+    {
+        if (testPassiveSkills == null || testPassiveSkills.Length == 0)
+        {
+            Debug.Log("[SkillManager] 설정된 테스트 패시브 스킬이 없습니다.");
+            return;
+        }
+
+        Debug.Log($"[SkillManager] 설정된 테스트 패시브 스킬 목록 ({testPassiveSkills.Length}개):");
+        for (int i = 0; i < testPassiveSkills.Length; i++)
+        {
+            if (testPassiveSkills[i] != null)
+            {
+                int testLevel = GetTestPassiveSkillLevel(i);
+                string levelInfo = testLevel > 0 ? $"테스트 Lv.{testLevel}" : $"최대 Lv.{testPassiveSkills[i].maxLevel}";
+                Debug.Log($"  [{i}] {testPassiveSkills[i].skillName} ({testPassiveSkills[i].passiveType}) - {levelInfo}");
+            }
+            else
+            {
+                Debug.Log($"  [{i}] null");
+            }
+        }
+    }
+
+    /// <summary>
+    /// 패시브 스킬 효과를 즉시 적용합니다
+    /// </summary>
+    [ContextMenu("패시브 스킬 효과 즉시 적용")]
+    public void ApplyPassiveSkillEffects()
+    {
+        if (PassiveSkillManager.Instance == null)
+        {
+            Debug.LogError("[SkillManager] PassiveSkillManager.Instance를 찾을 수 없습니다.");
+            return;
+        }
+
+        // PassiveSkillManager의 ApplyAllPassiveEffects 메서드를 호출하여 효과 적용
+        // 이 메서드는 private이므로 리플렉션을 사용하거나 public 메서드가 필요함
+        var method = typeof(PassiveSkillManager).GetMethod("ApplyAllPassiveEffects",
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+        if (method != null)
+        {
+            method.Invoke(PassiveSkillManager.Instance, null);
+            Debug.Log("[SkillManager] 패시브 스킬 효과가 즉시 적용되었습니다.");
+        }
+        else
+        {
+            Debug.LogWarning("[SkillManager] ApplyAllPassiveEffects 메서드를 찾을 수 없습니다.");
+        }
+    }
+    #endregion
 }

@@ -11,6 +11,12 @@ public class RPGProjectile : MonoBehaviour
     [Header("폭발 설정")]
     [SerializeField] private float explosionRadius = 2.5f;
 
+    [Header("레벨별 스탯 설정 (Inspector에서 조정 가능)")]
+    [SerializeField] private float[] damageLevels = {50f, 60f, 70f, 80f, 90f};
+    [SerializeField] private float[] speedLevels = {10f, 12f, 14f, 16f, 18f};
+    [SerializeField] private float[] explosionRadiusLevels = {2.5f, 2.8f, 3.1f, 3.4f, 3.7f};
+    [SerializeField] private int[] projectileCountLevels = {1, 2, 3, 3, 4};
+
     [Header("시각 효과")]
     [SerializeField] private TrailRenderer trail;
     [SerializeField] private ParticleSystem launchParticles;
@@ -30,6 +36,10 @@ public class RPGProjectile : MonoBehaviour
     private bool hasExploded = false;
     private float timeAlive = 0f;
     private bool isMoving = false;
+
+    // 레벨 관련
+    private int currentLevel = 1;
+    private float currentExplosionRadius;
     #endregion
 
     #region Unity Lifecycle
@@ -124,9 +134,14 @@ public class RPGProjectile : MonoBehaviour
     /// </summary>
     public void SetParameters(Vector3 startPosition, Vector3 direction, float damage, float speed)
     {
-        this.damage = damage;
+        // 레벨 1 기본값 설정 (호환성 유지)
+        SetLevel(1);
+
+        // 개별 값 설정 (레벨 시스템과 호환)
+        if (damage > 0) this.damage = damage;
+        if (speed > 0) this.moveSpeed = speed;
+
         this.moveDirection = direction.normalized;
-        this.moveSpeed = speed;
         hasExploded = false;
         timeAlive = 0f;
         isMoving = true;
@@ -145,6 +160,50 @@ public class RPGProjectile : MonoBehaviour
         PlayLaunchEffects();
 
         Debug.Log($"RPGProjectile: 발사! 방향: {moveDirection}, 속도: {moveSpeed}, 데미지: {damage}");
+    }
+
+    // 레벨별 파라미터 설정 (권장)
+    public void SetParameters(Vector3 startPosition, Vector3 direction, int level)
+    {
+        SetLevel(level);
+        this.moveDirection = direction.normalized;
+        hasExploded = false;
+        timeAlive = 0f;
+        isMoving = true;
+
+        // 위치 설정
+        transform.position = startPosition;
+
+        // Rigidbody2D를 Kinematic으로 설정하여 직접 제어
+        if (rb != null)
+        {
+            rb.velocity = Vector2.zero;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+        }
+
+        // 발사 이펙트
+        PlayLaunchEffects();
+
+        Debug.Log($"RPGProjectile: 발사! 레벨: {currentLevel}, 속도: {moveSpeed}, 데미지: {damage}");
+    }
+
+    // 레벨 설정 메서드
+    public void SetLevel(int level)
+    {
+        currentLevel = Mathf.Clamp(level, 1, damageLevels.Length);
+        UpdateStatsForLevel();
+    }
+
+    private void UpdateStatsForLevel()
+    {
+        int levelIndex = currentLevel - 1;
+
+        // 스탯 업데이트
+        damage = damageLevels[levelIndex];
+        moveSpeed = speedLevels[levelIndex];
+        currentExplosionRadius = explosionRadiusLevels[levelIndex];
+
+        Debug.Log($"RPGProjectile 레벨 {currentLevel}: 데미지={damage}, 속도={moveSpeed}, 폭발반경={currentExplosionRadius}");
     }
     #endregion
 
@@ -188,7 +247,7 @@ public class RPGProjectile : MonoBehaviour
         if (explosion != null)
         {
             // 폭발 위치와 데미지 설정
-            explosion.SetExplosion(transform.position, damage, explosionRadius, enemyLayer);
+            explosion.SetExplosion(transform.position, damage, currentExplosionRadius, enemyLayer);
         }
     }
 

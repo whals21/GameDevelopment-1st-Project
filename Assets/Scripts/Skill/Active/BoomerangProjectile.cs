@@ -11,6 +11,12 @@ public class BoomerangProjectile : MonoBehaviour
     [SerializeField] private int damage = 20;
     [SerializeField] private LayerMask enemyLayer;
 
+    [Header("레벨별 스탯 설정 (Inspector에서 조정 가능)")]
+    [SerializeField] private float[] damageLevels = {20f, 25f, 30f, 35f, 40f};
+    [SerializeField] private float[] speedMultiplierLevels = {1f, 1.2f, 1.4f, 1.6f, 1.8f};
+    [SerializeField] private float[] sizeLevels = {1f, 1.1f, 1.2f, 1.3f, 1.4f};
+    [SerializeField] private float[] rotationSpeedLevels = {720f, 840f, 960f, 1080f, 1200f};
+
     [Header("Visual Settings")]
     [SerializeField] private float rotationSpeed = 720f; // 회전 속도 (도/초)
     [SerializeField] private TrailRenderer trailRenderer;
@@ -24,6 +30,13 @@ public class BoomerangProjectile : MonoBehaviour
     private float lifeTimer = 0f;
     private bool isReturning = false;
     private const float ENEMY_DAMAGE_INTERVAL = 0.5f; // 같은 적에게 데미지를 주는 간격
+
+    // 레벨 관련
+    private int currentLevel = 1;
+    private float currentDamage;
+    private float currentSpeedMultiplier;
+    private float currentSize;
+    private float currentRotationSpeed;
 
     private void Awake()
     {
@@ -198,8 +211,8 @@ public class BoomerangProjectile : MonoBehaviour
         {
             if (other.TryGetComponent<Enemy>(out Enemy enemy))
             {
-                enemy.TakeDamage(damage);
-                Debug.Log($"부메랑이 적 {enemy.name}에게 {damage} 데미지");
+                enemy.TakeDamage(currentDamage);
+                Debug.Log($"부메랑이 적 {enemy.name}에게 {currentDamage} 데미지");
             }
         }
     }
@@ -250,9 +263,42 @@ public class BoomerangProjectile : MonoBehaviour
     }
 
     #region Properties (for compatibility with existing code)
-    public float ReturnSpeed => returnSpeed;
+    public float ReturnSpeed => returnSpeed * currentSpeedMultiplier;
     public float MaxDistance => maxDistance;
     public float PickupRange => pickupRange;
     public bool IsReturning => isReturning;
+    public int CurrentLevel => currentLevel;
+    public float CurrentDamage => currentDamage;
+    #endregion
+
+    #region Level Management
+    public void SetLevel(int level)
+    {
+        currentLevel = Mathf.Clamp(level, 1, damageLevels.Length);
+        UpdateStatsForLevel();
+    }
+
+    private void UpdateStatsForLevel()
+    {
+        int levelIndex = currentLevel - 1;
+
+        // 스탯 업데이트
+        currentDamage = damageLevels[levelIndex];
+        currentSpeedMultiplier = speedMultiplierLevels[levelIndex];
+        currentSize = sizeLevels[levelIndex];
+        currentRotationSpeed = rotationSpeedLevels[levelIndex];
+
+        // 크기 적용
+        transform.localScale = Vector3.one * currentSize;
+
+        Debug.Log($"Boomerang 레벨 {currentLevel}: 데미지={currentDamage}, 속도배수={currentSpeedMultiplier}x, 크기={currentSize}x");
+    }
+
+    // 레벨업 이펙트 메서드 (필요시 구현)
+    private void PlayLevelUpEffect()
+    {
+        // 여기에 레벨업 시각적 효트 추가 가능
+        // 예: 파티클 이펙트, 소리 등
+    }
     #endregion
 }

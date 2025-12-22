@@ -58,10 +58,10 @@ public class MissileProjectile : Projectile
     private void MoveProjectile()
     {
         // 전진 이동
-        transform.Translate(transform.right * speed * Time.deltaTime);
+        transform.Translate(transform.right * Speed * Time.deltaTime);
 
         // 미사일이 이동 방향으로 회전
-        //UpdateMissileRotation();
+        UpdateMissileRotation();
     }
 
     private void UpdateMissileRotation()
@@ -70,10 +70,10 @@ public class MissileProjectile : Projectile
         if (moveDirection.magnitude > 0.01f)
         {
             // 방향 벡터를 각도로 변환 (Mathf.Atan2는 y, x 순서)
-            float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg + 90f;
 
             // 미사일 스프라이트가 위를 향하도록 90도 보정
-            transform.rotation = Quaternion.Euler(0, 0, angle + 90f);
+            transform.rotation = Quaternion.Euler(0, 0, angle);
         }
     }
 
@@ -91,13 +91,13 @@ public class MissileProjectile : Projectile
     {
         if (hasDeactivated) return;
 
-        // 적 충돌
-        if (other.CompareTag("Enemy"))
+        // 적 충돌 (레이어 마스크 사용)
+        if ((enemyLayer.value & (1 << other.gameObject.layer)) != 0)
         {
             Enemy enemy = other.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.TakeDamage(damage);
+                enemy.TakeDamage(Damage);
             }
 
             // 폭발 이펙트 생성
@@ -105,9 +105,8 @@ public class MissileProjectile : Projectile
 
             DeactivateProjectile();
         }
-
-        // 지형 충돌
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        // 장애물 충돌 (Ground, Wall 등)
+        else if ((obstacleLayer.value & (1 << other.gameObject.layer)) != 0)
         {
             CreateExplosionEffect();
             DeactivateProjectile();

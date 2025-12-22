@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8297aba9e983e844d902c72f1395ee46, type: 3}
+  m_Name: SkillData_Guardian
+  m_EditorClassIdentifier: 
+  skillName: Guardian
+  description: "\uD68C\uC804\uD558\uB294 \uD1B1\uB0A0\uC744 \uD50C\uB9AC\uC774\uC5B4
+    \uC8FC\uBCC0\uC5D0 \uC0DD\uC131"
+  icon: {fileID: 21300000, guid: a10d36fcd6b2dc846b543716576446aa, type: 3}
+  skillType: 0
+  projectilePrefab: {fileID: 0}
+  skillObjectPrefab: {fileID: 9188658686722922059, guid: a1256b3f9b333d248a3c93c94e137785, type: 3}
+  damage: 15
+  cooldown: 8
+  projectileSpeed: 15
+  projectileCount: 1
+  attackRange: 10
+  levels:
+  - level: 1
+    damageMultiplier: 1
+    cooldownMultiplier: 1
+    additionalProjectiles: 0
+    projectileSpeedMultiplier: 0
+    projectileSizeMultiplier: 0
+    projectileScaleIncrease: 0
+    upgradeDescription: "2\uAC1C\uC758 \uD1B1\uB0A0"
+  - level: 2
+    damageMultiplier: 1.2
+    cooldownMultiplier: 1
+    additionalProjectiles: 0
+    projectileSpeedMultiplier: 0
+    projectileSizeMultiplier: 0
+    projectileScaleIncrease: 0
+    upgradeDescription: "\uD1B1\uB0A0 3\uAC1C, \uD68C\uC804 \uC18D\uB3C4 \uC99D\uAC00"
+  - level: 3
+    damageMultiplier: 1.4
+    cooldownMultiplier: 1
+    additionalProjectiles: 0
+    projectileSpeedMultiplier: 0
+    projectileSizeMultiplier: 0
+    projectileScaleIncrease: 0
+    upgradeDescription: "\uD1B1\uB0A0 4\uAC1C, \uD68C\uC804 \uC18D\uB3C4 \uC99D\uAC00"
+  - level: 4
+    damageMultiplier: 1.6
+    cooldownMultiplier: 1
+    additionalProjectiles: 0
+    projectileSpeedMultiplier: 0
+    projectileSizeMultiplier: 0
+    projectileScaleIncrease: 0
+    upgradeDescription: "\uD1B1\uB0A0 5\uAC1C, \uD68C\uC804 \uC18D\uB3C4 \uC99D\uAC00"
+  - level: 5
+    damageMultiplier: 1.8
+    cooldownMultiplier: 1
+    additionalProjectiles: 0
+    projectileSpeedMultiplier: 0
+    projectileSizeMultiplier: 0
+    projectileScaleIncrease: 0
+    upgradeDescription: "\uD1B1\uB0A0 6\uAC1C, \uD68C\uC804 \uC18D\uB3C4 \uC99D\uAC00"
+  evoSkill: {fileID: 0}
+  evoRequirements: 

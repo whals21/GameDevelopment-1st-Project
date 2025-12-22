@@ -359,20 +359,20 @@ public class LightningSkill : MonoBehaviour
     #endregion
 
     #region Debug
-    private void OnGUI()
-    {
-        if (!isActive) return;
+    // private void OnGUI()
+    // {
+    //     if (!isActive) return;
 
-        // 디버그 정보 표시
-        GUILayout.BeginArea(new Rect(10, 200, 300, 180));
-        GUILayout.Label($"Lightning Skill Lv.{currentLevel}");
-        GUILayout.Label($"Damage: {damage:F1}");
-        GUILayout.Label($"Lightning Count: {lightningCount}");
-        GUILayout.Label($"Attack Range: {attackRange}m");
-        GUILayout.Label($"Cooldown: {cooldownTime:F1}s");
-        GUILayout.Label($"Next Strike: {currentCooldown:F1}s");
-        GUILayout.Label($"Enemies in Range: {(cachedEnemies?.Length ?? 0)}");
-        GUILayout.EndArea();
-    }
+    //     // 디버그 정보 표시
+    //     GUILayout.BeginArea(new Rect(10, 200, 300, 180));
+    //     GUILayout.Label($"Lightning Skill Lv.{currentLevel}");
+    //     GUILayout.Label($"Damage: {damage:F1}");
+    //     GUILayout.Label($"Lightning Count: {lightningCount}");
+    //     GUILayout.Label($"Attack Range: {attackRange}m");
+    //     GUILayout.Label($"Cooldown: {cooldownTime:F1}s");
+    //     GUILayout.Label($"Next Strike: {currentCooldown:F1}s");
+    //     GUILayout.Label($"Enemies in Range: {(cachedEnemies?.Length ?? 0)}");
+    //     GUILayout.EndArea();
+    // }
     #endregion
 }

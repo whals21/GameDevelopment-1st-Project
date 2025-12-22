@@ -10,7 +10,11 @@ public class SoccerBallProjectile : Projectile
     [SerializeField] private float outOfBoundsMargin = 0.2f;
     [SerializeField] private int maxRelaunchCount = 3;
     [SerializeField] private float minBounceInterval = 0.1f;
-    [SerializeField] private LayerMask enemyLayer;
+
+    [Header("레벨별 스탯 설정 (Inspector에서 조정 가능)")]
+    [SerializeField] private int[] bounceCountLevels = {5, 6, 7, 8, 9};
+    [SerializeField] private float[] bounceSpeedLevels = {15f, 18f, 21f, 24f, 27f};
+    [SerializeField] private int[] relaunchCountLevels = {3, 3, 4, 4, 5};
 
     // 상수 정의
     private const float OUT_OF_BOUNDS_CHECK_INTERVAL = 0.1f;
@@ -21,7 +25,6 @@ public class SoccerBallProjectile : Projectile
     private int currentBounces = 0;
     private int currentRelaunchCount = 0;
     private Vector3 currentDirection;
-    private float currentSpeed;
     private Camera mainCamera;
     private Transform playerTransform;
     private bool isRecalculating = false;
@@ -54,7 +57,7 @@ public class SoccerBallProjectile : Projectile
 
         // 축구공 특수 초기화 - speed가 0이면 기본값 사용
         currentDirection = direction.normalized;
-        currentSpeed = speed > 0 ? speed : bounceSpeed; // speed가 0이면 기본 bounceSpeed 사용
+        Speed = speed > 0 ? speed : bounceSpeed; // speed가 0이면 기본 bounceSpeed 사용
         currentBounces = 0;
         currentRelaunchCount = 0;
         isRecalculating = false;
@@ -136,18 +139,18 @@ public class SoccerBallProjectile : Projectile
     // 이동 처리
     private void HandleMovement()
     {
-        if (currentSpeed <= 0f)
+        if (Speed <= 0f)
         {
             return;
         }
 
-        transform.position += currentDirection * currentSpeed * Time.deltaTime;
+        transform.position += currentDirection * Speed * Time.deltaTime;
 
         // 회전 효과
         if (currentDirection != Vector3.zero)
         {
             transform.right = currentDirection;
-            transform.Rotate(0f, 0f, currentSpeed * Time.deltaTime * 50f);
+            transform.Rotate(0f, 0f, Speed * Time.deltaTime * 50f);
         }
     }
 
@@ -182,7 +185,7 @@ public class SoccerBallProjectile : Projectile
         }
 
         isRecalculating = true;
-        currentSpeed = 0f;
+        Speed = 0f;
 
         // 시각적 효과 (선택적)
         CreateRecalculateEffect();
@@ -222,7 +225,7 @@ public class SoccerBallProjectile : Projectile
         }
 
         // 속도 설정 (재발사할 때마다 약간 감소)
-        currentSpeed = bounceSpeed * Mathf.Pow(BOUNCE_SPEED_DECAY, currentRelaunchCount - 1);
+        Speed = bounceSpeed * Mathf.Pow(BOUNCE_SPEED_DECAY, currentRelaunchCount - 1);
 
         // 튕김 횟수 초기화
         currentBounces = 0;
@@ -410,5 +413,20 @@ public class SoccerBallProjectile : Projectile
     protected override void ReturnToPool()
     {
         DeactivateProjectile();
+    }
+
+    // 레벨별 스탯 업데이트 오버라이드
+    protected override void UpdateStats()
+    {
+        // 부모 스탯 업데이트 먼저 호출
+        base.UpdateStats();
+
+        // 축구공 특수 스탯 업데이트
+        int levelIndex = currentLevel - 1;
+        maxBounces = bounceCountLevels[levelIndex];
+        bounceSpeed = bounceSpeedLevels[levelIndex];
+        maxRelaunchCount = relaunchCountLevels[levelIndex];
+
+        Debug.Log($"축구공 레벨 {currentLevel}: 튕김횟수={maxBounces}, 튕김속도={bounceSpeed}, 재발사횟수={maxRelaunchCount}");
     }
 }

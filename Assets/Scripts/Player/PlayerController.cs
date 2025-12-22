@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     [Header("����� ���̽�ƽ")]
     [SerializeField] private VirtualJoystick joyStick;
 
+    // 패시브 스킬 관련
+    private float movementSpeedMultiplier = 1f;
+
     private Vector2 inputVec;
     private Rigidbody2D rb;
     private SpriteRenderer spriter;
@@ -26,15 +29,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            // 창 키거나 끄기
-            if (PlayerHUD.Instance != null)
-            {
-                PlayerHUD.Instance.TogglePauseUI();
-            }
-        }
-
         inputVec.x = Input.GetAxisRaw("Horizontal");
         inputVec.y = Input.GetAxisRaw("Vertical");
 
@@ -69,8 +63,30 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 moveDist = Vector2.ClampMagnitude(inputVec, 1f);
 
-        Vector2 nextVec = moveDist * stats.Speed * Time.fixedDeltaTime;
+        Vector2 nextVec = moveDist * stats.Speed * movementSpeedMultiplier * Time.fixedDeltaTime;
 
         rb.MovePosition(rb.position + nextVec);
     }
+
+    //12-22 조민희가 추가함
+    #region Passive Skill Integration 
+    /// <summary>
+    /// 이동속도 배수 설정 (패시브 스킬용)
+    /// </summary>
+    /// <param name="multiplier">이동속도 배수 (1.0 = 100%)</param>
+    public void SetMovementSpeedMultiplier(float multiplier)
+    {
+        movementSpeedMultiplier = Mathf.Max(0.1f, multiplier);
+        Debug.Log($"[PlayerController] 이동속도 배수가 {movementSpeedMultiplier:F2}(으)로 설정됨");
+    }
+
+    /// <summary>
+    /// 현재 이동속도 배수 반환
+    /// </summary>
+    /// <returns>이동속도 배수</returns>
+    public float GetMovementSpeedMultiplier()
+    {
+        return movementSpeedMultiplier;
+    }
+    #endregion
 }

@@ -357,22 +357,22 @@ public class RPGSkill : MonoBehaviour
     #endregion
 
     #region Debug
-    private void OnGUI()
-    {
-        if (!isActive) return;
+    // private void OnGUI()
+    // {
+    //     if (!isActive) return;
 
-        // 디버그 정보 표시
-        GUILayout.BeginArea(new Rect(10, 250, 300, 200));
-        GUILayout.Label($"RPG Skill Lv.{currentLevel}");
-        GUILayout.Label($"Damage: {damage:F1}");
-        GUILayout.Label($"Projectile Count: {projectileCount}");
-        GUILayout.Label($"Projectile Speed: {projectileSpeed}m/s");
-        GUILayout.Label($"Attack Range: {attackRange}m");
-        GUILayout.Label($"Cooldown: {cooldownTime:F1}s");
-        GUILayout.Label($"Next Fire: {currentCooldown:F1}s");
-        GUILayout.Label($"Target: {(currentTarget != null ? currentTarget.name : "None")}");
-        GUILayout.EndArea();
-    }
+    //     // 디버그 정보 표시
+    //     GUILayout.BeginArea(new Rect(10, 250, 300, 200));
+    //     GUILayout.Label($"RPG Skill Lv.{currentLevel}");
+    //     GUILayout.Label($"Damage: {damage:F1}");
+    //     GUILayout.Label($"Projectile Count: {projectileCount}");
+    //     GUILayout.Label($"Projectile Speed: {projectileSpeed}m/s");
+    //     GUILayout.Label($"Attack Range: {attackRange}m");
+    //     GUILayout.Label($"Cooldown: {cooldownTime:F1}s");
+    //     GUILayout.Label($"Next Fire: {currentCooldown:F1}s");
+    //     GUILayout.Label($"Target: {(currentTarget != null ? currentTarget.name : "None")}");
+    //     GUILayout.EndArea();
+    // }
 
     private void OnDrawGizmosSelected()
     {

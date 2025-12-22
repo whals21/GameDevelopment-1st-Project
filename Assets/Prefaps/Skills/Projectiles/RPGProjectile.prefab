@@ -282,10 +282,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   lifetime: 5
-  gravity: 9.81
   explosionRadius: 2.5
-  explodeOnImpact: 1
-  explodeOnTimeout: 1
   trail: {fileID: 0}
   launchParticles: {fileID: 0}
   launchSound: {fileID: 0}

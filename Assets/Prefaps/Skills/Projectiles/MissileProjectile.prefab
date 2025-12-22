@@ -162,5 +162,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeTime: 3
-  missileSpeed: 15
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
   explosionEffect: {fileID: 6258178645403468384, guid: 4a97bcfc6adab3846814eedbca4f7c3a, type: 3}

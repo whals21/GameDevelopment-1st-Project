@@ -119,7 +119,7 @@ public class MolotovProjectile : Projectile
             if (fireGround != null)
             {
                 fireGround.transform.position = transform.position;
-                fireGround.Init(damage * 0.5f, 5f); // 지속 데미지는 50%
+                fireGround.Init(Damage * 0.5f, 5f); // 지속 데미지는 50%
             }
             else
             {
@@ -129,7 +129,7 @@ public class MolotovProjectile : Projectile
                 GameObject fireGroundObj = new GameObject("FireGround_Emergency");
                 FireGround emergencyFireGround = fireGroundObj.AddComponent<FireGround>();
                 emergencyFireGround.transform.position = transform.position;
-                emergencyFireGround.Init(damage * 0.5f, 5f);
+                emergencyFireGround.Init(Damage * 0.5f, 5f);
             }
         }
         else
