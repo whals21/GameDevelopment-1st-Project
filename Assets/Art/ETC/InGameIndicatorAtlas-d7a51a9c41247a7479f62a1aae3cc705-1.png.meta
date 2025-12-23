@@ -126,10 +126,17 @@ TextureImporter:
       name: InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_0
       rect:
         serializedVersion: 2
+<<<<<<< HEAD
         x: 0
         y: 853.3333
         width: 170.66667
         height: 170.66667
+=======
+        x: 1719
+        y: 850
+        width: 147
+        height: 174
+>>>>>>> 1bffe4566aa131e6ba9f02f5622630f3cee8374d
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -137,6 +144,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
+<<<<<<< HEAD
       spriteID: b4e89cc823404bb478a605f646f6d7ec
       internalID: -750352990
       vertices: []
@@ -1294,6 +1302,10 @@ TextureImporter:
       bones: []
       spriteID: f0cdbbc73db3cab42bb92ec41224b68a
       internalID: 2129893467
+=======
+      spriteID: eca6a5193e43e4c4088bb0be26e4fa1e
+      internalID: -1374654785
+>>>>>>> 1bffe4566aa131e6ba9f02f5622630f3cee8374d
       vertices: []
       indices: 
       edges: []
@@ -1301,7 +1313,11 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
+<<<<<<< HEAD
     spriteID: 13cccacf63fb5bf40a20df27dbb02ca7
+=======
+    spriteID: 5e97eb03825dee720800000000000000
+>>>>>>> 1bffe4566aa131e6ba9f02f5622630f3cee8374d
     internalID: 0
     vertices: []
     indices: 
@@ -1309,6 +1325,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+<<<<<<< HEAD
       InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_0: -750352990
       InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_1: -1055809848
       InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_10: 1348719055
@@ -1365,6 +1382,9 @@ TextureImporter:
       InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_7: 300434769
       InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_8: -1837282573
       InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_9: -39593440
+=======
+      InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_0: -1374654785
+>>>>>>> 1bffe4566aa131e6ba9f02f5622630f3cee8374d
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

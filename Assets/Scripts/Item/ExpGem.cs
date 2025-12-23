@@ -14,6 +14,18 @@ public class ExpGem : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+
+    }
+    private void Start()
+    {
+        if (player == null) // 플레이어 찾기
+        {
+            GameObject p = GameObject.FindGameObjectWithTag("Player");
+            if (p != null)
+            {
+                player = p.transform;
+            }
+        }
     }
 
     // 오브젝트 풀링용 Init() 메서드
@@ -62,5 +74,12 @@ public class ExpGem : MonoBehaviour
     private void ReturnToPool()
     {
         ObjectPoolManager.Instance.ReturnExpGem(this);
+    }
+
+    public void Magnetize()
+    {
+        isBeingAttracted = true;
+
+         magnetSpeed = 20f; // 투사체 속도
     }
 }

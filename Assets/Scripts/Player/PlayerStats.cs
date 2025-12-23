@@ -69,6 +69,24 @@ public class PlayerStats : MonoBehaviour
             // gameObject.SetActive(false); // 플레이어가 아예 사라짐
         }
     }
+    public void Heal(float amount)
+    {
+        currentHp += amount;
+
+        // 최대 체력을 넘지 않도록
+        if (currentHp > maxHp)
+        {
+            currentHp = maxHp;
+        }
+
+        // UI 갱신
+        if (PlayerHUD.Instance != null)
+        {
+            PlayerHUD.Instance.UpdateHp(currentHp, maxHp);
+        }
+
+        Debug.Log($" 체력 {amount} 회복! 현재 HP: {currentHp}");
+    }
 
     IEnumerator InvincibleRoutine()
     {
@@ -123,6 +141,8 @@ public class PlayerStats : MonoBehaviour
             return expCurve.Evaluate(level);
         }
     }
+
+
 
     // 스탯 증가 메서드
     public void AddSpeed(float amount) { speed += amount; }
