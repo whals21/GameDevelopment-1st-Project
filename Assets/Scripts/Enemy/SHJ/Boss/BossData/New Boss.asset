@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossPrefab: {fileID: 0}
   hp: 50
-  move: 1
+  move: 15
   detectionRange: 10
   appearTime: 10
   killCountToSpawn: 10

@@ -14,16 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: []
   bulletCount: 
-  attackRayLength:
-  - 15
   damage:
-  - 20
-  damageMove:
   - 20
   attackRange:
   - 5
-  delayAfter: []
-  BossAttackOption: 00000000
-  warningPads:
-  - {fileID: 6361049014533627461, guid: ff90cade94cf9bb428cf8a75fe50731b, type: 3}
-  warningPadCount: 0000000001000000
+  delayAfter: 0
+  bossAttacks: []
