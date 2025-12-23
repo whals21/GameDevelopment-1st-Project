@@ -158,8 +158,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8238552834587993004}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606239bb87954fe469c1b11d9e9aa4c3, type: 3}
+  m_Script: {fileID: 11500000, guid: 9dde144cdb4bdb5408e965c0c3d83bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  expValue: 30
-  magnetSpeed: 10
+  expValue: 10
+  magnetSpeed: 3.5
+  baseMagnetRange: 1

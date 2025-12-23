@@ -426,7 +426,5 @@ public class SoccerBallProjectile : Projectile
         maxBounces = bounceCountLevels[levelIndex];
         bounceSpeed = bounceSpeedLevels[levelIndex];
         maxRelaunchCount = relaunchCountLevels[levelIndex];
-
-        Debug.Log($"축구공 레벨 {currentLevel}: 튕김횟수={maxBounces}, 튕김속도={bounceSpeed}, 재발사횟수={maxRelaunchCount}");
     }
 }

@@ -496,7 +496,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExpGem (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7788130250008709110, guid: d04fe200f24b89d45b06f31c646c4ddc, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1514,7 +1515,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExpGem (2)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7788130250008709110, guid: d04fe200f24b89d45b06f31c646c4ddc, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1565,6 +1567,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forcefieldPrefab: {fileID: 6918976490401859778, guid: 547dd206d6911c047bcee4da370a5b5e, type: 3}
   forcefieldParent: {fileID: 152268700}
+  activeForcefields: []
+  forcefieldSkill: {fileID: 0}
+  forcefieldLevel: 0
+  isForcefieldActive: 0
 --- !u!1 &248017414
 GameObject:
   m_ObjectHideFlags: 0
@@ -1739,7 +1745,7 @@ MonoBehaviour:
   brickPrefab: {fileID: 2772579272930128702, guid: 2b5271b524d4e384a856caa10d8b8baa, type: 3}
   fireGroundPrefab: {fileID: 5442096530452227084, guid: 8664922d214edbb4aa247e3cd2eac423, type: 3}
   soccerBallPrefab: {fileID: 3415185044716646700, guid: 645c060876d5faf48a2c962b0021cd59, type: 3}
-  expGemPrefab: {fileID: 7788130250008709110, guid: d04fe200f24b89d45b06f31c646c4ddc, type: 3}
+  expGemPrefab: {fileID: 1228547844716432452, guid: d04fe200f24b89d45b06f31c646c4ddc, type: 3}
   damageTextPrefab: {fileID: 6261605996551218003, guid: 18335dd4c60200f478b546865573ecec, type: 3}
   guardianTopPrefab: {fileID: 956449345279957988, guid: f8cae82349e6cc14196d7fbdc5b3f2d5, type: 3}
   dronePrefab: {fileID: 5808401194832607624, guid: d3775578bf37dc348b151f86974b851d, type: 3}
@@ -1848,7 +1854,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExpGem (7)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7788130250008709110, guid: d04fe200f24b89d45b06f31c646c4ddc, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -2054,10 +2061,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 152268700}
   levelUpManager: {fileID: 0}
-  level: 1
-  exp: 0
-  maxExp: 10
-  killCount: 0
   dataManager: {fileID: 1686091348}
   currentTierIndex: 0
 --- !u!4 &358683052
@@ -2687,12 +2690,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testSkills:
-  - {fileID: 11400000, guid: 8a15e5a18d5987a4891af99448a99ac4, type: 2}
-  testSkillLevels: 01000000
+  - {fileID: 11400000, guid: c572ab794d279304e8e9ce61aad30eda, type: 2}
+  testSkillLevels: 05000000
   testPassiveSkills:
   - {fileID: 11400000, guid: 5f399665f4ac8764981d8e6a3f567777, type: 2}
   - {fileID: 11400000, guid: 1ab9c4ed93aa4774da769ae94bb7c218, type: 2}
-  - {fileID: 11400000, guid: 2a9401f14a1b9634d949193df9805cf7, type: 2}
+  - {fileID: 11400000, guid: 39ad9654b5012f941808fd7ed499c39d, type: 2}
   - {fileID: 11400000, guid: 4073701c6b5673244ba68da57055b0e0, type: 2}
   - {fileID: 11400000, guid: 358bff6db4917b74cb61b33bc88f8974, type: 2}
   testPassiveSkillLevels: 0500000005000000050000000500000005000000
@@ -2764,7 +2767,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExpGem (4)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7788130250008709110, guid: d04fe200f24b89d45b06f31c646c4ddc, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -3762,7 +3766,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExpGem (6)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7788130250008709110, guid: d04fe200f24b89d45b06f31c646c4ddc, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -5530,7 +5535,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExpGem (5)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7788130250008709110, guid: d04fe200f24b89d45b06f31c646c4ddc, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -6441,7 +6447,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExpGem (3)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7788130250008709110, guid: d04fe200f24b89d45b06f31c646c4ddc, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -6640,7 +6647,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExpGem
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7788130250008709110, guid: d04fe200f24b89d45b06f31c646c4ddc, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -6726,6 +6734,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  healthRegenRate: 0
+  expBonusMultiplier: 1
 --- !u!61 &1415810729
 BoxCollider2D:
   m_ObjectHideFlags: 0

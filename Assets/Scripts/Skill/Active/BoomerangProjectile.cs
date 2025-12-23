@@ -132,8 +132,6 @@ public class BoomerangProjectile : MonoBehaviour
         {
             trailRenderer.Clear();
         }
-
-        Debug.Log($"Boomerang Init: damage={damage}, speed={speed}, direction={direction}");
     }
 
     /// <summary>
@@ -212,7 +210,6 @@ public class BoomerangProjectile : MonoBehaviour
             if (other.TryGetComponent<Enemy>(out Enemy enemy))
             {
                 enemy.TakeDamage(currentDamage);
-                Debug.Log($"부메랑이 적 {enemy.name}에게 {currentDamage} 데미지");
             }
         }
     }
@@ -290,8 +287,6 @@ public class BoomerangProjectile : MonoBehaviour
 
         // 크기 적용
         transform.localScale = Vector3.one * currentSize;
-
-        Debug.Log($"Boomerang 레벨 {currentLevel}: 데미지={currentDamage}, 속도배수={currentSpeedMultiplier}x, 크기={currentSize}x");
     }
 
     // 레벨업 이펙트 메서드 (필요시 구현)

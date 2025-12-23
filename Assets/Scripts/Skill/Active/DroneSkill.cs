@@ -60,9 +60,6 @@ public class DroneSkill : MonoBehaviour
             baseCooldown = data.cooldown;
             baseDamage = data.damage;
             baseSpeed = data.projectileSpeed;
-
-            Debug.Log($"DroneSkill SetSkillData - 미사일 수: {baseMissileCount}, 데미지: {baseDamage}");
-            Debug.Log($"드론 스킬 기본 스탯 업데이트 - 쿨타임: {baseCooldown}, 속도: {baseSpeed}");
         }
     }
 
@@ -116,18 +113,14 @@ public class DroneSkill : MonoBehaviour
 
     private IEnumerator FireMissilesRoutine()
     {
-        Debug.Log("미사일 발사 코루틴 시작! isActive: " + isActive);
-
         while (isActive && currentDrone != null)
         {
             // 쿨타임 계산
             float cooldown = Mathf.Max(0.5f, baseCooldown - (currentLevel - 1) * 0.2f);
-            Debug.Log("미사일 발사 대기 중... 쿨다운: " + cooldown + "초");
             yield return new WaitForSeconds(cooldown);
 
             if (!isActive || currentDrone == null) break;
 
-            Debug.Log("미사일 다발 발사!");
             // 미사일 발사
             FireMissileBurst();
         }

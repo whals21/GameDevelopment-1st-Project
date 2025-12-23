@@ -172,12 +172,8 @@ public class RPGExplosion : MonoBehaviour
                 float finalDamage = damage * damageMultiplier;
                 enemy.TakeDamage(finalDamage);
                 hitCount++;
-
-                Debug.Log($"RPGExplosion: 적 {enemy.name}에게 {finalDamage:F1} 데미지 (거리: {distance:F2}m, 배수: {damageMultiplier:F2})");
             }
         }
-
-        Debug.Log($"RPGExplosion: 총 {hitCount}마리 적에게 데미지 적용");
     }
 
     private IEnumerator GrowAnimation()

@@ -72,7 +72,6 @@ public class PassiveSkillManager : MonoBehaviour
 
             if (hasTestSkills && ownedPassiveSkills.Count == 0)
             {
-                Debug.Log("[PassiveSkillManager] 테스트 패시브 스킬이 설정되어 있어 자동으로 등록합니다...");
                 SkillManager.Instance.RegisterTestPassiveSkills();
             }
         }
@@ -95,8 +94,6 @@ public class PassiveSkillManager : MonoBehaviour
                 }
             }
         }
-
-        Debug.Log($"[PassiveSkillManager] 스킬 데이터 캐시 초기화 완료: {skillDataCache.Count}개 스킬");
     }
 
     /// <summary>
@@ -119,14 +116,11 @@ public class PassiveSkillManager : MonoBehaviour
             // 이미 보유한 스킬이면 레벨 업 가능한지 확인
             if (ownedPassiveSkills[skillType] >= skillData.maxLevel)
             {
-                Debug.Log($"[PassiveSkillManager] {skillType} 스킬은 이미 최대 레벨 ({skillData.maxLevel})입니다.");
                 return false;
             }
 
             // 레벨 업
             int newLevel = ++ownedPassiveSkills[skillType];
-            Debug.Log($"[PassiveSkillManager] {skillData.skillName} 스킬이 레벨 {newLevel}(으)로 상승했습니다.");
-
             OnSkillLevelUp?.Invoke(skillData, newLevel);
             ApplyAllPassiveEffects();
             return true;
@@ -135,8 +129,6 @@ public class PassiveSkillManager : MonoBehaviour
         {
             // 새로운 스킬 획득 (레벨 1로 시작)
             ownedPassiveSkills.Add(skillType, 1);
-            Debug.Log($"[PassiveSkillManager] {skillData.skillName} 스킬을 새로 획득했습니다 (레벨 1).");
-
             OnSkillAcquired?.Invoke(skillData, 1);
             ApplyAllPassiveEffects();
             return true;
@@ -215,17 +207,11 @@ public class PassiveSkillManager : MonoBehaviour
     /// </summary>
     private void ApplyAllPassiveEffects()
     {
-        Debug.Log($"[PassiveSkillManager] ApplyAllPassiveEffects 시작 - 보유 스킬 수: {ownedPassiveSkills.Count}");
-
         // PlayerStats 컴포넌트 찾기
         var playerStats = FindObjectOfType<PlayerStats>();
         if (playerStats == null)
         {
             Debug.LogWarning("[PassiveSkillManager] PlayerStats 컴포넌트를 찾을 수 없습니다.");
-        }
-        else
-        {
-            Debug.Log("[PassiveSkillManager] PlayerStats 찾음");
         }
 
         // PlayerController 찾기 (미리 찾아두기)
@@ -234,34 +220,17 @@ public class PassiveSkillManager : MonoBehaviour
         {
             Debug.LogWarning("[PassiveSkillManager] PlayerController를 찾을 수 없습니다.");
         }
-        else
-        {
-            Debug.Log("[PassiveSkillManager] PlayerController 찾음");
-        }
 
         // 각 패시브 효과 적용
-        int successCount = 0;
         foreach (var kvp in ownedPassiveSkills)
         {
             PassiveSkillType skillType = kvp.Key;
             int level = kvp.Value;
 
-            Debug.Log($"[PassiveSkillManager] 스킬 적용 시도: {skillType} Lv.{level}");
-
             if (skillDataCache.TryGetValue(skillType, out PassiveSkillData skillData))
             {
                 float effectValue = skillData.GetEffectValue(level);
-                Debug.Log($"[PassiveSkillManager] {skillType} 효과값: {effectValue}");
-
-                if (ApplyPassiveEffect(skillType, effectValue, playerStats, playerController))
-                {
-                    successCount++;
-                    Debug.Log($"[PassiveSkillManager] {skillType} 효과 적용 성공");
-                }
-                else
-                {
-                    Debug.LogError($"[PassiveSkillManager] {skillType} 효과 적용 실패");
-                }
+                ApplyPassiveEffect(skillType, effectValue, playerStats, playerController);
             }
             else
             {
@@ -269,7 +238,6 @@ public class PassiveSkillManager : MonoBehaviour
             }
         }
 
-        Debug.Log($"[PassiveSkillManager] ApplyAllPassiveEffects 완료 - 성공: {successCount}/{ownedPassiveSkills.Count}");
         OnPassiveSkillsUpdated?.Invoke();
     }
 
@@ -288,18 +256,21 @@ public class PassiveSkillManager : MonoBehaviour
             switch (skillType)
             {
                 case PassiveSkillType.ExperienceBonus:
-                    Debug.Log($"[PassiveSkillManager] 경험치 보너스 {value*100}% 적용 (미구현)");
-                    return true; // 경험치 보너스는 별도 관리 (추가 구현 필요)
-
-                case PassiveSkillType.MagnetRange:
-                    Debug.Log($"[PassiveSkillManager] 마그넷 범위 {value}m 증가 적용 (미구현)");
-                    return true; // 마그넷 범위 증가 (추가 구현 필요)
+                    if (playerStats != null)
+                    {
+                        playerStats.SetExpBonusMultiplier(1f + value);
+                        return true;
+                    }
+                    else
+                    {
+                        Debug.LogError("[PassiveSkillManager] PlayerStats가 null");
+                        return false;
+                    }
 
                 case PassiveSkillType.DamageBoost:
                     if (SkillManager.Instance != null)
                     {
                         SkillManager.Instance.SetDamageMultiplier(1f + value);
-                        Debug.Log($"[PassiveSkillManager] 공격력 배수 {1f + value:F2}로 설정 완료");
                         return true;
                     }
                     else
@@ -312,7 +283,18 @@ public class PassiveSkillManager : MonoBehaviour
                     if (playerStats != null)
                     {
                         playerStats.AddMaxHp(value);
-                        Debug.Log($"[PassiveSkillManager] 최대 체력 {value} 증가 완료");
+                        return true;
+                    }
+                    else
+                    {
+                        Debug.LogError("[PassiveSkillManager] PlayerStats가 null");
+                        return false;
+                    }
+
+                case PassiveSkillType.MagnetRange:
+                    if (playerStats != null)
+                    {
+                        playerStats.AddMagnetRange(value);
                         return true;
                     }
                     else
@@ -322,8 +304,16 @@ public class PassiveSkillManager : MonoBehaviour
                     }
 
                 case PassiveSkillType.HealthRegen:
-                    Debug.Log($"[PassiveSkillManager] 체력 재생 {value}/초 적용 (미구현)");
-                    return true; // 체력 재생 (추가 구현 필요)
+                    if (playerStats != null)
+                    {
+                        playerStats.SetHealthRegenRate(value);
+                        return true;
+                    }
+                    else
+                    {
+                        Debug.LogError("[PassiveSkillManager] PlayerStats가 null");
+                        return false;
+                    }
 
                 case PassiveSkillType.MovementSpeed:
                     // 미리 찾은 PlayerController 사용, 없으면 다시 찾기
@@ -339,7 +329,6 @@ public class PassiveSkillManager : MonoBehaviour
                         if (method != null)
                         {
                             method.Invoke(playerController, new object[] { 1f + value });
-                            Debug.Log($"[PassiveSkillManager] 이동속도 배수 {1f + value:F2}로 설정 완료");
                             return true;
                         }
                         else
@@ -358,7 +347,6 @@ public class PassiveSkillManager : MonoBehaviour
                     if (SkillManager.Instance != null)
                     {
                         SkillManager.Instance.SetCooldownMultiplier(1f - value);
-                        Debug.Log($"[PassiveSkillManager] 쿨다운 배수 {1f - value:F2}로 설정 완료");
                         return true;
                     }
                     else
@@ -368,7 +356,6 @@ public class PassiveSkillManager : MonoBehaviour
                     }
 
                 case PassiveSkillType.DropRateBonus:
-                    Debug.Log($"[PassiveSkillManager] 드롭률 보너스 {value*100}% 적용 (미구현)");
                     return true; // 드롭률 증가 (추가 구현 필요)
 
                 default:
@@ -430,7 +417,6 @@ public class PassiveSkillManager : MonoBehaviour
     {
         ownedPassiveSkills.Clear();
         ApplyAllPassiveEffects();
-        Debug.Log("[PassiveSkillManager] 모든 패시브 스킬이 초기화되었습니다.");
     }
 
     /// <summary>
@@ -444,7 +430,6 @@ public class PassiveSkillManager : MonoBehaviour
             ownedPassiveSkills[kvp.Key] = kvp.Value.maxLevel;
         }
         ApplyAllPassiveEffects();
-        Debug.Log("[PassiveSkillManager] 모든 패시브 스킬이 최대 레벨로 설정되었습니다.");
     }
 
     /// <summary>
@@ -549,6 +534,24 @@ public class PassiveSkillManager : MonoBehaviour
         if (cachedPlayerStats != null)
         {
             buffText.AppendLine($"최대 체력: {cachedPlayerStats.MaxHp:F0}");
+
+            float healthRegen = cachedPlayerStats.GetHealthRegenRate();
+            if (healthRegen > 0f)
+            {
+                buffText.AppendLine($"체력 재생: +{healthRegen:F1}/초");
+            }
+
+            float expBonus = cachedPlayerStats.GetExpBonusMultiplier();
+            if (expBonus > 1.0f)
+            {
+                buffText.AppendLine($"경험치 보너스: +{(expBonus - 1f) * 100:F0}%");
+            }
+
+            float magnetRange = cachedPlayerStats.MagnetRange;
+            if (magnetRange > 3f)  // 기본값 3f 초과 시에만 표시
+            {
+                buffText.AppendLine($"마그넷 범위: {magnetRange:F1}m (+{magnetRange - 3f:F1}m)");
+            }
         }
 
         cachedBuffInfo = buffText.ToString();
@@ -638,7 +641,6 @@ public class PassiveSkillManager : MonoBehaviour
     public void ToggleDebugGUI()
     {
         showDebugGUI = !showDebugGUI;
-        Debug.Log($"[PassiveSkillManager] 디버그 GUI {(showDebugGUI ? "표시" : "숨김")}");
     }
     #endregion
 }

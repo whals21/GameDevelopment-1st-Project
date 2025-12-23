@@ -19,8 +19,8 @@ public class ForcefieldManager : MonoBehaviour
     private bool isForcefieldActive = false;
 
     // 레벨별 설정
-    private readonly float[] baseRadius = { 1f, 1.5f, 1.5f, 1.75f, 2f };
-    private readonly float[] outerRadius = { 0f, 0f, 2f, 2.25f, 2.5f };
+    private readonly float[] baseRadius = { 3f, 3.5f, 3f, 3.5f, 4f };
+    private readonly float[] outerRadius = { 0f, 0f, 4f, 4.5f, 5f };
     private readonly float[] damageMultipliers = { 1f, 1.5f, 2f, 2.25f, 2.5f };
     #endregion
 
@@ -129,13 +129,11 @@ public class ForcefieldManager : MonoBehaviour
             {
                 fieldObj.transform.SetParent(GameManager.Instance.player.transform);
                 fieldObj.transform.localPosition = Vector3.zero;
-                Debug.Log($"Forcefield {i}를 플레이어의 자식으로 설정함");
             }
             else
             {
                 // 플레이어가 없을 경우 ForcefieldParent를 사용
                 fieldObj.transform.SetParent(forcefieldParent);
-                Debug.LogWarning("ForcefieldManager: 플레이어를 찾을 수 없어 ForcefieldParent를 사용합니다.");
             }
 
             // 반경 설정

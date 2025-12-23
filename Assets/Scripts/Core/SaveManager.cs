@@ -5,10 +5,10 @@ public class SaveManager : MonoBehaviour
 {
     public static SaveManager Instance;
 
-    public GameData nowPlayer = new GameData(); // ÀúÀå °ø°£
-    public bool isContinue = false; // "ÀÌ¾îÇÏ±â" ÆÇµ¶
+    public GameData nowPlayer = new GameData(); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public bool isContinue = false; // "ï¿½Ì¾ï¿½ï¿½Ï±ï¿½" ï¿½Çµï¿½
 
-    string path; // ÀúÀåµÉ °æ·Î
+    string path; // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 
     private void Awake()
     {
@@ -16,7 +16,7 @@ public class SaveManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            path = Application.persistentDataPath + "/SaveData.json"; // °æ·Î ¼³Á¤
+            path = Application.persistentDataPath + "/SaveData.json"; // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
         else
         {
@@ -24,44 +24,45 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    // ÀúÀåÇÏ±â
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
     public void SaveGame()
     {
-        // ÇöÀç °ÔÀÓ »óÅÂ¸¦ ÀúÀå
-        if (GameManager.Instance != null)
-        {
-            nowPlayer.level = GameManager.Instance.level;
-            nowPlayer.currentExp = GameManager.Instance.exp;
-            nowPlayer.maxExp = GameManager.Instance.maxExp;
-            nowPlayer.killCount = GameManager.Instance.killCount;
-        }
+        // 12/23 ì½”ë“œ ë¹„í™œì„±í™”_ì¡°ë¯¼í¬
+        // // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // if (GameManager.Instance != null)
+        // {
+        //     nowPlayer.level = GameManager.Instance.level;
+        //     nowPlayer.currentExp = GameManager.Instance.exp;
+        //     nowPlayer.maxExp = GameManager.Instance.maxExp;
+        //     nowPlayer.killCount = GameManager.Instance.killCount;
+        // }
 
-        // ÆÄÀÏ·Î ÀúÀå
-        string json = JsonUtility.ToJson(nowPlayer, true);
-        File.WriteAllText(path, json);
+        // // ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // string json = JsonUtility.ToJson(nowPlayer, true);
+        // File.WriteAllText(path, json);
 
-        Debug.Log("ÀúÀå ¿Ï·á: " + path);
+        // Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½: " + path);
     }
 
-    // ºÒ·¯¿À±â
+    // ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½
     public bool LoadGame()
     {
-        if (!File.Exists(path)) return false; // ÆÄÀÏ ¾øÀ¸¸é ½ÇÆĞ
+        if (!File.Exists(path)) return false; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         string json = File.ReadAllText(path);
         nowPlayer = JsonUtility.FromJson<GameData>(json);
 
-        isContinue = true; // "ÀÌ¾îÇÏ±â"¶ó°í Ç¥½Ã
+        isContinue = true; // "ï¿½Ì¾ï¿½ï¿½Ï±ï¿½"ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½
         return true;
     }
 
-    // ÆÄÀÏÀÌ ÀÖ´ÂÁö È®ÀÎ (¹öÆ° È°¼ºÈ­¿ë)
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½ (ï¿½ï¿½Æ° È°ï¿½ï¿½È­ï¿½ï¿½)
     public bool HasSaveData()
     {
         return File.Exists(path);
     }
 
-    // µ¥ÀÌÅÍ ÃÊ±âÈ­ (»õ·Î ÇÏ±â¿ë)
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ (ï¿½ï¿½ï¿½ï¿½ ï¿½Ï±ï¿½ï¿½)
     public void DataClear()
     {
         nowPlayer = new GameData();

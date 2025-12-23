@@ -107,8 +107,6 @@ public class LightningSkill : MonoBehaviour
     {
         currentLevel = Mathf.Max(1, level);
         LoadSkillData();
-
-        Debug.Log($"LightningSkill: 레벨 {currentLevel}로 설정됨 (번개 수: {lightningCount}, 데미지: {damage:F1}, 쿨타임: {cooldownTime:F1}초)");
     }
 
     /// <summary>
@@ -162,11 +160,6 @@ public class LightningSkill : MonoBehaviour
             damage = baseDamage * levelData.damageMultiplier;
             cooldownTime = baseCooldown * levelData.cooldownMultiplier;
             lightningCount = baseLightningCount + levelData.additionalProjectiles;
-
-            // 디버그: SkillData 기반 로그
-            Debug.Log($"LightningSkill Lv.{currentLevel} (SkillData): " +
-                     $"기본번호={baseLightningCount}, 추가번호={levelData.additionalProjectiles}, " +
-                     $"총번호={lightningCount}");
         }
         else
         {
@@ -174,11 +167,6 @@ public class LightningSkill : MonoBehaviour
             damage = baseDamage + (damageIncreasePerLevel * (currentLevel - 1));
             cooldownTime = baseCooldown - (cooldownReductionPerLevel * (currentLevel - 1));
             lightningCount = baseLightningCount + (currentLevel - 1);
-
-            // 디버그: 기본값 로그
-            Debug.Log($"LightningSkill Lv.{currentLevel} (기본값): " +
-                     $"기본번호={baseLightningCount}, 레벨보정={currentLevel - 1}, " +
-                     $"총번호={lightningCount}");
         }
 
         // 최소/최대값 제한
@@ -222,8 +210,6 @@ public class LightningSkill : MonoBehaviour
         // 목표 적 선택
         Enemy[] targets = SelectTargets(availableEnemies);
         if (targets.Length == 0) return;
-
-        Debug.Log($"LightningSkill: {lightningCount}개의 번개 발동! 데미지: {damage:F1}");
 
         // 번개 생성
         StartCoroutine(SpawnLightningSequence(targets));
@@ -289,10 +275,6 @@ public class LightningSkill : MonoBehaviour
     {
         List<Enemy> targets = new List<Enemy>();
 
-        // 디버그: 사용 가능한 적 수
-        Debug.Log($"LightningSkill: 타겟팅 시작 - 사용 가능한 적: {availableEnemies.Length}명, " +
-                 $"발동할 번개 수: {lightningCount}");
-
         // 모든 적 중에서 무작위로 선택
         System.Random random = new System.Random();
         Enemy[] shuffledEnemies = availableEnemies.OrderBy(x => random.Next()).ToArray();
@@ -301,13 +283,8 @@ public class LightningSkill : MonoBehaviour
         for (int i = 0; i < actualStrikes; i++)
         {
             targets.Add(shuffledEnemies[i]);
-
-            // 디버그: 선택된 적 정보
-            Debug.Log($"LightningSkill: 타겟 {i + 1}/{actualStrikes} 선택 - " +
-                     $"적: {shuffledEnemies[i]?.name}");
         }
 
-        Debug.Log($"LightningSkill: 최종 {targets.Count}개의 타겟 선택 완료");
         return targets.ToArray();
     }
 
@@ -351,9 +328,6 @@ public class LightningSkill : MonoBehaviour
                 .Where(e => e.gameObject.activeInHierarchy &&
                        Vector3.Distance(playerPosition, e.transform.position) <= attackRange)
                 .ToArray();
-
-            // 디버그: 사정거리 내 적 수 로그
-            Debug.Log($"LightningSkill: 사정거리 {attackRange}m 내 적 {cachedEnemies.Length}명 발견");
         }
     }
     #endregion

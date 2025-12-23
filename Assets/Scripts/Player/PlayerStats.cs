@@ -18,6 +18,13 @@ public class PlayerStats : MonoBehaviour
 
     private bool isInvincible = false;
 
+    [Header("체력 재생 시스템")]
+    [SerializeField] private float healthRegenRate = 0f;  // 초당 체력 재생량
+    private Coroutine healthRegenCoroutine;  // 체력 재생 코루틴
+
+    [Header("경험치 보너스 시스템")]
+    [SerializeField] private float expBonusMultiplier = 1.0f;  // 경험치 보너스 배수 (1.0 = 100%)
+
     void Start()
     {
         currentHp = maxHp;
@@ -84,8 +91,6 @@ public class PlayerStats : MonoBehaviour
         {
             PlayerHUD.Instance.UpdateHp(currentHp, maxHp);
         }
-
-        Debug.Log($" 체력 {amount} 회복! 현재 HP: {currentHp}");
     }
 
     IEnumerator InvincibleRoutine()
@@ -99,7 +104,9 @@ public class PlayerStats : MonoBehaviour
 
     public void GainExp(int amount)
     {
-        currentExp += amount;
+        // 경험치 보너스 적용
+        float finalExp = amount * expBonusMultiplier;
+        currentExp += finalExp;
 
         // 경험치바 UI 갱신
         if (PlayerHUD.Instance != null)
@@ -116,8 +123,6 @@ public class PlayerStats : MonoBehaviour
     {
         currentExp -= MaxExp;
         level++;
-
-        Debug.Log($"레벨 업 현재 레벨: {level}");
 
         if (PlayerHUD.Instance != null)
         {
@@ -150,6 +155,58 @@ public class PlayerStats : MonoBehaviour
     public void AddMagnetRange(float amount) { magnetRange += amount; }
     public void AddDamage(float amount) { damage += amount; }
     public void AddCooldown(float amount) { cooldown += amount; }
+
+    // 체력 재생 관련 메서드
+    public void SetHealthRegenRate(float rate)
+    {
+        healthRegenRate = rate;
+
+        // 코루틴 관리
+        if (healthRegenRate > 0f)
+        {
+            if (healthRegenCoroutine == null)
+            {
+                healthRegenCoroutine = StartCoroutine(HealthRegenRoutine());
+            }
+        }
+        else
+        {
+            if (healthRegenCoroutine != null)
+            {
+                StopCoroutine(healthRegenCoroutine);
+                healthRegenCoroutine = null;
+            }
+        }
+    }
+
+    public float GetHealthRegenRate() { return healthRegenRate; }
+
+    public void AddHealthRegenRate(float amount)
+    {
+        SetHealthRegenRate(healthRegenRate + amount);
+    }
+
+    /// <summary>
+    /// 체력 재생 코루틴 - 1초마다 체력 회복
+    /// </summary>
+    private IEnumerator HealthRegenRoutine()
+    {
+        while (healthRegenRate > 0f && currentHp < maxHp)
+        {
+            yield return new WaitForSeconds(1f);
+
+            if (currentHp < maxHp && healthRegenRate > 0f)
+            {
+                Heal(healthRegenRate);
+            }
+        }
+        healthRegenCoroutine = null;
+    }
+
+    // 경험치 보너스 관련 메서드
+    public void SetExpBonusMultiplier(float multiplier) { expBonusMultiplier = multiplier; }
+    public float GetExpBonusMultiplier() { return expBonusMultiplier; }
+    public void AddExpBonusMultiplier(float amount) { expBonusMultiplier += amount; }
 
     // [외부 접근용]
     public float Speed { get { return speed; } }

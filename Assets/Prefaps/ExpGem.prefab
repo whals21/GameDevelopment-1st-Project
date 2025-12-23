@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5978438376241536310}
   - component: {fileID: 9154708810091488077}
   - component: {fileID: 6398599297641667370}
-  - component: {fileID: 7788130250008709110}
+  - component: {fileID: 1228547844716432452}
   m_Layer: 13
   m_Name: ExpGem
   m_TagString: Exp
@@ -149,7 +149,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &7788130250008709110
+--- !u!114 &1228547844716432452
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,8 +158,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8238552834587993004}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606239bb87954fe469c1b11d9e9aa4c3, type: 3}
+  m_Script: {fileID: 11500000, guid: 9dde144cdb4bdb5408e965c0c3d83bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   expValue: 10
-  magnetSpeed: 10
+  magnetSpeed: 3.5
+  baseMagnetRange: 1
