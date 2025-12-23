@@ -144,16 +144,33 @@ public class PlayerHUD : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    // 게임 종료
-    public void OnClickQuit()
+    // 저장하고 종료
+    public void OnClickSaveAndQuit()
     {
+        // 저장 후
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.SaveGame();
+        }
+
+        // 끔
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false; // 유니티에서 정지
+        UnityEditor.EditorApplication.isPlaying = false;
 #else
-            Application.Quit(); // 실제 빌드된 게임 끄기
+        Application.Quit();
 #endif
     }
 
+    // 그냥 종료
+    public void OnClickQuitOnly()
+    {
+        // 저장 코드 없이 끔
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
     // 계속하기
     public void OnClickResume()
     {

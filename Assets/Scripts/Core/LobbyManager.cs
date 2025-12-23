@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviour
 {
@@ -7,17 +8,40 @@ public class LobbyManager : MonoBehaviour
     public string gameSceneName = "MainScene"; // 이동할 씬 이름
     public GameObject optionPanel;
 
+    [Header("버튼")]
+    public Button continueButton;
+
+    private void Start()
+    {
+        // 저장된 데이터가 없으면 이어하기 버튼 비활성화 (클릭 불가)
+        if (SaveManager.Instance != null && !SaveManager.Instance.HasSaveData())
+        {
+            continueButton.interactable = false; // 클릭 불가능하게 만듦
+        }
+        else
+        {
+            continueButton.interactable = true;
+        }
+    }
+
     // 새로 하기
     public void OnClickNewGame()
     {
-        // 나중에 여기서 '데이터 초기화' 진행
+        if (SaveManager.Instance != null) SaveManager.Instance.DataClear();
         SceneManager.LoadScene(gameSceneName);
     }
 
     // 이어 하기
     public void OnClickContinue()
     {
-        // 나중에 세이브 로드 기능 구현 예정
+        if (SaveManager.Instance != null && SaveManager.Instance.LoadGame())
+        {
+            SceneManager.LoadScene(gameSceneName);
+        }
+        else
+        {
+            Debug.Log("저장된 파일이 없습니다.");
+        }
     }
 
     // 설정 창 켜기
