@@ -22,7 +22,9 @@ public class ObjectPoolManager : MonoBehaviour
     public MissileProjectile missilePrefab;
     public LightningStrike lightningPrefab;
     public RPGProjectile rpgPrefab; 
-    public RPGExplosion rpgExplosionPrefab; 
+    public RPGExplosion rpgExplosionPrefab;
+
+    public RandomBox randomBoxPrefab; // 1223 랜덤박스
 
     [Header("Pool Sizes")]
     public int[] enemyPoolSizes = new int[] { };    //12/18
@@ -41,6 +43,8 @@ public class ObjectPoolManager : MonoBehaviour
     public int lightningPoolSize = 30;
     public int rpgPoolSize = 10;
     public int rpgExplosionPoolSize = 10;
+
+    public int randomBoxPoolSize = 5; // 1223 랜덤박스
 
     public int expGemPoolSizePerTier = 50; //<---12/18추가 된거임
     // 풀들
@@ -61,6 +65,8 @@ public class ObjectPoolManager : MonoBehaviour
     private ObjectPool<RPGProjectile> rpgPool;
     private ObjectPool<RPGExplosion> rpgExplosionPool;
 
+    private ObjectPool<RandomBox> randomBoxPool; // 1223 랜덤박스
+
     //12/18추가 되었음
     private List<ObjectPool<ExpGem>> expGemPools = new List<ObjectPool<ExpGem>>();  //리스트 활성화
     private DataManager dataManager;    //경험치 담겨져있음
@@ -74,10 +80,11 @@ public class ObjectPoolManager : MonoBehaviour
     private bool isInitialized = false;
     private readonly string[] requiredPrefabs = {
         //"enemyPrefab"//12/18
+        // "randomBoxPrefab" //1223
         "enemyBulletPrefab", "projectilePrefab",
         "boomerangPrefab", "molotovPrefab", "brickPrefab",
         "fireGroundPrefab", "soccerBallPrefab", "expGemPrefab",
-        "damageTextPrefab", "guardianTopPrefab", "rpgPrefab", "rpgExplosionPrefab"
+        "damageTextPrefab", "guardianTopPrefab", "rpgPrefab", "rpgExplosionPrefab", "randomBoxPrefab"
     };
 
     private void Awake()
@@ -111,6 +118,7 @@ public class ObjectPoolManager : MonoBehaviour
 
         // 풀 초기화
         //enemyPool = new ObjectPool<Enemy>(enemyPrefab, enemyPoolSize, transform);//12/18
+        // randomBoxPool = new ObjectPool<RandomBox>(randomBoxPrefab, randomBoxPoolSize, transform); //1223
         enemyBulletPool = new ObjectPool<EnemyBullet>(enemyBulletPrefab, enemyBulletPoolSize, transform);
         projectilePool = new ObjectPool<Projectile>(projectilePrefab, projectilePoolSize, transform);
         boomerangPool = new ObjectPool<BoomerangProjectile>(boomerangPrefab, boomerangPoolSize, transform);
@@ -126,6 +134,9 @@ public class ObjectPoolManager : MonoBehaviour
         lightningPool = new ObjectPool<LightningStrike>(lightningPrefab, lightningPoolSize, transform);
         rpgPool = new ObjectPool<RPGProjectile>(rpgPrefab, rpgPoolSize, transform);
         rpgExplosionPool = new ObjectPool<RPGExplosion>(rpgExplosionPrefab, rpgExplosionPoolSize, transform);
+
+        randomBoxPool = new ObjectPool<RandomBox>(randomBoxPrefab, randomBoxPoolSize, transform);
+
         isInitialized = true;
 
 
@@ -500,6 +511,20 @@ public class ObjectPoolManager : MonoBehaviour
         if (!ValidatePoolInitialized(rpgExplosionPool, "RPGExplosion")) return;
         rpgExplosion.gameObject.SetActive(false);
         rpgExplosionPool.Return(rpgExplosion);
+    }
+
+    // 1223 랜덤박스 풀링
+    public RandomBox GetRandomBox()
+    {
+        if (!ValidatePoolInitialized(randomBoxPool, "RandomBox")) return null;
+        return randomBoxPool.Get();
+    }
+    public void ReturnRandomBox(RandomBox box)
+    {
+        if (!ValidatePoolInitialized(randomBoxPool, "RandomBox")) return;
+
+        box.gameObject.SetActive(false);
+        randomBoxPool.Return(box);
     }
 
     // 풀 초기화 상태 유효성 검사

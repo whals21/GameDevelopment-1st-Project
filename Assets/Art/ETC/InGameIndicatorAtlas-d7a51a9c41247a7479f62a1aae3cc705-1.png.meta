@@ -131,7 +131,7 @@ TextureImporter:
         width: 0
         height: 0
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -143,10 +143,31 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_1
+      rect:
+        serializedVersion: 2
+        x: 1718
+        y: 852
+        width: 152
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 931c893b185f6f040952167f3a5f7d31
+      internalID: -1938636905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: b3d2168b0b6796b43a9ceec6756a3df2
     internalID: 0
     vertices: []
     indices: 
@@ -155,6 +176,7 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_0: 7738121176900807749
+      InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_1: -1938636905
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

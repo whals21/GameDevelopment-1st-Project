@@ -29,6 +29,10 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject victoryPanel;
+
+    [Header("이펙트 UI")]
+    [SerializeField] private UnityEngine.UI.Image flashPanel;
+
     private int kills = 0;
 
     void Awake()
@@ -175,6 +179,38 @@ public class PlayerHUD : MonoBehaviour
     public void OnClickResume()
     {
         TogglePauseUI();
+    }
+    public void TriggerFlashEffect()
+    {
+        // 판넬이 연결되어 있을 때만 작동
+        if (flashPanel != null)
+        {
+            // 코루틴 실행
+            StartCoroutine(FlashRoutine());
+        }
+    }
+    IEnumerator FlashRoutine()
+    {
+        // 순식간에 하얗게 변함
+        flashPanel.color = new Color(1, 1, 1, 0.8f);
+
+        // 0.5초 동안 서서히 투명해짐
+        float duration = 0.5f; // 지속 시간
+        float time = 0;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+
+            // 시간이 지날수록 알파값(투명도)을 0.8 -> 0으로 줄임
+            float alpha = Mathf.Lerp(0.8f, 0f, time / duration);
+            flashPanel.color = new Color(1, 1, 1, alpha);
+
+            yield return null;
+        }
+
+        // 확실하게 투명하게 만들기
+        flashPanel.color = new Color(1, 1, 1, 0f);
     }
 
 }
