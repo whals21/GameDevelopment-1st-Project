@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 2682184789590373286, guid: 6449a62f3a3c1d44a921cbc39dd04e3e, type: 3}
   EnemyName: Enemy
-  EnemyHP: 20
+  EnemyHP: 100
   moveSpeed: 3
   isRanged: 0
   projectilePrefab: {fileID: 927450996480703183, guid: cc86a1a48f46f1f4eb4264f87cabdb5f, type: 3}

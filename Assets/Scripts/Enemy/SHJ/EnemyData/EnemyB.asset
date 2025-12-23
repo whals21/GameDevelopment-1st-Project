@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 2682184789590373286, guid: 6449a62f3a3c1d44a921cbc39dd04e3e, type: 3}
   EnemyName: 
-  EnemyHP: 150
+  EnemyHP: 50
   moveSpeed: 2
   isRanged: 0
   projectilePrefab: {fileID: 4580022208843392257, guid: d14ca3873114bcb4da7216eab8fed7af, type: 3}
-  attackRange: 0
-  attackDelay: 0
+  attackRange: 4
+  attackDelay: 0.5
   firePoint: {fileID: 0}
   weapons: []
   poolIndex: 0

@@ -230,7 +230,7 @@ public class ObjectPoolManager : MonoBehaviour
     }
 
     // Enemy 가져오기
-    public Enemy GetEnemy(int index)    //12/19
+    public Enemy GetEnemy(int index)
     {
         if (!isInitialized)
         {
