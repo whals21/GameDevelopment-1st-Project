@@ -9,6 +9,7 @@ public class BossManager : MonoBehaviour
     // 현재 보스 (currentBossIndex에 해당하는) 데이터 get 프로퍼티
     public int CurrentHp => (currentBossIndex >= 0 && currentBossIndex < bossDatas.Length) ? bossDatas[currentBossIndex].hp : 0;
     public float CurrentMoveSpeed => (currentBossIndex >= 0 && currentBossIndex < bossDatas.Length) ? bossDatas[currentBossIndex].move : 0f;
+
     public float CurrentDetectionRange => (currentBossIndex >= 0 && currentBossIndex < bossDatas.Length) ? bossDatas[currentBossIndex].detectionRange : 0f;
     public float CurrentAppearTime => (currentBossIndex >= 0 && currentBossIndex < bossDatas.Length) ? bossDatas[currentBossIndex].appearTime : 0f;
     public int CurrentKillCountToSpawn => (currentBossIndex >= 0 && currentBossIndex < bossDatas.Length) ? bossDatas[currentBossIndex].killCountToSpawn : 0;

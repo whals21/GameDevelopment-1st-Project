@@ -24,8 +24,9 @@ public class BossController : MonoBehaviour
     public GameObject CurrentBulletPrefab => bossPattern.bulletPrefab[CurrentPatternIndex];
     public int CurrentBulletCount => bossPattern.bulletCount[CurrentPatternIndex];
     public float CurrentAttackRayLength => bossPattern.attackRayLength[CurrentPatternIndex];
-    public float CurrentDelayAfter => bossPattern.delayAfter[CurrentPatternIndex];
     public float CurrentAttackRange => bossPattern.attackRange[CurrentPatternIndex];
+    public float CurrentDelayAfter => bossPattern.delayAfter[CurrentPatternIndex];
+   
     public float CurrentDamage => bossPattern.damage[CurrentPatternIndex];
     public float CurrentDamageMove => bossPattern.damageMove[CurrentPatternIndex];
 
@@ -43,9 +44,12 @@ public class BossController : MonoBehaviour
     // 발판 타입별 풀 (warningPads 인덱스 = 타입)
     private List<GameObject>[] padPools;
 
-  
+
 
     private BossAttack attackComp;            // 공격 컴포넌트
+    public BoosAttackRay attackRay;
+    public BossRange attackRange;
+
     private float attackCooldown = 2f;        // 패턴 간 최소 대기 시간
     private float attackTimer = 0f;
 

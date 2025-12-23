@@ -3,54 +3,49 @@ using UnityEngine;
 
 public class BossWarningPadPool : MonoBehaviour
 {
-    private Queue<GameObject> pool = new Queue<GameObject>();
-    private BossController boss;
-
-    // 컨트롤러에서 주입
-    public void Initialize(BossController controller)
+    [System.Serializable]
+    public class PadInfo
     {
-        boss = controller;
-        CreatePool();
+        public GameObject prefab; // 사용할 발판 프리팹
+        public int count;         // 최대 개수
     }
 
-    private void CreatePool()
+    public PadInfo[] pads;                       // Inspector에서 세팅
+    private List<GameObject>[] padPools;         // 풀링 저장
+
+    private void Awake()
     {
-        pool.Clear();
+        padPools = new List<GameObject>[pads.Length];
 
-        
-        GameObject prefab = boss.CurrentBulletPrefab;           // 대신 발판 프리팹 가져올 거임
-        int count = boss.CurrentBulletCount;                    // 개수도 동일하게
-
-        // 하지만 우리는 발판을 위한 별도 프로퍼티가 필요함 → 아래 주석 참고
-
-        if (prefab == null)
+        for (int i = 0; i < pads.Length; i++)
         {
-            Debug.LogWarning("[BossWarningPadPool] prefab이 null입니다. BossController에서 발판 프리팹을 제공해주세요.");
-            return;
-        }
-
-        for (int i = 0; i < count; i++)
-        {
-            GameObject pad = Instantiate(prefab, transform);
-            pad.SetActive(false);
-            pool.Enqueue(pad);
+            padPools[i] = new List<GameObject>();
+            for (int j = 0; j < pads[i].count; j++)
+            {
+                GameObject pad = Instantiate(pads[i].prefab, transform);
+                pad.SetActive(false);
+                padPools[i].Add(pad);
+            }
         }
     }
 
-    public GameObject GetPad()
+    // 사용 가능한 발판 가져오기
+    public GameObject GetPad(int type)
     {
-        if (pool.Count == 0)
-            return null;
-
-        GameObject pad = pool.Dequeue();
-        pad.SetActive(true);
-        return pad;
+        foreach (var pad in padPools[type])
+        {
+            if (!pad.activeInHierarchy)
+            {
+                pad.SetActive(true);
+                return pad;
+            }
+        }
+        return null; // 다 사용 중이면 null
     }
 
+    // 발판 반환
     public void ReturnPad(GameObject pad)
     {
-        if (pad == null) return;
         pad.SetActive(false);
-        pool.Enqueue(pad);
     }
 }
