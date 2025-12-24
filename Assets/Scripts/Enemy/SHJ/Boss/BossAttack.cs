@@ -228,19 +228,19 @@ class BossAttackPattern001 : BossAttackBase
     // 실행 가능 조건 체크 (범위 또는 레이 감지)
     public override bool CanExecute()
     {
-        if (boss.target == null)
-            return false;
+        if (boss == null) return false;
+        if (boss.attackRay == null) return false;
+        if (boss.rb == null) return false;
+        if (boss.target == null) return false;
+
+        //마지막 위치를 본다 (단 1번)
+        boss.attackRay.UpdateDirection();
 
         RaycastHit2D hit = boss.attackRay.Fire();
-
-        // 플레이어가 시야 안에 없으면 공격 불가
         if (hit.collider == null)
             return false;
 
-        // 이 순간의 위치를 LOCK
         lockedTargetPos = hit.point;
-
-        // 공격 방향도 이때 결정
         dashDir = (lockedTargetPos - (Vector2)boss.rb.position).normalized;
 
         return true;

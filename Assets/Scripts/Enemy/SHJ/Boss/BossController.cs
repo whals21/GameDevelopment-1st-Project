@@ -54,27 +54,32 @@ public class BossController : MonoBehaviour
     private float attackTimer = 0f;
 
 
-    private void Start()
+    private void Awake()
     {
-        // 보스 데이터 로드
-        myData = BossManager.Instance.BossDatas[MonsterNumber];
-
         // 컴포넌트 캐싱
         rb = GetComponent<Rigidbody2D>();
         Col = GetComponent<Collider2D>();
+    }
 
-        // 기본 상태 설정
-        SetState(new BossMove(this));
 
-        // 발판 Pool 초기화
-        InitializePadPool();
+    private void Start()
+    {
+        if (attackRay != null)
+            attackRay.Initialize(this);
 
-        // 공격 컴포넌트 세팅
+        // 보스 데이터 로드
+        myData = BossManager.Instance.BossDatas[MonsterNumber];
+
+
+        // 공격 컴포넌트
         attackComp = GetComponent<BossAttack>();
         if (attackComp == null)
             attackComp = gameObject.AddComponent<BossAttack>();
 
         attackComp.Initialize(this);
+
+        SetState(new BossMove(this));
+        InitializePadPool();
     }
 
     private void Update()
