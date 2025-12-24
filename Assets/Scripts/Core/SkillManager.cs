@@ -62,17 +62,6 @@ public class SkillManager : MonoBehaviour
             forcefieldManagerObj.AddComponent<ForcefieldManager>();
         }
 
-        Debug.Log($"SkillManager Instance: {SkillManager.Instance != null}");
-        Debug.Log($"ObjectPoolManager Instance: {ObjectPoolManager.Instance != null}");
-        
-        var rpgSkill = GetComponent<RPGSkill>();
-        if (rpgSkill != null)
-        {
-            Debug.Log($"RPG Skill Active: {rpgSkill.IsActive}");
-            Debug.Log($"RPG Skill Data: {rpgSkill.SkillData != null}");
-            Debug.Log($"RPG Skill Level: {rpgSkill.CurrentLevel}");
-        }
-
         EquipTestSkills();
         UpdateForcefieldSkills(); // Forcefield 스킬들 확인 및 활성화
     }
@@ -120,13 +109,16 @@ public class SkillManager : MonoBehaviour
     {
         if (!IsValidSlot(slot) || skill == null) return;
 
-        // 기존 Forcefield 스킬 해제
-        if (forcefieldSlot >= 0 && forcefieldSlot < MAX_SKILLS && equippedSkills[forcefieldSlot] != null)
+        // 기존 Forcefield 스킬 해제 (단, 같은 슬롯에 같은 스킬이면 건너뜀)
+        if (skill.skillType == SkillType.Forcefield)
         {
-            if (equippedSkills[forcefieldSlot].name.Contains("Forcefield"))
+            if (forcefieldSlot >= 0 && forcefieldSlot < MAX_SKILLS && forcefieldSlot != slot && equippedSkills[forcefieldSlot] != null)
             {
-                ForcefieldManager.Instance.UnequipForcefield();
-                forcefieldSlot = -1;
+                if (equippedSkills[forcefieldSlot].skillType == SkillType.Forcefield)
+                {
+                    ForcefieldManager.Instance.UnequipForcefield();
+                    forcefieldSlot = -1;
+                }
             }
         }
 
@@ -134,19 +126,77 @@ public class SkillManager : MonoBehaviour
         skillLevels[slot] = Mathf.Max(1, level);
         cooldownTimers[slot] = 0f;
 
-        // Forcefield 스킬 확인 및 장착
-        if (skill.name.Contains("Forcefield") || skill.skillName.Contains("Forcefield"))
+        // Forcefield 스킬 확인 및 장착 (skillType으로 체크)
+        if (skill.skillType == SkillType.Forcefield)
         {
             forcefieldSlot = slot;
             ForcefieldManager.Instance.EquipForcefield(skill, level);
         }
-
-        Debug.Log($"슬롯 {slot}: {skill.name} (레벨 {level}) 장착 완료");
     }
 
     public int GetSkillLevel(int slot) => IsValidSlot(slot) ? skillLevels[slot] : 0;
     public bool HasSkill(int slot) => IsValidSlot(slot) && equippedSkills[slot] != null;
     public int GetEquippedSkillCount() => equippedSkills.Count(skill => skill != null);
+
+    /// <summary>
+    /// 스킬 교체 (진화 시 사용)
+    /// 기존 스킬을 제거하고 새 스킬을 같은 슬롯에 장착
+    /// </summary>
+    /// <param name="oldSkill">제거할 기존 스킬</param>
+    /// <param name="newSkill">장착할 새 스킬</param>
+    /// <param name="level">새 스킬의 레벨</param>
+    public void ReplaceSkill(SkillData oldSkill, SkillData newSkill, int level)
+    {
+        if (oldSkill == null || newSkill == null) return;
+
+        // 기존 스킬이 장착된 슬롯 찾기
+        int slot = -1;
+        for (int i = 0; i < MAX_SKILLS; i++)
+        {
+            if (equippedSkills[i] == oldSkill)
+            {
+                slot = i;
+                break;
+            }
+        }
+
+        if (slot < 0)
+        {
+            Debug.LogWarning($"[SkillManager] ReplaceSkill: {oldSkill.skillName}을(를) 찾을 수 없습니다.");
+            return;
+        }
+
+        // Forcefield 스킬 교체 처리
+        if (oldSkill.skillType == SkillType.Forcefield)
+        {
+            ForcefieldManager.Instance?.UnequipForcefield();
+            forcefieldSlot = -1;
+        }
+
+        // Guardian/Drone 스킬 오브젝트 정리
+        if (oldSkill.skillType == SkillType.Guardian)
+        {
+            GameObject guardianObj = GameObject.Find(oldSkill.skillName);
+            if (guardianObj != null) Destroy(guardianObj);
+        }
+        else if (oldSkill.skillType == SkillType.Drone && droneSkillInstance != null)
+        {
+            Destroy(droneSkillInstance.gameObject);
+            droneSkillInstance = null;
+        }
+
+        // MagneticDart 스킬 오브젝트 정리
+        if (oldSkill.skillType == SkillType.Special)
+        {
+            var magneticDartSkill = FindObjectOfType<MagneticDartSkill>();
+            if (magneticDartSkill != null) Destroy(magneticDartSkill.gameObject);
+        }
+
+        // 새 스킬 장착
+        EquipSkill(slot, newSkill, level);
+
+        Debug.Log($"[SkillManager] {oldSkill.skillName} → {newSkill.skillName} 스킬 교체 완료 (슬롯 {slot})");
+    }
 
     // 런타임에 스킬 레벨 설정 (인스펙터에서 테스트용)
     [ContextMenu("Update Skill Levels From Inspector")]
@@ -157,7 +207,6 @@ public class SkillManager : MonoBehaviour
             if (HasSkill(i) && testSkillLevels[i] != skillLevels[i])
             {
                 skillLevels[i] = Mathf.Max(1, testSkillLevels[i]);
-                Debug.Log($"슬롯 {i}: 스킬 레벨을 {skillLevels[i]}로 업데이트");
             }
         }
     }
@@ -174,8 +223,6 @@ public class SkillManager : MonoBehaviour
             {
                 ForcefieldManager.Instance.UpdateForcefieldLevel(level);
             }
-
-            Debug.Log($"슬롯 {slot}: 스킬 레벨을 {level}로 설정");
         }
     }
     #endregion
@@ -183,12 +230,12 @@ public class SkillManager : MonoBehaviour
     #region Forcefield Management
     private void UpdateForcefieldSkills()
     {
-        // 모든 스킬을 확인하여 Forcefield가 있는지 체크
+        // 모든 스킬을 확인하여 Forcefield가 있는지 체크 (skillType으로 확인)
         for (int i = 0; i < MAX_SKILLS; i++)
         {
             if (HasSkill(i) && equippedSkills[i] != null)
             {
-                if (equippedSkills[i].name.Contains("Forcefield") || equippedSkills[i].skillName.Contains("Forcefield"))
+                if (equippedSkills[i].skillType == SkillType.Forcefield)
                 {
                     forcefieldSlot = i;
                     ForcefieldManager.Instance.EquipForcefield(equippedSkills[i], skillLevels[i]);
@@ -209,9 +256,9 @@ public class SkillManager : MonoBehaviour
             // Forcefield는 쿨타임이 없으므로 건너뛰기
             if (i == forcefieldSlot) continue;
 
-            // Guardian, Forcefield, Drone은 지속적인 스킬이므로 쿨다운 체크 조정
+            // Guardian, Drone, Special은 지속적인 스킬이므로 쿨다운 체크 조정
             var skill = equippedSkills[i];
-            if (skill.skillType == SkillType.Guardian || skill.skillType == SkillType.Forcefield || skill.skillType == SkillType.Drone)
+            if (skill.skillType == SkillType.Guardian || skill.skillType == SkillType.Drone || skill.skillType == SkillType.Special)
             {
                 // 지속 스킬은 첫 실행 이후에는 주기적으로 체크하지 않음
                 if (cooldownTimers[i] > 0f) continue;
@@ -250,8 +297,11 @@ public class SkillManager : MonoBehaviour
                     success = ExecuteGuardianSkill(skill, level, slot);
                     break;
 
+                // Forcefield는 지속형 스킬로서 ExecuteSkill로 실행되지 않음
+                // EquipSkill()에서 ForcefieldManager.EquipForcefield()를 통해 활성화됨
                 case SkillType.Forcefield:
-                    success = ExecuteForcefieldSkill(skill, level, slot);
+                    LogWarning($"ExecuteSkill: Forcefield는 ExecuteSkill로 실행되지 않아야 합니다. [슬롯{slot}]");
+                    success = false;
                     break;
 
                 case SkillType.Drone:
@@ -408,32 +458,6 @@ public class SkillManager : MonoBehaviour
         catch (System.Exception ex)
         {
             LogError($"ExecuteGuardianSkill: 예외 발생 - {ex.Message}");
-            return false;
-        }
-    }
-
-    private bool ExecuteForcefieldSkill(SkillData skill, int level, int slot)
-    {
-        try
-        {
-            LogSkill("포스필드 스킬 실행 시작", skill, level, slot);
-
-            // ForcefieldManager로 위임
-            if (ForcefieldManager.Instance != null)
-            {
-                ForcefieldManager.Instance.EquipForcefield(skill, level);
-                LogSkill("포스필드 스킬 장착 완료", skill, level, slot);
-                return true;
-            }
-            else
-            {
-                LogError("ExecuteForcefieldSkill: ForcefieldManager.Instance가 null");
-                return false;
-            }
-        }
-        catch (System.Exception ex)
-        {
-            LogError($"ExecuteForcefieldSkill: 예외 발생 - {ex.Message}");
             return false;
         }
     }
@@ -639,27 +663,44 @@ public class SkillManager : MonoBehaviour
             // 특수 스킬에 따른 개별 처리
             if (skill.skillObjectPrefab != null)
             {
-                GameObject specialObj = Instantiate(skill.skillObjectPrefab);
-                if (specialObj != null)
+                // MagneticDartSkill은 이미 존재하는 인스턴스가 있는지 확인
+                var existingMagneticDart = FindObjectOfType<MagneticDartSkill>();
+                if (existingMagneticDart != null)
                 {
-                    // 부모 설정
-                    specialObj.transform.SetParent(transform);
-
-                    // 스킬별 특수 초기화 로직 (확장용)
-                    // TODO: 특수 스킬별 구현 필요
-
-                    LogSkill("특수 스킬 오브젝트 생성 완료", skill, level, slot);
-
-                    // 쿨다운 설정
-                    float cooldown = GetSkillCooldown(skill, level);
-                    cooldownTimers[slot] = cooldown;
-                    return true;
+                    // 이미 활성화되어 있으면 레벨만 업데이트
+                    existingMagneticDart.SetLevel(level);
+                    LogSkill("MagneticDart 스킬 이미 활성화됨, 레벨 업데이트", skill, level, slot);
                 }
                 else
                 {
-                    LogError("ExecuteSpecialSkill: 특수 스킬 오브젝트 생성 실패");
-                    return false;
+                    // 새로 생성
+                    GameObject specialObj = Instantiate(skill.skillObjectPrefab);
+                    if (specialObj != null)
+                    {
+                        // 부모 설정
+                        specialObj.transform.SetParent(transform);
+
+                        // MagneticDartSkill 확인 및 활성화
+                        var magneticDartSkill = specialObj.GetComponent<MagneticDartSkill>();
+                        if (magneticDartSkill != null)
+                        {
+                            magneticDartSkill.Activate(level);
+                            LogSkill("MagneticDart 스킬 활성화 완료", skill, level, slot);
+                        }
+
+                        LogSkill("특수 스킬 오브젝트 생성 완료", skill, level, slot);
+                    }
+                    else
+                    {
+                        LogError("ExecuteSpecialSkill: 특수 스킬 오브젝트 생성 실패");
+                        return false;
+                    }
                 }
+
+                // 쿨다운 설정 (지속형 스킬이므로 한 번만 실행)
+                float cooldown = GetSkillCooldown(skill, level);
+                cooldownTimers[slot] = cooldown;
+                return true;
             }
             else
             {
@@ -1072,12 +1113,10 @@ public class SkillManager : MonoBehaviour
         // 임시방편: Molotov는 항상 3초 쿨다운
         if (skill.projectilePrefab != null && skill.projectilePrefab.GetComponent<MolotovProjectile>() != null)
         {
-            Debug.Log($"Molotov 쿨다운: 3초");
             return 3f;
         }
 
         float cooldown = skill.cooldown * GetFinalCooldownMultiplier(skill, level);
-        Debug.Log($"일반 스킬 쿨다운: {cooldown}초 (기본: {skill.cooldown}, 배수: {GetCooldownMultiplier(skill, level)})");
 
         // 최소 1초 보장
         return Mathf.Max(1f, cooldown);
@@ -1181,8 +1220,7 @@ public class SkillManager : MonoBehaviour
     /// <param name="slot">슬롯 번호</param>
     private void LogSkill(string message, SkillData skill, int level, int slot = -1)
     {
-        string slotInfo = slot >= 0 ? $"[슬롯{slot}] " : "";
-        Debug.Log($"[SkillManager] {slotInfo}{message}: {skill?.skillName ?? "Unknown"} (레벨 {level})");
+        // 빈 메서드로 유지 (필요시 로그 활성화)
     }
 
     /// <summary>
@@ -1257,7 +1295,6 @@ public class SkillManager : MonoBehaviour
     public void SetDamageMultiplier(float multiplier)
     {
         globalDamageMultiplier = Mathf.Max(0.1f, multiplier);
-        Debug.Log($"[SkillManager] 전체 데미지 배수가 {globalDamageMultiplier:F2}(으)로 설정됨");
     }
 
     /// <summary>
@@ -1267,7 +1304,6 @@ public class SkillManager : MonoBehaviour
     public void SetCooldownMultiplier(float multiplier)
     {
         globalCooldownMultiplier = Mathf.Max(0.1f, multiplier);
-        Debug.Log($"[SkillManager] 전체 쿨다운 배수가 {globalCooldownMultiplier:F2}(으)로 설정됨");
     }
 
     /// <summary>
@@ -1322,7 +1358,6 @@ public class SkillManager : MonoBehaviour
     {
         if (testPassiveSkills == null || testPassiveSkills.Length == 0)
         {
-            Debug.LogWarning("[SkillManager] 테스트 패시브 스킬이 설정되지 않았습니다.");
             return;
         }
 
@@ -1332,9 +1367,6 @@ public class SkillManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[SkillManager] {testPassiveSkills.Length}개의 테스트 패시브 스킬을 등록합니다...");
-
-        int successCount = 0;
         for (int i = 0; i < testPassiveSkills.Length; i++)
         {
             var passiveSkill = testPassiveSkills[i];
@@ -1348,44 +1380,9 @@ public class SkillManager : MonoBehaviour
                 // 목표 레벨까지 스킬 획득 반복
                 for (int level = 1; level <= targetLevel; level++)
                 {
-                    bool success = PassiveSkillManager.Instance.TryAcquireSkill(passiveSkill.passiveType);
-                    if (success)
-                    {
-                        Debug.Log($"[SkillManager] 테스트 패시브 스킬 등록 성공: {passiveSkill.skillName} Lv.{level}");
-                    }
-                    else
-                    {
-                        if (level == 1)
-                        {
-                            Debug.LogWarning($"[SkillManager] 테스트 패시브 스킬 등록 실패: {passiveSkill.skillName}");
-                        }
-                        else
-                        {
-                            Debug.LogError($"[SkillManager] 테스트 패시브 스킬 레벨업 실패: {passiveSkill.skillName} Lv.{level}");
-                        }
-                        break;
-                    }
-                }
-
-                if (PassiveSkillManager.Instance.GetSkillLevel(passiveSkill.passiveType) == targetLevel)
-                {
-                    successCount++;
+                    PassiveSkillManager.Instance.TryAcquireSkill(passiveSkill.passiveType);
                 }
             }
-            else
-            {
-                Debug.LogWarning($"[SkillManager] 테스트 패시브 스킬 배열의 {i}번째 항목이 null입니다.");
-            }
-        }
-
-        Debug.Log($"[SkillManager] 테스트 패시브 스킬 등록 완료: {successCount}/{testPassiveSkills.Length}개 성공");
-
-        // 현재 패시브 스킬 상태 출력
-        var ownedSkills = PassiveSkillManager.Instance.GetAllOwnedSkills();
-        Debug.Log($"[SkillManager] 현재 보유한 패시브 스킬: {ownedSkills.Count}개");
-        foreach (var kvp in ownedSkills)
-        {
-            Debug.Log($"  - {kvp.Key}: Lv.{kvp.Value}");
         }
     }
 
@@ -1434,16 +1431,8 @@ public class SkillManager : MonoBehaviour
         // 현재 레벨에서 목표 레벨까지 등록 반복
         for (int level = currentLevel + 1; level <= targetLevel; level++)
         {
-            bool success = PassiveSkillManager.Instance.TryAcquireSkill(passiveSkill.passiveType);
-            if (!success)
-            {
-                Debug.LogWarning($"[SkillManager] 테스트 패시브 스킬 레벨업 실패: {passiveSkill.skillName} Lv.{level}");
-                break;
-            }
+            PassiveSkillManager.Instance.TryAcquireSkill(passiveSkill.passiveType);
         }
-
-        currentLevel = PassiveSkillManager.Instance.GetSkillLevel(passiveSkill.passiveType);
-        Debug.Log($"[SkillManager] 테스트 패시브 스킬 등록 성공: {passiveSkill.skillName} (현재 Lv.{currentLevel})");
     }
 
     /// <summary>
@@ -1472,35 +1461,6 @@ public class SkillManager : MonoBehaviour
         }
 
         PassiveSkillManager.Instance.ResetAllPassiveSkills();
-        Debug.Log("[SkillManager] 모든 테스트 패시브 스킬이 제거되었습니다.");
-    }
-
-    /// <summary>
-    /// 현재 설정된 테스트 패시브 스킬 목록을 출력합니다
-    /// </summary>
-    [ContextMenu("테스트 패시브 스킬 목록 출력")]
-    public void PrintTestPassiveSkills()
-    {
-        if (testPassiveSkills == null || testPassiveSkills.Length == 0)
-        {
-            Debug.Log("[SkillManager] 설정된 테스트 패시브 스킬이 없습니다.");
-            return;
-        }
-
-        Debug.Log($"[SkillManager] 설정된 테스트 패시브 스킬 목록 ({testPassiveSkills.Length}개):");
-        for (int i = 0; i < testPassiveSkills.Length; i++)
-        {
-            if (testPassiveSkills[i] != null)
-            {
-                int testLevel = GetTestPassiveSkillLevel(i);
-                string levelInfo = testLevel > 0 ? $"테스트 Lv.{testLevel}" : $"최대 Lv.{testPassiveSkills[i].maxLevel}";
-                Debug.Log($"  [{i}] {testPassiveSkills[i].skillName} ({testPassiveSkills[i].passiveType}) - {levelInfo}");
-            }
-            else
-            {
-                Debug.Log($"  [{i}] null");
-            }
-        }
     }
 
     /// <summary>
@@ -1516,18 +1476,12 @@ public class SkillManager : MonoBehaviour
         }
 
         // PassiveSkillManager의 ApplyAllPassiveEffects 메서드를 호출하여 효과 적용
-        // 이 메서드는 private이므로 리플렉션을 사용하거나 public 메서드가 필요함
         var method = typeof(PassiveSkillManager).GetMethod("ApplyAllPassiveEffects",
             System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
         if (method != null)
         {
             method.Invoke(PassiveSkillManager.Instance, null);
-            Debug.Log("[SkillManager] 패시브 스킬 효과가 즉시 적용되었습니다.");
-        }
-        else
-        {
-            Debug.LogWarning("[SkillManager] ApplyAllPassiveEffects 메서드를 찾을 수 없습니다.");
         }
     }
     #endregion

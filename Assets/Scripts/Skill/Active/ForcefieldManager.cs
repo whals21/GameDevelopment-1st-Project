@@ -62,11 +62,22 @@ public class ForcefieldManager : MonoBehaviour
     // 보호막 스킬 장착
     public void EquipForcefield(SkillData skill, int level)
     {
+        // 이미 같은 스킬과 레벨로 활성화되어 있으면 무시 (중복 생성 방지)
+        if (isForcefieldActive && forcefieldSkill == skill && forcefieldLevel == level)
+        {
+            return;
+        }
+
         forcefieldSkill = skill;
         forcefieldLevel = level;
 
         if (skill != null && level > 0)
         {
+            // 기존 보호막이 있으면 비활성화 후 재생성
+            if (isForcefieldActive)
+            {
+                DeactivateForcefield();
+            }
             ActivateForcefield();
         }
         else

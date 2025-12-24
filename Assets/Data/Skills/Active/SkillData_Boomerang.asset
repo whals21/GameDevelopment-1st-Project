@@ -65,5 +65,5 @@ MonoBehaviour:
     projectileSizeMultiplier: 1
     projectileScaleIncrease: 0.5
     upgradeDescription: Adds boomerang size, Adds boomerang damage
-  evoSkill: {fileID: 0}
+  evoSkill: {fileID: 11400000, guid: b184065ba4ffacf45adac9e891f1b773, type: 2}
   evoRequirements: 

@@ -21,10 +21,10 @@ public class ObjectPoolManager : MonoBehaviour
     public Drone dronePrefab;
     public MissileProjectile missilePrefab;
     public LightningStrike lightningPrefab;
-    public RPGProjectile rpgPrefab; 
+    public RPGProjectile rpgPrefab;
     public RPGExplosion rpgExplosionPrefab;
-
-    public RandomBox randomBoxPrefab; // 1223 랜덤박스
+    public MagneticDartProjectile magneticDartPrefab;
+    public RandomBox randomBoxPrefab; 
 
     [Header("Pool Sizes")]
     public int[] enemyPoolSizes = new int[] { };    //12/18
@@ -43,8 +43,8 @@ public class ObjectPoolManager : MonoBehaviour
     public int lightningPoolSize = 30;
     public int rpgPoolSize = 10;
     public int rpgExplosionPoolSize = 10;
-
-    public int randomBoxPoolSize = 5; // 1223 랜덤박스
+    public int magneticDartPoolSize = 10;
+    public int randomBoxPoolSize = 10;
 
     public int expGemPoolSizePerTier = 50; //<---12/18추가 된거임
     // 풀들
@@ -64,8 +64,8 @@ public class ObjectPoolManager : MonoBehaviour
     private ObjectPool<LightningStrike> lightningPool;
     private ObjectPool<RPGProjectile> rpgPool;
     private ObjectPool<RPGExplosion> rpgExplosionPool;
-
-    private ObjectPool<RandomBox> randomBoxPool; // 1223 랜덤박스
+    private ObjectPool<MagneticDartProjectile> magneticDartPool;
+    private ObjectPool<RandomBox> randomBoxPool;
 
     //12/18추가 되었음
     private List<ObjectPool<ExpGem>> expGemPools = new List<ObjectPool<ExpGem>>();  //리스트 활성화
@@ -80,11 +80,10 @@ public class ObjectPoolManager : MonoBehaviour
     private bool isInitialized = false;
     private readonly string[] requiredPrefabs = {
         //"enemyPrefab"//12/18
-        // "randomBoxPrefab" //1223
         "enemyBulletPrefab", "projectilePrefab",
         "boomerangPrefab", "molotovPrefab", "brickPrefab",
         "fireGroundPrefab", "soccerBallPrefab", "expGemPrefab",
-        "damageTextPrefab", "guardianTopPrefab", "rpgPrefab", "rpgExplosionPrefab", "randomBoxPrefab"
+        "damageTextPrefab", "guardianTopPrefab", "rpgPrefab", "rpgExplosionPrefab"
     };
 
     private void Awake()
@@ -118,7 +117,6 @@ public class ObjectPoolManager : MonoBehaviour
 
         // 풀 초기화
         //enemyPool = new ObjectPool<Enemy>(enemyPrefab, enemyPoolSize, transform);//12/18
-        // randomBoxPool = new ObjectPool<RandomBox>(randomBoxPrefab, randomBoxPoolSize, transform); //1223
         enemyBulletPool = new ObjectPool<EnemyBullet>(enemyBulletPrefab, enemyBulletPoolSize, transform);
         projectilePool = new ObjectPool<Projectile>(projectilePrefab, projectilePoolSize, transform);
         boomerangPool = new ObjectPool<BoomerangProjectile>(boomerangPrefab, boomerangPoolSize, transform);
@@ -134,9 +132,8 @@ public class ObjectPoolManager : MonoBehaviour
         lightningPool = new ObjectPool<LightningStrike>(lightningPrefab, lightningPoolSize, transform);
         rpgPool = new ObjectPool<RPGProjectile>(rpgPrefab, rpgPoolSize, transform);
         rpgExplosionPool = new ObjectPool<RPGExplosion>(rpgExplosionPrefab, rpgExplosionPoolSize, transform);
-
+        magneticDartPool = new ObjectPool<MagneticDartProjectile>(magneticDartPrefab, magneticDartPoolSize, transform);
         randomBoxPool = new ObjectPool<RandomBox>(randomBoxPrefab, randomBoxPoolSize, transform);
-
         isInitialized = true;
 
 
@@ -216,17 +213,17 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
-    // // SO 기반으로 Enemy 가져오기
-    // public Enemy GetEnemy(EnemyObject so)
-    // {
-    //     if (!enemyPoolsBySO.ContainsKey(so))
-    //     {
-    //         Debug.LogError("풀 없음: " + so.name);
-    //         return null;
-    //     }
+    // SO 기반으로 Enemy 가져오기
+    public Enemy GetEnemy(EnemyObject so)
+    {
+        if (!enemyPoolsBySO.ContainsKey(so))
+        {
+            Debug.LogError("풀 없음: " + so.name);
+            return null;
+        }
 
-    //     return enemyPoolsBySO[so].Get();
-    // }
+        return enemyPoolsBySO[so].Get();
+    }
     // 필수 프리팹 유효성 검사
     private void ValidateRequiredPrefabs()
     {
@@ -241,7 +238,7 @@ public class ObjectPoolManager : MonoBehaviour
     }
 
     // Enemy 가져오기
-    public Enemy GetEnemy(int index)    //12/19
+    public Enemy GetEnemy(int index)
     {
         if (!isInitialized)
         {
@@ -513,7 +510,20 @@ public class ObjectPoolManager : MonoBehaviour
         rpgExplosionPool.Return(rpgExplosion);
     }
 
-    // 1223 랜덤박스 풀링
+    // MagneticDart 풀링
+    public MagneticDartProjectile GetMagneticDart()
+    {
+        if (!ValidatePoolInitialized(magneticDartPool, "MagneticDart")) return null;
+        return magneticDartPool.Get();
+    }
+    public void ReturnMagneticDart(MagneticDartProjectile dart)
+    {
+        if (!ValidatePoolInitialized(magneticDartPool, "MagneticDart")) return;
+        dart.gameObject.SetActive(false);
+        magneticDartPool.Return(dart);
+    }
+
+    // RandomBox 풀링
     public RandomBox GetRandomBox()
     {
         if (!ValidatePoolInitialized(randomBoxPool, "RandomBox")) return null;
@@ -522,7 +532,6 @@ public class ObjectPoolManager : MonoBehaviour
     public void ReturnRandomBox(RandomBox box)
     {
         if (!ValidatePoolInitialized(randomBoxPool, "RandomBox")) return;
-
         box.gameObject.SetActive(false);
         randomBoxPool.Return(box);
     }

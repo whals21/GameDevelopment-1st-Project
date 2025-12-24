@@ -1499,6 +1499,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 245890897}
+  - component: {fileID: 245890898}
   m_Layer: 7
   m_Name: ForcefieldManager
   m_TagString: Untagged
@@ -1521,6 +1522,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 152268700}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &245890898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 245890896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40bf3101874028c4780b8e7fe2954dfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forcefieldPrefab: {fileID: 6918976490401859778, guid: 547dd206d6911c047bcee4da370a5b5e, type: 3}
+  forcefieldParent: {fileID: 152268700}
 --- !u!1 &248017414
 GameObject:
   m_ObjectHideFlags: 0
@@ -1703,6 +1718,7 @@ MonoBehaviour:
   lightningPrefab: {fileID: 3167097836887561848, guid: 0f8f68352bc61634ebba9ba5564eaa38, type: 3}
   rpgPrefab: {fileID: 2568495200583859290, guid: 6feb03b39d1b63a45b2b912f4055e630, type: 3}
   rpgExplosionPrefab: {fileID: 8049410300347525239, guid: ddce02617f191e44ab01d24b914cd646, type: 3}
+  magneticDartPrefab: {fileID: 2939155532130027861, guid: d8520391d9cb41e41bc43b34bf539751, type: 3}
   randomBoxPrefab: {fileID: 4521468941778708298, guid: 1f1ece1531702d64e8337767e6fcd161, type: 3}
   enemyPoolSizes: 0c0000000c000000
   enemyBulletPoolSize: 10
@@ -1720,6 +1736,7 @@ MonoBehaviour:
   lightningPoolSize: 20
   rpgPoolSize: 10
   rpgExplosionPoolSize: 10
+  magneticDartPoolSize: 10
   randomBoxPoolSize: 5
   expGemPoolSizePerTier: 50
   enemyTypes: []
@@ -1878,7 +1895,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 152268700}
-  levelUpManager: {fileID: 0}
+  levelUpManager: {fileID: 792838653}
   dataManager: {fileID: 1686091348}
   currentTierIndex: 0
 --- !u!4 &358683052
@@ -2508,15 +2525,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testSkills:
-  - {fileID: 11400000, guid: c572ab794d279304e8e9ce61aad30eda, type: 2}
-  testSkillLevels: 05000000
+  - {fileID: 11400000, guid: b184065ba4ffacf45adac9e891f1b773, type: 2}
+  - {fileID: 11400000, guid: e7eea4080a4ac0d44b4af315794027d3, type: 2}
+  testSkillLevels: 0100000001000000
   testPassiveSkills:
   - {fileID: 11400000, guid: 5f399665f4ac8764981d8e6a3f567777, type: 2}
-  - {fileID: 11400000, guid: 1ab9c4ed93aa4774da769ae94bb7c218, type: 2}
-  - {fileID: 11400000, guid: 39ad9654b5012f941808fd7ed499c39d, type: 2}
-  - {fileID: 11400000, guid: 4073701c6b5673244ba68da57055b0e0, type: 2}
-  - {fileID: 11400000, guid: 358bff6db4917b74cb61b33bc88f8974, type: 2}
-  testPassiveSkillLevels: 0500000005000000050000000500000005000000
+  testPassiveSkillLevels: 01000000
 --- !u!1001 &492451768
 PrefabInstance:
   m_ObjectHideFlags: 0

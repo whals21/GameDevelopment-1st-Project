@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class RandomBox : MonoBehaviour
 {
-    [Header("¼³Á¤")]
-    [SerializeField] private GameObject[] rewardItems; // ³ª¿Ã ¾ÆÀÌÅÛµé
-    [SerializeField] private float lifeTime = 10f; // 10ÃÊ µÚ¿¡ »ç¶óÁü
+    [Header("ï¿½ï¿½ï¿½ï¿½")]
+    [SerializeField] private GameObject[] rewardItems; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ûµï¿½
+    [SerializeField] private float lifeTime = 10f; // 10ï¿½ï¿½ ï¿½Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 
-    // È°¼ºÈ­µÉ ¶§¸¶´Ù ½ÇÇà
+    // È°ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     private void OnEnable()
     {
-        // ÀÏÁ¤ ½Ã°£ µÚ¿¡ ½º½º·Î »ç¶óÁö°Ô ¿¹¾à
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         CancelInvoke("Despawn");
         Invoke("Despawn", lifeTime);
     }
@@ -24,26 +24,34 @@ public class RandomBox : MonoBehaviour
 
     private void OpenBox()
     {
-        // ¾ÆÀÌÅÛ ¸ñ·ÏÀÌ ºñ¾îÀÖÀ¸¸é ¿¡·¯ ¹æÁö
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (rewardItems.Length > 0)
         {
-            // ·£´ıÀ¸·Î ÇÏ³ª »Ì±â
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï³ï¿½ ï¿½Ì±ï¿½
             int index = Random.Range(0, rewardItems.Length);
             GameObject selectedItem = rewardItems[index];
 
-            // »óÀÚ À§Ä¡¿¡ ¾ÆÀÌÅÛ ¼ÒÈ¯
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
             Instantiate(selectedItem, transform.position, Quaternion.identity);
 
-            Debug.Log($"»óÀÚ ¿ÀÇÂ {selectedItem.name} ³ª¿Ô´Ù");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ {selectedItem.name} ï¿½ï¿½ï¿½Ô´ï¿½");
         }
 
-        // »óÀÚ´Â »ç¶óÁü
+        // ï¿½ï¿½ï¿½Ú´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
         Despawn();
     }
 
     private void Despawn()
     {
-        gameObject.SetActive(false);
+        // ì˜¤ë¸Œì íŠ¸ í’€ì— ë°˜í™˜ - 12/24 ì¡°ë¯¼í¬ ì¶”ê°€
+        if (ObjectPoolManager.Instance != null)
+        {
+            ObjectPoolManager.Instance.ReturnRandomBox(this);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
 
     }
 }

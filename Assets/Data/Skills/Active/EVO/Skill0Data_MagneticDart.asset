@@ -10,60 +10,60 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8297aba9e983e844d902c72f1395ee46, type: 3}
-  m_Name: SkillData_Guardian
+  m_Name: Skill0Data_MagneticDart
   m_EditorClassIdentifier: 
-  skillName: Guardian
-  description: "\uD68C\uC804\uD558\uB294 \uD1B1\uB0A0\uC744 \uD50C\uB9AC\uC774\uC5B4
-    \uC8FC\uBCC0\uC5D0 \uC0DD\uC131"
-  icon: {fileID: 21300000, guid: a10d36fcd6b2dc846b543716576446aa, type: 3}
-  skillType: 0
-  projectilePrefab: {fileID: 8151767714879711735, guid: f8cae82349e6cc14196d7fbdc5b3f2d5, type: 3}
-  skillObjectPrefab: {fileID: 9188658686722922059, guid: a1256b3f9b333d248a3c93c94e137785, type: 3}
+  skillName: "\uB9C8\uADF8\uB124\uD2F1 \uB2E4\uD2B8"
+  description: "2\uAC1C\uC758 \uD22C\uC0AC\uCCB4\uAC00 \uACF5\uC804\uD558\uBA70 \uC801\uC744
+    \uACF5\uACA9\uD558\uACE0 \uD22C\uC0AC\uCCB4\uB97C \uCC28\uB2E8\uD569\uB2C8\uB2E4"
+  icon: {fileID: 21300000, guid: cd28851ef10a3c74f9c48ba202686ad3, type: 3}
+  skillType: 6
+  projectilePrefab: {fileID: 2864860492614333976, guid: d8520391d9cb41e41bc43b34bf539751, type: 3}
+  skillObjectPrefab: {fileID: 6868546550866327212, guid: 1cda4ee8f983c0e459a6d0124d421cc6, type: 3}
   damage: 15
-  cooldown: 8
+  cooldown: 0
   projectileSpeed: 15
   projectileCount: 1
   attackRange: 10
   levels:
   - level: 1
     damageMultiplier: 1
-    cooldownMultiplier: 1
+    cooldownMultiplier: 0
     additionalProjectiles: 0
     projectileSpeedMultiplier: 0
     projectileSizeMultiplier: 0
     projectileScaleIncrease: 0
-    upgradeDescription: "2\uAC1C\uC758 \uD1B1\uB0A0"
+    upgradeDescription: 
   - level: 2
-    damageMultiplier: 1.2
-    cooldownMultiplier: 1
+    damageMultiplier: 1.1
+    cooldownMultiplier: 0
     additionalProjectiles: 0
     projectileSpeedMultiplier: 0
     projectileSizeMultiplier: 0
     projectileScaleIncrease: 0
-    upgradeDescription: "\uD1B1\uB0A0 3\uAC1C, \uD68C\uC804 \uC18D\uB3C4 \uC99D\uAC00"
+    upgradeDescription: 
   - level: 3
-    damageMultiplier: 1.4
-    cooldownMultiplier: 1
+    damageMultiplier: 1.2
+    cooldownMultiplier: 0
     additionalProjectiles: 0
     projectileSpeedMultiplier: 0
     projectileSizeMultiplier: 0
     projectileScaleIncrease: 0
-    upgradeDescription: "\uD1B1\uB0A0 4\uAC1C, \uD68C\uC804 \uC18D\uB3C4 \uC99D\uAC00"
+    upgradeDescription: 
   - level: 4
-    damageMultiplier: 1.6
-    cooldownMultiplier: 1
+    damageMultiplier: 1.3
+    cooldownMultiplier: 0
     additionalProjectiles: 0
     projectileSpeedMultiplier: 0
     projectileSizeMultiplier: 0
     projectileScaleIncrease: 0
-    upgradeDescription: "\uD1B1\uB0A0 5\uAC1C, \uD68C\uC804 \uC18D\uB3C4 \uC99D\uAC00"
+    upgradeDescription: 
   - level: 5
-    damageMultiplier: 1.8
-    cooldownMultiplier: 1
+    damageMultiplier: 1.4
+    cooldownMultiplier: 0
     additionalProjectiles: 0
     projectileSpeedMultiplier: 0
     projectileSizeMultiplier: 0
     projectileScaleIncrease: 0
-    upgradeDescription: "\uD1B1\uB0A0 6\uAC1C, \uD68C\uC804 \uC18D\uB3C4 \uC99D\uAC00"
+    upgradeDescription: 
   evoSkill: {fileID: 0}
   evoRequirements: 
