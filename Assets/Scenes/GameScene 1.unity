@@ -1499,7 +1499,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 245890897}
-  - component: {fileID: 245890898}
   m_Layer: 7
   m_Name: ForcefieldManager
   m_TagString: Untagged
@@ -1522,24 +1521,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 152268700}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &245890898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 245890896}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61ecf41305b577a42a9fc9433863a394, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  forcefieldPrefab: {fileID: 6918976490401859778, guid: 547dd206d6911c047bcee4da370a5b5e, type: 3}
-  forcefieldParent: {fileID: 152268700}
-  activeForcefields: []
-  forcefieldSkill: {fileID: 0}
-  forcefieldLevel: 0
-  isForcefieldActive: 0
 --- !u!1 &248017414
 GameObject:
   m_ObjectHideFlags: 0
@@ -5778,6 +5759,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2e0ee0a4260c244c8e940dab30491f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pads: []
 --- !u!1 &1194831514
 GameObject:
   m_ObjectHideFlags: 0
@@ -6340,7 +6322,7 @@ MonoBehaviour:
   maxEnemies: 100
   spawnDistance: 15
   enemyTypes:
-  - {fileID: 11400000, guid: a4e2a2613c00f1f448d7c94e16724578, type: 2}
+  - {fileID: 11400000, guid: 5f5ecb3b1f76d92489921c7b11288a09, type: 2}
   - {fileID: 11400000, guid: 70d92edc6412928498cd87b70772d3b8, type: 2}
   - {fileID: 11400000, guid: 5ed5596caaacb4d42b43e68fd143f31e, type: 2}
 --- !u!4 &1377424393
