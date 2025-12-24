@@ -306,8 +306,6 @@ public class LightningStrike : MonoBehaviour
                 }
             }
         }
-
-        Debug.Log($"LightningStrike: {transform.position}에서 {damage} 데미지 전달");
     }
 
     /// <summary>

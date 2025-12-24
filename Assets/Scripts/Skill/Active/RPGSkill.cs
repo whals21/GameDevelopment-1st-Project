@@ -108,8 +108,6 @@ public class RPGSkill : MonoBehaviour
     {
         currentLevel = Mathf.Max(1, level);
         LoadSkillData();
-
-        Debug.Log($"RPGSkill: 레벨 {currentLevel}로 설정됨 (발사체 수: {projectileCount}, 데미지: {damage:F1}, 쿨타임: {cooldownTime:F1}초)");
     }
 
     /// <summary>
@@ -164,10 +162,6 @@ public class RPGSkill : MonoBehaviour
             damage = baseDamage * levelData.damageMultiplier;
             cooldownTime = baseCooldown * levelData.cooldownMultiplier;
             projectileCount = baseProjectileCount + levelData.additionalProjectiles;
-
-            Debug.Log($"RPGSkill Lv.{currentLevel} (SkillData): " +
-                     $"기본발사체={baseProjectileCount}, 추가발사체={levelData.additionalProjectiles}, " +
-                     $"총발사체={projectileCount}");
         }
         else
         {
@@ -175,10 +169,6 @@ public class RPGSkill : MonoBehaviour
             damage = baseDamage * GetLevelDamageMultiplier(currentLevel);
             cooldownTime = baseCooldown - (cooldownReductionPerLevel * (currentLevel - 1));
             projectileCount = GetLevelProjectileCount(currentLevel);
-
-            Debug.Log($"RPGSkill Lv.{currentLevel} (기본값): " +
-                     $"뎀지지배수={GetLevelDamageMultiplier(currentLevel):F1}, " +
-                     $"발사체수={projectileCount}");
         }
 
         // 최소/최대값 제한
@@ -277,8 +267,6 @@ public class RPGSkill : MonoBehaviour
     {
         if (currentTarget == null || !currentTarget.gameObject.activeInHierarchy) return;
 
-        Debug.Log($"RPGSkill: {projectileCount}개의 RPG 발사! 타겟: {currentTarget.name}");
-
         // 발사체 발사
         StartCoroutine(FireProjectilesSequence());
 
@@ -346,8 +334,6 @@ public class RPGSkill : MonoBehaviour
 
             // 발사체 초기화
             projectile.SetParameters(transform.position, direction, damage, projectileSpeed);
-
-            Debug.Log($"RPGSkill: 발사체 #{index + 1} 발사. 방향: {direction}");
         }
         else
         {

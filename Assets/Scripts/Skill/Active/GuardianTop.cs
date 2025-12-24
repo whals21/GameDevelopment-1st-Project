@@ -54,7 +54,6 @@ public class GuardianTop : MonoBehaviour
             rb.gravityScale = 0f; // 중력 비활성화
             rb.constraints = RigidbodyConstraints2D.FreezeRotation; // 회전은 직접 제어
             rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous; // 연속 충돌 감지
-            Debug.Log($"[GuardianTop] Rigidbody2D 설정: Dynamic, GravityScale=0, CollisionDetection=Continuous");
         }
         else
         {
@@ -99,14 +98,10 @@ public class GuardianTop : MonoBehaviour
         if (topCollider != null)
         {
             topCollider.enabled = true;
-            Debug.Log($"[GuardianTop] 콜라이더 활성화: {topCollider.GetType().Name}, IsTrigger: {topCollider.isTrigger}");
         }
 
         // 초기 위치 설정
         UpdateOrbitPosition();
-
-        // 초기화 정보 로그
-        Debug.Log($"[GuardianTop] 초기화 완료 - 데미지: {damage}, 배수: {damageMultiplier}, 콜라이더: {(topCollider != null ? topCollider.GetType().Name : "None")}");
     }
 
     private void Update()
@@ -156,39 +151,26 @@ public class GuardianTop : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log($"[GuardianTop] OnCollisionEnter2D 호출됨! 충돌한 객체: {collision.gameObject.name} (Layer: {LayerMask.LayerToName(collision.gameObject.layer)})");
-
         if (lastCollisionTime > 0)
         {
-            Debug.Log("[GuardianTop] 충돌 쿨다운으로 무시됨");
             return; // 충돌 쿨다운 체크
         }
-
-        // 레이어 마스크 정보 로그
-        Debug.Log($"[GuardianTop] LayerMask 정보 - EnemyLayer: {enemyLayer.value}, ProjectileLayer: {projectileLayer.value}, GroundLayer: {groundLayer.value}");
 
         // 적 처리
         if (IsInLayer(collision.gameObject, enemyLayer))
         {
-            Debug.Log("[GuardianTop] 적 레이어 감지됨!");
             HandleEnemyCollision(collision);
         }
         // 적 투사체 차단
         else if (IsInLayer(collision.gameObject, projectileLayer))
         {
-            Debug.Log("[GuardianTop] 투사체 레이어 감지됨!");
             HandleProjectileCollision(collision);
         }
         // 지형 충돌
         else if (IsInLayer(collision.gameObject, groundLayer))
         {
-            Debug.Log("[GuardianTop] 지형 레이어 감지됨 - 충돌 무시");
             // 지형에는 반응하지 않고 통과
             Physics2D.IgnoreCollision(collision.collider, topCollider);
-        }
-        else
-        {
-            Debug.Log($"[GuardianTop] 알 수 없는 레이어: {collision.gameObject.layer} - 처리되지 않음");
         }
 
         lastCollisionTime = COLLISION_COOLDOWN;
@@ -197,25 +179,20 @@ public class GuardianTop : MonoBehaviour
     // Trigger 기반 충돌 감지 (콜라이더가 Trigger인 경우)
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log($"[GuardianTop] OnTriggerEnter2D 호출됨! 객체: {other.gameObject.name} (Layer: {LayerMask.LayerToName(other.gameObject.layer)})");
-
         // 중복 충돌 체크
         if (alreadyCollidedWith.Contains(other))
         {
-            Debug.Log("[GuardianTop] 이미 충돌했던 객체 - 무시");
             return;
         }
 
         // 적 처리
         if (IsInLayer(other.gameObject, enemyLayer))
         {
-            Debug.Log("[GuardianTop] Trigger로 적 레이어 감지됨!");
             HandleEnemyTriggerCollision(other);
         }
         // 적 투사체 차단
         else if (IsInLayer(other.gameObject, projectileLayer))
         {
-            Debug.Log("[GuardianTop] Trigger로 투사체 레이어 감지됨!");
             HandleProjectileTriggerCollision(other);
         }
 
@@ -235,23 +212,17 @@ public class GuardianTop : MonoBehaviour
     // 적 충돌 처리
     private void HandleEnemyCollision(Collision2D collision)
     {
-        Debug.Log($"[GuardianTop] HandleEnemyCollision 호출 - 충돌 객체: {collision.gameObject.name}");
-
         Enemy enemy = collision.gameObject.GetComponent<Enemy>();
         if (enemy == null)
         {
-            Debug.LogError($"[GuardianTop] Enemy 컴포넌트를 찾을 수 없습니다: {collision.gameObject.name}");
             return;
         }
 
         // 데미지 계산
         float finalDamage = damage * damageMultiplier;
-        Debug.Log($"[GuardianTop] 데미지 적용 시도 - 기본 데미지: {damage}, 배수: {damageMultiplier}, 최종 데미지: {finalDamage}");
-        Debug.Log($"[GuardianTop] 적 현재 HP: {enemy.CurrentHP}");
 
         // 데미지 적용
         enemy.TakeDamage(finalDamage);
-        Debug.Log($"[GuardianTop] 데미지 적용 후 적 HP: {enemy.CurrentHP}");
 
         // 넉백 적용
         Rigidbody2D enemyRb = enemy.GetComponent<Rigidbody2D>();
@@ -259,7 +230,6 @@ public class GuardianTop : MonoBehaviour
         {
             Vector2 knockbackDirection = (enemy.transform.position - transform.position).normalized;
             enemyRb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
-            Debug.Log($"[GuardianTop] 넉백 적용 - 방향: {knockbackDirection}, 힘: {knockbackForce}");
         }
 
         // 히트 이펙트
@@ -269,23 +239,17 @@ public class GuardianTop : MonoBehaviour
     // Trigger 기반 적 충돌 처리
     private void HandleEnemyTriggerCollision(Collider2D other)
     {
-        Debug.Log($"[GuardianTop] HandleEnemyTriggerCollision 호출 - 객체: {other.gameObject.name}");
-
         Enemy enemy = other.GetComponent<Enemy>();
         if (enemy == null)
         {
-            Debug.LogError($"[GuardianTop] Enemy 컴포넌트를 찾을 수 없습니다: {other.gameObject.name}");
             return;
         }
 
         // 데미지 계산
         float finalDamage = damage * damageMultiplier;
-        Debug.Log($"[GuardianTop] Trigger 데미지 적용 - 기본 데미지: {damage}, 배수: {damageMultiplier}, 최종 데미지: {finalDamage}");
-        Debug.Log($"[GuardianTop] 적 현재 HP: {enemy.CurrentHP}");
 
         // 데미지 적용
         enemy.TakeDamage(finalDamage);
-        Debug.Log($"[GuardianTop] Trigger 데미지 적용 후 적 HP: {enemy.CurrentHP}");
 
         // 넉백 적용
         Rigidbody2D enemyRb = enemy.GetComponent<Rigidbody2D>();
@@ -293,7 +257,6 @@ public class GuardianTop : MonoBehaviour
         {
             Vector2 knockbackDirection = (enemy.transform.position - transform.position).normalized;
             enemyRb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
-            Debug.Log($"[GuardianTop] Trigger 넉백 적용 - 방향: {knockbackDirection}, 힘: {knockbackForce}");
         }
 
         // 히트 이펙트
@@ -303,15 +266,12 @@ public class GuardianTop : MonoBehaviour
     // Trigger 기반 투사체 충돌 처리
     private void HandleProjectileTriggerCollision(Collider2D other)
     {
-        Debug.Log($"[GuardianTop] HandleProjectileTriggerCollision 호출 - 객체: {other.gameObject.name}");
-
         // 적 투사체 파괴
         EnemyBullet bullet = other.GetComponent<EnemyBullet>();
         if (bullet != null)
         {
             Destroy(other.gameObject);
             CreateBlockEffect(other.transform.position);
-            Debug.Log("[GuardianTop] 투사체 파괴 완료");
         }
     }
 
@@ -353,10 +313,7 @@ public class GuardianTop : MonoBehaviour
     private bool IsInLayer(GameObject obj, LayerMask layerMask)
     {
         int objLayer = obj.layer;
-        string layerName = LayerMask.LayerToName(objLayer);
-        bool isInLayer = (layerMask.value & (1 << objLayer)) != 0;
-        Debug.Log($"[GuardianTop] IsInLayer 체크 - 객체: {obj.name}, 레이어: {objLayer}({layerName}), LayerMask: {layerMask.value}, 결과: {isInLayer}");
-        return isInLayer;
+        return (layerMask.value & (1 << objLayer)) != 0;
     }
 
     // 비활성화
@@ -451,7 +408,6 @@ public class GuardianTop : MonoBehaviour
                     continue;
                 }
 
-                Debug.Log($"[GuardianTop] 오버랩으로 적 감지: {hit.gameObject.name}");
                 HandleEnemyTriggerCollision(hit);
                 alreadyCollidedWith.Add(hit);
             }

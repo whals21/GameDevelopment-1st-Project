@@ -158,8 +158,6 @@ public class RPGProjectile : MonoBehaviour
 
         // 발사 이펙트
         PlayLaunchEffects();
-
-        Debug.Log($"RPGProjectile: 발사! 방향: {moveDirection}, 속도: {moveSpeed}, 데미지: {damage}");
     }
 
     // 레벨별 파라미터 설정 (권장)
@@ -183,8 +181,6 @@ public class RPGProjectile : MonoBehaviour
 
         // 발사 이펙트
         PlayLaunchEffects();
-
-        Debug.Log($"RPGProjectile: 발사! 레벨: {currentLevel}, 속도: {moveSpeed}, 데미지: {damage}");
     }
 
     // 레벨 설정 메서드
@@ -202,8 +198,6 @@ public class RPGProjectile : MonoBehaviour
         damage = damageLevels[levelIndex];
         moveSpeed = speedLevels[levelIndex];
         currentExplosionRadius = explosionRadiusLevels[levelIndex];
-
-        Debug.Log($"RPGProjectile 레벨 {currentLevel}: 데미지={damage}, 속도={moveSpeed}, 폭발반경={currentExplosionRadius}");
     }
     #endregion
 
@@ -218,8 +212,6 @@ public class RPGProjectile : MonoBehaviour
         if (hasExploded) return;
 
         hasExploded = true;
-
-        Debug.Log($"RPGProjectile: 폭발! 위치: {transform.position}, 반경: {explosionRadius}m");
 
         // 폭발 이펙트 생성
         CreateExplosion();

@@ -229,8 +229,6 @@ public class GuardianSkill : MonoBehaviour
 
         // 기존 톱날 파괴 후 재생성
         InitializeTops();
-
-        Debug.Log($"Guardian 레벨업: Lv.{currentLevel}");
     }
 
     // 레벨업 이펙트 코루틴
@@ -287,8 +285,6 @@ public class GuardianSkill : MonoBehaviour
 
         // 진화 이펙트
         CreateEvolutionEffect();
-
-        Debug.Log("Guardian가 Defender로 진화했습니다!");
     }
 
     // 활성화 이펙트
