@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class FieldItem : MonoBehaviour
 {
@@ -13,10 +14,24 @@ public class FieldItem : MonoBehaviour
     public ItemType type;
     public float healAmount = 20f; // 힐량
     public float bombDamage = 9999f;
+    private bool canPickup = false;
+
+    private void OnEnable()
+    {
+        canPickup = false; // 잠금
+        StartCoroutine(EnablePickupRoutine()); // 쿨타임 시작
+    }
+
+    IEnumerator EnablePickupRoutine()
+    {
+        yield return new WaitForSeconds(0.5f); // 0.5초 대기
+        canPickup = true;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // 플레이어랑 닿았을 때만 발동
+        if (!canPickup) return;
+
         if (collision.CompareTag("Player"))
         {
             ApplyEffect();
@@ -63,6 +78,11 @@ public class FieldItem : MonoBehaviour
 
             case ItemType.Bomb:
                 Debug.Log("폭탄 발동");
+
+                if (PlayerHUD.Instance != null)
+                {
+                    PlayerHUD.Instance.TriggerFlashEffect();
+                }
                 // 맵에 있는 모든 Enemy 태그를 찾음
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
