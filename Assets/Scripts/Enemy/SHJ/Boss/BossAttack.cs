@@ -231,17 +231,16 @@ class BossAttackPattern001 : BossAttackBase
         if (boss.target == null)
             return false;
 
-        // 눈으로 레이 발사
         RaycastHit2D hit = boss.attackRay.Fire();
 
-        // 충돌이 없으면 실행 불가
+        // 플레이어가 시야 안에 없으면 공격 불가
         if (hit.collider == null)
             return false;
 
-        // 마지막으로 눈이 맞춘 위치를 잠금
+        // 이 순간의 위치를 LOCK
         lockedTargetPos = hit.point;
 
-        // 돌진 방향 계산
+        // 공격 방향도 이때 결정
         dashDir = (lockedTargetPos - (Vector2)boss.rb.position).normalized;
 
         return true;

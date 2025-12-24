@@ -15,15 +15,15 @@ MonoBehaviour:
   bulletPrefab: []
   bulletCount: 
   attackRayLength:
-  - 15
+  - 200
+  attackRange:
+  - 0
   damage:
   - 20
   damageMove:
-  - 20
-  attackRange:
-  - 5
+  - 100
   delayAfter: []
   BossAttackOption: 00000000
   warningPads:
   - {fileID: 6361049014533627461, guid: ff90cade94cf9bb428cf8a75fe50731b, type: 3}
-  warningPadCount: 0000000001000000
+  warningPadCount: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a000000
