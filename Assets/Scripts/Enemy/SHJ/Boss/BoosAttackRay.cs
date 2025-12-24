@@ -4,45 +4,51 @@ using UnityEngine;
 
 public class BoosAttackRay : MonoBehaviour
 {
-    [SerializeField] private LayerMask targetLayer;
+    [SerializeField] private LayerMask targetLayer; // 감지할 레이어
 
-    private BossController boss;
-    private Vector2 currentDir;     // 계속 갱신되는 방향
-    private Vector2 fireDir;        // 발사 시 고정 방향
+    private BossController boss;   // 뇌(BossController) 참조
+    private Vector2 currentDir;    // 매 프레임 갱신되는 방향
 
-    public void Initialize(BossController controller)   //일단 연결 부모하고
+    // ----------------------
+    // 초기화: 보스 연결
+    // ----------------------
+    public void Initialize(BossController controller)
     {
         boss = controller;
     }
 
-    // 예고 단계에서 매 프레임 호출
-    public void UpdateDirection()       //애가 업데이트 되어야 대상을 찾겠지?
+    // ----------------------
+    // 예고 단계에서 호출: 플레이어 위치 추적
+    // 매 프레임 갱신
+    // ----------------------
+    public void UpdateDirection()
     {
-        if (boss.target == null) return;
+        if (boss == null || boss.target == null) return;
 
-        currentDir =
-            (boss.target.position - transform.position).normalized;
+        // 눈이 보는 방향 갱신
+        currentDir = (boss.target.position - (Vector3)transform.position).normalized;
     }
 
-  
-
-    // 공격 발동 순간
-    public void Fire()
+    // ----------------------
+    // 공격 발동 시 호출
+    // 레이 반환, 길이와 방향만 사용
+    // 충돌 여부 판단은 패턴에서 처리
+    // ----------------------
+    public RaycastHit2D Fire()
     {
-        fireDir = currentDir;
+        if (boss == null) return default;
 
-        RaycastHit2D hit = Physics2D.Raycast(
+        return Physics2D.Raycast(
             transform.position,
-            fireDir,
+            currentDir,              // 이미 UpdateDirection에서 계산된 방향 사용
             boss.CurrentAttackRayLength,
             targetLayer
         );
-
-        if (hit.collider != null)//패턴 발동되겠지?
-        {
-            
-        }
     }
 
+    // ----------------------
+    // 현재 보는 방향 반환 (패턴에서 참조 가능)
+    // ----------------------
+    public Vector2 CurrentDirection => currentDir;
 
 }
