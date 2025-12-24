@@ -21,10 +21,13 @@ public enum BossAttackType
 //  - Tick 갱신 (패턴 진행)
 //  - 공격 종료 처리
 // ----------------------
+
 public class BossAttack : MonoBehaviour
 {
     private BossController boss;       // 보스 참조
     private IBossAttack currentAttack; // 현재 실행 중인 공격 패턴
+
+
 
     // 현재 공격 중인지 확인
     public bool IsAttacking => currentAttack != null;
@@ -70,6 +73,8 @@ public class BossAttack : MonoBehaviour
             currentAttack = null;
         }
     }
+
+
 }
 
 // ----------------------
@@ -105,21 +110,36 @@ public static class BossAttackPatternFactory
 // ----------------------
 public abstract class BossAttackBase : IBossAttack
 {
-    protected BossController boss;     // 패턴이 참조하는 보스
-    protected BoosAttackRay attackRay;
-    protected BossRange attackRange;
+    protected BossController boss;        // 패턴이 참조하는 보스
+    protected BoosAttackRay attackRay;    // 공격용 레이
+    protected BossRange attackRange;      // 공격 범위
 
-    protected float warningTimer;      // 경고 단계 시간 누적
-    protected bool executed;           // 공격 실행 여부 (Execute 호출 여부)
+    protected float warningTimer;         // 경고 단계 시간 누적
+    protected bool executed;              // Execute 호출 여부
 
-    protected GameObject warningPad;   // 경고 단계에서 표시할 발판
-    protected bool padSpawned;         // 발판 생성 여부 확인
+    protected GameObject warningPad;      // 경고용 발판 단일
+    protected bool padSpawned;            // 발판 생성 여부 확인
+    protected const float WARNING_TIME = 3f;
 
-    protected const float WARNING_TIME = 3f; // 경고 단계 지속 시간
+    protected List<GameObject> warningPads = new List<GameObject>(); // 공격용 발판 리스트
+
+    [Header("Warning Pad Settings")]
+    protected int warningPadType = 0;
+    protected int warningPadCount = 1;
 
     // ----------------------
-    // 초기화
-    // 패턴 시작 시 호출, 보스 참조 전달
+    // 패턴 루트/발판/총알 관리용 Transform
+    // - 각 패턴 별로 Pattern001, Pattern002 등 생성
+    // - 하위에 WarningPads, Bullets 생성
+    // ----------------------
+    protected Transform patternRoot;
+    protected Transform warningPadRoot;
+    protected Transform bulletRoot;
+
+    
+
+    // ----------------------
+    // 초기화: 보스 참조 전달 + 패턴 루트 생성
     // ----------------------
     public virtual void Initialize(BossController boss)
     {
@@ -131,69 +151,59 @@ public abstract class BossAttackBase : IBossAttack
         executed = false;
         padSpawned = false;
         warningPad = null;
+
+       
     }
 
-
     // ----------------------
-    // 패턴 실행 조건 체크
-    // 실제 공격 시작 가능 여부 판단
-    // (범위/레이 조건 등)
+    // 공격 가능 조건 체크 (범위/레이 등)
     // ----------------------
     public abstract bool CanExecute();
 
     // ----------------------
-    // Tick: 매 프레임 호출
-    // 역할:
-    // 1. 경고 단계 진행
-    // 2. 경고 완료 시 Execute() 호출
-    // 3. 공격 진행 단계 OnAttackTick() 호출
+    // 매 프레임 호출: 경고 및 공격 진행
     // ----------------------
     public void Tick()
     {
         if (!executed) // 경고 단계
         {
-            warningTimer += Time.deltaTime; // 시간 누적
-            UpdateWarning();                // 경고 표시 처리
+            warningTimer += Time.deltaTime;
+            UpdateWarning();
 
             if (warningTimer >= WARNING_TIME)
             {
-                Execute();    // 경고 종료 → 공격 실행
+                Execute();
                 executed = true;
             }
         }
         else
         {
-            OnAttackTick(); // 공격 진행 중 처리
+            OnAttackTick(); // 공격 진행 단계
         }
     }
 
     // ----------------------
-    // 경고 단계 업데이트
-    // 발판, 시각 효과 등 표시
+    // 경고 단계 업데이트 (발판/시각 효과)
     // ----------------------
     protected abstract void UpdateWarning();
 
     // ----------------------
-    // 공격 실행
-    // 경고 종료 후 실제 공격 수행
+    // 공격 실행 단계
     // ----------------------
     public abstract void Execute();
 
     // ----------------------
-    // 공격 진행 중 반복 처리
-    // (대시 이동, 발사 등)
+    // 공격 진행 중 반복 Tick
     // ----------------------
     protected virtual void OnAttackTick() { }
 
     // ----------------------
-    // 공격 종료
-    // 발판 반환, 상태 초기화, 보스 이동 상태 복귀 등
+    // 공격 종료 처리
     // ----------------------
     public abstract void Exit();
 
     // ----------------------
     // 공격 완료 여부
-    // Tick 호출 외부에서 패턴 종료 판단
     // ----------------------
     public abstract bool IsFinished { get; }
 }
@@ -201,16 +211,19 @@ public abstract class BossAttackBase : IBossAttack
 // ----------------------
 // BossAttackPattern001
 // 역할: 단일 패턴 예시 (대시 공격)
-//  - 경고 발판 표시
-//  - 목표 위치 LOCK 후 돌진
-//  - 도착 시 종료
+// - 경고 발판 표시
+// - 레이 감지로 플레이어 위치 LOCK
+// - Execute 시점에서 실제 공격용 발판 생성
+// - 돌진 후 도착 시 공격 종료
 // ----------------------
+
 class BossAttackPattern001 : BossAttackBase
 {
     private bool finished;            // 공격 완료
     private bool dashStarted;         // 돌진 시작 여부
     private Vector2 lockedTargetPos;  // 경고 단계에서 잠근 플레이어 위치
     private Vector2 dashDir;          // 돌진 방향
+    private Vector2 warningOriginPos;
 
     private const float WARNING_DURATION = 3f;
     private float warningElapsed;
@@ -228,20 +241,48 @@ class BossAttackPattern001 : BossAttackBase
     // 실행 가능 조건 체크 (범위 또는 레이 감지)
     public override bool CanExecute()
     {
-        if (boss == null) return false;
-        if (boss.attackRay == null) return false;
-        if (boss.rb == null) return false;
-        if (boss.target == null) return false;
+        if (boss == null)
+        {
+            Debug.LogError("[BossAttackPattern001] boss is NULL");
+            return false;
+        }
 
-        //마지막 위치를 본다 (단 1번)
+        if (boss.attackRay == null)
+        {
+            Debug.LogError("[BossAttackPattern001] attackRay is NULL");
+            return false;
+        }
+
+        if (boss.rb == null)
+        {
+            Debug.LogError("[BossAttackPattern001] Rigidbody2D is NULL");
+            return false;
+        }
+
+        if (boss.target == null)
+        {
+            Debug.Log("[BossAttackPattern001] target 없음");
+            return false;
+        }
+
+        // 눈 방향 갱신 (중요)
         boss.attackRay.UpdateDirection();
 
         RaycastHit2D hit = boss.attackRay.Fire();
+
         if (hit.collider == null)
+        {
+            Debug.Log("[BossAttackPattern001] 레이 감지 실패");
             return false;
+        }
+
+        // 감지 성공
+        Debug.Log($"[BossAttackPattern001] 레이 감지 성공 : {hit.collider.name}");
 
         lockedTargetPos = hit.point;
         dashDir = (lockedTargetPos - (Vector2)boss.rb.position).normalized;
+
+        warningOriginPos = lockedTargetPos;
 
         return true;
     }
@@ -250,81 +291,65 @@ class BossAttackPattern001 : BossAttackBase
     // 경고 단계: 발판 생성 및 표시
     protected override void UpdateWarning()
     {
-        if (padSpawned) return;
+        warningElapsed += Time.deltaTime;
 
-        warningPad = boss.GetWarningPad(0);
-        if (warningPad == null) return;
-
-        warningPad.transform.position = new Vector3(lockedTargetPos.x, lockedTargetPos.y, -1f);
-        warningPad.transform.localScale = Vector3.one * 2f;
-
-        var sr = warningPad.GetComponent<SpriteRenderer>();
-        if (sr != null)
+        if (warningPads.Count == 0)
         {
-            sr.sortingOrder = 100;
-            sr.color = new Color(1, 0, 0, 0.5f); // 붉은 경고 표시
-        }
+            warningPadType = 0;
+            warningPadCount = 1;
 
-        padSpawned = true;
+            warningPads = boss.GetWarningPads(warningPadType, warningPadCount);
+
+            if (warningPads.Count == 0)
+            {
+                Debug.LogWarning("[BossAttackPattern001] WarningPad 생성 실패");
+                return;
+            }
+
+            float spacing = 1.2f;
+
+            for (int i = 0; i < warningPads.Count; i++)
+            {
+                Vector2 pos =
+                    warningOriginPos + dashDir * spacing * i;
+
+                warningPads[i].transform.position = pos;
+            }
+        }
     }
 
     // 공격 실행
     public override void Execute()
     {
+        // 경고 종료 → 발판 제거
+        foreach (var pad in warningPads)
+            boss.ReturnWarningPad(pad);
+
+        warningPads.Clear();
+
+        //공격 시작
         dashStarted = true;
     }
 
     // 공격 진행 Tick
     protected override void OnAttackTick()
     {
-        if (!dashStarted)
+        if (!dashStarted) return;
+
+        float dashSpeed = boss.CurrentDamageMove;
+        boss.rb.velocity = dashDir * dashSpeed;
+
+        float distance = Vector2.Distance(boss.rb.position, lockedTargetPos);
+        if (distance < 0.5f)
         {
-            // 경고 타이머 및 발판 생성 처리
-            warningTimer += Time.deltaTime;
-
-            if (!padSpawned)
-            {
-                warningPad = boss.GetWarningPad(0);
-                if (warningPad != null)
-                {
-                    warningPad.transform.position = lockedTargetPos;
-                    warningPad.transform.localScale = Vector3.one * 2f;
-                    var sr = warningPad.GetComponent<SpriteRenderer>();
-                    if (sr != null)
-                        sr.color = new Color(1, 0, 0, 0.5f);
-                    padSpawned = true;
-                }
-            }
-
-            if (warningTimer >= WARNING_TIME)
-            {
-                dashStarted = true;
-                if (warningPad != null)
-                    boss.ReturnWarningPad(warningPad);
-            }
-
-            return;
-        }
-
-        // 돌진 이동
-        float speed = boss.CurrentDamageMove;
-        Vector2 nextPos = boss.rb.position + dashDir * speed * Time.deltaTime;
-        boss.rb.MovePosition(nextPos);
-
-        // 목표 도착 시 종료
-        if (Vector2.Distance(boss.rb.position, lockedTargetPos) < 0.1f)
             finished = true;
+        }
     }
 
     // 공격 종료: 발판 반환, 상태 이동으로 복귀
     public override void Exit()
     {
-        if (warningPad != null)
-        {
-            boss.ReturnWarningPad(warningPad);
-            warningPad = null;
-        }
-
+        boss.rb.velocity = Vector2.zero;
         boss.SetState(new BossMove(boss));
     }
 }
