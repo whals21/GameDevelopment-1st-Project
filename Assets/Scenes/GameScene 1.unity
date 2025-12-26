@@ -1499,6 +1499,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 245890897}
+  - component: {fileID: 245890898}
   m_Layer: 7
   m_Name: ForcefieldManager
   m_TagString: Untagged
@@ -1521,6 +1522,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 152268700}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &245890898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 245890896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40bf3101874028c4780b8e7fe2954dfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forcefieldPrefab: {fileID: 6918976490401859778, guid: 547dd206d6911c047bcee4da370a5b5e, type: 3}
+  forcefieldParent: {fileID: 152268700}
 --- !u!1 &248017414
 GameObject:
   m_ObjectHideFlags: 0
@@ -4131,6 +4146,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d7852cc7598e73d43b1918e5873065c9, type: 2}
   - {fileID: 11400000, guid: 0828cd2730e03ff469e4dd442a12ce71, type: 2}
   - {fileID: 11400000, guid: 8596c776283d4b041aafe85aa78db606, type: 2}
+  - {fileID: 11400000, guid: 8feb91bb066570244af0fb7b79533d29, type: 2}
+  - {fileID: 11400000, guid: 7bcf9b195893db340912d85c7c3f4127, type: 2}
+  - {fileID: 11400000, guid: c4f1588feeed67a48abe258876aed303, type: 2}
   levelUpPanel: {fileID: 1488323578}
   itemButtons:
   - {fileID: 363006735}

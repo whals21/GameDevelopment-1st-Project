@@ -1531,4 +1531,5 @@ public class SkillManager : MonoBehaviour
         }
     }
     #endregion
+
 }

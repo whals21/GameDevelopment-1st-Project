@@ -6,7 +6,7 @@ public class LevelUpManager : MonoBehaviour
     public static LevelUpManager Instance;
 
     [Header("데이터")]
-    [SerializeField] private ItemData[] allItems;
+    [SerializeField] private ItemData[] allItems; // 액티브 + 패시브
 
     [Header("UI")]
     [SerializeField] private GameObject levelUpPanel;
@@ -22,96 +22,89 @@ public class LevelUpManager : MonoBehaviour
         levelUpPanel.SetActive(true);
         Time.timeScale = 0f;
 
-        // 뽑을 수 있는 후보
+        // 배울 수 있는 무기,패시브
         List<ItemData> candidates = GetValidItems();
 
-        // 랜덤으로 3개 뽑아서 버튼에 표시
-        int count = Mathf.Min(3, candidates.Count); // 후보가 3개보다 적을 수도 있으니까
+        // 셔플
+        for (int i = 0; i < candidates.Count; i++)
+        {
+            ItemData temp = candidates[i];
+            int rand = Random.Range(i, candidates.Count);
+            candidates[i] = candidates[rand];
+            candidates[rand] = temp;
+        }
 
-        // 후보 섞기 (랜덤)
-        ShuffleList(candidates);
-
+        // 버튼에 표시
         for (int i = 0; i < itemButtons.Length; i++)
         {
-            if (i < count)
+            if (i < candidates.Count)
             {
                 itemButtons[i].gameObject.SetActive(true);
-                ItemData item = candidates[i];
-
-                // 현재 레벨 가져오기
-                int currentLv = 0;
-                if (SkillManager.Instance != null)
-                    currentLv = SkillManager.Instance.GetSkillLevel(item.skillData);
-
-                // 다음 레벨
-                int nextLv = currentLv + 1;
-
-                // 설명 가져오기
-                string desc = "";
-                if (currentLv == 0)
-                {
-                    // 처음 얻을 땐 기본 설명
-                    desc = item.itemDesc;
-                }
-                else
-                {
-                    // 업그레이드일 땐 스킬 데이터 안의 '업그레이드 설명'
-                    if (item.skillData != null && currentLv < item.skillData.levels.Length)
-                        desc = item.skillData.levels[currentLv].upgradeDescription;
-                    else
-                        desc = "Max Level";
-                }
-
-                itemButtons[i].SetItem(item, nextLv, desc);
+                itemButtons[i].Init(candidates[i]);
             }
             else
             {
-                // 뽑을 게 없으면 버튼 끄기
                 itemButtons[i].gameObject.SetActive(false);
             }
         }
     }
 
-    // 배울수 있는 무기,스킬 확인
     private List<ItemData> GetValidItems()
     {
         List<ItemData> validList = new List<ItemData>();
 
         foreach (var item in allItems)
         {
-            if (item.skillData == null) continue;
-
-            // 현재 레벨 확인
-            int currentLv = 0;
-            if (SkillManager.Instance != null)
-                currentLv = SkillManager.Instance.GetSkillLevel(item.skillData);
-
-            // 최대 렙 보다 작아야 배울 수 있음
-            if (currentLv < item.skillData.levels.Length)
+            // 액티브 스킬
+            if (item.itemType == ItemType.Active)
             {
-                validList.Add(item);
+                if (item.skillData == null) continue;
+
+                int currentLv = 0;
+                if (SkillManager.Instance != null)
+                    currentLv = SkillManager.Instance.GetSkillLevel(item.skillData);
+
+                if (currentLv < item.skillData.levels.Length)
+                    validList.Add(item);
+            }
+            // 패시브 스킬
+            else
+            {
+                int currentLv = 0;
+                if (PassiveSkillManager.Instance != null)
+                {
+                    currentLv = PassiveSkillManager.Instance.GetSkillLevel(item.passiveType);
+                }
+
+                // 만렙 체크
+                int maxLevel = (item.passiveAmounts != null) ? item.passiveAmounts.Length : 5;
+
+                if (currentLv < maxLevel)
+                {
+                    validList.Add(item);
+                }
             }
         }
         return validList;
     }
 
-    // 셔플
-    private void ShuffleList<T>(List<T> list)
-    {
-        for (int i = 0; i < list.Count; i++)
-        {
-            T temp = list[i];
-            int randomIndex = Random.Range(i, list.Count);
-            list[i] = list[randomIndex];
-            list[randomIndex] = temp;
-        }
-    }
-
     public void SelectItem(ItemData selectedItem)
     {
-        if (SkillManager.Instance != null)
+        // 액티브 -> 스킬 매니저
+        if (selectedItem.itemType == ItemType.Active)
         {
-            SkillManager.Instance.UnlockOrUpgradeSkill(selectedItem.skillData);
+            if (SkillManager.Instance != null)
+            {
+                SkillManager.Instance.UnlockOrUpgradeSkill(selectedItem.skillData);
+            }
+        }
+        // 패시브 -> 패시브 매니저
+        else
+        {
+            if (PassiveSkillManager.Instance != null)
+            {
+                PassiveSkillManager.Instance.TryAcquireSkill(selectedItem.passiveType);
+            }
         }
 
         levelUpPanel.SetActive(false);

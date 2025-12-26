@@ -2,48 +2,102 @@ using UnityEngine;
 
 public class RandomBox : MonoBehaviour
 {
-    [Header("설정")]
+    [Header("보상 설정")]
     [SerializeField] private GameObject[] rewardItems; // 나올 아이템들
-    [SerializeField] private float lifeTime = 10f; // 10초 뒤에 사라짐
+    [SerializeField] private float lifeTime = 20f;     // 안 부수면 사라지는 시간
 
-    // 활성화될 때마다 실행
+    [Header("체력 설정")]
+    [SerializeField] private float maxHp = 50f;
+    private bool isBroken = false; // 중복 파괴 방지용
+
+    [SerializeField] private float currentHp;
+
+    [Header("피격 효과 (선택)")]
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    private Color originalColor;
+
+    private void Awake()
+    {
+        if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null) originalColor = spriteRenderer.color;
+    }
+
     private void OnEnable()
     {
-        // 일정 시간 뒤에 스스로 사라지게 예약
+        // 상태 초기화
+        currentHp = maxHp;
+        isBroken = false;
+        if (spriteRenderer != null) spriteRenderer.color = originalColor;
+
+        // 시간 지나면 사라짐
         CancelInvoke("Despawn");
         Invoke("Despawn", lifeTime);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void TakeDamage(float damage)
     {
-        if (collision.CompareTag("Player"))
+        if (isBroken) return;
+
+        currentHp -= damage;
+
+        // 피격 효과
+        StartCoroutine(HitFlashRoutine());
+
+        // 체력이 0이 되면 상자 오픈
+        if (currentHp <= 0)
         {
             OpenBox();
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        int layer = collision.gameObject.layer;
+
+        // 9: Projectile, 14: Projectile2, 0: Default
+        if (layer == 9 || layer == 14 || layer == 0)
+        {
+            TakeDamage(10f); // 1회피격 10데미지
+            collision.gameObject.SetActive(false);
+        }
+    }
+
+    private System.Collections.IEnumerator HitFlashRoutine()
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = Color.red; // 빨간색
+            yield return new WaitForSeconds(0.1f);
+            spriteRenderer.color = originalColor;
+        }
+    }
+
     private void OpenBox()
     {
-        // 아이템 목록이 비어있으면 에러 방지
+        isBroken = true;
+
         if (rewardItems.Length > 0)
         {
-            // 랜덤으로 하나 뽑기
             int index = Random.Range(0, rewardItems.Length);
             GameObject selectedItem = rewardItems[index];
 
-            // 상자 위치에 아이템 소환
+            // 아이템 소환
             Instantiate(selectedItem, transform.position, Quaternion.identity);
-
-            Debug.Log($"상자 오픈 {selectedItem.name} 나왔다");
         }
 
-        // 상자는 사라짐
         Despawn();
     }
 
     private void Despawn()
     {
-        gameObject.SetActive(false);
-
+        // 매니저가 있으면 반납, 없으면 비활성화
+        if (ObjectPoolManager.Instance != null)
+        {
+            ObjectPoolManager.Instance.ReturnRandomBox(this);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
