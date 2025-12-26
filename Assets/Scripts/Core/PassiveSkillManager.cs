@@ -461,6 +461,7 @@ public class PassiveSkillManager : MonoBehaviour
     private string cachedSkillInfo = "";
     private string cachedBuffInfo = "";
 
+    /*
     private void OnGUI()
     {
         if (!showDebugGUI) return;
@@ -642,5 +643,6 @@ public class PassiveSkillManager : MonoBehaviour
     {
         showDebugGUI = !showDebugGUI;
     }
+    */
     #endregion
 }

@@ -2526,11 +2526,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   testSkills:
   - {fileID: 11400000, guid: b184065ba4ffacf45adac9e891f1b773, type: 2}
-  - {fileID: 11400000, guid: e7eea4080a4ac0d44b4af315794027d3, type: 2}
-  testSkillLevels: 0100000001000000
-  testPassiveSkills:
-  - {fileID: 11400000, guid: 5f399665f4ac8764981d8e6a3f567777, type: 2}
-  testPassiveSkillLevels: 01000000
+  testSkillLevels: 01000000
+  testPassiveSkills: []
+  testPassiveSkillLevels: 
 --- !u!1001 &492451768
 PrefabInstance:
   m_ObjectHideFlags: 0
