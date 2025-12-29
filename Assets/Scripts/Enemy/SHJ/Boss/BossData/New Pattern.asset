@@ -12,18 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12a726b19303fe34a997fa64902b7121, type: 3}
   m_Name: New Pattern
   m_EditorClassIdentifier: 
-  bulletPrefab: []
-  bulletCount: 
+  BossAttackOption: 000000000100000002000000
   attackRayLength:
   - 300
+  - 0
+  - 0
   attackRange:
+  - 0
+  - 20
   - 0
   damage:
   - 20
+  - 20
+  - 20
   damageMove:
   - 50
-  delayAfter: []
-  BossAttackOption: 00000000
+  - 0
+  - 0
+  delayAfter:
+  - 3
+  - 3
+  - 3
+  bulletPrefab: []
+  bulletCount: 0000000000000000000000000000000000000000
   warningPads:
   - {fileID: 6361049014533627461, guid: ff90cade94cf9bb428cf8a75fe50731b, type: 3}
+  - {fileID: 6361049014533627461, guid: 085864e01603c574581e9112e42e19aa, type: 3}
   warningPadCount: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a000000

@@ -42,4 +42,26 @@ public class BossManager : MonoBehaviour
 
         Instance = this;
     }
+
+    private void CheckBossAppear()
+    {
+        //if (currentBossIndex != -1) return; // 이미 보스 등장
+
+        //float gameTime = GameManager.Instance.GameTime;
+        //int playerLevel = GameManager.Instance.levelUpManager.CurrentPlayerLevel;
+
+        //for (int i = 0; i < bossDatas.Length; i++)
+        //{
+        //    var data = bossDatas[i];
+
+        //    // 킬 수 조건은 무시하고, 시간과 플레이어 레벨만 체크
+        //    if (gameTime >= data.appearTime &&
+        //        playerLevel >= data.playerLV)
+        //    {
+        //        currentBossIndex = i; // 기준점으로 현재 보스 결정
+        //        Debug.Log($"Boss ready: {data.name}");
+        //        break;
+        //    }
+        //}
+    }
 }

@@ -1,137 +1,118 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static ActtackManager;
 
+// ==========================
+// BossController
+// - 랜덤 패턴 선택
+// - 패턴별 총알 풀 연동
+// - 발판 풀 관리
+// ==========================
 public class BossController : MonoBehaviour
 {
-
-
-    private BossState currentState;          // 현재 보스 상태 (Move, Attack 등)
-    [SerializeField] private int MonsterNumber;
-
-    [SerializeField] private BossPattern bossPattern; // OS(ScriptableObject) 패턴 데이터
-    private BossScriptsObject myData;
+    private BossState currentState;                  // 현재 상태
+    [SerializeField] private int MonsterNumber;     // 보스 번호
+    [SerializeField] private BossPattern bossPattern; // OS 패턴 데이터
+    private BossScriptsObject myData;               // 보스 기본 데이터
     public BossScriptsObject Data => myData;
 
-    public Transform target;                 // 타겟(플레이어)
+    public Transform target;                         // 타겟
     public Rigidbody2D rb;
     public Rigidbody2D RB => rb;
     public Collider2D Col { get; private set; }
 
     public int CurrentPatternIndex { get; private set; } // 현재 패턴 인덱스
 
-
-
+    // 현재 패턴 공격 옵션, 총알, 데미지, 범위 등
+    public BossAttackType CurrentBossAttackOption => bossPattern.BossAttackOption[CurrentPatternIndex];
     public GameObject CurrentBulletPrefab => bossPattern.bulletPrefab[CurrentPatternIndex];
     public int CurrentBulletCount => bossPattern.bulletCount[CurrentPatternIndex];
     public float CurrentAttackRayLength => bossPattern.attackRayLength[CurrentPatternIndex];
     public float CurrentAttackRange => bossPattern.attackRange[CurrentPatternIndex];
     public float CurrentDelayAfter => bossPattern.delayAfter[CurrentPatternIndex];
-
     public float CurrentDamage => bossPattern.damage[CurrentPatternIndex];
     public float CurrentDamageMove => bossPattern.damageMove[CurrentPatternIndex];
 
-    // 현재 패턴에서 사용할 공격 타입(enum)
-    public BossAttackType CurrentBossAttackOption =>
-        bossPattern.BossAttackOption[CurrentPatternIndex];
-
-
-    // OS에서 설정한 발판 프리팹 배열
+    // 발판 관련
     public GameObject[] WarningPadPrefabs => bossPattern.warningPads;
-
-    // OS에서 설정한 발판 개수 배열
+    private BossFirePool[] firePools;
     public int[] WarningPadCounts => bossPattern.warningPadCount;
-
-    // 발판 타입별 풀 (warningPads 인덱스 = 타입)
-
     private List<GameObject>[] padPools;
 
-    private BossAttack attackComp;            // 공격 컴포넌트
+    [Header("패턴 쿨타임")]
+    [SerializeField] private float attackCooldown = 5f;
+    private float attackTimer = 0f;
+
+    public Transform PatternsRoot { get; private set; }   // 하위 패턴 루트
+    private BossAttack attackComp;                         // 공격 컴포넌트
     public BoosAttackRay attackRay;
     public BossRange attackRange;
-
-    [Header("다음 패턴 발동 시간 설정")]
-    [SerializeField] private float attackCooldown = 5f;        // 패턴 간 최소 대기 시간
-    private float attackTimer = 0f;
-    public Transform PatternsRoot { get; private set; }
-
+    public BossFirePool FirePool;                          // 총알 풀
+    public BossDie bossDie;
+    // ==========================
+    // Awake: 컴포넌트 캐싱 및 패턴 루트 생성
+    // ==========================
     private void Awake()
     {
-        // 컴포넌트 캐싱
         rb = GetComponent<Rigidbody2D>();
         Col = GetComponent<Collider2D>();
-
         attackRange = GetComponentInChildren<BossRange>(true);
-
         if (attackRay == null)
             attackRay = GetComponentInChildren<BoosAttackRay>(true);
 
-        if (attackRay == null)
-            Debug.LogError("[BossController] BoosAttackRay NOT FOUND");
-        else
-            Debug.Log($"[BossController] BoosAttackRay FOUND : {attackRay.name}");
-
         PatternsRoot = transform.Find("Patterns");
-
         if (PatternsRoot == null)
         {
             GameObject patterns = new GameObject("Patterns");
             patterns.transform.SetParent(transform);
             PatternsRoot = patterns.transform;
         }
-
-
+        InitializeComponents();
     }
 
-
+    // ==========================
+    // Start: 초기화
+    // ==========================
     private void Start()
     {
-        InitializePadPool();
-        CreateAllPatternRoots();
+        if (attackRay != null) attackRay.Initialize(this);
 
-        if (attackRay != null)
-            attackRay.Initialize(this);
-
-        // 보스 데이터 로드
         myData = BossManager.Instance.BossDatas[MonsterNumber];
 
-        // 공격 컴포넌트
-        attackComp = GetComponent<BossAttack>();
-        if (attackComp == null)
-            attackComp = gameObject.AddComponent<BossAttack>();
-
+        attackComp = GetComponent<BossAttack>() ?? gameObject.AddComponent<BossAttack>();
         attackComp.Initialize(this);
 
         SetState(new BossMove(this));
 
+        InitializePadPool();       // 발판 풀 초기화
+        CreateAllPatternRoots();   // 패턴 루트 생성
+        InitializeAllFirePools();           // FirePool 초기화
     }
 
+    // ==========================
+    // Update: 상태 업데이트 및 랜덤 공격
+    // ==========================
     private void Update()
     {
         attackTimer += Time.deltaTime;
 
-        // 공격 중이면 상태머신 정지, 공격 Tick만 수행
         if (attackComp != null && attackComp.IsAttacking)
         {
             attackComp.Tick();
             return;
         }
 
-        // 공격 쿨타임이 지나면 랜덤 패턴 실행
         if (attackTimer >= attackCooldown)
         {
             TryStartRandomAttack();
             attackTimer = 0f;
         }
 
-        // 상태머신 업데이트
         currentState?.UpdateState();
     }
 
-    private void FixedUpdate()
-    {
-        currentState?.FixedUpdateState();
-    }
+    private void FixedUpdate() => currentState?.FixedUpdateState();
 
     public void SetState(BossState newState)
     {
@@ -140,42 +121,59 @@ public class BossController : MonoBehaviour
         currentState?.Enter();
     }
 
-    // 현재 사용할 패턴 인덱스 설정
+    // ==========================
+    // 패턴 변경
+    // - CurrentPatternIndex 변경
+    // - 총알 풀 초기화
+    // ==========================
     public void SetPattern(int index)
     {
         CurrentPatternIndex = index;
-    }
 
-    // OS 기준으로 타입별 발판 풀 생성
-    private void InitializePadPool()
-    {
-        if (WarningPadPrefabs == null || WarningPadCounts == null)
+        GameObject prefab = CurrentBulletPrefab;
+        int count = CurrentBulletCount;
+
+        // 이 패턴은 총알 안 씀 → 무시
+        if (prefab == null || count <= 0)
         {
-            Debug.LogError("[PadPool] WarningPad 데이터 NULL");
+            Debug.Log($"[BossController] Pattern {index} 총알 없음 → 풀 생성 안함");
             return;
         }
+
+        // FirePool 없으면 생성
+        if (FirePool == null)
+        {
+            GameObject obj = new GameObject("FirePool");
+            obj.transform.SetParent(transform);
+            FirePool = obj.AddComponent<BossFirePool>();
+        }
+
+        //  핵심: 패턴 인덱스에 맞는 값으로 풀 초기화
+        FirePool.Initialize(prefab, count, this);
+
+        Debug.Log($"[BossController] Pattern {index} 총알 풀 준비 완료 ({prefab.name} x {count})");
+    }
+
+    // ==========================
+    // 발판 풀 초기화
+    // ==========================
+    private void InitializePadPool()
+    {
+        if (WarningPadPrefabs == null || WarningPadCounts == null) return;
 
         int typeCount = WarningPadPrefabs.Length;
         padPools = new List<GameObject>[typeCount];
 
-        // 이게 핵심
         int maxCount = 0;
         foreach (int c in WarningPadCounts)
-            if (c > maxCount)
-                maxCount = c;
+            if (c > maxCount) maxCount = c;
 
         for (int type = 0; type < typeCount; type++)
         {
             padPools[type] = new List<GameObject>();
-
             GameObject prefab = WarningPadPrefabs[type];
-            if (prefab == null)
-            {
-                Debug.LogError($"[PadPool] type={type} prefab NULL");
-                continue;
-            }
+            if (prefab == null) continue;
 
-            // 각 타입마다 "최대 필요 수" 만큼만 생성
             for (int i = 0; i < maxCount; i++)
             {
                 var pad = Instantiate(prefab, transform);
@@ -185,34 +183,28 @@ public class BossController : MonoBehaviour
         }
     }
 
-
-    // 특정 타입의 사용 가능한 발판 하나 반환
+    // ==========================
+    // 발판 가져오기/반환
+    // ==========================
     public List<GameObject> GetWarningPads(int type, int count)
     {
         List<GameObject> result = new List<GameObject>();
-
-        // 0개 요청이면 그냥 빈 리스트 반환
-        if (count <= 0)
-            return result;
+        if (count <= 0) return result;
 
         if (type < 0 || type >= padPools.Length)
         {
-            Debug.LogWarning($"[BossController] WarningPad type 범위 오류 type={type}");
+            Debug.LogWarning($"WarningPad type 범위 오류 type={type}");
             return result;
         }
 
         var pool = padPools[type];
-
         int available = 0;
         foreach (var pad in pool)
-            if (!pad.activeSelf)
-                available++;
+            if (!pad.activeSelf) available++;
 
         if (available < count)
         {
-            Debug.LogWarning(
-                $"[BossController] WarningPad 부족 type={type} 요청={count} 실제={available}"
-            );
+            Debug.LogWarning($"WarningPad 부족 type={type} 요청={count} 실제={available}");
             return result;
         }
 
@@ -222,78 +214,91 @@ public class BossController : MonoBehaviour
             {
                 pad.SetActive(true);
                 result.Add(pad);
-                if (result.Count >= count)
-                    break;
+                if (result.Count >= count) break;
             }
         }
 
         return result;
     }
 
+    public void ReturnWarningPad(GameObject pad) { if (pad == null) return; pad.SetActive(false); }
+    public void ReturnAllWarningPads() { foreach (var pool in padPools) foreach (var pad in pool) pad.SetActive(false); }
 
-    // 발판 하나 반환
-    public void ReturnWarningPad(GameObject pad)
+    private void InitializeAllFirePools()
     {
-        if (pad == null) return;
-        pad.SetActive(false);
-    }
+        int patternCount = bossPattern.BossAttackOption.Length;
+        firePools = new BossFirePool[patternCount];
 
-    // 모든 발판 비활성화 (패턴 종료 시)
-    public void ReturnAllWarningPads()
-    {
-        foreach (var pool in padPools)
+        for (int i = 0; i < patternCount; i++)
         {
-            foreach (var pad in pool)
-                pad.SetActive(false);
+            GameObject prefab = bossPattern.bulletPrefab[i];
+            int count = bossPattern.bulletCount[i];
+
+            if (prefab == null || count <= 0)
+                continue;
+
+            GameObject obj = new GameObject($"FirePool_Pattern_{i}");
+            obj.transform.SetParent(transform);
+
+            BossFirePool pool = obj.AddComponent<BossFirePool>();
+            pool.Initialize(prefab, count, this); // 여기서 BossController 넘김
+
+            firePools[i] = pool;
         }
     }
 
+    // ==========================
+    // 현재 패턴 총알 불려오기
+    // ==========================
+    public GameObject GetCurrentPatternBullet()
+    {
+        BossFirePool pool = firePools[CurrentPatternIndex];
 
-    // OS에 등록된 공격 패턴 중 랜덤 실행
+        if (pool == null)
+        {
+            Debug.LogWarning($"Pattern {CurrentPatternIndex} 총알 풀 없음");
+            return null;
+        }
+
+        return pool.GetBullet();
+    }
+
+    // ==========================
+    // 랜덤 공격 실행
+    // ==========================
     private void TryStartRandomAttack()
     {
-        if (bossPattern.BossAttackOption == null ||
-            bossPattern.BossAttackOption.Length == 0)
+        if (bossPattern.BossAttackOption == null || bossPattern.BossAttackOption.Length == 0)
         {
             Debug.LogError("BossAttackOption not set in BossPattern!");
             return;
         }
 
         int patternCount = bossPattern.BossAttackOption.Length;
-        SetPattern(Random.Range(0, patternCount));
+        SetPattern(Random.Range(0, patternCount)); // 패턴 선택 + FirePool 초기화
 
         attackComp.TryStartAttack(CurrentBossAttackOption);
     }
 
+    // ==========================
+    // 패턴 루트 생성
+    // ==========================
     private void CreateAllPatternRoots()
     {
-        if (bossPattern?.BossAttackOption == null)
-            return;
-
-        foreach (var type in bossPattern.BossAttackOption)
-        {
-            CreatePatternRootIfMissing(type);
-        }
+        if (bossPattern?.BossAttackOption == null) return;
+        foreach (var type in bossPattern.BossAttackOption) CreatePatternRootIfMissing(type);
     }
-    /// <summary>
-    /// PatternsRoot 하위에 특정 패턴 루트와 하위 BulletRoots, PadRoots 생성/확인
-    /// </summary>
+
     public Transform CreatePatternRootIfMissing(BossAttackType type)
     {
         if (PatternsRoot == null)
         {
-            PatternsRoot = transform.Find("Patterns");
-            if (PatternsRoot == null)
-            {
-                GameObject patternsObj = new GameObject("Patterns");
-                patternsObj.transform.SetParent(transform);
-                PatternsRoot = patternsObj.transform;
-            }
+            PatternsRoot = transform.Find("Patterns") ?? new GameObject("Patterns").transform;
+            PatternsRoot.SetParent(transform);
         }
 
         string patternName = type.ToString();
         Transform pattern = PatternsRoot.Find(patternName);
-
         if (pattern == null)
         {
             GameObject patternObj = new GameObject(patternName);
@@ -302,7 +307,6 @@ public class BossController : MonoBehaviour
             pattern = patternObj.transform;
         }
 
-        // 하위 루트 생성
         if (pattern.Find("BulletRoots") == null)
         {
             GameObject bulletObj = new GameObject("BulletRoots");
@@ -319,22 +323,34 @@ public class BossController : MonoBehaviour
 
         return pattern;
     }
-    public Transform GetOrCreatePatternRoot(BossAttackType type)
-    {
-        return CreatePatternRootIfMissing(type);
-    }
 
-    public Transform GetPadRoot(BossAttackType type)
+    //보스 데미지 연결
+    private void InitializeComponents()
     {
-        Transform pattern = GetOrCreatePatternRoot(type);
-        Transform padRoot = pattern.Find("PadRoots");
-        if (padRoot == null)
+        // BossDie 연결
+        bossDie = GetComponent<BossDie>();
+        if (bossDie == null)
         {
-            GameObject padObj = new GameObject("PadRoots");
-            padObj.transform.SetParent(pattern);
-            padObj.transform.localPosition = Vector3.zero;
-            padRoot = padObj.transform;
+            bossDie = gameObject.AddComponent<BossDie>();
         }
-        return padRoot;
+
+        // 패턴 루트 연결
+        PatternsRoot = transform.Find("Patterns");
+        if (PatternsRoot == null)
+        {
+            GameObject patterns = new GameObject("Patterns");
+            patterns.transform.SetParent(transform);
+            PatternsRoot = patterns.transform;
+        }
+    }
+    public void TakeDamageFromPlayer(float damage)
+    {
+        // 보스 체력 감소 처리
+        if (bossDie != null)
+        {
+            bossDie.TakeDamage(damage);
+        }
     }
 }
+
+
