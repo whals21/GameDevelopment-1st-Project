@@ -188,7 +188,9 @@ public class Enemy : MonoBehaviour
         {
             int tier = GameManager.Instance.currentTierIndex;
 
-            ExpGem gem = ObjectPoolManager.Instance.GetExpGem(tier);
+            //12/29 조민희 수정 - tier 넘겨주기 비활성화
+            //ExpGem gem = ObjectPoolManager.Instance.GetExpGem(tier);
+            ExpGem gem = ObjectPoolManager.Instance.GetExpGem();
             if (gem != null)
             {
                 gem.transform.position = transform.position;

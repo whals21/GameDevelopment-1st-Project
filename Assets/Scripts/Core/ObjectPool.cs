@@ -1,58 +1,87 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+/// <summary>
+/// v2 ObjectPool - 제네릭 오브젝트 풀
+///
+/// 전문가 피드백:
+/// - 간결하고 완벽한 구조
+/// - MonoBehaviour를 상속받지 않아 가벼움 (순수 C# 클래스)
+/// - Queue를 사용한 선입선출(FIFO) 로직은 풀링의 표준
+/// - Get()에서 풀이 비면 바로 생성하는 로직은 메모리 할당 최소화 + 유연성 제공
+///
+/// 역할: "데이터 구조"만 담당, 비즈니스 로직은 각 클래스에 위임
+/// </summary>
+/// <typeparam name="T">MonoBehaviour를 상속받은 타입</typeparam>
 public class ObjectPool<T> where T : MonoBehaviour
 {
-    private T prefab;
-    private Transform parent;
-    private Queue<T> pool;
-    private int initialSize;
+    private T _prefab;
+    private Transform _parent;
+    private Queue<T> _pool;
+    private int _initialSize;
 
-    // 생성자
+    /// <summary>
+    /// 생성자
+    /// </summary>
+    /// <param name="prefab">풀링할 프리팹</param>
+    /// <param name="initialSize">초기 풀 크기</param>
+    /// <param name="parent">부모 트랜스폼 (선택사항)</param>
     public ObjectPool(T prefab, int initialSize, Transform parent = null)
     {
-        this.prefab = prefab;
-        this.initialSize = initialSize;
-        this.parent = parent;
-        this.pool = new Queue<T>();
+        _prefab = prefab;
+        _initialSize = initialSize;
+        _parent = parent;
+        _pool = new Queue<T>();
 
         // 초기 풀 생성
-        for (int i = 0; i < initialSize; i++)
+        for (int i = 0; i < _initialSize; i++)
         {
             CreateNewObject();
         }
     }
 
-    // 새 오브젝트 생성
+    /// <summary>
+    /// 새 오브젝트 생성 (내부 사용)
+    /// </summary>
     private T CreateNewObject()
     {
-        T obj = Object.Instantiate(prefab, parent);
+        T obj = Object.Instantiate(_prefab, _parent);
         obj.gameObject.SetActive(false);
-        pool.Enqueue(obj);
+        _pool.Enqueue(obj);
         return obj;
     }
 
-    // 풀에서 오브젝트 가져오기
+    /// <summary>
+    /// 풀에서 오브젝트 가져오기
+    /// 풀이 비어있으면 자동으로 새로 생성
+    /// </summary>
     public T Get()
     {
         // 풀이 비어있으면 새로 생성
-        if (pool.Count == 0)
+        if (_pool.Count == 0)
         {
             CreateNewObject();
         }
 
-        T obj = pool.Dequeue();
+        T obj = _pool.Dequeue();
         obj.gameObject.SetActive(true);
         return obj;
     }
 
-    // 풀에 오브젝트 반환
+    /// <summary>
+    /// 풀에 오브젝트 반환
+    /// 비활성화하여 OnDisable 라이프사이클 트리거
+    /// </summary>
     public void Return(T obj)
     {
-        obj.gameObject.SetActive(false);
-        pool.Enqueue(obj);
+        if (obj == null) return;
+
+        obj.gameObject.SetActive(false); // OnDisable 자동 호출 -> ResetForReuse()
+        _pool.Enqueue(obj);
     }
 
-    // 현재 풀 크기
-    public int PoolSize => pool.Count;
+    /// <summary>
+    /// 현재 풀 크기 (디버깅용)
+    /// </summary>
+    public int PoolSize => _pool.Count;
 }

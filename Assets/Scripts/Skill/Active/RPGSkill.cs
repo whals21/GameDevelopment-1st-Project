@@ -1,377 +1,213 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
-public class RPGSkill : MonoBehaviour
+/// <summary>
+/// RPG 스킬 구현
+/// 가장 가까운 적에게 유도 로켓을 발사합니다.
+/// 레벨에 따라 한 번에 발사하는 로켓 수가 증가합니다.
+///
+/// 성능 최적화:
+/// - TargetingHelper로 타겟팅 로직 재사용 (코드 중복 제거)
+/// - PlayerController.Instance로 빠른 플레이어 참조
+/// - LayerMask 캐싱으로 불필요한 콜라이더 필터링
+/// - 적 캐싱으로 불필요한 탐색 최소화
+///
+/// 확장성:
+/// - 레벨에 따른 로켓 수 증가
+/// - 데이터 주도 설계 (rapidFireInterval, defaultSpreadAngle 등)
+/// - 수학적 단순화 (균등 분할 공식)
+/// </summary>
+public class RPGSkill : SkillBase
 {
-    #region Serialized Fields
-    [Header("스킬 설정")]
-    [SerializeField] private SkillData skillData;
-    [SerializeField] private int currentLevel = 1;
-    [SerializeField] private bool isActive = true;
-
-    [Header("밸런스 수치")]
-    [SerializeField] private float baseCooldown = 4f;
-    [SerializeField] private float baseDamage = 20f;
-    [SerializeField] private int baseProjectileCount = 1;
-    [SerializeField] private float cooldownReductionPerLevel = 0.2f;
-
-    [Header("발사 설정")]
-    [SerializeField] private LayerMask enemyLayer;
-    [SerializeField] private float projectileSpeed = 8f;
-    [SerializeField] private float spreadAngle = 15f; // 다중 발사체 분산 각도
-    [SerializeField] private float attackRange = 15f; // 사정거리
-    [SerializeField] private float targetUpdateInterval = 0.5f;
-    #endregion
-
     #region Private Fields
-    private float currentCooldown;
-    private int projectileCount;
-    private float damage;
-    private float cooldownTime;
-    private Enemy currentTarget;
-    private float targetUpdateTimer;
-    private Transform playerTransform;
+    private Transform _playerTransform;
+    private int _enemyLayerMask;
+
+    // 적 타겟팅 (캐싱)
+    private Enemy _currentTarget;
+    private float _targetUpdateTimer;
+    private const float TARGET_UPDATE_INTERVAL = 0.5f;
     #endregion
 
-    #region Properties
-    public int CurrentLevel => currentLevel;
-    public bool IsActive => isActive;
-    public SkillData SkillData => skillData;
+    #region Initialization
+    protected override void OnInitialize()
+    {
+        base.OnInitialize();
+
+        // 싱글톤으로 빠른 플레이어 참조
+        if (PlayerController.Instance != null)
+        {
+            _playerTransform = PlayerController.Instance.transform;
+        }
+
+        // LayerMask 캐싱
+        _enemyLayerMask = LayerMask.GetMask("Enemy");
+    }
     #endregion
 
-    #region Unity Lifecycle
-    private void Awake()
+    #region Core Loop
+    public override void UpdateSkill()
     {
-        // 기본값 설정
-        if (skillData == null)
-        {
-            Debug.LogWarning("RPGSkill: SkillData가 설정되지 않았습니다!");
-            isActive = false;
-            return;
-        }
-
-        // 플레이어 Transform 찾기
-        playerTransform = transform;
-    }
-
-    private void Start()
-    {
-        // 스킬 데이터에서 값 가져오기
-        LoadSkillData();
-    }
-
-    private void Update()
-    {
-        if (!isActive) return;
-
-        // 쿨타임 업데이트
-        if (currentCooldown > 0f)
-        {
-            currentCooldown -= Time.deltaTime;
-        }
-
-        // 타겟 업데이트
+        base.UpdateSkill();
         UpdateTarget();
-
-        // 자동 발동 체크
-        if (currentCooldown <= 0f && currentTarget != null)
-        {
-            FireRPG();
-        }
-    }
-    #endregion
-
-    #region Public Methods
-    /// <summary>
-    /// 스킬 데이터 설정
-    /// </summary>
-    public void SetSkillData(SkillData data)
-    {
-        skillData = data;
-        if (data != null)
-        {
-            LoadSkillData();
-            isActive = true;
-        }
-        else
-        {
-            isActive = false;
-        }
     }
 
     /// <summary>
-    /// 스킬 레벨 설정
+    /// RPG 스킬 발동
+    /// 현재 타겟에게 로켓을 발사합니다.
     /// </summary>
-    public void SetLevel(int level)
+    protected override void Execute()
     {
-        currentLevel = Mathf.Max(1, level);
-        LoadSkillData();
-    }
-
-    /// <summary>
-    /// 스킬 활성화/비활성화
-    /// </summary>
-    public void SetActive(bool active)
-    {
-        isActive = active;
-        if (!active)
+        // 타겟 유효성 검사
+        if (_currentTarget == null || !_currentTarget.gameObject.activeInHierarchy || _currentTarget.CurrentHP <= 0)
         {
-            currentCooldown = 0f; // 비활성화 시 쿨타임 초기화
-            currentTarget = null;
-        }
-    }
-
-    /// <summary>
-    /// 수동 발동
-    /// </summary>
-    public void ManualFire()
-    {
-        if (isActive && currentCooldown <= 0f && currentTarget != null)
-        {
-            FireRPG();
-        }
-    }
-
-    /// <summary>
-    /// 쿨타임 초기화
-    /// </summary>
-    public void ResetCooldown()
-    {
-        currentCooldown = 0f;
-    }
-    #endregion
-
-    #region Private Methods
-    /// <summary>
-    /// 스킬 데이터에서 값 로드
-    /// </summary>
-    private void LoadSkillData()
-    {
-        if (skillData == null)
-        {
-            Debug.LogWarning("RPGSkill: SkillData가 null입니다!");
             return;
         }
 
-        // 레벨별 데이터 가져오기
-        var levelData = GetLevelData(currentLevel);
-        if (levelData != null)
-        {
-            damage = baseDamage * levelData.damageMultiplier;
-            cooldownTime = baseCooldown * levelData.cooldownMultiplier;
-            projectileCount = baseProjectileCount + levelData.additionalProjectiles;
-        }
-        else
-        {
-            // 기본값으로 설정 (Survivor.io 스펙 기반)
-            damage = baseDamage * GetLevelDamageMultiplier(currentLevel);
-            cooldownTime = baseCooldown - (cooldownReductionPerLevel * (currentLevel - 1));
-            projectileCount = GetLevelProjectileCount(currentLevel);
-        }
-
-        // 최소/최대값 제한
-        projectileCount = Mathf.Clamp(projectileCount, 1, 5);
-        cooldownTime = Mathf.Max(cooldownTime, 1f);
-        damage = Mathf.Max(damage, 1f);
+        // 다중 로켓 발사
+        int rocketCount = GetRocketCount();
+        StartCoroutine(FireRocketsSequence(rocketCount));
     }
 
     /// <summary>
-    /// 레벨별 데미지 배수 (Survivor.io 스펙 기반)
+    /// 다중 로켓 발사 시퀀스
     /// </summary>
-    private float GetLevelDamageMultiplier(int level)
+    private IEnumerator FireRocketsSequence(int rocketCount)
     {
-        switch (level)
+        float delay = _data.rapidFireInterval;
+
+        for (int i = 0; i < rocketCount; i++)
         {
-            case 1: return 2f;   // ★
-            case 2: return 4f;   // ★★
-            case 3: return 4f;   // ★★★
-            case 4: return 6f;   // ★★★★
-            case 5: return 6f;   // ★★★★★
-            default: return 6f + (level - 5) * 2f;
+            // 스킬 비활성화 시 중단
+            if (!_isActive) yield break;
+
+            FireSingleRocket(i, rocketCount);
+
+            // 발사 간 딜레이 (마지막은 제외)
+            if (i < rocketCount - 1 && delay > 0f)
+            {
+                yield return new WaitForSeconds(delay);
+            }
         }
     }
 
     /// <summary>
-    /// 레벨별 발사체 수 (Survivor.io 스펙 기반)
+    /// 단일 로켓 발사
     /// </summary>
-    private int GetLevelProjectileCount(int level)
+    private void FireSingleRocket(int index, int totalCount)
     {
-        switch (level)
-        {
-            case 1: return 1;  // ★
-            case 2: return 1;  // ★★
-            case 3: return 2;  // ★★★ (+1)
-            case 4: return 2;  // ★★★★
-            case 5: return 3;  // ★★★★★ (+1)
-            default: return 3;
-        }
-    }
+        if (_currentTarget == null || ObjectPoolManager.Instance == null) return;
 
-    /// <summary>
-    /// 레벨 데이터 가져오기
-    /// </summary>
-    private SkillLevel GetLevelData(int level)
-    {
-        if (skillData == null || skillData.levels == null || level <= 0 || level > skillData.levels.Length)
+        // v2: 통합 투사체 시스템 사용 (RPGProjectile → Projectile + Homing)
+        Projectile rocket = ObjectPoolManager.Instance.GetProjectile();
+        if (rocket == null)
         {
-            return null;
+            Debug.LogWarning("[RPGSkill] Projectile를 풀에서 가져올 수 없습니다.");
+            return;
         }
-        return skillData.levels[level - 1];
-    }
 
+        // 기본 방향 계산
+        Vector3 targetPos = _currentTarget.transform.position;
+        Vector3 direction = (targetPos - _playerTransform.position).normalized;
+
+        // 통합된 각도 계산 공식 (수학적 단순화)
+        if (totalCount > 1)
+        {
+            float totalSpread = _data.defaultSpreadAngle;
+            float offset = CalculateAngleOffset(index, totalCount, totalSpread);
+            direction = Quaternion.Euler(0, 0, offset) * direction;
+        }
+
+        // 로켓 발사 (v2: 위치 설정 후 Setup 호출)
+        float damage = GetFinalDamage();
+        float speed = GetProjectileSpeed();
+        float size = GetSizeMultiplier();
+        rocket.transform.position = _playerTransform.position;
+        rocket.gameObject.SetActive(true);
+        rocket.Setup(direction, damage, speed, ProjectileMovementType.Homing);
+
+        // 시각 효과 설정 (v2) - SkillData에서 스프라이트, 색상, 크기 적용
+        Debug.Log($"[RPGSkill] {_data.skillName} - sprite: {_data.projectileSprite?.name ?? "null"}, color: {_data.projectileColor}, scale: {_data.projectileScale * size}");
+        rocket.SetSprite(_data.projectileSprite, _data.projectileColor, _data.projectileScale * size);
+    }
+    #endregion
+
+    #region Targeting
     /// <summary>
-    /// 타겟 업데이트
+    /// 타겟 업데이트 (TargetingHelper 사용)
+    /// 일정 주기로 가장 가까운 적을 찾습니다.
     /// </summary>
     private void UpdateTarget()
     {
-        targetUpdateTimer += Time.deltaTime;
-        if (targetUpdateTimer >= targetUpdateInterval)
+        _targetUpdateTimer += Time.deltaTime;
+        if (_targetUpdateTimer >= TARGET_UPDATE_INTERVAL)
         {
-            targetUpdateTimer = 0f;
+            _targetUpdateTimer = 0f;
 
-            // 가장 가까운 적 찾기
-            currentTarget = FindClosestEnemy();
-        }
-    }
+            if (_playerTransform == null || _data == null) return;
 
-    /// <summary>
-    /// 가장 가까운 적 찾기
-    /// </summary>
-    private Enemy FindClosestEnemy()
-    {
-        Enemy[] enemies = FindObjectsOfType<Enemy>();
-        Enemy closestEnemy = null;
-        float closestDistance = attackRange;
-
-        foreach (Enemy enemy in enemies)
-        {
-            if (!enemy.gameObject.activeInHierarchy) continue;
-
-            float distance = Vector3.Distance(playerTransform.position, enemy.transform.position);
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestEnemy = enemy;
-            }
-        }
-
-        return closestEnemy;
-    }
-
-    /// <summary>
-    /// RPG 발사
-    /// </summary>
-    private void FireRPG()
-    {
-        if (currentTarget == null || !currentTarget.gameObject.activeInHierarchy) return;
-
-        // 발사체 발사
-        StartCoroutine(FireProjectilesSequence());
-
-        // 쿨타임 설정
-        currentCooldown = cooldownTime;
-    }
-
-    /// <summary>
-    /// 다중 발사체 시퀀스
-    /// </summary>
-    private IEnumerator FireProjectilesSequence()
-    {
-        int strikesToSpawn = Mathf.Min(projectileCount, 1);
-
-        for (int i = 0; i < strikesToSpawn; i++)
-        {
-            FireSingleProjectile(i);
-
-            // 발사 간 딜레이
-            if (i < strikesToSpawn - 1)
-            {
-                yield return new WaitForSeconds(0.1f);
-            }
-        }
-    }
-
-    /// <summary>
-    /// 단일 발사체 발사
-    /// </summary>
-    private void FireSingleProjectile(int index)
-    {
-        if (ObjectPoolManager.Instance == null)
-        {
-            Debug.LogError("RPGSkill: ObjectPoolManager를 찾을 수 없습니다!");
-            return;
-        }
-
-        RPGProjectile projectile = ObjectPoolManager.Instance.GetRPG();
-        if (projectile != null)
-        {
-            Vector3 targetPosition = currentTarget.transform.position;
-
-            // 다중 발사체 각도 계산
-            Vector3 direction = (targetPosition - transform.position).normalized;
-
-            if (projectileCount > 1)
-            {
-                // 중간 발사체는 정면, 양옆은 분산
-                float angleOffset = 0f;
-                if (projectileCount == 2)
-                {
-                    angleOffset = index == 0 ? -spreadAngle : spreadAngle;
-                }
-                else if (projectileCount == 3)
-                {
-                    angleOffset = index == 0 ? -spreadAngle : (index == 1 ? 0 : spreadAngle);
-                }
-                else if (projectileCount >= 4)
-                {
-                    angleOffset = (index - (projectileCount - 1) * 0.5f) * (spreadAngle * 2f / (projectileCount - 1));
-                }
-
-                direction = Quaternion.Euler(0, 0, angleOffset) * direction;
-            }
-
-            // 발사체 초기화
-            projectile.SetParameters(transform.position, direction, damage, projectileSpeed);
-        }
-        else
-        {
-            Debug.LogError("RPGSkill: RPGProjectile를 풀에서 가져올 수 없습니다!");
+            // TargetingHelper 사용 (코드 중복 제거)
+            float searchRadius = _data.attackRange > 0 ? _data.attackRange : 15f;
+            _currentTarget = TargetingHelper.FindNearestEnemy(
+                _playerTransform.position,
+                searchRadius,
+                _enemyLayerMask
+            );
         }
     }
     #endregion
 
-    #region Debug
-    // private void OnGUI()
-    // {
-    //     if (!isActive) return;
-
-    //     // 디버그 정보 표시
-    //     GUILayout.BeginArea(new Rect(10, 250, 300, 200));
-    //     GUILayout.Label($"RPG Skill Lv.{currentLevel}");
-    //     GUILayout.Label($"Damage: {damage:F1}");
-    //     GUILayout.Label($"Projectile Count: {projectileCount}");
-    //     GUILayout.Label($"Projectile Speed: {projectileSpeed}m/s");
-    //     GUILayout.Label($"Attack Range: {attackRange}m");
-    //     GUILayout.Label($"Cooldown: {cooldownTime:F1}s");
-    //     GUILayout.Label($"Next Fire: {currentCooldown:F1}s");
-    //     GUILayout.Label($"Target: {(currentTarget != null ? currentTarget.name : "None")}");
-    //     GUILayout.EndArea();
-    // }
-
-    private void OnDrawGizmosSelected()
+    #region Stats Calculation
+    /// <summary>
+    /// 다중 발사체 각도 오프셋을 계산합니다.
+    /// 수학적 단순화: 모든 개수를 하나의 공식으로 처리
+    ///
+    /// 공식: (인덱스 / (전체-1) - 0.5) * 전체각도
+    /// 예: 2개 -> (-0.5 * 60), (0.5 * 60) -> -30도, +30도
+    /// 예: 3개 -> (-0.5 * 60), (0 * 60), (0.5 * 60) -> -30도, 0도, +30도
+    /// </summary>
+    private float CalculateAngleOffset(int index, int totalCount, float spreadAngle)
     {
-        // 사정거리 표시
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        if (totalCount <= 1) return 0f;
+        return (index / (totalCount - 1f) - 0.5f) * spreadAngle;
+    }
 
-        // 타겟까지 선 표시
-        if (currentTarget != null)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(transform.position, currentTarget.transform.position);
-        }
+    /// <summary>
+    /// 레벨에 따른 로켓 수를 반환합니다.
+    /// </summary>
+    private int GetRocketCount()
+    {
+        int baseCount = _data.projectileCount > 0 ? _data.projectileCount : 1;
+        int additionalCount = GetAdditionalProjectiles();
+        return Mathf.Max(baseCount + additionalCount, 1);
+    }
+
+    /// <summary>
+    /// 투사체 속도를 반환합니다.
+    /// </summary>
+    private float GetProjectileSpeed()
+    {
+        SkillLevel levelData = GetLevelData(_currentLevel);
+        float speedMultiplier = levelData?.projectileSpeedMultiplier ?? 1f;
+        float baseSpeed = _data.projectileSpeed > 0 ? _data.projectileSpeed : 8f;
+        return baseSpeed * speedMultiplier;
+    }
+
+    /// <summary>
+    /// 레벨별 추가 투사체 수를 가져옵니다.
+    /// </summary>
+    private int GetAdditionalProjectiles()
+    {
+        SkillLevel levelData = GetLevelData(_currentLevel);
+        return levelData?.additionalProjectiles ?? 0;
+    }
+    #endregion
+
+    #region Cleanup
+    protected override void OnDeactivate()
+    {
+        _currentTarget = null;
+        _targetUpdateTimer = 0f;
     }
     #endregion
 }

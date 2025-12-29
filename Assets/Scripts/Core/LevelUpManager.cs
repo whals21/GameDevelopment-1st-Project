@@ -5,7 +5,7 @@ public class LevelUpManager : MonoBehaviour
 {
     public static LevelUpManager Instance;
 
-    [Header("µ¥ÀÌÅÍ")]
+    [Header("ì•„ì´í…œ")]
     [SerializeField] private ItemData[] allItems;
 
     [Header("UI")]
@@ -22,13 +22,13 @@ public class LevelUpManager : MonoBehaviour
         levelUpPanel.SetActive(true);
         Time.timeScale = 0f;
 
-        // »ÌÀ» ¼ö ÀÖ´Â ÈÄº¸
+        // ë ˆë²¨ì—… ê°€ëŠ¥í•œ ëª¨ë“  ì•„ì´í…œ ê°€ì ¸ì˜¤ê¸°
         List<ItemData> candidates = GetValidItems();
 
-        // ·£´ıÀ¸·Î 3°³ »Ì¾Æ¼­ ¹öÆ°¿¡ Ç¥½Ã
-        int count = Mathf.Min(3, candidates.Count); // ÈÄº¸°¡ 3°³º¸´Ù ÀûÀ» ¼öµµ ÀÖÀ¸´Ï±î
+        // í›„ë³´ ì¤‘ 3ê°œ ëœë¤ ì„ íƒí•˜ì—¬ ë²„íŠ¼ì— í‘œì‹œ
+        int count = Mathf.Min(3, candidates.Count);
 
-        // ÈÄº¸ ¼¯±â (·£´ı)
+        // í›„ë³´ ì„ê¸° (ì…”í”Œ)
         ShuffleList(candidates);
 
         for (int i = 0; i < itemButtons.Length; i++)
@@ -38,41 +38,75 @@ public class LevelUpManager : MonoBehaviour
                 itemButtons[i].gameObject.SetActive(true);
                 ItemData item = candidates[i];
 
-                // ÇöÀç ·¹º§ °¡Á®¿À±â
+                // í˜„ì¬ ìŠ¤í‚¬ ë ˆë²¨ í™•ì¸
                 int currentLv = 0;
                 if (SkillManager.Instance != null)
                     currentLv = SkillManager.Instance.GetSkillLevel(item.skillData);
 
-                // ´ÙÀ½ ·¹º§
+                // ë‹¤ìŒ ë ˆë²¨
                 int nextLv = currentLv + 1;
 
-                // ¼³¸í °¡Á®¿À±â
-                string desc = "";
-                if (currentLv == 0)
-                {
-                    // Ã³À½ ¾òÀ» ¶© ±âº» ¼³¸í
-                    desc = item.itemDesc;
-                }
-                else
-                {
-                    // ¾÷±×·¹ÀÌµåÀÏ ¶© ½ºÅ³ µ¥ÀÌÅÍ ¾ÈÀÇ '¾÷±×·¹ÀÌµå ¼³¸í'
-                    if (item.skillData != null && currentLv < item.skillData.levels.Length)
-                        desc = item.skillData.levels[currentLv].upgradeDescription;
-                    else
-                        desc = "Max Level";
-                }
+                // ì„¤ëª… í…ìŠ¤íŠ¸ ìƒì„±
+                string desc = GetItemDescription(item, currentLv);
 
                 itemButtons[i].SetItem(item, nextLv, desc);
             }
             else
             {
-                // »ÌÀ» °Ô ¾øÀ¸¸é ¹öÆ° ²ô±â
+                // ë‚¨ëŠ” ë²„íŠ¼ ìˆ¨ê¸°ê¸°
                 itemButtons[i].gameObject.SetActive(false);
             }
         }
     }
 
-    // ¹è¿ï¼ö ÀÖ´Â ¹«±â,½ºÅ³ È®ÀÎ
+    /// <summary>
+    /// ì•„ì´í…œ ì„¤ëª… í…ìŠ¤íŠ¸ ìƒì„±
+    /// </summary>
+    private string GetItemDescription(ItemData item, int currentLv)
+    {
+        // ì§„í™” ê°€ëŠ¥í•œ ìŠ¤í‚¬ì¸ì§€ í™•ì¸
+        if (CanEvolveTo(item.skillData))
+        {
+            SkillData evoSkill = item.skillData.evoSkill;
+            return $"ì§„í™”: {item.skillData.skillName} â†’ {evoSkill.skillName}\n{evoSkill.description}";
+        }
+
+        // ì¼ë°˜ ë ˆë²¨ì—…
+        if (currentLv == 0)
+        {
+            // ì²˜ìŒ íšë“ ì‹œ ê¸°ë³¸ ì„¤ëª…
+            return item.itemDesc;
+        }
+        else
+        {
+            // ì´ë¯¸ ê°€ì§€ê³  ìˆìœ¼ë©´ ë ˆë²¨ì—… ì‹œ ì„¤ëª…
+            if (item.skillData != null && currentLv < item.skillData.levels.Length)
+                return item.skillData.levels[currentLv].upgradeDescription;
+            else
+                return "Max Level";
+        }
+    }
+
+    /// <summary>
+    /// ì§„í™” ê°€ëŠ¥ ì—¬ë¶€ í™•ì¸ - 1229 ìˆ˜ì • ì¡°ë¯¼í¬
+    /// v2: ë°ì´í„° ì£¼ë„í˜• ì§„í™” í™•ì¸ (EvolutionChecker.CanEvolve ì‚¬ìš©)
+    /// </summary>
+    private bool CanEvolveTo(SkillData skillData)
+    {
+        if (skillData == null || skillData.evoSkill == null) return false;
+
+        // ì´ë¯¸ ì§„í™” ìŠ¤í‚¬ì„ ê°€ì§€ê³  ìˆìœ¼ë©´ ì§„í™” ë¶ˆê°€
+        if (SkillManager.Instance.GetSkillLevel(skillData.evoSkill) > 0) return false;
+
+        // í˜„ì¬ ìŠ¤í‚¬ì´ ìµœê³  ë ˆë²¨ì´ì–´ì•¼ ì§„í™” ê°€ëŠ¥
+        int currentLv = SkillManager.Instance.GetSkillLevel(skillData);
+        if (currentLv < skillData.levels.Length) return false;
+
+        // v2: ë°ì´í„° ì£¼ë„í˜• ì§„í™” í™•ì¸ (EvolutionChecker ì‚¬ìš©)
+        return EvolutionChecker.CanEvolve(skillData, currentLv);
+    }
+
+    // ë ˆë²¨ì—… ê°€ëŠ¥í•œ ëª¨ë“  ì•„ì´í…œ,ìŠ¤í‚¬ í™•ì¸
     private List<ItemData> GetValidItems()
     {
         List<ItemData> validList = new List<ItemData>();
@@ -81,13 +115,18 @@ public class LevelUpManager : MonoBehaviour
         {
             if (item.skillData == null) continue;
 
-            // ÇöÀç ·¹º§ È®ÀÎ
+            // í˜„ì¬ ë ˆë²¨ í™•ì¸
             int currentLv = 0;
             if (SkillManager.Instance != null)
                 currentLv = SkillManager.Instance.GetSkillLevel(item.skillData);
 
-            // ÃÖ´ë ·¾ º¸´Ù ÀÛ¾Æ¾ß ¹è¿ï ¼ö ÀÖÀ½
+            // 1. ì¼ë°˜ ìŠ¤í‚¬ ë ˆë²¨ì—… (ìµœëŒ€ ë ˆë²¨ ë¯¸ë‹¬)
             if (currentLv < item.skillData.levels.Length)
+            {
+                validList.Add(item);
+            }
+            // 2. ì§„í™” ê°€ëŠ¥í•œ ìŠ¤í‚¬ (ìµœëŒ€ ë ˆë²¨ ë‹¬ì„± + ì§„í™” ì¡°ê±´ ì¶©ì¡±)
+            else if (CanEvolveTo(item.skillData))
             {
                 validList.Add(item);
             }
@@ -95,7 +134,7 @@ public class LevelUpManager : MonoBehaviour
         return validList;
     }
 
-    // ¼ÅÇÃ
+    // ì…”í”Œ
     private void ShuffleList<T>(List<T> list)
     {
         for (int i = 0; i < list.Count; i++)
@@ -111,10 +150,34 @@ public class LevelUpManager : MonoBehaviour
     {
         if (SkillManager.Instance != null)
         {
-            SkillManager.Instance.UnlockOrUpgradeSkill(selectedItem.skillData);
+            // ì§„í™” ê°€ëŠ¥í•œ ìŠ¤í‚¬ì´ë©´ ì§„í™” ì²˜ë¦¬
+            if (CanEvolveTo(selectedItem.skillData))
+            {
+                EvolveSkill(selectedItem.skillData);
+            }
+            else
+            {
+                // ì¼ë°˜ ìŠ¤í‚¬ ë ˆë²¨ì—…
+                SkillManager.Instance.UpgradeOrEquipSkill(selectedItem.skillData);
+            }
         }
 
         levelUpPanel.SetActive(false);
         Time.timeScale = 1f;
+    }
+
+    /// <summary>
+    /// ìŠ¤í‚¬ ì§„í™” ì²˜ë¦¬
+    /// </summary>
+    private void EvolveSkill(SkillData baseSkill)
+    {
+        if (baseSkill == null || baseSkill.evoSkill == null) return;
+
+        SkillData evoSkill = baseSkill.evoSkill;
+
+        // ê¸°ì¡´ ìŠ¤í‚¬ ì œê±°í•˜ê³  ì§„í™” ìŠ¤í‚¬ë¡œ êµì²´
+        SkillManager.Instance.ReplaceSkill(baseSkill, evoSkill, 1);
+
+        Debug.Log($"[LevelUpManager] {baseSkill.skillName} â†’ {evoSkill.skillName} ì§„í™” ì™„ë£Œ!");
     }
 }

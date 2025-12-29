@@ -41,19 +41,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2424363981006457382}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29b3a9e1e2c99034d8717041089e9e52, type: 3}
+  m_Script: {fileID: 11500000, guid: 2aa64501653e61b48a3a76319df56fda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillData: {fileID: 11400000, guid: a85d2257edfbf3d42a89f4faacc60ead, type: 2}
-  currentLevel: 1
-  isActive: 1
-  baseCooldown: 3
-  baseDamage: 10
-  baseLightningCount: 1
-  cooldownReductionPerLevel: 0.2
-  damageIncreasePerLevel: 2.5
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  strikeDelay: 0.15
-  attackRange: 8

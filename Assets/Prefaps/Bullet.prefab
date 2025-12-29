@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6658542677066781946}
   - component: {fileID: 3982213836692367431}
   - component: {fileID: -5605492195642344654}
+  - component: {fileID: 6533944237207209692}
   - component: {fileID: 2350686407022641144}
   m_Layer: 0
   m_Name: Bullet
@@ -112,7 +113,42 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
+--- !u!70 &6533944237207209692
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927450996480703183}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1, y: 2}
+  m_Direction: 0
 --- !u!114 &2350686407022641144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,7 +158,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 927450996480703183}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25019c9ee89a16544b74e47223e39ce7, type: 3}
+  m_Script: {fileID: 11500000, guid: d13fb0704865cae4183957e0c27771ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 3
+  _enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  _obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  _maxLifetime: 5
+  _boomerangMaxDistance: 8
+  _boomerangReturnSpeedMult: 1.2
+  _boomerangRotationSpeed: 720
+  _orbitBaseRadius: 1
+  _orbitMaxRadius: 5
+  _orbitExpansionSpeed: 1
+  _orbitBaseRotationSpeed: 180
+  _molotovArcHeight: 3
+  _fireGroundPrefab: {fileID: 2388024931358325485, guid: 8664922d214edbb4aa247e3cd2eac423, type: 3}
+  _brickGravity: 15
+  _brickBounceDamping: 0.7
+  _brickBounceMinSpeed: 3
+  _brickMaxHits: 3
+  _soccerMaxBounces: 5
+  _soccerBounceSpeed: 15
+  _soccerSpawnRadius: 3
+  _soccerMaxRelaunchCount: 3

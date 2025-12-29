@@ -1,371 +1,279 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
-public class GuardianSkill : MonoBehaviour
+/// <summary>
+/// 가디언 스킬 구현
+/// 플레이어 주변을 회전하며 적을 공격하는 가디언을 소환합니다.
+/// 레벨에 따라 소환되는 가디언의 수가 증가합니다.
+///
+/// 성능 최적화:
+/// - PlayerController.Instance로 빠른 플레이어 참조
+/// - 로컬 좌표계 사용으로 불필요한 연산 제거
+/// - Physics2D.OverlapCircleNonAlloc로 반경 내 적만 탐색
+///
+/// 확장성:
+/// - 레벨에 따른 다중 소환 지원
+/// - 데이터 위임 패턴 (계산은 부모, 행동은 자식)
+/// </summary>
+public class GuardianSkill : SkillBase
 {
-    [Header("가디언 설정")]
-    [SerializeField] private GameObject topPrefab;
-    [SerializeField] private Transform playerTransform;
-    [SerializeField] private float reactivateDelay = 1f;
+    #region Private Fields
+    // 다중 가디언 관리 (레벨에 따라 2~3마리 소환 가능)
+    private List<GameObject> _guardianObjects = new List<GameObject>();
+    private Transform _playerTransform;
+    #endregion
 
-    [Header("레벨별 설정")]
-    [SerializeField] private int baseTopCount = 2;
-    [SerializeField] private float baseRadius = 2f;
-    [SerializeField] private float baseRotationSpeed = 180f;
-    [SerializeField] private float baseDuration = 5f;
-    [SerializeField] private float baseDamage = 15f;
-    [SerializeField] private float baseKnockback = 5f;
-
-    // 레벨별 스탯 배열
-    private readonly float[] damageMultipliers = {0.5f, 0.6f, 0.7f, 0.8f, 0.9f};
-    [SerializeField] private float[] speedMultipliers = {1f, 1.2f, 1.4f, 1.6f, 1.8f}; // 인스펙터에서 조절 가능
-
-    // 레벨 관리
-    private int currentLevel = 1;
-    private int maxLevel = 5;
-
-    // 런타임 데이터
-    private int currentTopCount;
-    private float currentRotationSpeed;
-    private float currentDamageMultiplier;
-    private float currentDuration;
-    private bool isEvolved = false;
-
-    // 톱날 관리
-    private List<GuardianTop> activeTops = new List<GuardianTop>();
-    private bool isActive = false;
-    private float activeTimer = 0f;
-    private Coroutine activationCoroutine = null;
-
-    // 오디오
-    [SerializeField] private AudioClip activationSound;
-    [SerializeField] private AudioClip levelUpSound;
-    private AudioSource audioSource;
-
-    // 이펙트
-    [SerializeField] private GameObject activationEffect;
-    [SerializeField] private GameObject levelUpEffect;
-
-    // 상수
-    private const float UPGRADE_EFFECT_DURATION = 1f;
-
-    private void Awake()
+    #region Initialization
+    protected override void OnInitialize()
     {
-        // 오디오 소스 초기화
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-        {
-            audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.playOnAwake = false;
-        }
+        base.OnInitialize();
 
-        // 플레이어 자동 찾기
-        if (playerTransform == null)
+        // 싱글톤으로 빠른 플레이어 참조
+        if (PlayerController.Instance != null)
         {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null) playerTransform = player.transform;
+            _playerTransform = PlayerController.Instance.transform;
         }
     }
+    #endregion
 
-    private void Start()
+    #region Core Loop
+    protected override void Execute()
     {
-        // 초기 레벨 설정
-        InitializeLevel();
+        // 스킬 발동 시마다 가디언 수 체크 및 갱신
+        UpdateGuardians();
+    }
+
+    /// <summary>
+    /// 가디언 소환수를 관리하고 스탯을 업데이트합니다.
+    /// </summary>
+    private void UpdateGuardians()
+    {
+        int targetCount = GetTargetGuardianCount();
+
+        // 마리수 부족 시 생성
+        while (_guardianObjects.Count < targetCount)
+        {
+            CreateSingleGuardian();
+        }
+
+        // 마리수 초과 시 제거 (레벨 다운 등의 예외 상황)
+        while (_guardianObjects.Count > targetCount)
+        {
+            RemoveGuardian();
+        }
+
+        // 모든 가디언 스탯 업데이트
+        UpdateAllGuardianStats();
+    }
+
+    /// <summary>
+    /// 레벨에 따른 목표 가디언 수를 반환합니다.
+    /// 뱀서류 게임 패턴: 레벨업 시 소환수 증가
+    /// </summary>
+    private int GetTargetGuardianCount()
+    {
+        if (_currentLevel >= 7) return 3;
+        if (_currentLevel >= 4) return 2;
+        return 1;
+    }
+
+    /// <summary>
+    /// 단일 가디언을 생성합니다.
+    /// </summary>
+    private void CreateSingleGuardian()
+    {
+        if (_data?.prefab == null) return;
+
+        GameObject guardianObj = Instantiate(_data.prefab, _playerTransform);
+        guardianObj.name = $"Guardian_{_data.skillName}_{_guardianObjects.Count}";
+
+        // GuardianTop 컴포넌트를 가져와서 초기화
+        var guardianTop = guardianObj.GetComponent<GuardianTop>();
+        if (guardianTop != null)
+        {
+            float damage = GetFinalDamage();
+            float range = _data.attackRange * GetSizeMultiplier();
+            float knockback = 5f; // 넉백력
+            float speed = _data.hoverSpeed; // 회전 속도 (도/초)
+            int enemyLayerMask = LayerMask.GetMask("Enemy");
+
+            guardianTop.Initialize(damage, knockback, range, speed, _playerTransform, enemyLayerMask);
+        }
+
+        _guardianObjects.Add(guardianObj);
+    }
+
+    /// <summary>
+    /// 가장 최근에 생성된 가디언을 제거합니다.
+    /// </summary>
+    private void RemoveGuardian()
+    {
+        if (_guardianObjects.Count == 0) return;
+
+        int lastIndex = _guardianObjects.Count - 1;
+        GameObject guardianToRemove = _guardianObjects[lastIndex];
+
+        if (guardianToRemove != null)
+        {
+            Destroy(guardianToRemove);
+        }
+
+        _guardianObjects.RemoveAt(lastIndex);
+    }
+
+    /// <summary>
+    /// 모든 가디언의 스탯을 업데이트합니다.
+    /// GuardianTop 컴포넌트를 사용하여 스탯 업데이트
+    /// </summary>
+    private void UpdateAllGuardianStats()
+    {
+        float finalDamage = GetFinalDamage();
+        float finalRange = _data.attackRange * GetSizeMultiplier();
+        float knockback = 5f;
+        float speed = _data.hoverSpeed;
+        int enemyLayerMask = LayerMask.GetMask("Enemy");
+
+        // 여러 마리일 때 서로 겹치지 않게 각도 분배
+        float angleStep = 360f / _guardianObjects.Count;
+
+        for (int i = 0; i < _guardianObjects.Count; i++)
+        {
+            if (_guardianObjects[i] != null &&
+                _guardianObjects[i].TryGetComponent<GuardianTop>(out var guardianTop))
+            {
+                // GuardianTop 스탯 업데이트
+                guardianTop.UpdateStats(finalDamage, knockback, speed);
+
+                // 각도 오프셋 설정을 위해 현재 각도 설정
+                // GuardianTop은 내부적으로 CurrentAngle를 사용하므로 여기서는 설정 불필요
+            }
+        }
+    }
+    #endregion
+
+    #region Level Management
+    protected override void OnLevelChanged(int newLevel)
+    {
+        base.OnLevelChanged(newLevel);
+        // 레벨 변경 시 가디언 수 재조정
+        UpdateGuardians();
+    }
+    #endregion
+
+    #region Cleanup
+    public override void Deactivate()
+    {
+        base.Deactivate();
+
+        // 모든 가디언 제거
+        foreach (var guardian in _guardianObjects)
+        {
+            if (guardian != null)
+            {
+                Destroy(guardian);
+            }
+        }
+        _guardianObjects.Clear();
+    }
+    #endregion
+}
+
+/// <summary>
+/// 가디언 동작 컴포넌트
+/// 가디언 오브젝트에 붙어서 회전 및 공격을 담당합니다.
+///
+/// 설계 원칙:
+/// - 플레이어의 자식으로 생성되므로 PlayerController 참조 불필요
+/// - 부모 기준 로컬 좌표로 위치 계산
+/// - 스탯 계산은 GuardianSkill에서 위임받음
+/// </summary>
+public class GuardianBehavior : MonoBehaviour
+{
+    // 위임받은 스탯 (직접 계산하지 않음)
+    private float _damage;
+    private float _range;
+    private float _attackCooldown;
+
+    // 회전 관련
+    private float _angleOffset = 0f;  // 초기 각도 (여러 마리일 때 분배용)
+    private float _currentAngle = 0f;
+    private float _attackTimer = 0f;
+
+    // 회전 설정 (데이터에서 가져올 수도 있음)
+    private const float ORBIT_RADIUS = 3f;
+    private const float ROTATION_SPEED = 180f;
+
+    // LayerMask 캐싱
+    private int _enemyLayerMask;
+
+    /// <summary>
+    /// 스탯을 설정합니다.
+    /// GuardianSkill에서 계산된 값을 받습니다.
+    /// </summary>
+    public void SetStats(float damage, float range, float cooldown)
+    {
+        _damage = damage;
+        _range = range;
+        _attackCooldown = Mathf.Max(0.3f, cooldown);
+    }
+
+    /// <summary>
+    /// 초기 각도 오프셋을 설정합니다.
+    /// 여러 마리가 서로 겹치지 않게 배치하기 위함입니다.
+    /// </summary>
+    public void SetOffsetAngle(float offset)
+    {
+        _angleOffset = offset;
+        _currentAngle = offset;
+    }
+
+    public void Activate()
+    {
+        gameObject.SetActive(true);
+
+        // LayerMask 캐싱
+        _enemyLayerMask = LayerMask.GetMask("Enemy");
     }
 
     private void Update()
     {
-        if (!isActive) return;
+        // 부모(Player) 기준 로컬 회전 (월드 좌표 계산 불필요)
+        _currentAngle += ROTATION_SPEED * Time.deltaTime;
 
-        // 타이머 업데이트 (진화 전만)
-        if (!isEvolved)
+        float rad = _currentAngle * Mathf.Deg2Rad;
+        transform.localPosition = new Vector3(
+            Mathf.Cos(rad) * ORBIT_RADIUS,
+            Mathf.Sin(rad) * ORBIT_RADIUS,
+            0
+        );
+
+        // 주기적 공격
+        _attackTimer += Time.deltaTime;
+        if (_attackTimer >= _attackCooldown)
         {
-            activeTimer += Time.deltaTime;
-
-            if (activeTimer >= currentDuration)
-            {
-                DeactivateGuardian();
-            }
+            _attackTimer = 0f;
+            AttackNearestEnemy();
         }
     }
 
-    // 초기 레벨 설정
-    private void InitializeLevel()
+    /// <summary>
+    /// 가장 가까운 적 공격 (TargetingHelper 사용)
+    /// </summary>
+    private void AttackNearestEnemy()
     {
-        UpdateLevelStats();
-        InitializeTops();
-    }
+        if (_range <= 0) return;
 
-    // 레벨별 스탯 업데이트
-    private void UpdateLevelStats()
-    {
-        // 톱날 수 계산
-        currentTopCount = baseTopCount + (currentLevel - 1);
+        // TargetingHelper로 중복 제거
+        Enemy nearest = TargetingHelper.FindNearestEnemy(
+            transform.position,
+            _range,
+            _enemyLayerMask
+        );
 
-        // 회전 속도 계산
-        currentRotationSpeed = baseRotationSpeed * speedMultipliers[currentLevel - 1];
-
-        // 데미지 배수 설정
-        currentDamageMultiplier = damageMultipliers[Mathf.Min(currentLevel - 1, damageMultipliers.Length - 1)];
-
-        // 지속시간 설정 (레벨당 1초 증가)
-        currentDuration = baseDuration + (currentLevel - 1);
-    }
-
-    // 톱날 초기화
-    private void InitializeTops()
-    {
-        // 기존 톱날 정리
-        ClearAllTops();
-
-        // 새 톱날 생성
-        float angleStep = 360f / currentTopCount;
-
-        for (int i = 0; i < currentTopCount; i++)
+        if (nearest != null)
         {
-            // 오브젝트 풀에서 톱날 가져오기
-            GuardianTop top = ObjectPoolManager.Instance.GetGuardianTop();
-            if (top == null)
-            {
-                Debug.LogWarning("Guardian: 톱날을 풀에서 가져오지 못했습니다!");
-                continue;
-            }
-
-            // 초기 각도 균등 분배
-            float initialAngle = i * angleStep;
-
-            // 톱날 초기화
-            top.Initialize(
-                initialAngle,
-                baseRadius,
-                currentRotationSpeed,
-                playerTransform,
-                currentDamageMultiplier
-            );
-
-            // 스탯 업데이트
-            top.UpdateStats(baseDamage, baseKnockback, currentRotationSpeed);
-
-            activeTops.Add(top);
+            // 위임받은 데미지로 공격
+            nearest.TakeDamage(_damage);
         }
-    }
-
-    // 가디언 활성화
-    public void ActivateGuardian()
-    {
-        if (isActive) return;
-
-        isActive = true;
-        activeTimer = 0f;
-
-        // 톱날 활성화
-        foreach (var top in activeTops)
-        {
-            top.Reactivate();
-        }
-
-        // 활성화 이펙트
-        CreateActivationEffect();
-
-        // 활성화 사운드
-        if (audioSource != null && activationSound != null)
-        {
-            audioSource.PlayOneShot(activationSound);
-        }
-    }
-
-    // 가디언 비활성화
-    public void DeactivateGuardian()
-    {
-        if (!isActive) return;
-
-        isActive = false;
-
-        // 톱날 비활성화
-        foreach (var top in activeTops)
-        {
-            top.Deactivate();
-        }
-
-        // 진화 전이면 재소환 코루틴 시작
-        if (!isEvolved)
-        {
-            if (activationCoroutine != null)
-            {
-                StopCoroutine(activationCoroutine);
-            }
-            activationCoroutine = StartCoroutine(ReactivateAfterDelay());
-        }
-    }
-
-    // 지연 후 재활성화 코루틴
-    private IEnumerator ReactivateAfterDelay()
-    {
-        yield return new WaitForSeconds(reactivateDelay);
-        ActivateGuardian();
-        activationCoroutine = null;
-    }
-
-    // 가디언 레벨업
-    public void UpgradeGuardian()
-    {
-        if (currentLevel >= maxLevel) return;
-
-        currentLevel++;
-        currentLevel = Mathf.Min(currentLevel, maxLevel);
-
-        // 스탯 업데이트
-        UpdateLevelStats();
-
-        // 레벨업 이펙트
-        StartCoroutine(ShowLevelUpEffect());
-
-        // 레벨업 사운드
-        if (audioSource != null && levelUpSound != null)
-        {
-            audioSource.PlayOneShot(levelUpSound);
-        }
-
-        // 기존 톱날 파괴 후 재생성
-        InitializeTops();
-    }
-
-    // 레벨업 이펙트 코루틴
-    private IEnumerator ShowLevelUpEffect()
-    {
-        // 이펙트 생성
-        if (levelUpEffect != null && playerTransform != null)
-        {
-            GameObject effect = Instantiate(levelUpEffect, playerTransform.position, Quaternion.identity);
-            effect.transform.localScale = Vector3.one * 2f;
-            Destroy(effect, UPGRADE_EFFECT_DURATION);
-        }
-
-        // 톱날 깜빡임 효과
-        foreach (var top in activeTops)
-        {
-            StartCoroutine(FlashTop(top));
-        }
-
-        yield return new WaitForSeconds(UPGRADE_EFFECT_DURATION);
-    }
-
-    // 톱날 깜빡임 효과
-    private IEnumerator FlashTop(GuardianTop top)
-    {
-        SpriteRenderer renderer = top.GetComponent<SpriteRenderer>();
-        if (renderer == null) yield break;
-
-        Color originalColor = renderer.color;
-
-        for (int i = 0; i < 3; i++)
-        {
-            renderer.color = Color.yellow;
-            yield return new WaitForSeconds(0.1f);
-            renderer.color = originalColor;
-            yield return new WaitForSeconds(0.1f);
-        }
-    }
-
-    // 진화 (Defender로)
-    public void EvolveGuardian()
-    {
-        isEvolved = true;
-
-        // 최고 레벨로 설정
-        currentLevel = maxLevel;
-        UpdateLevelStats();
-
-        // 영구 활성화
-        if (!isActive)
-        {
-            ActivateGuardian();
-        }
-
-        // 진화 이펙트
-        CreateEvolutionEffect();
-    }
-
-    // 활성화 이펙트
-    private void CreateActivationEffect()
-    {
-        if (activationEffect == null || playerTransform == null) return;
-
-        GameObject effect = Instantiate(activationEffect, playerTransform.position, Quaternion.identity);
-        Destroy(effect, 2f);
-    }
-
-    // 진화 이펙트
-    private void CreateEvolutionEffect()
-    {
-        // 진화 특수 이펙트 생성
-        if (Resources.Load("Effects/EvolutionEffect") != null && playerTransform != null)
-        {
-            GameObject effect = Instantiate(Resources.Load("Effects/EvolutionEffect") as GameObject);
-            effect.transform.position = playerTransform.position;
-            Destroy(effect, 3f);
-        }
-    }
-
-    // 모든 톱날 정리
-    private void ClearAllTops()
-    {
-        foreach (var top in activeTops)
-        {
-            if (top != null)
-            {
-                top.Deactivate();
-                ObjectPoolManager.Instance.ReturnGuardianTop(top);
-            }
-        }
-        activeTops.Clear();
-    }
-
-    // 현재 상태 정보 반환
-    public GuardianSkillData GetCurrentData()
-    {
-        return new GuardianSkillData
-        {
-            level = currentLevel,
-            topCount = currentTopCount,
-            rotationSpeed = currentRotationSpeed,
-            damageMultiplier = currentDamageMultiplier,
-            duration = currentDuration,
-            isActive = isActive,
-            remainingTime = isEvolved ? -1f : currentDuration - activeTimer
-        };
-    }
-
-    // 외부에서 현재 레벨 설정용
-    public void SetLevel(int level)
-    {
-        currentLevel = Mathf.Clamp(level, 1, maxLevel);
-        InitializeLevel();
-    }
-
-    // 활성 상태 확인
-    public bool IsGuardianActive()
-    {
-        return isActive;
-    }
-
-    // 남은 시간 확인
-    public float GetRemainingTime()
-    {
-        if (isEvolved) return -1f; // 진화 시 무한
-        return Mathf.Max(0f, currentDuration - activeTimer);
-    }
-
-    private void OnDestroy()
-    {
-        // 코루틴 정리
-        if (activationCoroutine != null)
-        {
-            StopCoroutine(activationCoroutine);
-        }
-
-        // 톱날 정리
-        ClearAllTops();
     }
 }

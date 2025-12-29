@@ -1,254 +1,303 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
-public class DroneSkill : MonoBehaviour
+/// <summary>
+/// 드론 스킬 구현
+/// 자율적으로 적을 찾아 공격하는 드론을 소환합니다.
+/// 레벨에 따라 소환되는 드론의 수가 증가합니다.
+///
+/// 성능 최적화:
+/// - PlayerController.Instance로 빠른 플레이어 참조
+/// - 로컬 좌표계 사용으로 불필요한 연산 제거
+/// - Physics2D.OverlapCircleNonAlloc로 반경 내 적만 탐색
+///
+/// 확장성:
+/// - 레벨에 따른 다중 소환 지원
+/// - 데이터 위임 패턴 (계산은 부모, 행동은 자식)
+/// - 데이터 주도 설계 (호버링 파라미터 ScriptableObject화)
+/// </summary>
+public class DroneSkill : SkillBase
 {
-    [Header("드론 설정")]
-    [SerializeField] private GameObject dronePrefab;
-    [SerializeField] private Transform playerTransform;
-    [SerializeField] private Transform droneFollowPoint;  // 드론이 따라다닐 위치
+    #region Private Fields
+    // 다중 드론 관리 (레벨에 따라 2~3마리 소환 가능)
+    private List<GameObject> _droneObjects = new List<GameObject>();
+    private Transform _playerTransform;
+    #endregion
 
-    // 스킬 데이터 참조
-    private SkillData skillData;
-
-    [Header("레벨별 기본 설정")]
-    [SerializeField] private int baseMissileCount = 10;  // 3 → 10으로 증가
-    [SerializeField] private float baseCooldown = 3f;
-    [SerializeField] private float baseDamage = 8f;
-    [SerializeField] private float baseSpeed = 15f;
-
-    [Header("발사 설정")]
-    [SerializeField] private float fireRate = 30f;  // 발사 방향 회전 속도 (도/초)
-    [SerializeField] private float missileSpread = 75f;  // 30도 → 75도로 확장
-    [SerializeField] private float followDistance = 1.2f;  // 플레이어와의 거리 (기본값 1.2)
-    [SerializeField] private float followSpeed = 2.5f;  // 추적 속도 (기본값 2.5)
-
-    // 상태 변수
-    private int currentLevel = 1;
-    private Drone currentDrone;
-    private bool isActive = false;
-    private float currentFireAngle = 0f;
-    private Coroutine fireCoroutine;
-
-    public void InitializeDroneSkill(int level)
+    #region Initialization
+    protected override void OnInitialize()
     {
-        currentLevel = Mathf.Clamp(level, 1, 5);
+        base.OnInitialize();
 
-        if (currentDrone == null)
+        // 싱글톤으로 빠른 플레이어 참조
+        if (PlayerController.Instance != null)
         {
-            SpawnDrone();
-            UpdateDroneStats();
-            ActivateDrone();
-        }
-        else
-        {
-            // 이미 드론이 있으면 레벨만 업데이트
-            UpdateDroneStats();
+            _playerTransform = PlayerController.Instance.transform;
         }
     }
+    #endregion
 
-    // SkillManager에서 스킬 데이터 설정
-    public void SetSkillData(SkillData data)
+    #region Core Loop
+    protected override void Execute()
     {
-        skillData = data;
-
-        // SkillData 값으로 기본 설정 업데이트
-        if (data != null)
-        {
-            // 기본 스탯 값으로 설정
-            baseMissileCount = data.projectileCount;
-            baseCooldown = data.cooldown;
-            baseDamage = data.damage;
-            baseSpeed = data.projectileSpeed;
-        }
+        // 스킬 발동 시마다 드론 수 체크 및 갱신
+        UpdateDrones();
     }
 
-    private void SpawnDrone()
+    /// <summary>
+    /// 드론 소환수를 관리하고 스탯을 업데이트합니다.
+    /// </summary>
+    private void UpdateDrones()
     {
-        // 오브젝트 풀에서 드론 가져오기
-        currentDrone = ObjectPoolManager.Instance.GetDrone();
-        if (currentDrone == null)
+        int targetCount = GetTargetDroneCount();
+
+        // 마리수 부족 시 생성
+        while (_droneObjects.Count < targetCount)
         {
-            GameObject droneObj = Instantiate(dronePrefab, transform);
-            currentDrone = droneObj.GetComponent<Drone>();
-        }
-        else
-        {
-            currentDrone.gameObject.SetActive(true);
+            CreateSingleDrone();
         }
 
-        // 드론 초기 위치 설정
-        Vector3 startPos = playerTransform.position + Vector3.up * followDistance;
-        currentDrone.transform.position = startPos;
-        currentDrone.Initialize(playerTransform, followDistance, followSpeed);
-    }
-
-    private void UpdateDroneStats()
-    {
-        if (currentDrone == null) return;
-
-        // 레벨별 스탯 계산
-        float damage = (baseDamage + (currentLevel - 1) * 2f) * 0.5f;  // 개당 데미지 50% 조정 (전체 데미지 유지)
-        float speed = baseSpeed * 1.3f;  // 속도 30% 증가 (15 → 19.5)
-        int missileCount = baseMissileCount + (currentLevel - 1) * 2;  // 레벨당 +2 미사일
-        float cooldown = Mathf.Max(0.5f, baseCooldown - (currentLevel - 1) * 0.2f);  // 레벨당 -0.2초 쿨타임
-
-        currentDrone.SetStats(damage, speed, missileCount, cooldown);
-    }
-
-    private void ActivateDrone()
-    {
-        if (currentDrone == null) return;
-
-        isActive = true;
-        currentDrone.Activate();
-
-        // 미사일 발사 코루틴 시작
-        if (fireCoroutine != null)
+        // 마리수 초과 시 제거 (레벨 다운 등의 예외 상황)
+        while (_droneObjects.Count > targetCount)
         {
-            StopCoroutine(fireCoroutine);
+            RemoveDrone();
         }
-        fireCoroutine = StartCoroutine(FireMissilesRoutine());
+
+        // 모든 드론 스탯 업데이트
+        UpdateAllDroneStats();
     }
 
-    private IEnumerator FireMissilesRoutine()
+    /// <summary>
+    /// 레벨에 따른 목표 드론 수를 반환합니다.
+    /// 뱀서류 게임 패턴: 레벨업 시 소환수 증가
+    /// </summary>
+    private int GetTargetDroneCount()
     {
-        while (isActive && currentDrone != null)
+        if (_currentLevel >= 7) return 3;
+        if (_currentLevel >= 4) return 2;
+        return 1;
+    }
+
+    /// <summary>
+    /// 단일 드론을 생성합니다.
+    /// </summary>
+    private void CreateSingleDrone()
+    {
+        if (_data?.prefab == null) return;
+
+        GameObject droneObj = Instantiate(_data.prefab, _playerTransform);
+        droneObj.name = $"Drone_{_data.skillName}_{_droneObjects.Count}";
+
+        // Drone 컴포넌트를 가져와서 초기화
+        var drone = droneObj.GetComponent<Drone>();
+        if (drone != null)
         {
-            // 쿨타임 계산
-            float cooldown = Mathf.Max(0.5f, baseCooldown - (currentLevel - 1) * 0.2f);
-            yield return new WaitForSeconds(cooldown);
+            float damage = GetFinalDamage();
+            float cooldown = GetFinalCooldown();
+            float radius = _data.hoverRadius;
+            float speed = _data.hoverSpeed;
+            float projectileSpeed = _data.projectileSpeed;
+            int enemyLayerMask = LayerMask.GetMask("Enemy");
 
-            if (!isActive || currentDrone == null) break;
-
-            // 미사일 발사
-            FireMissileBurst();
+            drone.Initialize(_playerTransform, damage, cooldown, radius, speed, projectileSpeed, enemyLayerMask, _data);
         }
+
+        _droneObjects.Add(droneObj);
     }
 
-    private void FireMissileBurst()
+    /// <summary>
+    /// 가장 최근에 생성된 드론을 제거합니다.
+    /// </summary>
+    private void RemoveDrone()
     {
-        if (currentDrone == null) return;
+        if (_droneObjects.Count == 0) return;
 
-        // 레벨별 스탯 계산
-        int missileCount = baseMissileCount + (currentLevel - 1) * 2;
-        float damage = (baseDamage + (currentLevel - 1) * 2f) * 0.5f;  // 개당 데미지 50% 조정
-        float speed = baseSpeed * 1.3f;  // 속도 30% 증가
-        float cooldown = Mathf.Max(0.5f, baseCooldown - (currentLevel - 1) * 0.2f);
+        int lastIndex = _droneObjects.Count - 1;
+        GameObject droneToRemove = _droneObjects[lastIndex];
 
-        // 현재 발사 각도 업데이트
-        currentFireAngle += fireRate * cooldown;
-        if (currentFireAngle >= 360f) currentFireAngle -= 360f;
-
-        // 그룹별 미사일 발사 시작
-        StartCoroutine(FireMissileGroups(missileCount, damage, speed));
-    }
-
-    private IEnumerator FireMissileGroups(int totalMissiles, float damage, float speed)
-    {
-        // 그룹별 미사일 수 (3-4발씩)
-        int groupSize = Mathf.Clamp(4, 3, totalMissiles);  // 최대 4발씩
-        int remainingMissiles = totalMissiles;
-
-        // 미사일 다발 발사 각도 계산
-        float angleStep = missileSpread / (totalMissiles - 1);
-        float startAngle = currentFireAngle - (missileSpread / 2f);
-        int currentMissileIndex = 0;
-
-        while (remainingMissiles > 0)
+        if (droneToRemove != null)
         {
-            int missilesInThisGroup = Mathf.Min(groupSize, remainingMissiles);
+            Destroy(droneToRemove);
+        }
 
-            // 그룹 내 미사일 발사
-            for (int i = 0; i < missilesInThisGroup; i++)
+        _droneObjects.RemoveAt(lastIndex);
+    }
+
+    /// <summary>
+    /// 모든 드론의 스탯을 업데이트합니다.
+    /// Drone 컴포넌트를 사용하여 스탯 업데이트
+    /// </summary>
+    private void UpdateAllDroneStats()
+    {
+        float finalDamage = GetFinalDamage();
+        float finalCooldown = GetFinalCooldown();
+
+        for (int i = 0; i < _droneObjects.Count; i++)
+        {
+            if (_droneObjects[i] != null &&
+                _droneObjects[i].TryGetComponent<Drone>(out var drone))
             {
-                float angle = startAngle + (angleStep * currentMissileIndex);
-                Vector2 direction = Quaternion.Euler(0, 0, angle) * Vector2.up;
+                // Drone 스탯 업데이트
+                drone.UpdateStats(finalDamage, finalCooldown, _data.hoverSpeed);
+            }
+        }
+    }
+    #endregion
 
-                SpawnMissile(currentDrone.transform.position, direction, damage, speed);
-                currentMissileIndex++;
-                remainingMissiles--;
+    #region Level Management
+    protected override void OnLevelChanged(int newLevel)
+    {
+        base.OnLevelChanged(newLevel);
+        // 레벨 변경 시 드론 수 재조정
+        UpdateDrones();
+    }
+    #endregion
 
-                // 미사일 간 짧은 지연 (20ms)
-                if (i < missilesInThisGroup - 1)  // 그룹의 마지막 미사일이 아닐 경우에만
+    #region Cleanup
+    public override void Deactivate()
+    {
+        base.Deactivate();
+
+        // 모든 드론 제거
+        foreach (var drone in _droneObjects)
+        {
+            if (drone != null)
+            {
+                Destroy(drone);
+            }
+        }
+        _droneObjects.Clear();
+    }
+    #endregion
+}
+
+/// <summary>
+/// 드론 동작 컴포넌트
+/// 드론이 플레이어 주변을 호버링하며 적을 공격합니다.
+///
+/// 설계 원칙:
+/// - 플레이어의 자식으로 생성되므로 PlayerController 참조 불필요
+/// - 부모 기준 로컬 좌표로 위치 계산
+/// - 스탯 계산은 DroneSkill에서 위임받음
+/// - 호버링 파라미터는 SkillData에서 가져옴 (데이터 주도 설계)
+/// </summary>
+public class DroneBehavior : MonoBehaviour
+{
+    // 위임받은 스탯 (직접 계산하지 않음)
+    private float _damage;
+    private float _cooldown;
+    private SkillData _data;
+
+    // 회전 관련
+    private float _angleOffset = 0f;  // 초기 각도 (여러 마리일 때 분배용)
+    private float _hoverAngle = 0f;
+    private float _attackTimer = 0f;
+
+    // LayerMask 캐싱
+    private int _enemyLayerMask;
+
+    /// <summary>
+    /// 스탯을 설정합니다.
+    /// DroneSkill에서 계산된 값을 받습니다.
+    /// </summary>
+    public void SetStats(float damage, float cooldown, SkillData data)
+    {
+        _damage = damage;
+        _cooldown = cooldown;
+        _data = data;
+    }
+
+    /// <summary>
+    /// 초기 각도 오프셋을 설정합니다.
+    /// 여러 마리가 서로 겹치지 않게 배치하기 위함입니다.
+    /// </summary>
+    public void SetOffsetAngle(float offset)
+    {
+        _angleOffset = offset;
+        _hoverAngle = offset;
+    }
+
+    public void Activate()
+    {
+        gameObject.SetActive(true);
+
+        // LayerMask 캐싱
+        _enemyLayerMask = LayerMask.GetMask("Enemy");
+    }
+
+    private void Update()
+    {
+        if (_data == null) return;
+
+        // 부모(Player) 기준 로컬 회전 (월드 좌표 계산 불필요)
+        _hoverAngle += _data.hoverSpeed * Time.deltaTime;
+
+        float rad = _hoverAngle * Mathf.Deg2Rad;
+        transform.localPosition = new Vector3(
+            Mathf.Cos(rad) * _data.hoverRadius,
+            Mathf.Sin(rad) * _data.hoverRadius * _data.hoverEllipseRatio,  // 타원형 비율 적용
+            0
+        );
+
+        // 공격 타이머 (데이터에서 설정한 최소값으로 클램프)
+        _attackTimer += Time.deltaTime;
+        float attackInterval = Mathf.Max(_data.attackIntervalMin, _cooldown);
+        if (_attackTimer >= attackInterval)
+        {
+            _attackTimer = 0f;
+            FireAtEnemy();
+        }
+    }
+
+    /// <summary>
+    /// 가장 가까운 적에게 투사체 발사 (TargetingHelper 사용)
+    /// </summary>
+    private void FireAtEnemy()
+    {
+        if (_data == null) return;
+
+        float searchRadius = _data.enemySearchRadius > 0 ? _data.enemySearchRadius : 20f;
+        Vector3 worldPos = transform.position;
+
+        // TargetingHelper로 중복 제거
+        Enemy nearest = TargetingHelper.FindNearestEnemy(
+            worldPos,
+            searchRadius,
+            _enemyLayerMask
+        );
+
+        if (nearest != null && _data.prefab != null)
+        {
+            // 투사체 발사
+            Vector3 direction = (nearest.transform.position - worldPos).normalized;
+
+            // 오브젝트 풀링 사용
+            Projectile projectile = null;
+            if (ObjectPoolManager.Instance != null)
+            {
+                projectile = ObjectPoolManager.Instance.GetProjectile();
+            }
+
+            if (projectile == null)
+            {
+                GameObject projectileObj = Instantiate(_data.prefab, worldPos, Quaternion.identity);
+                projectile = projectileObj.GetComponent<Projectile>();
+                if (projectile == null)
                 {
-                    yield return new WaitForSeconds(0.02f);  // 20ms 지연
+                    projectile = projectileObj.AddComponent<Projectile>();
                 }
             }
-
-            // 그룹 간 지연 (80ms)
-            if (remainingMissiles > 0)
+            else
             {
-                yield return new WaitForSeconds(0.08f);  // 80ms 지연
+                projectile.gameObject.SetActive(true);
+                projectile.gameObject.transform.position = worldPos;
             }
-        }
-    }
 
-    private void SpawnMissile(Vector3 position, Vector2 direction, float damage, float speed)
-    {
-        // 오브젝트 풀에서 미사일 가져오기
-        var missile = ObjectPoolManager.Instance.GetMissile();
-        if (missile == null)
-        {
-            GameObject missileObj = new GameObject("Missile");
-            //missileObj.transform.SetParent(transform);
-            missile = missileObj.AddComponent<MissileProjectile>();
-        }
-        else
-        {
-            missile.gameObject.SetActive(true);
-            missile.transform.position = position;
+            // 위임받은 데미지 사용
+            projectile.Setup(direction, _damage, _data.projectileSpeed, _data.movementType);
 
-            // 미사일 상태 초기화 (중요!)
-            MissileProjectile missileComp = missile as MissileProjectile;
-            if (missileComp != null)
-            {
-                missileComp.ResetForReuse();
-            }
-        }
-
-        // 수동으로 초기화 (Initialize 메서드가 없으므로)
-        missile.transform.position = position;
-        missile.Init(damage, speed, direction);
-        missile.gameObject.transform.localScale = Vector3.one * 0.3f;  // 미사일 크기를 30%로大幅 줄임
-
-        // 미사일 방향 설정 (발사 방향으로 회전)
-        MissileProjectile missileProjectile = missile as MissileProjectile;
-        if (missileProjectile != null)
-        {
-            missileProjectile.SetDirection(direction);
-        }
-    }
-
-    public void DeactivateDroneSkill()
-    {
-        isActive = false;
-
-        if (fireCoroutine != null)
-        {
-            StopCoroutine(fireCoroutine);
-            fireCoroutine = null;
-        }
-
-        if (currentDrone != null)
-        {
-            currentDrone.Deactivate();
-            ObjectPoolManager.Instance.ReturnDrone(currentDrone);
-            currentDrone = null;
-        }
-    }
-
-    public void SetPlayerTransform(Transform player)
-    {
-        playerTransform = player;
-
-        // 드론 추적 포인트 설정
-        if (droneFollowPoint == null)
-        {
-            GameObject followPoint = new GameObject("DroneFollowPoint");
-            followPoint.transform.SetParent(playerTransform);
-            followPoint.transform.localPosition = Vector3.up * followDistance;
-            droneFollowPoint = followPoint.transform;
+            // 시각 효과 설정 (v2) - SkillData에서 스프라이트, 색상, 크기 적용
+            projectile.SetSprite(_data.projectileSprite, _data.projectileColor, _data.projectileScale);
         }
     }
 }

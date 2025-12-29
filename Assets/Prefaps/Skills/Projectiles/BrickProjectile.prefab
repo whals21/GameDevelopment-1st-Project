@@ -158,16 +158,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 6695559934035842656}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97d120bcb54fa814eb28909716cc4aa3, type: 3}
+  m_Script: {fileID: 11500000, guid: d13fb0704865cae4183957e0c27771ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 8
-  knockbackForce: 5
-  maxHits: 3
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 2048
-  impactEffect: {fileID: 0}
-  enemyLayer:
+  _enemyLayer:
     serializedVersion: 2
     m_Bits: 256
+  _obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  _maxLifetime: 5
+  _boomerangMaxDistance: 8
+  _boomerangReturnSpeedMult: 1.2
+  _boomerangRotationSpeed: 720
+  _orbitBaseRadius: 1
+  _orbitMaxRadius: 5
+  _orbitExpansionSpeed: 1
+  _orbitBaseRotationSpeed: 180
+  _molotovArcHeight: 3
+  _fireGroundPrefab: {fileID: 0}
+  _brickGravity: 15
+  _brickBounceDamping: 0.7
+  _brickBounceMinSpeed: 3
+  _brickMaxHits: 3
+  _soccerMaxBounces: 5
+  _soccerBounceSpeed: 15
+  _soccerSpawnRadius: 3
+  _soccerMaxRelaunchCount: 3
