@@ -20,10 +20,10 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private Transform playerTransform; // 이펙트 터질 위치
 
     [Header("레벨 관련")]
-    [SerializeField] private TextMeshProUGUI levelText;
+    public TextMeshProUGUI levelText;       //12/29
 
     [Header("킬 카운트")]
-    [SerializeField] private TextMeshProUGUI killCountText;
+    public TextMeshProUGUI killCountText;   //12/29
 
     [Header("게임 상태 UI")]
     [SerializeField] private GameObject pausePanel;

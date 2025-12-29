@@ -25,6 +25,18 @@ public class PlayerStats : MonoBehaviour
     [Header("경험치 보너스 시스템")]
     [SerializeField] private float expBonusMultiplier = 1.0f;  // 경험치 보너스 배수 (1.0 = 100%)
 
+    public static PlayerStats Instance { get; private set; } // 12/29추가
+
+    private void Awake()    //12/29추가
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); // 중복 제거
+            return;
+        }
+        Instance = this;
+    }
+
     void Start()
     {
         currentHp = maxHp;

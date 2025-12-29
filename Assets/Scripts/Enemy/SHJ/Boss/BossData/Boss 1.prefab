@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 5072897593862626767}
   - component: {fileID: 162317878641941893}
   m_Layer: 0
-  m_Name: Boss
+  m_Name: Boss 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -187,7 +187,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1318412455, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+  m_Sprite: {fileID: -207556361, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -210,8 +210,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 698fe0c48f1dd304e87e359c92908752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterNumber: 0
-  bossPattern: {fileID: 11400000, guid: 4f63030bf78cea447a043c22d48e477a, type: 2}
+  MonsterNumber: 1
+  bossPattern: {fileID: 11400000, guid: 38d94b7aadcee5c45999f47755140de2, type: 2}
   target: {fileID: 0}
   rb: {fileID: 5072897593862626767}
   attackCooldown: 5

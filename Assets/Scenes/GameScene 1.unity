@@ -6045,6 +6045,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1278186438 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6352538531734285599, guid: caf772dda376dd74791daf3430bedf00, type: 3}
+  m_PrefabInstance: {fileID: 5664268326167529616}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1278186440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1278186438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 447267b2527a9ba46b2ae86218841b52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1316682793
 GameObject:
   m_ObjectHideFlags: 0
@@ -9845,6 +9862,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 152268700}
+    - target: {fileID: 5068693639065735349, guid: caf772dda376dd74791daf3430bedf00, type: 3}
+      propertyPath: FirePool
+      value: 
+      objectReference: {fileID: 1278186440}
     - target: {fileID: 6352538531734285599, guid: caf772dda376dd74791daf3430bedf00, type: 3}
       propertyPath: m_Name
       value: patternName
@@ -9856,7 +9877,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6352538531734285599, guid: caf772dda376dd74791daf3430bedf00, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1278186440}
   m_SourcePrefab: {fileID: 100100000, guid: caf772dda376dd74791daf3430bedf00, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
