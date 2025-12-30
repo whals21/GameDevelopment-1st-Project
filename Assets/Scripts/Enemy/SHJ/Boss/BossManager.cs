@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -86,7 +87,7 @@ public class BossManager : MonoBehaviour
             // 이미 스폰된 보스면 건너뛰기
             if (bossSpawnedFlags[i]) continue;
 
-            Debug.Log($"[Boss Check] 보스: {bossData.name} | 레벨: {cachedPlayerLevel}/{bossData.playerLV}, 킬: {cachedKillCount}/{bossData.killCountToSpawn}, 시간: {elapsedTime}/{bossData.appearTime}");
+            
 
             if (cachedPlayerLevel >= bossData.playerLV &&
                 cachedKillCount >= bossData.killCountToSpawn &&
@@ -94,28 +95,33 @@ public class BossManager : MonoBehaviour
             {
                 bossSpawnedFlags[i] = true; // 이 보스는 이제 스폰됨
                 currentBossIndex = i;
-                Debug.Log($"[Boss Spawn] 보스 {bossData.name} 출현 조건 만족! 스폰 시작");
-                SpawnBoss(bossData);
+                
+                SpawnBoss(bossData,i);
             }
         }
     }
 
-    private void SpawnBoss(BossScriptsObject bossData)
+    private void SpawnBoss(BossScriptsObject bossData, int index)
     {
         if (bossData.bossPrefab == null) return;
 
         Vector3 managerPos = transform.position;
         float range = bossData.detectionRange;
-        Vector3 spawnPos = managerPos + new Vector3(Random.Range(-range, range), 0f, Random.Range(-range, range));
+
+        Vector3 spawnPos = managerPos + new Vector3(
+            UnityEngine.Random.Range(-range, range),
+            0f,
+            UnityEngine.Random.Range(-range, range)
+        );
 
         GameObject bossObj = Instantiate(bossData.bossPrefab, spawnPos, Quaternion.identity);
 
-        // BossController 가져오기
         BossController bossCtrl = bossObj.GetComponent<BossController>();
         if (bossCtrl != null)
         {
+            bossCtrl.SetMonsterNumber(index); // 핵심
             activeBosses.Add(bossCtrl);
-            Debug.Log($"[Boss Spawned] {bossObj.name} 위치: {spawnPos}");
+            Debug.Log($"[Boss Spawned] {bossObj.name} index={index}");
         }
     }
 }

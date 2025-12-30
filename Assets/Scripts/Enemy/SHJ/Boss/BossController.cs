@@ -353,6 +353,12 @@ public class BossController : MonoBehaviour
             bossDie.TakeDamage(damage);
         }
     }
+
+    public void SetMonsterNumber(int index)
+    {
+        MonsterNumber = index;
+        myData = BossManager.Instance.BossDatas[index];
+    }
 }
 
 
