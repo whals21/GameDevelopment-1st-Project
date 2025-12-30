@@ -18,6 +18,7 @@ public class BossController : MonoBehaviour
     public BossScriptsObject Data => myData;
 
     public Transform target;                         // 타겟
+    [SerializeField] private LayerMask playerLayer;
     public Rigidbody2D rb;
     public Rigidbody2D RB => rb;
     public Collider2D Col { get; private set; }
@@ -69,6 +70,7 @@ public class BossController : MonoBehaviour
             PatternsRoot = patterns.transform;
         }
         InitializeComponents();
+        SetTargetAutomatically();
     }
 
     // ==========================
@@ -354,10 +356,19 @@ public class BossController : MonoBehaviour
         }
     }
 
-    public void SetMonsterNumber(int index)
+    public void SetTargetAutomatically()
     {
-        MonsterNumber = index;
-        myData = BossManager.Instance.BossDatas[index];
+        if (target != null) return; // 이미 설정되어 있으면 무시
+
+        if (PlayerStats.Instance != null)
+        {
+            target = PlayerStats.Instance.transform;
+            Debug.Log($"[{name}] 타겟 자동 설정 완료: {target.name}");
+        }
+        else
+        {
+            Debug.LogWarning($"[{name}] PlayerStats.Instance가 존재하지 않아 타겟 설정 실패");
+        }
     }
 }
 
