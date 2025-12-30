@@ -9,21 +9,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8297aba9e983e844d902c72f1395ee46, type: 3}
+  m_Script: {fileID: 11500000, guid: a80fe98a771acd04f96286bcc8a0567e, type: 3}
   m_Name: SkillData_Brick
   m_EditorClassIdentifier: 
-  skillName: "\uBCBD\uB3CC"
-  description: "\uBCBD\uB3CC\uC744 \uC704\uB85C \uB358\uC838 \uC801\uC5D0\uAC8C \uB370\uBBF8\uC9C0\uC640
-    \uB109\uBC31\uC744 \uAC00\uD568"
+  skillName: Brick
+  description: 
   icon: {fileID: 21300000, guid: dcba742e7126976449eea145fcb28168, type: 3}
   skillType: 0
-  projectilePrefab: {fileID: 6695559934035842656, guid: 2b5271b524d4e384a856caa10d8b8baa, type: 3}
-  skillObjectPrefab: {fileID: 0}
-  damage: 20
-  cooldown: 0.3
-  projectileSpeed: 15
+  prefab: {fileID: 6695559934035842656, guid: 2b5271b524d4e384a856caa10d8b8baa, type: 3}
+  damage: 18
+  cooldown: 1.5
+  projectileSpeed: 9
   projectileCount: 1
   attackRange: 10
+  spreadAngle: 30
+  movementType: 5
+  enemySearchRadius: 20
+  hoverRadius: 2
+  hoverSpeed: 90
+  hoverEllipseRatio: 0.3
+  attackIntervalMin: 0.5
+  specialProjectileCount: 1
+  isOrbiting: 0
+  initialAngleOffset: 0
+  strikeDelay: 0.15
+  rapidFireInterval: 0.1
+  defaultSpreadAngle: 15
+  projectileSprite: {fileID: 21300000, guid: dcba742e7126976449eea145fcb28168, type: 3}
+  projectileColor: {r: 1, g: 1, b: 1, a: 1}
+  projectileScale: 1
+  damageInterval: 0.2
   levels:
   - level: 1
     damageMultiplier: 1
@@ -31,39 +46,40 @@ MonoBehaviour:
     additionalProjectiles: 0
     projectileSpeedMultiplier: 1
     projectileSizeMultiplier: 1
-    projectileScaleIncrease: 1
-    upgradeDescription: "1\uAC1C \uBCBD\uB3CC"
-  - level: 2
-    damageMultiplier: 2
-    cooldownMultiplier: 1
-    additionalProjectiles: 1
-    projectileSpeedMultiplier: 0
-    projectileSizeMultiplier: 0
     projectileScaleIncrease: 0
-    upgradeDescription: "2\uAC1C \uBCBD\uB3CC"
+    upgradeDescription: 
+  - level: 2
+    damageMultiplier: 1.3
+    cooldownMultiplier: 0.95
+    additionalProjectiles: 0
+    projectileSpeedMultiplier: 1
+    projectileSizeMultiplier: 1
+    projectileScaleIncrease: 1.1
+    upgradeDescription: 
   - level: 3
-    damageMultiplier: 3
-    cooldownMultiplier: 1
+    damageMultiplier: 1.7
+    cooldownMultiplier: 0.9
+    additionalProjectiles: 1
+    projectileSpeedMultiplier: 1
+    projectileSizeMultiplier: 1.2
+    projectileScaleIncrease: 0
+    upgradeDescription: 
+  - level: 4
+    damageMultiplier: 2.2
+    cooldownMultiplier: 0.85
+    additionalProjectiles: 1
+    projectileSpeedMultiplier: 1
+    projectileSizeMultiplier: 1
+    projectileScaleIncrease: 1.4
+    upgradeDescription: 
+  - level: 5
+    damageMultiplier: 2.8
+    cooldownMultiplier: 0.8
     additionalProjectiles: 2
     projectileSpeedMultiplier: 1
     projectileSizeMultiplier: 1
-    projectileScaleIncrease: 1
-    upgradeDescription: "3\uAC1C \uBCBD\uB3CC"
-  - level: 4
-    damageMultiplier: 4
-    cooldownMultiplier: 1
-    additionalProjectiles: 3
-    projectileSpeedMultiplier: 1
-    projectileSizeMultiplier: 1
-    projectileScaleIncrease: 1
-    upgradeDescription: "4\uAC1C \uBCBD\uB3CC"
-  - level: 5
-    damageMultiplier: 5
-    cooldownMultiplier: 1
-    additionalProjectiles: 4
-    projectileSpeedMultiplier: 1
-    projectileSizeMultiplier: 1
-    projectileScaleIncrease: 1
-    upgradeDescription: "5\uAC1C \uBCBD\uB3CC"
+    projectileScaleIncrease: 1.6
+    upgradeDescription: 
   evoSkill: {fileID: 0}
-  evoRequirements: 
+  evoRequiredLevel: 0
+  evoRequiredPassives: 

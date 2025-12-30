@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -4590826280255501720}
   - component: {fileID: 6695141642914705027}
   - component: {fileID: 7478472416236618072}
-  - component: {fileID: 3167097836887561848}
+  - component: {fileID: 4423444558394202105}
   - component: {fileID: 4069877953116209690}
   m_Layer: 12
   m_Name: LightningStrike
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1198100389
   m_SortingLayer: 1
-  m_SortingOrder: 100
+  m_SortingOrder: 200
   m_Sprite: {fileID: 21300000, guid: 9f8a782cc33ac4d41a24e46c01b56bc1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -150,7 +150,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &3167097836887561848
+--- !u!114 &4423444558394202105
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -159,30 +159,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2650197257238807158}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 917d54ce40f08fd428038d5aa9b9835c, type: 3}
+  m_Script: {fileID: 11500000, guid: 3934be9aa848b0342b89653285c6ade1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
-  effectDuration: 0.5
-  strikeDelay: 0.1
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  strikeWidth: 0.5
   lightningSprites:
   - {fileID: -1433410374, guid: 953e711373ed97745825fcbeaf89f384, type: 3}
   - {fileID: 110406233, guid: 953e711373ed97745825fcbeaf89f384, type: 3}
   - {fileID: 1260062555, guid: 953e711373ed97745825fcbeaf89f384, type: 3}
   - {fileID: 1534821960, guid: 953e711373ed97745825fcbeaf89f384, type: 3}
-  - {fileID: 1905170690, guid: 953e711373ed97745825fcbeaf89f384, type: 3}
   - {fileID: -1425769091, guid: 953e711373ed97745825fcbeaf89f384, type: 3}
   frameRate: 30
   startColor: {r: 1, g: 1, b: 1, a: 1}
   endColor: {r: 1, g: 1, b: 1, a: 0}
   fadeDuration: 0.3
-  minScale: 0.8
-  maxScale: 1.2
-  lightningLight: {fileID: 4069877953116209690}
+  lightningLight: {fileID: 0}
   lightIntensity: 3
   lightFlickerSpeed: 15
   strikeSound: {fileID: 0}

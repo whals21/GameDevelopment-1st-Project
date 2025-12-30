@@ -1,88 +1,83 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static EnemyEnum;
 
+/// <summary>
+/// v2 ObjectPoolManager - 통합 투사체 시스템
+///
+/// v2 아키텍처를 위한 오브젝트 풀링 관리자입니다.
+///
+/// 주요 특징:
+/// - 통합 Projectile 풀 (ProjectileMovementType으로 모든 동작 지원)
+/// - GuardianTop, Drone, LightningStrike, RPGExplosion, FireGround는 별도 풀 유지
+/// - 코드 중복 제거 (ValidateAndGetPool<T> 패턴)
+/// </summary>
 public class ObjectPoolManager : MonoBehaviour
 {
     public static ObjectPoolManager Instance { get; private set; }
 
-    [Header("Prefabs")]
-    public Enemy[] enemyPrefabs; //12/18
+    #region Prefabs
+    [Header("Enemy")]
+    public Enemy[] enemyPrefabs;
+    public int[] enemyPoolSizes;
+
+    [Header("Unified Projectile - v2")]
+    public Projectile projectilePrefab;  // 통합 투사체 (모든 타입 지원)
+
+    [Header("Projectiles - Enemy")]
     public EnemyBullet enemyBulletPrefab;
-    public Projectile projectilePrefab;
-    public BoomerangProjectile boomerangPrefab;
-    public MolotovProjectile molotovPrefab;
-    public BrickProjectile brickPrefab;
-    public FireGround fireGroundPrefab;
-    public SoccerBallProjectile soccerBallPrefab;
-    public ExpGem expGemPrefab;
-    public DamageText damageTextPrefab;
+
+    [Header("Summoned Objects")]
     public GuardianTop guardianTopPrefab;
     public Drone dronePrefab;
-    public MissileProjectile missilePrefab;
-    public LightningStrike lightningPrefab;
-    public RPGProjectile rpgPrefab; 
-    public RPGExplosion rpgExplosionPrefab; 
 
+    [Header("Effects")]
+    public LightningStrike lightningPrefab;
+    public FireGround fireGroundPrefab;
+
+    [Header("Items & UI")]
+    public ExpGem expGemPrefab;
+    public DamageText damageTextPrefab;
+    public RandomBox randomBoxPrefab;
+    #endregion
+
+    #region Pool Sizes
     [Header("Pool Sizes")]
-    public int[] enemyPoolSizes = new int[] { };    //12/18
+    public int projectilePoolSize = 100;     // 통합 투사체 (모든 타입)
     public int enemyBulletPoolSize = 50;
-    public int projectilePoolSize = 50;
-    public int boomerangPoolSize = 20;
-    public int molotovPoolSize = 30;
-    public int brickPoolSize = 30;
-    public int fireGroundPoolSize = 50;
-    public int soccerBallPoolSize = 20;
-    public int expGemPoolSize = 200;
-    public int damageTextPoolSize = 50;
     public int guardianTopPoolSize = 20;
     public int dronePoolSize = 5;
-    public int missilePoolSize = 50;
     public int lightningPoolSize = 30;
-    public int rpgPoolSize = 10;
-    public int rpgExplosionPoolSize = 10;
+    public int fireGroundPoolSize = 50;
+    public int expGemPoolSize = 200;
+    public int damageTextPoolSize = 50;
+    public int randomBoxPoolSize = 10;
+    #endregion
 
-    public int expGemPoolSizePerTier = 50; //<---12/18추가 된거임
-    // 풀들
-    private List<ObjectPool<Enemy>> enemyPools = new List<ObjectPool<Enemy>>(); //12/18
-    private ObjectPool<EnemyBullet> enemyBulletPool;
-    private ObjectPool<Projectile> projectilePool;
-    private ObjectPool<BoomerangProjectile> boomerangPool;
-    private ObjectPool<MolotovProjectile> molotovPool;
-    private ObjectPool<BrickProjectile> brickPool;
-    private ObjectPool<FireGround> fireGroundPool;
-    private ObjectPool<SoccerBallProjectile> soccerBallPool;
-    private ObjectPool<ExpGem> expGemPool;
-    private ObjectPool<DamageText> damageTextPool;
-    private ObjectPool<GuardianTop> guardianTopPool;
-    private ObjectPool<Drone> dronePool;
-    private ObjectPool<MissileProjectile> missilePool;
-    private ObjectPool<LightningStrike> lightningPool;
-    private ObjectPool<RPGProjectile> rpgPool;
-    private ObjectPool<RPGExplosion> rpgExplosionPool;
+    #region Pools
+    // 통합 투사체 풀
+    private ObjectPool<Projectile> _projectilePool;
 
-    //12/18추가 되었음
-    private List<ObjectPool<ExpGem>> expGemPools = new List<ObjectPool<ExpGem>>();  //리스트 활성화
-    private DataManager dataManager;    //경험치 담겨져있음
-    private int lastTierCount = 0; // 이전에 생성된 티어 수 추적
-    private Dictionary<EnemyObject, ObjectPool<Enemy>> enemyPoolsBySO = new Dictionary<EnemyObject, ObjectPool<Enemy>>();
-    [Header("Enemy Objects (SO)")]
-    public EnemyObject[] enemyTypes;
-    //
+    // 적 관련
+    private List<ObjectPool<Enemy>> _enemyPools = new List<ObjectPool<Enemy>>();
+    private ObjectPool<EnemyBullet> _enemyBulletPool;
 
-    // 유효성 검사 캐시
-    private bool isInitialized = false;
-    private readonly string[] requiredPrefabs = {
-        //"enemyPrefab"//12/18
-        "enemyBulletPrefab", "projectilePrefab",
-        "boomerangPrefab", "molotovPrefab", "brickPrefab",
-        "fireGroundPrefab", "soccerBallPrefab", "expGemPrefab",
-        "damageTextPrefab", "guardianTopPrefab", "rpgPrefab", "rpgExplosionPrefab"
-    };
+    // 소환체 풀
+    private ObjectPool<GuardianTop> _guardianTopPool;
+    private ObjectPool<Drone> _dronePool;
 
+    // 이펙트 풀
+    private ObjectPool<LightningStrike> _lightningPool;
+    private ObjectPool<FireGround> _fireGroundPool;
+
+    // 아이템/UI 풀
+    private ObjectPool<ExpGem> _expGemPool;
+    private ObjectPool<DamageText> _damageTextPool;
+    private ObjectPool<RandomBox> _randomBoxPool;
+    #endregion
+
+    #region Initialization
     private void Awake()
     {
-        // 싱글톤
         if (Instance != null && Instance != this)
         {
             Debug.LogWarning("ObjectPoolManager 이미 존재 - 중복 오브젝트 파괴");
@@ -96,445 +91,228 @@ public class ObjectPoolManager : MonoBehaviour
     private void Start()
     {
         InitializePools();
-
-        
     }
 
-
-
-
-
-    // 풀 초기화 분리
     private void InitializePools()
     {
-        ValidateRequiredPrefabs();
-
-        // 풀 초기화
-        //enemyPool = new ObjectPool<Enemy>(enemyPrefab, enemyPoolSize, transform);//12/18
-        enemyBulletPool = new ObjectPool<EnemyBullet>(enemyBulletPrefab, enemyBulletPoolSize, transform);
-        projectilePool = new ObjectPool<Projectile>(projectilePrefab, projectilePoolSize, transform);
-        boomerangPool = new ObjectPool<BoomerangProjectile>(boomerangPrefab, boomerangPoolSize, transform);
-        molotovPool = new ObjectPool<MolotovProjectile>(molotovPrefab, molotovPoolSize, transform);
-        brickPool = new ObjectPool<BrickProjectile>(brickPrefab, brickPoolSize, transform);
-        fireGroundPool = new ObjectPool<FireGround>(fireGroundPrefab, fireGroundPoolSize, transform);
-        soccerBallPool = new ObjectPool<SoccerBallProjectile>(soccerBallPrefab, soccerBallPoolSize, transform);
-        expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
-        damageTextPool = new ObjectPool<DamageText>(damageTextPrefab, damageTextPoolSize, transform);
-        guardianTopPool = new ObjectPool<GuardianTop>(guardianTopPrefab, guardianTopPoolSize, transform);
-        dronePool = new ObjectPool<Drone>(dronePrefab, dronePoolSize, transform);
-        missilePool = new ObjectPool<MissileProjectile>(missilePrefab, missilePoolSize, transform);
-        lightningPool = new ObjectPool<LightningStrike>(lightningPrefab, lightningPoolSize, transform);
-        rpgPool = new ObjectPool<RPGProjectile>(rpgPrefab, rpgPoolSize, transform);
-        rpgExplosionPool = new ObjectPool<RPGExplosion>(rpgExplosionPrefab, rpgExplosionPoolSize, transform);
-        isInitialized = true;
-
-
-        //12/18
-        ExpInitialize();
-        EnemysList();
-    }
-
-    //12/18
-    private void ExpInitialize()    //내가 바로 경험치 그거임
-    {
-        dataManager = FindObjectOfType<DataManager>();
-        if (dataManager == null)
+        // 통합 투사체 풀
+        if (projectilePrefab != null)
         {
-            Debug.LogError("ObjectPoolManager: DataManager를 찾을 수 없습니다!");
-            return;
+            _projectilePool = new ObjectPool<Projectile>(projectilePrefab, projectilePoolSize, transform);
         }
-        if (dataManager.expDropObject == null)
-        {
-            Debug.LogError("ObjectPoolManager: DataManager에 ExpDropObject가 할당되지 않았습니다!");
-            return;
-        }
-        //내용물 확인 안하면 저거 뜬다
-        // ExpStart 내용 여기로 이동
-        expGemPools.Clear();//청소
-        lastTierCount = 0;
 
+        // 적 풀
+        if (enemyPrefabs != null && enemyPrefabs.Length > 0)
+        {
+            for (int i = 0; i < enemyPrefabs.Length; i++)
+            {
+                if (enemyPrefabs[i] != null)
+                {
+                    int size = (enemyPoolSizes != null && i < enemyPoolSizes.Length) ? enemyPoolSizes[i] : 50;
+                    _enemyPools.Add(new ObjectPool<Enemy>(enemyPrefabs[i], size, transform));
+                }
+            }
+        }
+
+        // EnemyBullet
+        if (enemyBulletPrefab != null)
+            _enemyBulletPool = new ObjectPool<EnemyBullet>(enemyBulletPrefab, enemyBulletPoolSize, transform);
+
+        // 소환체
+        if (guardianTopPrefab != null)
+            _guardianTopPool = new ObjectPool<GuardianTop>(guardianTopPrefab, guardianTopPoolSize, transform);
+
+        if (dronePrefab != null)
+            _dronePool = new ObjectPool<Drone>(dronePrefab, dronePoolSize, transform);
+
+        // 이펙트
+        if (lightningPrefab != null)
+            _lightningPool = new ObjectPool<LightningStrike>(lightningPrefab, lightningPoolSize, transform);
+
+        if (fireGroundPrefab != null)
+            _fireGroundPool = new ObjectPool<FireGround>(fireGroundPrefab, fireGroundPoolSize, transform);
+
+        // 아이템/UI
         if (expGemPrefab != null)
-        {
-            expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
-        }
+            _expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
 
-        // 티어 풀 생성
-        if (dataManager.expDropObject.expGemPrefabs != null)
-        {
-            foreach (GameObject prefabGO in dataManager.expDropObject.expGemPrefabs)
-            {
-                if (prefabGO != null)
-                {
-                    ExpGem prefab = prefabGO.GetComponent<ExpGem>();
-                    if (prefab != null)
-                    {
-                        var pool = new ObjectPool<ExpGem>(prefab, expGemPoolSizePerTier, transform);
-                        expGemPools.Add(pool);
-                    }
-                    else
-                    {
-                        expGemPools.Add(null);
-                    }
-                }
-                else
-                {
-                    expGemPools.Add(null);
-                }
-            }
-        }
+        if (damageTextPrefab != null)
+            _damageTextPool = new ObjectPool<DamageText>(damageTextPrefab, damageTextPoolSize, transform);
 
-      
+        if (randomBoxPrefab != null)
+            _randomBoxPool = new ObjectPool<RandomBox>(randomBoxPrefab, randomBoxPoolSize, transform);
     }
+    #endregion
 
-    private void EnemysList()
-    {
-        enemyPoolsBySO.Clear();
-
-        for (int i = 0; i < enemyPrefabs.Length; i++)
-        {
-            if (enemyPrefabs[i] != null)
-            {
-                int size = (enemyPoolSizes != null && i < enemyPoolSizes.Length) ? enemyPoolSizes[i] : 50;
-                ObjectPool<Enemy> pool = new ObjectPool<Enemy>(enemyPrefabs[i], size, transform);
-                enemyPools.Add(pool);
-
-                // SO와 풀 연결
-                if (i < enemyTypes.Length)
-                    enemyPoolsBySO[enemyTypes[i]] = pool;
-            }
-        }
-    }
-
-    // // SO 기반으로 Enemy 가져오기
-    // public Enemy GetEnemy(EnemyObject so)
-    // {
-    //     if (!enemyPoolsBySO.ContainsKey(so))
-    //     {
-    //         Debug.LogError("풀 없음: " + so.name);
-    //         return null;
-    //     }
-
-    //     return enemyPoolsBySO[so].Get();
-    // }
-    // 필수 프리팹 유효성 검사
-    private void ValidateRequiredPrefabs()
-    {
-        foreach (string prefabName in requiredPrefabs)
-        {
-            var prefab = GetType().GetField(prefabName)?.GetValue(this);
-            if (prefab == null)
-            {
-                Debug.LogError($"ObjectPoolManager: {prefabName}이 설정되지 않았습니다!");
-            }
-        }
-    }
-
-    // Enemy 가져오기
-    public Enemy GetEnemy(int index)    //12/19
-    {
-        if (!isInitialized)
-        {
-            Debug.LogError("Enemy Pool 아직 초기화 안 됨");
-            return null;
-        }
-
-        if (index < 0 || index >= enemyPools.Count)
-        {
-            Debug.LogError($"잘못된 poolIndex: {index}");
-            return null;
-        }
-
-        if (enemyPools[index] == null)
-        {
-            Debug.LogError($"enemyPools[{index}] NULL");
-            return null;
-        }
-
-        return enemyPools[index].Get();
-    }
-
-   public void ReturnEnemy(Enemy enemy)//12/19
-   {
-        if (enemy == null) return;
-
-        int index = enemy.PoolIndex;
-
-        if (index < 0 || index >= enemyPools.Count)
-        {
-            Debug.LogError($"ReturnEnemy 실패: 잘못된 PoolIndex {index}");
-            return;
-        }
-
-        enemyPools[index].Return(enemy);
-    }
-
-    // Projectile 가져오기
+    #region Unified Projectile (v2)
+    /// <summary>
+    /// 통합 투사체 가져오기
+    /// ProjectileMovementType에 따라 모든 투사체 타입을 지원합니다.
+    /// </summary>
     public Projectile GetProjectile()
     {
-        return projectilePool.Get();
+        return ValidateAndGetPool(_projectilePool, "Projectile")?.Get();
     }
 
     public void ReturnProjectile(Projectile projectile)
     {
-        projectilePool.Return(projectile);
+        if (projectile == null) return;
+        _projectilePool?.Return(projectile);
     }
+    #endregion
 
-    // Boomerang 가져오기
-    public BoomerangProjectile GetBoomerang()
+    #region Enemy
+    public Enemy GetEnemy(int index)
     {
-        return boomerangPool.Get();
+        if (index < 0 || index >= _enemyPools.Count) return null;
+        if (_enemyPools[index] == null) return null;
+        return _enemyPools[index].Get();
     }
 
-    public void ReturnBoomerang(BoomerangProjectile boomerang)
+    public void ReturnEnemy(Enemy enemy)
     {
-        boomerangPool.Return(boomerang);
+        if (enemy == null) return;
+
+        int index = enemy.PoolIndex;
+        if (index < 0 || index >= _enemyPools.Count) return;
+
+        _enemyPools[index]?.Return(enemy);
     }
+    #endregion
 
-    // Molotov 가져오기
-    public MolotovProjectile GetMolotov()
-    {
-        return molotovPool.Get();
-    }
-
-    public void ReturnMolotov(MolotovProjectile molotov)
-    {
-        molotovPool.Return(molotov);
-    }
-
-    // Brick 가져오기
-    public BrickProjectile GetBrick()
-    {
-        return brickPool.Get();
-    }
-
-    public void ReturnBrick(BrickProjectile brick)
-    {
-        brickPool.Return(brick);
-    }
-
-    // FireGround 가져오기
-    public FireGround GetFireGround()
-    {
-        if (!ValidatePoolInitialized(fireGroundPool, "FireGround")) return null;
-        return fireGroundPool.Get();
-    }
-
-    public void ReturnFireGround(FireGround fireGround)
-    {
-        if (!ValidatePoolInitialized(fireGroundPool, "FireGround")) return;
-        fireGroundPool.Return(fireGround);
-    }
-
-    // SoccerBall 가져오기
-    public SoccerBallProjectile GetSoccerBall()
-    {
-        if (!ValidatePoolInitialized(soccerBallPool, "SoccerBall")) return null;
-        return soccerBallPool.Get();
-    }
-
-    public void ReturnSoccerBall(SoccerBallProjectile soccerBall)
-    {
-        if (!ValidatePoolInitialized(soccerBallPool, "SoccerBall")) return;
-        soccerBallPool.Return(soccerBall);
-    }
-
-    // ExpGem 가져오기
-    public ExpGem GetExpGem()
-    {
-        return expGemPool.Get();
-
-
-    }
-
-    //12/18추가 된 것
-    public ExpGem GetExpGem(int tierIndex)
-    {
-        if (expGemPools == null || tierIndex < 0 || tierIndex >= expGemPools.Count || expGemPools[tierIndex] == null)
-        {
-            // 티어 풀 없으면 기본 풀 사용 (fallback)
-            Debug.LogWarning($"티어 {tierIndex} 풀 없음. 기본 ExpGem 사용");
-            return expGemPool.Get();
-        }
-
-        return expGemPools[tierIndex].Get();
-    }
-
-    public void ReturnExpGem(ExpGem expGem)
-    {
-        //expGemPool.Return(expGem);
-
-        //12/18 수정된것
-        if (expGem == null) return;
-
-        // 티어별 풀에 반환 시도
-        if (dataManager != null && dataManager.expDropObject != null && dataManager.expDropObject.expGemPrefabs != null)
-        {
-            for (int i = 0; i < dataManager.expDropObject.expGemPrefabs.Length; i++)
-            {
-                if (dataManager.expDropObject.expGemPrefabs[i] != null &&
-                    expGem.name.Contains(dataManager.expDropObject.expGemPrefabs[i].name + "(Clone)"))
-                {
-                    expGemPools[i]?.Return(expGem);
-                    return;
-                }
-            }
-        }
-
-        // 못 찾으면 기본 풀에 반환
-        expGemPool.Return(expGem);
-    }
-
-
-
-    // EnemyBullet 가져오기 및 반환 (팀원 코드 지원용)
+    #region EnemyBullet
     public EnemyBullet GetEnemyBullet()
     {
-        return enemyBulletPool.Get();
+        return ValidateAndGetPool(_enemyBulletPool, "EnemyBullet")?.Get();
     }
 
-    public void ReturnEnemyBullet(EnemyBullet enemyBullet)
+    public void ReturnEnemyBullet(EnemyBullet bullet)
     {
-        enemyBulletPool.Return(enemyBullet);
+        _enemyBulletPool?.Return(bullet);
     }
+    #endregion
 
-    // DamageText 가져오기 및 반환
-    public DamageText GetDamageText()
-    {
-        return damageTextPool.Get();
-    }
-    public void ReturnDamageText(DamageText text)
-    {
-        damageTextPool.Return(text);
-    }
-
-    // GuardianTop 가져오기 및 반환
+    #region GuardianTop
     public GuardianTop GetGuardianTop()
     {
-        if (!ValidatePoolInitialized(guardianTopPool, "GuardianTop")) return null;
-        return guardianTopPool.Get();
+        var top = ValidateAndGetPool(_guardianTopPool, "GuardianTop")?.Get();
+        // Get()에서 이미 SetActive(true)됨
+        return top;
     }
 
     public void ReturnGuardianTop(GuardianTop top)
     {
-        if (!ValidatePoolInitialized(guardianTopPool, "GuardianTop")) return;
-
-        // 톱날 재사용을 위한 리셋
-        top.ResetForReuse();
-        guardianTopPool.Return(top);
+        if (top == null) return;
+        // OnDisable에서 ResetForReuse() 자동 호출 (캡슐화 - 전문가 피드백)
+        _guardianTopPool?.Return(top);
     }
+    #endregion
 
-    // 드론 풀링
+    #region Drone
     public Drone GetDrone()
     {
-        if (!ValidatePoolInitialized(dronePool, "Drone")) return null;
-        return dronePool.Get();
+        return ValidateAndGetPool(_dronePool, "Drone")?.Get();
     }
 
     public void ReturnDrone(Drone drone)
     {
-        if (!ValidatePoolInitialized(dronePool, "Drone")) return;
-
+        if (drone == null) return;
         drone.Deactivate();
-        dronePool.Return(drone);
+        _dronePool?.Return(drone);
     }
+    #endregion
 
-    // 미사일 풀링
-    public MissileProjectile GetMissile()
-    {
-        if (!ValidatePoolInitialized(missilePool, "MissileProjectile")) return null;
-        return missilePool.Get();
-    }
-
-    public void ReturnMissile(MissileProjectile missile)
-    {
-        if (!ValidatePoolInitialized(missilePool, "MissileProjectile")) return;
-
-        missile.gameObject.SetActive(false);
-        missilePool.Return(missile);
-    }
-
-    // 번개 풀링
+    #region Lightning
     public LightningStrike GetLightning()
     {
-        if (!ValidatePoolInitialized(lightningPool, "LightningStrike")) return null;
-
-        LightningStrike lightning = lightningPool.Get();
+        var lightning = ValidateAndGetPool(_lightningPool, "LightningStrike")?.Get();
         if (lightning != null)
         {
-            // 오브젝트 활성화 (통합 접근 방식에서는 간단한 활성화만 충분)
             lightning.gameObject.SetActive(true);
         }
-
         return lightning;
     }
 
     public void ReturnLightning(LightningStrike lightning)
     {
-        if (!ValidatePoolInitialized(lightningPool, "LightningStrike")) return;
-
+        if (lightning == null) return;
         lightning.gameObject.SetActive(false);
-        lightningPool.Return(lightning);
+        _lightningPool?.Return(lightning);
+    }
+    #endregion
+
+    #region FireGround
+    public FireGround GetFireGround()
+    {
+        var fireGround = ValidateAndGetPool(_fireGroundPool, "FireGround")?.Get();
+        // Get()에서 이미 SetActive(true)됨
+        return fireGround;
     }
 
-    // RPG 풀링
-    public RPGProjectile GetRPG()
+    public void ReturnFireGround(FireGround fireGround)
     {
-        if (!ValidatePoolInitialized(rpgPool, "RPGProjectile")) return null;
-        return rpgPool.Get();
+        if (fireGround == null) return;
+        // OnDisable에서 ResetForReuse() 자동 호출 (캡슐화 - 전문가 피드백)
+        _fireGroundPool?.Return(fireGround);
     }
-    public void ReturnRPG(RPGProjectile rpg)
+    #endregion
+
+    #region Items & UI
+    public ExpGem GetExpGem()
     {
-        if (!ValidatePoolInitialized(rpgPool, "RPGProjectile")) return;
-        rpg.gameObject.SetActive(false);
-        rpgPool.Return(rpg);
+        return ValidateAndGetPool(_expGemPool, "ExpGem")?.Get();
     }
 
-    // RPGExplosion 풀링
-    public RPGExplosion GetRPGExplosion()
+    public void ReturnExpGem(ExpGem gem)
     {
-        if (!ValidatePoolInitialized(rpgExplosionPool, "RPGExplosion")) return null;
-        return rpgExplosionPool.Get();
-    }
-    public void ReturnRPGExplosion(RPGExplosion rpgExplosion)
-    {
-        if (!ValidatePoolInitialized(rpgExplosionPool, "RPGExplosion")) return;
-        rpgExplosion.gameObject.SetActive(false);
-        rpgExplosionPool.Return(rpgExplosion);
+        _expGemPool?.Return(gem);
     }
 
-    // 풀 초기화 상태 유효성 검사
-    private bool ValidatePoolInitialized<T>(ObjectPool<T> pool, string poolName) where T : MonoBehaviour
+    public DamageText GetDamageText()
     {
-        if (!isInitialized)
-        {
-            Debug.LogError($"ObjectPoolManager: {poolName} 풀이 초기화되지 않았습니다!");
-            return false;
-        }
+        return ValidateAndGetPool(_damageTextPool, "DamageText")?.Get();
+    }
 
+    public void ReturnDamageText(DamageText text)
+    {
+        _damageTextPool?.Return(text);
+    }
+
+    public RandomBox GetRandomBox()
+    {
+        return ValidateAndGetPool(_randomBoxPool, "RandomBox")?.Get();
+    }
+
+    public void ReturnRandomBox(RandomBox box)
+    {
+        if (box == null) return;
+        box.gameObject.SetActive(false);
+        _randomBoxPool?.Return(box);
+    }
+    #endregion
+
+    #region Utility
+    private ObjectPool<T> ValidateAndGetPool<T>(ObjectPool<T> pool, string poolName) where T : MonoBehaviour
+    {
         if (pool == null)
         {
-            Debug.LogError($"ObjectPoolManager: {poolName} 풀이 null입니다!");
-            return false;
+            Debug.LogError($"ObjectPoolManager: {poolName} 풀이 초기화되지 않았습니다!");
+            return null;
         }
-
-        return true;
+        return pool;
     }
 
-    // 제네릭 방식으로 풀 가져오기
     public ObjectPool<T> GetPool<T>() where T : MonoBehaviour
     {
-        if (typeof(T) == typeof(Enemy))
-            return enemyPools as ObjectPool<T>; //<12/18
-        else if (typeof(T) == typeof(Projectile))
-            return projectilePool as ObjectPool<T>;
+        if (typeof(T) == typeof(Projectile))
+            return _projectilePool as ObjectPool<T>;
+        else if (typeof(T) == typeof(Enemy))
+            return _enemyPools.Count > 0 ? _enemyPools[0] as ObjectPool<T> : null;
         else if (typeof(T) == typeof(ExpGem))
-           return expGemPool as ObjectPool<T>;
-        else if (typeof(T) == typeof(RPGProjectile))
-            return rpgPool as ObjectPool<T>;
-        else if (typeof(T) == typeof(RPGExplosion))
-            return rpgExplosionPool as ObjectPool<T>;
+            return _expGemPool as ObjectPool<T>;
 
         Debug.LogError($"ObjectPoolManager: 풀을 찾을 수 없음: {typeof(T).Name}");
         return null;
     }
+    #endregion
 }

@@ -1,244 +1,109 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
-public class LightningSkill : MonoBehaviour
+/// <summary>
+/// 번개 스킬 구현
+/// 사정거리 내의 무작위 적에게 번개를 떨어뜨립니다.
+/// 레벨에 따라 한 번에 떨어뜨리는 번개의 수가 증가합니다.
+///
+/// 성능 최적화:
+/// - PlayerController.Instance로 빠른 플레이어 참조
+/// - Physics2D.OverlapCircleNonAlloc로 반경 내 적만 탐색
+/// - LayerMask로 불필요한 콜라이더 필터링
+/// - 적 캐싱으로 불필요한 탐색 최소화
+///
+/// 확장성:
+/// - 레벨에 따른 번개 수 증가
+/// - 데이터 주도 설계 (strikeDelay, lightningCount 등)
+/// </summary>
+public class LightningSkill : SkillBase
 {
-    #region Serialized Fields
-    [Header("스킬 설정")]
-    [SerializeField] private SkillData skillData;
-    [SerializeField] private int currentLevel = 1;
-    [SerializeField] private bool isActive = true;
-
-    [Header("밸런스 수치")]
-    [SerializeField] private float baseCooldown = 3f;
-    [SerializeField] private float baseDamage = 10f;
-    [SerializeField] private int baseLightningCount = 1;
-    [SerializeField] private float cooldownReductionPerLevel = 0.2f;
-    [SerializeField] private float damageIncreasePerLevel = 2.5f;
-
-    [Header("타겟팅")]
-    [SerializeField] private LayerMask enemyLayer;
-    [SerializeField] private float strikeDelay = 0.15f;
-    [SerializeField] private float attackRange = 15f; 
-    #endregion
-
     #region Private Fields
-    private float currentCooldown;
-    private int lightningCount;
-    private float damage;
-    private float cooldownTime;
-    private Enemy[] cachedEnemies;
-    private float enemyCacheTimer;
+    private Transform _playerTransform;
+    private int _enemyLayerMask;
+
+    // 적 캐싱 (불필요한 탐색 최소화)
+    private List<Enemy> _cachedEnemies = new List<Enemy>();
+    private float _enemyCacheTimer;
     private const float ENEMY_CACHE_INTERVAL = 0.5f;
     #endregion
 
-    #region Properties
-    public int CurrentLevel => currentLevel;
-    public bool IsActive => isActive;
-    public SkillData SkillData => skillData;
-    #endregion
-
-    #region Unity Lifecycle
-    private void Awake()
+    #region Initialization
+    protected override void OnInitialize()
     {
-        // 기본값 설정
-        if (skillData == null)
+        base.OnInitialize();
+
+        // 싱글톤으로 빠른 플레이어 참조
+        if (PlayerController.Instance != null)
         {
-            Debug.LogWarning("LightningSkill: SkillData가 설정되지 않았습니다!");
-            isActive = false;
-            return;
-        }
-    }
-
-    private void Start()
-    {
-        // 스킬 데이터에서 값 가져오기
-        LoadSkillData();
-
-        // 적 리스트 캐싱 시작
-        enemyCacheTimer = 0f;
-    }
-
-    private void Update()
-    {
-        if (!isActive) return;
-
-        // 쿨타임 업데이트
-        if (currentCooldown > 0f)
-        {
-            currentCooldown -= Time.deltaTime;
+            _playerTransform = PlayerController.Instance.transform;
         }
 
-        // 자동 발동 체크
-        if (currentCooldown <= 0f)
-        {
-            TryActivateLightning();
-        }
+        // LayerMask 캐싱
+        _enemyLayerMask = LayerMask.GetMask("Enemy");
 
-        // 적 캐시 업데이트
+        // 초기 적 캐싱
         UpdateEnemyCache();
     }
     #endregion
 
-    #region Public Methods
-    /// <summary>
-    /// 스킬 데이터 설정
-    /// </summary>
-    public void SetSkillData(SkillData data)
+    #region Core Loop
+    public override void UpdateSkill()
     {
-        skillData = data;
-        if (data != null)
-        {
-            LoadSkillData();
-            isActive = true;
-        }
-        else
-        {
-            isActive = false;
-        }
+        base.UpdateSkill();
+        UpdateEnemyCache();
     }
 
     /// <summary>
-    /// 스킬 레벨 설정
+    /// 번개 스킬 발동
+    /// 레벨에 따라 여러 적에게 번개를 떨어뜨립니다.
     /// </summary>
-    public void SetLevel(int level)
+    protected override void Execute()
     {
-        currentLevel = Mathf.Max(1, level);
-        LoadSkillData();
-    }
+        if (_data == null) return;
 
-    /// <summary>
-    /// 스킬 활성화/비활성화
-    /// </summary>
-    public void SetActive(bool active)
-    {
-        isActive = active;
-        if (!active)
-        {
-            currentCooldown = 0f; // 비활성화 시 쿨타임 초기화
-        }
-    }
+        // 캐싱된 적 중 무작위 선택
+        if (_cachedEnemies == null || _cachedEnemies.Count == 0) return;
 
-    /// <summary>
-    /// 수동 발동
-    /// </summary>
-    public void ManualActivate()
-    {
-        if (isActive && currentCooldown <= 0f)
-        {
-            ActivateLightning();
-        }
-    }
+        // 번개 수 결정 (레벨에 따라 증가)
+        int lightningCount = GetLightningCount();
+        int targetsToStrike = Mathf.Min(lightningCount, _cachedEnemies.Count);
 
-    /// <summary>
-    /// 쿨타임 초기화
-    /// </summary>
-    public void ResetCooldown()
-    {
-        currentCooldown = 0f;
-    }
-    #endregion
+        if (targetsToStrike == 0) return;
 
-    #region Private Methods
-    /// <summary>
-    /// 스킬 데이터에서 값 로드
-    /// </summary>
-    private void LoadSkillData()
-    {
-        if (skillData == null)
-        {
-            Debug.LogWarning("LightningSkill: SkillData가 null입니다!");
-            return;
-        }
+        // 무작위로 타겟 섞기
+        List<Enemy> targets = GetRandomTargets(_cachedEnemies, targetsToStrike);
 
-        // 레벨별 데이터 가져오기
-        var levelData = GetLevelData(currentLevel);
-        if (levelData != null)
-        {
-            damage = baseDamage * levelData.damageMultiplier;
-            cooldownTime = baseCooldown * levelData.cooldownMultiplier;
-            lightningCount = baseLightningCount + levelData.additionalProjectiles;
-        }
-        else
-        {
-            // 기본값으로 설정
-            damage = baseDamage + (damageIncreasePerLevel * (currentLevel - 1));
-            cooldownTime = baseCooldown - (cooldownReductionPerLevel * (currentLevel - 1));
-            lightningCount = baseLightningCount + (currentLevel - 1);
-        }
-
-        // 최소/최대값 제한
-        lightningCount = Mathf.Clamp(lightningCount, 1, 10);
-        cooldownTime = Mathf.Max(cooldownTime, 0.5f);
-        damage = Mathf.Max(damage, 1f);
-    }
-
-    /// <summary>
-    /// 레벨 데이터 가져오기
-    /// </summary>
-    private SkillLevel GetLevelData(int level)
-    {
-        if (skillData == null || skillData.levels == null || level <= 0 || level > skillData.levels.Length)
-        {
-            return null;
-        }
-        return skillData.levels[level - 1];
-    }
-
-    /// <summary>
-    /// 번개 발동 시도
-    /// </summary>
-    private void TryActivateLightning()
-    {
-        Enemy[] availableEnemies = GetAvailableEnemies();
-        if (availableEnemies.Length > 0)
-        {
-            ActivateLightning();
-        }
-    }
-
-    /// <summary>
-    /// 번개 발동
-    /// </summary>
-    private void ActivateLightning()
-    {
-        Enemy[] availableEnemies = GetAvailableEnemies();
-        if (availableEnemies.Length == 0) return;
-
-        // 목표 적 선택
-        Enemy[] targets = SelectTargets(availableEnemies);
-        if (targets.Length == 0) return;
-
-        // 번개 생성
+        // 번개 시퀀스 시작
         StartCoroutine(SpawnLightningSequence(targets));
-
-        // 쿨타임 설정
-        currentCooldown = cooldownTime;
     }
 
     /// <summary>
     /// 번개 생성 시퀀스
+    /// 여러 번개를 순차적으로 발사합니다.
     /// </summary>
-    private IEnumerator SpawnLightningSequence(Enemy[] targets)
+    private IEnumerator SpawnLightningSequence(List<Enemy> targets)
     {
-        int strikesToSpawn = Mathf.Min(lightningCount, targets.Length);
+        if (_data == null) yield break;
 
-        for (int i = 0; i < strikesToSpawn; i++)
+        float strikeDelay = _data.strikeDelay;
+
+        for (int i = 0; i < targets.Count; i++)
         {
-            if (targets[i] == null || !targets[i].gameObject.activeInHierarchy)
+            // 스킬 비활성화 시 중단
+            if (!_isActive) yield break;
+
+            if (targets[i] == null || !targets[i].gameObject.activeInHierarchy || targets[i].CurrentHP <= 0)
             {
-                // 비활성화된 적이면 다른 적 찾기
-                targets[i] = GetRandomEnemy();
-                if (targets[i] == null) continue;
+                continue;
             }
 
             // 번개 생성
             SpawnLightningStrike(targets[i]);
 
-            // 다음 번개까지의 지연
-            if (i < strikesToSpawn - 1)
+            // 다음 번개까지의 지연 (마지막은 제외)
+            if (i < targets.Count - 1 && strikeDelay > 0f)
             {
                 yield return new WaitForSeconds(strikeDelay);
             }
@@ -250,103 +115,109 @@ public class LightningSkill : MonoBehaviour
     /// </summary>
     private void SpawnLightningStrike(Enemy target)
     {
-        if (ObjectPoolManager.Instance == null)
+        if (target == null) return;
+
+        // 오브젝트 풀링 사용
+        LightningStrike lightning = null;
+        if (ObjectPoolManager.Instance != null)
         {
-            Debug.LogError("LightningSkill: ObjectPoolManager를 찾을 수 없습니다!");
-            return;
+            lightning = ObjectPoolManager.Instance.GetLightning();
         }
 
-        LightningStrike lightning = ObjectPoolManager.Instance.GetLightning();
         if (lightning != null)
         {
-            // 타겟 설정 (OnEnable()에서 모든 초기화 및 애니메이션 시작)
-            lightning.SetTarget(target, damage);
+            // v2: 논리와 시각 분리 - 위치만 설정, 데미지는 별도 처리
+            float damage = GetFinalDamage();
+            lightning.SetPosition(target.transform.position);
+            target.TakeDamage(damage);
         }
         else
         {
-            Debug.LogError("LightningSkill: LightningStrike를 풀에서 가져올 수 없습니다!");
-        }
-    }
-
-    /// <summary>
-    /// 목표 적 선택
-    /// </summary>
-    private Enemy[] SelectTargets(Enemy[] availableEnemies)
-    {
-        List<Enemy> targets = new List<Enemy>();
-
-        // 모든 적 중에서 무작위로 선택
-        System.Random random = new System.Random();
-        Enemy[] shuffledEnemies = availableEnemies.OrderBy(x => random.Next()).ToArray();
-
-        int actualStrikes = Mathf.Min(lightningCount, shuffledEnemies.Length);
-        for (int i = 0; i < actualStrikes; i++)
-        {
-            targets.Add(shuffledEnemies[i]);
-        }
-
-        return targets.ToArray();
-    }
-
-    /// <summary>
-    /// 사용 가능한 적 목록 가져오기
-    /// </summary>
-    private Enemy[] GetAvailableEnemies()
-    {
-        if (cachedEnemies == null)
-        {
-            UpdateEnemyCache();
-        }
-        return cachedEnemies ?? new Enemy[0];
-    }
-
-    /// <summary>
-    /// 무작위 적 가져오기
-    /// </summary>
-    private Enemy GetRandomEnemy()
-    {
-        Enemy[] enemies = GetAvailableEnemies();
-        if (enemies.Length == 0) return null;
-
-        int randomIndex = Random.Range(0, enemies.Length);
-        return enemies[randomIndex];
-    }
-
-    /// <summary>
-    /// 적 캐시 업데이트 (사정거리 제한 적용)
-    /// </summary>
-    private void UpdateEnemyCache()
-    {
-        enemyCacheTimer += Time.deltaTime;
-        if (enemyCacheTimer >= ENEMY_CACHE_INTERVAL)
-        {
-            enemyCacheTimer = 0f;
-
-            // 플레이어 위치 기준으로 사정거리 내의 적만 탐색
-            Vector3 playerPosition = transform.position; // LightningSkill이 플레이어를 따라다닌다고 가정
-            cachedEnemies = FindObjectsOfType<Enemy>()
-                .Where(e => e.gameObject.activeInHierarchy &&
-                       Vector3.Distance(playerPosition, e.transform.position) <= attackRange)
-                .ToArray();
+            // 풀이 없으면 직접 데미지 처리 (폴백)
+            target.TakeDamage(GetFinalDamage());
         }
     }
     #endregion
 
-    #region Debug
-    // private void OnGUI()
-    // {
-    //     if (!isActive) return;
+    #region Enemy Targeting
+    /// <summary>
+    /// 적 캐시 업데이트 (TargetingHelper 사용)
+    /// 일정 주기로 플레이어 주변 적만 탐색합니다.
+    /// </summary>
+    private void UpdateEnemyCache()
+    {
+        _enemyCacheTimer += Time.deltaTime;
+        if (_enemyCacheTimer >= ENEMY_CACHE_INTERVAL)
+        {
+            _enemyCacheTimer = 0f;
 
-    //     // 디버그 정보 표시
-    //     GUILayout.BeginArea(new Rect(10, 200, 300, 180));
-    //     GUILayout.Label($"Lightning Skill Lv.{currentLevel}");
-    //     GUILayout.Label($"Damage: {damage:F1}");
-    //     GUILayout.Label($"Lightning Count: {lightningCount}");
-    //     GUILayout.Label($"Attack Range: {attackRange}m");
-    //     GUILayout.Label($"Cooldown: {cooldownTime:F1}s");
-    //     GUILayout.Label($"Next Strike: {currentCooldown:F1}s");
-    //     GUILayout.Label($"Enemies in Range: {(cachedEnemies?.Length ?? 0)}");
-    //     GUILayout.EndArea();
-    // }
+            if (_playerTransform == null) return;
+
+            // 사정거리 내의 적만 탐색
+            float searchRadius = _data.attackRange > 0 ? _data.attackRange : 15f;
+            Vector3 origin = _playerTransform.position;
+
+            // TargetingHelper로 중복 제거 (결과를 바로 _cachedEnemies에 담음)
+            TargetingHelper.FindAllEnemies(origin, searchRadius, _enemyLayerMask, _cachedEnemies);
+        }
+    }
+
+    /// <summary>
+    /// 적 리스트에서 무작위로 N명 선택합니다.
+    /// In-place sampling으로 GC 할당을 최소화합니다.
+    /// </summary>
+    private List<Enemy> GetRandomTargets(List<Enemy> enemies, int count)
+    {
+        List<Enemy> result = new List<Enemy>();
+        int poolSize = enemies.Count;
+        int targetCount = Mathf.Min(count, poolSize);
+
+        for (int i = 0; i < targetCount; i++)
+        {
+            // 무작위 인덱스 선택 (poolSize 범위 내)
+            int randomIndex = Random.Range(0, poolSize);
+            result.Add(enemies[randomIndex]);
+
+            // 선택한 요소를 마지막으로 스왑하고 poolSize 감소
+            // 이렇게 하면 이미 선택된 적은 다시 선택되지 않음
+            int lastIndex = poolSize - 1;
+            Enemy temp = enemies[randomIndex];
+            enemies[randomIndex] = enemies[lastIndex];
+            enemies[lastIndex] = temp;
+
+            poolSize--;
+        }
+
+        return result;
+    }
+    #endregion
+
+    #region Stats Calculation
+    /// <summary>
+    /// 레벨에 따른 번개 수를 반환합니다.
+    /// 기본값 + 레벨별 추가 개수
+    /// </summary>
+    private int GetLightningCount()
+    {
+        int baseCount = _data.projectileCount > 0 ? _data.projectileCount : 1;
+        int additionalCount = GetAdditionalProjectiles();
+        return Mathf.Max(baseCount + additionalCount, 1);
+    }
+
+    /// <summary>
+    /// 레벨별 추가 투사체 수를 가져옵니다.
+    /// </summary>
+    private int GetAdditionalProjectiles()
+    {
+        SkillLevel levelData = GetLevelData(_currentLevel);
+        return levelData?.additionalProjectiles ?? 0;
+    }
+    #endregion
+
+    #region Cleanup
+    protected override void OnDeactivate()
+    {
+        // 별도 처리 필요 없음
+    }
     #endregion
 }

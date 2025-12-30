@@ -1,7 +1,19 @@
 using UnityEngine;
 
+/// <summary>
+/// 플레이어 컨트롤러
+/// 게임 내에서 단 하나만 존재하는 전역 플레이어 객체입니다.
+/// </summary>
 public class PlayerController : MonoBehaviour
 {
+    #region Singleton
+    /// <summary>
+    /// 전역 플레이어 인스턴스
+    /// 스킬 시스템 등에서 빠른 참조를 위해 사용합니다.
+    /// </summary>
+    public static PlayerController Instance { get; private set; }
+    #endregion
+
     [Header("����")]
     private PlayerStats stats;
 
@@ -21,6 +33,15 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
+        // 싱글톤 패턴
+        if (Instance != null)
+        {
+            Debug.LogWarning("[PlayerController] 여러 PlayerController가 감지되었습니다. 기존 인스턴스를 파기합니다.");
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+
         rb = GetComponent<Rigidbody2D>();
         spriter = GetComponent<SpriteRenderer>();
         anim = GetComponentInChildren<Animator>();

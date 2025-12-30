@@ -163,4 +163,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   expValue: 10
   magnetSpeed: 3.5
+  magnetItemBoostSpeed: 15
   baseMagnetRange: 1

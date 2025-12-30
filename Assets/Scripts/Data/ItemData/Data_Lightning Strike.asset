@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da598cf3fae59f849a222a52cc59b7ea, type: 3}
   m_Name: Data_Lightning Strike
   m_EditorClassIdentifier: 
-  skillData: {fileID: 11400000, guid: a85d2257edfbf3d42a89f4faacc60ead, type: 2}
+  skillData: {fileID: 11400000, guid: 6810f642680c6c1489356afccfde10aa, type: 2}
   itemName: "\uBC88\uAC1C"
   itemDesc: "\uAC15\uB825\uD55C \uBC88\uAC1C\uB97C \uC18C\uD658\uD558\uC5EC \uC801\uB4E4\uC5D0\uAC8C
     \uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4."

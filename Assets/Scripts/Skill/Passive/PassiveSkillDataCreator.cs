@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using System.IO;
@@ -117,7 +118,7 @@ public class PassiveSkillDataCreator
 
         SaveAsset(skillData, "CooldownReductionSkill");
     }
-    
+
     private static void SaveAsset(PassiveSkillData skillData, string fileName)
     {
         string assetPath = Path.Combine(FOLDER_PATH, $"{fileName}.asset");
@@ -125,3 +126,4 @@ public class PassiveSkillDataCreator
         Debug.Log($"[PassiveSkillDataCreator] 생성됨: {assetPath}");
     }
 }
+#endif

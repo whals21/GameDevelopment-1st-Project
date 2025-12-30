@@ -197,10 +197,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 6918976490401859778}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc34694ba07ad9b478cc3fe5a781172b, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ab55e8d90d3adb4fa979e582a6588cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  damageInterval: 0.2
+  lineRendererMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  innerAuraColor: {r: 0, g: 1, b: 1, a: 0.5}
+  outerAuraColor: {r: 0, g: 0.5, b: 1, a: 0.5}
+  innerAuraWidth: 0.2
+  outerAuraWidth: 0.15
+  baseDamageInterval: 0.5
+  outerRadiusMultiplier: 1.3
