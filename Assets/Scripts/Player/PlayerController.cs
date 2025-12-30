@@ -36,7 +36,6 @@ public class PlayerController : MonoBehaviour
         // 싱글톤 패턴
         if (Instance != null)
         {
-            Debug.LogWarning("[PlayerController] 여러 PlayerController가 감지되었습니다. 기존 인스턴스를 파기합니다.");
             Destroy(gameObject);
             return;
         }
@@ -66,10 +65,10 @@ public class PlayerController : MonoBehaviour
             bodyTransform.localScale = scale;
         }
 
-        // if (anim != null)
-        // {
-        //     anim.SetBool("isRun", inputVec.magnitude > 0);
-        // }
+        if (anim != null)
+        {
+            anim.SetBool("IsMoving", inputVec.magnitude > 0);
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)

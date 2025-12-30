@@ -52,6 +52,8 @@ public class ScienceManager : MonoBehaviour
         if (node == null) return;
 
         selectedNode = node;
+        Vector3 btnPos = btn.transform.position; // 노드의 현재위치
+        popupPanel.transform.position = btnPos + new Vector3(250f, 0f, 0f); // 팝업창 위치 이동
         OpenPopup();
     }
 

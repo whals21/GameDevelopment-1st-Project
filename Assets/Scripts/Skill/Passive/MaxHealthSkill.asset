@@ -17,11 +17,11 @@ MonoBehaviour:
   description: 
   skillIcon: {fileID: 21300000, guid: c92d23fe9819fb24cb943ba0561be7f4, type: 3}
   effectLevels:
-  - 0.2
-  - 0.4
-  - 0.6
-  - 0.8
-  - 1
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
   maxLevel: 5
   priority: 0
   rerollChanceAtMaxLevel: 0.3
