@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
-            stats.TakeDamage(10f * Time.deltaTime);
+            stats.TakeDamage(10f);
         }
     }
 

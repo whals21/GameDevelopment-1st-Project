@@ -5,10 +5,11 @@ public class LevelUpManager : MonoBehaviour
 {
     public static LevelUpManager Instance;
 
-    [Header("데이터")]
-    [SerializeField] private ItemData[] allItems; // 액티브 + 패시브
+    [Header("데이터 설정")]
+    [SerializeField] private ItemData[] activeItems;
+    [SerializeField] private ItemData[] passiveItems;
 
-    [Header("UI")]
+    [Header("UI 연결")]
     [SerializeField] private GameObject levelUpPanel;
     [SerializeField] private ItemUI[] itemButtons;
 
@@ -22,7 +23,7 @@ public class LevelUpManager : MonoBehaviour
         levelUpPanel.SetActive(true);
         Time.timeScale = 0f;
 
-        // 배울 수 있는 무기,패시브
+        // 배울 수 있는 스킬 가져오기
         List<ItemData> candidates = GetValidItems();
 
         // 셔플
@@ -53,38 +54,47 @@ public class LevelUpManager : MonoBehaviour
     {
         List<ItemData> validList = new List<ItemData>();
 
-        foreach (var item in allItems)
+        // 액티브 스킬 목록 검사
+        foreach (var item in activeItems)
         {
-            // 액티브 스킬
-            if (item.itemType == ItemType.Active)
+            // 실수로 패시브를 넣었을 경우를 대비한 안전장치
+            if (item.itemType != ItemType.Active) continue;
+            if (item.skillData == null) continue;
+
+            int currentLv = 0;
+            if (SkillManager.Instance != null)
+                currentLv = SkillManager.Instance.GetSkillLevel(item.skillData);
+
+            // 만렙 체크
+            int maxLevel = item.skillData.levels.Length;
+
+            if (currentLv < maxLevel)
             {
-                if (item.skillData == null) continue;
-
-                int currentLv = 0;
-                if (SkillManager.Instance != null)
-                    currentLv = SkillManager.Instance.GetSkillLevel(item.skillData);
-
-                if (currentLv < item.skillData.levels.Length)
-                    validList.Add(item);
-            }
-            // 패시브 스킬
-            else
-            {
-                int currentLv = 0;
-                if (PassiveSkillManager.Instance != null)
-                {
-                    currentLv = PassiveSkillManager.Instance.GetSkillLevel(item.passiveType);
-                }
-
-                // 만렙 체크
-                int maxLevel = (item.passiveAmounts != null) ? item.passiveAmounts.Length : 5;
-
-                if (currentLv < maxLevel)
-                {
-                    validList.Add(item);
-                }
+                validList.Add(item);
             }
         }
+
+        // 패시브 스킬 목록 검사
+        foreach (var item in passiveItems)
+        {
+            // 실수로 액티브를 넣었을 경우를 대비한 안전장치
+            if (item.itemType != ItemType.Passive) continue;
+
+            int currentLv = 0;
+            if (PassiveSkillManager.Instance != null)
+            {
+                currentLv = PassiveSkillManager.Instance.GetSkillLevel(item.passiveType);
+            }
+
+            // 만렙 체크
+            int maxLevel = (item.passiveAmounts != null) ? item.passiveAmounts.Length : 5;
+
+            if (currentLv < maxLevel)
+            {
+                validList.Add(item);
+            }
+        }
+
         return validList;
     }
 

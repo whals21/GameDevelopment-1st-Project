@@ -40,6 +40,14 @@ public class PlayerHUD : MonoBehaviour
         Instance = this;
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            TogglePauseUI();
+        }
+    }
+
     public void UpdateHp(float currentHp, float maxHp)
     {
         if (hpSlider != null) hpSlider.value = currentHp / maxHp;

@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da598cf3fae59f849a222a52cc59b7ea, type: 3}
-  m_Name: Data_MovementSpeed
+  m_Name: Data_MaxHealth
   m_EditorClassIdentifier: 
   itemType: 1
-  itemName: "\uC774\uB3D9\uC18D\uB3C4 \uC99D\uAC00"
+  itemName: "\uCD5C\uB300 \uCCB4\uB825 \uC99D\uAC00"
   itemIcon: {fileID: 0}
   itemDesc: 
   skillData: {fileID: 0}
-  passiveType: 6
+  passiveType: 4
   passiveAmounts:
-  - 0.1
-  - 0.2
-  - 0.3
-  - 0.4
-  - 0.5
+  - 10
+  - 20
+  - 30
+  - 40
+  - 50
