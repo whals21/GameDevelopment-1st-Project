@@ -55,7 +55,7 @@ public class RandomBox : MonoBehaviour
         int layer = collision.gameObject.layer;
 
         // 9: Projectile, 14: Projectile2, 0: Default
-        if (layer == 9 || layer == 14 || layer == 0)
+        if (layer == 9 || layer == 0)
         {
             TakeDamage(10f); // 1ȸ�ǰ� 10������
             collision.gameObject.SetActive(false);

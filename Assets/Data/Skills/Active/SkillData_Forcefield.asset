@@ -32,13 +32,18 @@ MonoBehaviour:
   specialProjectileCount: 1
   isOrbiting: 0
   initialAngleOffset: 0
+  penetrationCount: 0
+  projectileLifetime: 0
   strikeDelay: 0.15
   rapidFireInterval: 0.1
   defaultSpreadAngle: 15
   projectileSprite: {fileID: 0}
   projectileColor: {r: 1, g: 1, b: 1, a: 1}
   projectileScale: 1
-  damageInterval: 0.2
+  activeDuration: 5
+  damageInterval: 0.35
+  innerAuraColor: {r: 0, g: 1, b: 1, a: 0.5}
+  outerAuraColor: {r: 0, g: 0.5, b: 1, a: 0.5}
   levels:
   - level: 1
     damageMultiplier: 1
@@ -80,6 +85,6 @@ MonoBehaviour:
     projectileSizeMultiplier: 1
     projectileScaleIncrease: 0
     upgradeDescription: 
-  evoSkill: {fileID: 0}
-  evoRequiredLevel: 0
-  evoRequiredPassives: 
+  evoSkill: {fileID: 11400000, guid: c505e2c6e34d52a418b852d0ffbf2e68, type: 2}
+  evoRequiredLevel: 5
+  evoRequiredPassives: 05000000

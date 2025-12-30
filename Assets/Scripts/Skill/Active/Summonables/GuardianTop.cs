@@ -62,8 +62,8 @@ public class GuardianTop : MonoBehaviour
             _collider.isTrigger = true;
         }
 
-        // 초기 상태 비활성화
-        gameObject.SetActive(false);
+        // [v2] 초기 상태 비활성화 제거 - Initialize()에서 활성화를 담당
+        // gameObject.SetActive(false); // 제거: GuardianSkill에서 생성 후 Initialize()로 활성화
     }
 
     /// <summary>
@@ -72,6 +72,7 @@ public class GuardianTop : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
+        Debug.Log($"[GuardianTop] OnDisable called - {gameObject.name}");
         ResetForReuse();
     }
 
@@ -157,12 +158,25 @@ public class GuardianTop : MonoBehaviour
     /// </summary>
     private void OnTriggerEnter2D(Collider2D other)
     {
+        // [DEBUG] 충돌 로그
+        Debug.Log($"[GuardianTop] OnTriggerEnter2D - {other.name}, Layer: {LayerMask.LayerToName(other.gameObject.layer)}");
+
         // 레이어 체크
-        if ((_enemyLayerMask & (1 << other.gameObject.layer)) == 0) return;
+        if ((_enemyLayerMask & (1 << other.gameObject.layer)) == 0)
+        {
+            Debug.Log($"[GuardianTop] 레이어 불일치 - 제외");
+            return;
+        }
 
         if (other.TryGetComponent<Enemy>(out var enemy))
         {
-            if (enemy.CurrentHP <= 0) return;
+            if (enemy.CurrentHP <= 0)
+            {
+                Debug.Log($"[GuardianTop] 적 이미 사망 - 제외");
+                return;
+            }
+
+            Debug.Log($"[GuardianTop] 적 타격 - HP: {enemy.CurrentHP} -> Damage: {_damage}");
 
             // 데미지 (적 내부 쿨타임에 의존)
             enemy.TakeDamage(_damage);
@@ -177,6 +191,16 @@ public class GuardianTop : MonoBehaviour
             // 3. 히트 이펙트 (풀링 사용 권장)
             SpawnHitEffect(transform.position);
         }
+    }
+
+    /// <summary>
+    /// 물리적 충돌 감지 (디버깅용)
+    /// RandomBox와 같은 Is Trigger가 아닌 콜라이더와 충돌 시 호출됨
+    /// </summary>
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.LogError($"[GuardianTop] OnCollisionEnter2D (PHYSICAL COLLISION) - {collision.gameObject.name}, Layer: {LayerMask.LayerToName(collision.gameObject.layer)}");
+        Debug.LogError($"[GuardianTop] 이것은 물리적 충돌입니다! 상대방의 Collider Is Trigger를 확인하세요.");
     }
 
     /// <summary>
@@ -244,6 +268,14 @@ public class GuardianTop : MonoBehaviour
         _damage = damage;
         _knockbackForce = knockbackForce;
         _rotationSpeed = speed;
+    }
+
+    /// <summary>
+    /// 초기 각도 설정 (여러 마리가 균등하게 분배되도록)
+    /// </summary>
+    public void SetInitialAngle(float angle)
+    {
+        _currentAngle = angle;
     }
 
     /// <summary>

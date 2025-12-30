@@ -41,20 +41,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 5031693375446562043}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9940080aec8ae5409cbab83da44cc31, type: 3}
+  m_Script: {fileID: 11500000, guid: 5055bf66b2218614981acebc6f1b75e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillData: {fileID: 11400000, guid: 8a15e5a18d5987a4891af99448a99ac4, type: 2}
-  currentLevel: 1
-  isActive: 1
-  baseCooldown: 4
-  baseDamage: 20
-  baseProjectileCount: 1
-  cooldownReductionPerLevel: 0.2
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  projectileSpeed: 8
-  spreadAngle: 15
-  attackRange: 8
-  targetUpdateInterval: 0.5

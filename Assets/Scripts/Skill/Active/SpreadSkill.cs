@@ -1,13 +1,13 @@
 using UnityEngine;
 
 /// <summary>
-/// 특수 스킬 - 진화 스킬이나 특별한 효과를 가진 스킬
-/// 데이터 주도 설계로 다양한 특수 스킬을 지원합니다.
+/// 분산 스킬 - 다중 방향 투사체 발사
+/// 데이터 주도 설계로 다양한 분산 패턴을 지원합니다.
 ///
 /// 지원하는 스킬 유형 (데이터로 설정):
 /// - 단일 타겟팅: 가장 가까운 적에게 1발 발사
 /// - 다중 발사: 360도 분산으로 여러 발 발사 (예: Tri-Laser, SpiralShot)
-/// - 공전 투사체: 플레이어 주변을 공전하며 공격 (예: MagneticDart, Guardian Totem)
+/// - 공전 투사체: 플레이어 주변을 공전하며 공격 (예: MagneticDart)
 ///
 /// 성능 최적화:
 /// - PlayerController.Instance로 빠른 플레이어 참조
@@ -18,8 +18,8 @@ using UnityEngine;
 /// - 데이터 주도 설계 (모든 특성은 SkillData로 설정)
 /// - 코드 중복 제거 (통합된 발사 메서드)
 /// </summary>
-[SkillType(SkillType.Special)]
-public class SpecialSkill : SkillBase
+[SkillType(SkillType.Spread)]
+public class SpreadSkill : SkillBase
 {
     #region Private Fields
     private Transform _playerTransform;
@@ -45,7 +45,7 @@ public class SpecialSkill : SkillBase
 
     #region Core Loop
     /// <summary>
-    /// 특수 스킬 실행
+    /// 분산 스킬 실행
     /// 데이터에 정의된 발사 패턴에 따라 투사체를 발사합니다.
     /// </summary>
     protected override void Execute()
@@ -163,6 +163,21 @@ public class SpecialSkill : SkillBase
 
         // 데이터에서 이동 방식 가져와서 투사체 초기화
         projectile.Setup(direction, damage, speed, _data.movementType);
+
+        // [v2] 관통 효과 전달
+        if (_data.penetrationCount > 0)
+        {
+            projectile.SetPenetration(_data.penetrationCount);
+        }
+
+        // [v2] 생존 시간 오버라이드 전달
+        if (_data.projectileLifetime > 0)
+        {
+            projectile.SetLifetime(_data.projectileLifetime);
+        }
+
+        // 시각 효과 설정 (v2) - SkillData에서 스프라이트, 색상, 크기 적용
+        projectile.SetSprite(_data.projectileSprite, _data.projectileColor, _data.projectileScale * size);
 
         // 공전 인덱스 설정 (공전 모드일 때만)
         if (orbitIndex >= 0)

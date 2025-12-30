@@ -12,5 +12,5 @@ public enum SkillType
     Drone,       // 드론 스킬 (자율 공격 유닛)
     Lightning,   // 번개 스킬 (무작위 적에게 번개 타격)
     RPG,         // RPG 스킬 (가장 가까운 적에게 로켓 발사)
-    Special      // 특수 스킬 (진화 스킬 등)
+    Spread       // 분산 스킬 (360도 다중 발사, 공전 투사체)
 }

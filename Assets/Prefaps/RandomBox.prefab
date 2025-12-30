@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7587557609231670187}
   - component: {fileID: 4521468941778708298}
   - component: {fileID: 8337162287380159667}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: RandomBox
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -104,6 +104,7 @@ MonoBehaviour:
   - {fileID: 153551555534190185, guid: ef2c76bbb735d7f40b34414c63e7b0a7, type: 3}
   lifeTime: 10
   maxHp: 50
+  currentHp: 0
   spriteRenderer: {fileID: 0}
 --- !u!61 &8337162287380159667
 BoxCollider2D:

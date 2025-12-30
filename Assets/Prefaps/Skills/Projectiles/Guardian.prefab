@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 495347784010439105}
   - component: {fileID: 293673128180261303}
   - component: {fileID: 956449345279957988}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: Guardian
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

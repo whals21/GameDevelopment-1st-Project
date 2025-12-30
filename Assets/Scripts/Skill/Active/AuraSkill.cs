@@ -21,13 +21,6 @@ public class AuraSkill : SkillBase
     [Tooltip("라인 렌더러용 머티리얼 (GC 방지를 위해 할당 권장)")]
     [SerializeField] private Material lineRendererMaterial;
 
-    [Header("Colors")]
-    [Tooltip("내부 오라 색상")]
-    [SerializeField] private Color innerAuraColor = new Color(0f, 1f, 1f, 0.5f);
-
-    [Tooltip("외부 오라 색상 (Lv3+)")]
-    [SerializeField] private Color outerAuraColor = new Color(0f, 0.5f, 1f, 0.5f);
-
     [Header("Settings")]
     [Tooltip("내부 오라 두께")]
     [SerializeField] private float innerAuraWidth = 0.2f;
@@ -57,8 +50,14 @@ public class AuraSkill : SkillBase
     private float _outerAuraRadius;
     private float _damageTimer;
 
+    // 지속 시간 (v2)
+    private float _auraDurationTimer;
+
     // 활성화 여부
     private bool _isAuraActive = false;
+
+    // 쿨다운 대기 중 플래그 (v2: 지속시간 만료 후 쿨다운 완료까지 재활성화 방지)
+    private bool _isWaitingForCooldown = false;
     #endregion
 
     #region Initialization
@@ -89,15 +88,40 @@ public class AuraSkill : SkillBase
 
     #region Core Loop
     /// <summary>
-    /// 오라 업데이트 루프 (코드리뷰 반영: UpdateSkill 오버라이드)
+    /// 오라 업데이트 루프 (v2: 지속시간 시스템 추가)
     /// Aura는 지속 효과이므로 매 프레임 업데이트를 수행합니다.
+    /// activeDuration 동안 활성화된 후, 쿨타임을 기다리고 다시 활성화됩니다.
     /// </summary>
     public override void UpdateSkill()
     {
+        // [v2] 쿨다운 대기 중이면 아무것도 하지 않음 (쿨다운만 진행)
+        if (_isWaitingForCooldown)
+        {
+            base.UpdateSkill(); // 쿨다운만 체크
+            return;
+        }
+
         base.UpdateSkill(); // 쿨다운 체크 등 부모 로직 수행
 
         // 스킬이 꺼져 있으면 처리 안 함
         if (!_isAuraActive) return;
+
+        // [v2] 지속 시간 체크 (0이면 상시 유지)
+        if (_data.activeDuration > 0)
+        {
+            _auraDurationTimer += Time.deltaTime;
+            if (_auraDurationTimer >= _data.activeDuration)
+            {
+                // 지속 시간 만료 - 오라 비활성화
+                _isAuraActive = false;
+                _isWaitingForCooldown = true; // [v2] 쿨다운 대기 시작
+                if (_auraObject != null)
+                {
+                    _auraObject.SetActive(false);
+                }
+                return;
+            }
+        }
 
         // 1. 데미지 타이머 업데이트
         UpdateDamageTimer();
@@ -107,13 +131,20 @@ public class AuraSkill : SkillBase
     }
 
     /// <summary>
-    /// 오라 활성화 시작 (최초 1회만 호출)
+    /// 오라 활성화 시작 (쿨다운 완료 후 호출)
     /// </summary>
     protected override void Execute()
     {
+        // [v2] 쿨다운 완료 후 재활성화
+        if (_isWaitingForCooldown)
+        {
+            _isWaitingForCooldown = false; // 쿨다운 대기 종료
+        }
+
         // 오라 활성화
         _isAuraActive = true;
         _damageTimer = 0f;
+        _auraDurationTimer = 0f; // [v2] 지속 시간 타이머 초기화
 
         // 시각 효과 켜기
         if (_auraObject != null)
@@ -171,7 +202,7 @@ public class AuraSkill : SkillBase
 
     #region Visuals
     /// <summary>
-    /// 오라 시각 효과 생성 (코드리뷰 반영: Material Leak 제거)
+    /// 오라 시각 효과 생성 (v2: 데이터 주도 색상)
     /// </summary>
     private void CreateAuraVisuals()
     {
@@ -191,13 +222,17 @@ public class AuraSkill : SkillBase
             _auraObject.transform.position = transform.position;
         }
 
+        // [v2] 데이터에서 색상 가져오기 (기본값 폴백)
+        Color innerColor = _data != null ? _data.innerAuraColor : new Color(0f, 1f, 1f, 0.5f);
+        Color outerColor = _data != null ? _data.outerAuraColor : new Color(0f, 0.5f, 1f, 0.5f);
+
         // 내부 오라
         _innerLineRenderer = CreateOctagonLineRenderer(_auraObject.transform, "InnerAura",
-            innerAuraColor, innerAuraWidth, 5);
+            innerColor, innerAuraWidth, 5);
 
         // 외부 오라
         _outerLineRenderer = CreateOctagonLineRenderer(_auraObject.transform, "OuterAura",
-            outerAuraColor, outerAuraWidth, 3);
+            outerColor, outerAuraWidth, 3);
 
         // 초기화
         _auraRadius = _data.attackRange;

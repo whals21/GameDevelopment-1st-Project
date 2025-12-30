@@ -9,19 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67827102c60b8ca45968fe4fc9948601, type: 3}
+  m_Script: {fileID: 11500000, guid: 3842fbb2350e6714aa833d2f73e52027, type: 3}
   m_Name: ExperienceBonusSkill
   m_EditorClassIdentifier: 
   passiveType: 1
-  skillName: "\uACBD\uD5D8\uCE58 \uC99D\uAC00"
-  description: "\uD68D\uB4DD\uD558\uB294 \uACBD\uD5D8\uCE58\uAC00 \uC99D\uAC00\uD569\uB2C8\uB2E4."
-  skillIcon: {fileID: -1301782998, guid: 327a916c5cc63964281954804bab80ee, type: 3}
+  skillName: ExperienceBonus
+  description: 
+  skillIcon: {fileID: 21300000, guid: 88ffae8b56d386343b42bab53b7352fc, type: 3}
   effectLevels:
-  - 0.1
-  - 0.15
-  - 0.2
-  - 0.25
-  - 0.3
+  - 0.08
+  - 0.16
+  - 0.24
+  - 0.32
+  - 0.4
   maxLevel: 5
-  priority: 5
+  priority: 0
   rerollChanceAtMaxLevel: 0.3

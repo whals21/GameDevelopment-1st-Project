@@ -58,7 +58,7 @@ public class SkillData : ScriptableObject
     [Tooltip("최소 공격 간격 (초) - Guardian 스킬은 연속 공격")]
     public float attackIntervalMin = 0.5f;
 
-    [Header("특수 스킬 (Special)")]
+    [Header("특수 스킬 (Spread)")]
     [Tooltip("다중 발사: 한 번에 발사할 투사체 수")]
     [Min(1)]
     public int specialProjectileCount = 1;
@@ -67,6 +67,16 @@ public class SkillData : ScriptableObject
     [Tooltip("초기 각도 오프셋 (도)")]
     [Range(0f, 360f)]
     public float initialAngleOffset = 0f;
+
+    [Header("투사체 관통 (v2)")]
+    [Tooltip("관통 가능한 적 수 (0=관통 없음, 999=무한 관통)")]
+    [Min(0)]
+    public int penetrationCount = 0;
+
+    [Header("투사체 생존 (v2)")]
+    [Tooltip("투사체 최대 생존 시간 (초, 0이면 Projectile 프리팹 기본값 사용)")]
+    [Min(0f)]
+    public float projectileLifetime = 0f;
 
     [Header("번개 스킬 (Lightning)")]
     [Tooltip("번개 타격 간 딜레이 (초)")]
@@ -86,8 +96,17 @@ public class SkillData : ScriptableObject
     public float projectileScale = 1f;
 
     [Header("오라 스킬 (Aura)")]
+    [Tooltip("오라 지속 시간 (초, 0이면 상시 유지)")]
+    [Min(0f)]
+    public float activeDuration = 5f;
     [Tooltip("오라 데미지 간격 (초)")]
     public float damageInterval = 0.2f;
+
+    [Header("오라 색상 (v2)")]
+    [Tooltip("내부 오라 색상")]
+    public Color innerAuraColor = new Color(0f, 1f, 1f, 0.5f);
+    [Tooltip("외부 오라 색상 (Lv3+)")]
+    public Color outerAuraColor = new Color(0f, 0.5f, 1f, 0.5f);
 
     [Header("레벨별 스탯 (최대 5레벨)")]
     [Tooltip("레벨별 스킬 스탯 (배열)")]

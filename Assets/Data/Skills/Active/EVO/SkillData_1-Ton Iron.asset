@@ -10,35 +10,40 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a80fe98a771acd04f96286bcc8a0567e, type: 3}
-  m_Name: Skill0Data_MagneticDart
+  m_Name: SkillData_1-Ton Iron
   m_EditorClassIdentifier: 
-  skillName: MagneticDart
+  skillName: 1-Ton Iron
   description: 
-  icon: {fileID: 21300000, guid: cd28851ef10a3c74f9c48ba202686ad3, type: 3}
-  skillType: 0
-  prefab: {fileID: 2864860492614333976, guid: d8520391d9cb41e41bc43b34bf539751, type: 3}
+  icon: {fileID: 21300000, guid: f1ff99890f9addb45af8e0df1d6d8927, type: 3}
+  skillType: 6
+  prefab: {fileID: 927450996480703183, guid: cc86a1a48f46f1f4eb4264f87cabdb5f, type: 3}
   damage: 10
-  cooldown: 1
-  projectileSpeed: 15
+  cooldown: 2
+  projectileSpeed: 12
   projectileCount: 1
   attackRange: 10
   spreadAngle: 30
-  movementType: 3
+  movementType: 0
   enemySearchRadius: 20
   hoverRadius: 2
   hoverSpeed: 90
   hoverEllipseRatio: 0.3
   attackIntervalMin: 0.5
-  specialProjectileCount: 2
-  isOrbiting: 1
-  initialAngleOffset: 0
+  specialProjectileCount: 8
+  isOrbiting: 0
+  initialAngleOffset: 22.5
+  penetrationCount: 999
+  projectileLifetime: 1.2
   strikeDelay: 0.15
   rapidFireInterval: 0.1
   defaultSpreadAngle: 15
-  projectileSprite: {fileID: 21300000, guid: cd28851ef10a3c74f9c48ba202686ad3, type: 3}
+  projectileSprite: {fileID: 21300000, guid: f1ff99890f9addb45af8e0df1d6d8927, type: 3}
   projectileColor: {r: 1, g: 1, b: 1, a: 1}
   projectileScale: 1
+  activeDuration: 5
   damageInterval: 0.2
+  innerAuraColor: {r: 0, g: 1, b: 1, a: 0.5}
+  outerAuraColor: {r: 0, g: 0.5, b: 1, a: 0.5}
   levels:
   - level: 1
     damageMultiplier: 1
@@ -48,33 +53,33 @@ MonoBehaviour:
     projectileSizeMultiplier: 1
     projectileScaleIncrease: 0
     upgradeDescription: 
-  - level: 2
-    damageMultiplier: 1.5
-    cooldownMultiplier: 0.95
+  - level: 1
+    damageMultiplier: 1
+    cooldownMultiplier: 1
     additionalProjectiles: 0
     projectileSpeedMultiplier: 1
     projectileSizeMultiplier: 1
     projectileScaleIncrease: 0
     upgradeDescription: 
-  - level: 3
-    damageMultiplier: 1.8
-    cooldownMultiplier: 0.9
+  - level: 1
+    damageMultiplier: 1
+    cooldownMultiplier: 1
     additionalProjectiles: 0
     projectileSpeedMultiplier: 1
     projectileSizeMultiplier: 1
     projectileScaleIncrease: 0
     upgradeDescription: 
-  - level: 4
-    damageMultiplier: 2.2
-    cooldownMultiplier: 0.85
+  - level: 1
+    damageMultiplier: 1
+    cooldownMultiplier: 1
     additionalProjectiles: 0
     projectileSpeedMultiplier: 1
     projectileSizeMultiplier: 1
     projectileScaleIncrease: 0
     upgradeDescription: 
-  - level: 5
-    damageMultiplier: 2.7
-    cooldownMultiplier: 0.8
+  - level: 1
+    damageMultiplier: 1
+    cooldownMultiplier: 1
     additionalProjectiles: 0
     projectileSpeedMultiplier: 1
     projectileSizeMultiplier: 1

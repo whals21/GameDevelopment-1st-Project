@@ -48,7 +48,20 @@ public class GuardianSkill : SkillBase
     /// </summary>
     private void UpdateGuardians()
     {
+        // [v2] 파괴된 가디언 cleanup (null check)
+        for (int i = _guardianObjects.Count - 1; i >= 0; i--)
+        {
+            if (_guardianObjects[i] == null)
+            {
+                Debug.Log($"[GuardianSkill] Found null guardian at index {i}, removing from list");
+                _guardianObjects.RemoveAt(i);
+            }
+        }
+
         int targetCount = GetTargetGuardianCount();
+        int currentCount = _guardianObjects.Count;
+
+        Debug.Log($"[GuardianSkill] UpdateGuardians - Current: {currentCount}, Target: {targetCount}");
 
         // 마리수 부족 시 생성
         while (_guardianObjects.Count < targetCount)
@@ -68,13 +81,12 @@ public class GuardianSkill : SkillBase
 
     /// <summary>
     /// 레벨에 따른 목표 가디언 수를 반환합니다.
-    /// 뱀서류 게임 패턴: 레벨업 시 소환수 증가
+    /// 레벨에 정비례하게 가디언 수 증가 (최대 5레벨)
     /// </summary>
     private int GetTargetGuardianCount()
     {
-        if (_currentLevel >= 7) return 3;
-        if (_currentLevel >= 4) return 2;
-        return 1;
+        // 레벨 1~5에 따라 1~5마리 소환
+        return Mathf.Clamp(_currentLevel, 1, 5);
     }
 
     /// <summary>
@@ -113,6 +125,8 @@ public class GuardianSkill : SkillBase
         int lastIndex = _guardianObjects.Count - 1;
         GameObject guardianToRemove = _guardianObjects[lastIndex];
 
+        Debug.Log($"[GuardianSkill] Removing guardian: {guardianToRemove?.name}");
+
         if (guardianToRemove != null)
         {
             Destroy(guardianToRemove);
@@ -144,8 +158,9 @@ public class GuardianSkill : SkillBase
                 // GuardianTop 스탯 업데이트
                 guardianTop.UpdateStats(finalDamage, knockback, speed);
 
-                // 각도 오프셋 설정을 위해 현재 각도 설정
-                // GuardianTop은 내부적으로 CurrentAngle를 사용하므로 여기서는 설정 불필요
+                // 초기 각도 설정 (360도를 균등하게 분배)
+                float initialAngle = i * angleStep;
+                guardianTop.SetInitialAngle(initialAngle);
             }
         }
     }
@@ -164,6 +179,8 @@ public class GuardianSkill : SkillBase
     public override void Deactivate()
     {
         base.Deactivate();
+
+        Debug.Log($"[GuardianSkill] Deactivate - Removing {_guardianObjects.Count} guardians");
 
         // 모든 가디언 제거
         foreach (var guardian in _guardianObjects)

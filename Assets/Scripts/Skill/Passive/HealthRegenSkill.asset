@@ -9,13 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67827102c60b8ca45968fe4fc9948601, type: 3}
+  m_Script: {fileID: 11500000, guid: 3842fbb2350e6714aa833d2f73e52027, type: 3}
   m_Name: HealthRegenSkill
   m_EditorClassIdentifier: 
   passiveType: 5
-  skillName: "\uCCB4\uB825 \uC7AC\uC0DD"
-  description: "\uC2DC\uAC04\uC774 \uC9C0\uB0A8\uC5D0 \uB530\uB77C \uCCB4\uB825\uC774
-    \uC790\uB3D9\uC73C\uB85C \uD68C\uBCF5\uB429\uB2C8\uB2E4."
+  skillName: HealthRegen
+  description: 
   skillIcon: {fileID: 21300000, guid: 72f7620c69bd61042b7a6c6f5e4306f4, type: 3}
   effectLevels:
   - 0.01
@@ -24,5 +23,5 @@ MonoBehaviour:
   - 0.04
   - 0.05
   maxLevel: 5
-  priority: 3
+  priority: 0
   rerollChanceAtMaxLevel: 0.3

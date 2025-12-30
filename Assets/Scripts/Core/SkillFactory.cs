@@ -26,7 +26,7 @@ public static class SkillFactory
             { SkillType.Aura, typeof(AuraSkill) },
             { SkillType.Lightning, typeof(LightningSkill) },
             { SkillType.RPG, typeof(RPGSkill) },
-            { SkillType.Special, typeof(SpecialSkill) }
+            { SkillType.Spread, typeof(SpreadSkill) }
         };
     }
     #endregion

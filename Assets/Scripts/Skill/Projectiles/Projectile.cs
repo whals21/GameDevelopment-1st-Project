@@ -90,6 +90,15 @@ public class Projectile : MonoBehaviour
     private Transform _playerTransform;
     private float _soccerLastBounceTime;
     private bool _soccerIsRecalculating;
+
+    // 관통 효과 (v2)
+    private int _penetrationCount = 0;
+
+    // 생존 시간 오버라이드 (v2)
+    private float _maxLifetimeOverride = 0f;
+
+    // 이펙트 크기 배율 (v2) - Molotov의 FireGround 크기 등에 사용
+    private float _effectSizeMultiplier = 1f;
     #endregion
 
     #region Properties
@@ -136,6 +145,8 @@ public class Projectile : MonoBehaviour
         _soccerCurrentBounces = 0;
         _soccerRelaunchCount = 0;
         _soccerIsRecalculating = false;
+        _penetrationCount = 0;
+        _maxLifetimeOverride = 0f;
 
         if (_rb != null)
         {
@@ -216,6 +227,24 @@ public class Projectile : MonoBehaviour
     }
 
     /// <summary>
+    /// 관통 횟수 설정 (v2)
+    /// 0이면 관통 없음, 1이면 1명 관통, 999이면 무한 관통
+    /// </summary>
+    public void SetPenetration(int count)
+    {
+        _penetrationCount = count;
+    }
+
+    /// <summary>
+    /// 생존 시간 오버라이드 설정 (v2)
+    /// 0이면 Projectile 프리팹 기본값 사용, 0보다 크면 해당 값 사용
+    /// </summary>
+    public void SetLifetime(float lifetime)
+    {
+        _maxLifetimeOverride = lifetime;
+    }
+
+    /// <summary>
     /// 시각 효과 설정 (v2) - 스프라이트, 색상, 크기
     /// </summary>
     public void SetSprite(Sprite sprite, Color color, float scale = 1f)
@@ -238,6 +267,15 @@ public class Projectile : MonoBehaviour
         {
             Debug.LogError("[Projectile] _spriteRenderer가 null입니다!");
         }
+    }
+
+    /// <summary>
+    /// 이펙트 크기 배율 설정 (v2)
+    /// Molotov의 FireGround, 기타 투사체 도착 시 생성되는 이펙트의 크기에 적용
+    /// </summary>
+    public void SetEffectSizeMultiplier(float multiplier)
+    {
+        _effectSizeMultiplier = multiplier;
     }
 
     private void FindHomingTarget()
@@ -268,8 +306,9 @@ public class Projectile : MonoBehaviour
 
         _lifetime += Time.deltaTime;
 
-        // 최대 생존 시간 체크
-        if (_lifetime > _maxLifetime)
+        // 최대 생존 시간 체크 (v2: 오버라이드 우선)
+        float effectiveMaxLifetime = _maxLifetimeOverride > 0 ? _maxLifetimeOverride : _maxLifetime;
+        if (_lifetime > effectiveMaxLifetime)
         {
             ReturnToPoolOrDestroy();
             return;
@@ -434,7 +473,8 @@ public class Projectile : MonoBehaviour
             if (fireGround != null)
             {
                 fireGround.SetPosition(transform.position);
-                fireGround.Init(_damage * 0.5f, 5f);
+                // 레벨에 따른 크기 배율 적용
+                fireGround.Init(_damage * 0.5f, 5f, _effectSizeMultiplier);
             }
         }
         else if (_fireGroundPrefab != null)
@@ -444,7 +484,8 @@ public class Projectile : MonoBehaviour
             FireGround fg = fire.GetComponent<FireGround>();
             if (fg != null)
             {
-                fg.Init(_damage * 0.5f, 5f);
+                // 레벨에 따른 크기 배율 적용
+                fg.Init(_damage * 0.5f, 5f, _effectSizeMultiplier);
             }
             Destroy(fire, 6f);
         }
@@ -572,6 +613,13 @@ public class Projectile : MonoBehaviour
             if (enemy != null && enemy.CurrentHP > 0)
             {
                 enemy.TakeDamage(_damage);
+
+                // [v2] 관통 효과 체크
+                if (_penetrationCount > 0)
+                {
+                    _penetrationCount--;
+                    return; // 관통 횟수가 남으면 제거하지 않음
+                }
 
                 // 타입별 추가 처리
                 switch (_moveType)

@@ -56,10 +56,8 @@ public class ProjectileSkill : SkillBase
         // 가장 가까운 적 찾기
         Transform target = FindNearestEnemy();
 
-        // 적이 없으면 기본 방향으로 발사
-        Vector3 direction = target != null
-            ? (target.position - transform.position).normalized
-            : Vector3.right;
+        // 적이 있어도 랜덤한 수평 방향으로 발사
+        Vector3 direction = GetRandomHorizontalDirection();
 
         // 투사체 발사
         int projectileCount = GetProjectileCount();
@@ -107,15 +105,21 @@ public class ProjectileSkill : SkillBase
             projectile.gameObject.transform.position = transform.position;
         }
 
-        // 크기 조절
-        projectile.transform.localScale = Vector3.one * size;
+        // Molotov는 투사체 크기 고정, 화염지대 크기만 증가
+        float visualScale = (_data.movementType == ProjectileMovementType.Molotov) ? 1f : size;
+
+        // 크기 조절 (Molotov 제외하고 레벨에 따라 증가)
+        projectile.transform.localScale = Vector3.one * visualScale;
 
         // 데이터에서 이동 방식 가져와서 투사체 초기화
         projectile.Setup(direction, damage, speed, _data.movementType);
 
         // 시각 효과 설정 (v2) - SkillData에서 스프라이트, 색상, 크기 적용
-        Debug.Log($"[ProjectileSkill] {_data.skillName} - sprite: {_data.projectileSprite?.name ?? "null"}, color: {_data.projectileColor}, scale: {_data.projectileScale * size}");
-        projectile.SetSprite(_data.projectileSprite, _data.projectileColor, _data.projectileScale * size);
+        Debug.Log($"[ProjectileSkill] {_data.skillName} - sprite: {_data.projectileSprite?.name ?? "null"}, color: {_data.projectileColor}, scale: {_data.projectileScale * visualScale}");
+        projectile.SetSprite(_data.projectileSprite, _data.projectileColor, _data.projectileScale * visualScale);
+
+        // 이펙트 크기 배율 설정 (Molotov의 FireGround 크기 등에 적용 - 항상 레벨 기반 크기 사용)
+        projectile.SetEffectSizeMultiplier(size);
     }
     #endregion
 
@@ -190,6 +194,16 @@ public class ProjectileSkill : SkillBase
         float currentAngle = startAngle + (angleStep * index);
 
         return Quaternion.Euler(0, 0, currentAngle) * baseDirection;
+    }
+
+    /// <summary>
+    /// 랜덤한 수평 방향 반환 (적이 없을 때 사용)
+    /// -30도 ~ +30도 사이의 랜덤한 각도로 수평 발사
+    /// </summary>
+    private Vector3 GetRandomHorizontalDirection()
+    {
+        float randomAngle = Random.Range(-30f, 30f);
+        return Quaternion.Euler(0, 0, randomAngle) * Vector3.right;
     }
     #endregion
 }
