@@ -56,17 +56,14 @@ public class ProjectileSkill : SkillBase
         // 가장 가까운 적 찾기
         Transform target = FindNearestEnemy();
 
-        // 적이 있어도 랜덤한 수평 방향으로 발사
-        Vector3 direction = GetRandomHorizontalDirection();
-
         // 투사체 발사
         int projectileCount = GetProjectileCount();
 
         for (int i = 0; i < projectileCount; i++)
         {
-            // 데이터로부터 확산각 계산
-            Vector3 spreadDirection = CalculateSpreadDirection(direction, i, projectileCount, _data.spreadAngle);
-            SpawnProjectile(spreadDirection);
+            // 각 투사체마다 개별적으로 랜덤한 수평 방향 생성 (-60도 ~ +60도)
+            Vector3 randomDirection = GetRandomHorizontalDirection(60f);
+            SpawnProjectile(randomDirection);
         }
     }
 
@@ -110,6 +107,12 @@ public class ProjectileSkill : SkillBase
 
         // 크기 조절 (Molotov 제외하고 레벨에 따라 증가)
         projectile.transform.localScale = Vector3.one * visualScale;
+
+        // Molotov만 Layer 14: Projectile2로 설정
+        if (_data.movementType == ProjectileMovementType.Molotov)
+        {
+            projectile.gameObject.layer = LayerMask.NameToLayer("Projectile2");
+        }
 
         // 데이터에서 이동 방식 가져와서 투사체 초기화
         projectile.Setup(direction, damage, speed, _data.movementType);
@@ -197,12 +200,14 @@ public class ProjectileSkill : SkillBase
     }
 
     /// <summary>
-    /// 랜덤한 수평 방향 반환 (적이 없을 때 사용)
-    /// -30도 ~ +30도 사이의 랜덤한 각도로 수평 발사
+    /// 랜덤한 수평 방향 반환
+    /// 매개변수로 받은 각도 범위 내에서 랜덤한 방향을 반환합니다.
     /// </summary>
-    private Vector3 GetRandomHorizontalDirection()
+    /// <param name="angleRange">각도 범위 (예: 60f이면 -30도 ~ +30도)</param>
+    private Vector3 GetRandomHorizontalDirection(float angleRange = 60f)
     {
-        float randomAngle = Random.Range(-30f, 30f);
+        float halfRange = angleRange * 0.5f;
+        float randomAngle = Random.Range(-halfRange, halfRange);
         return Quaternion.Euler(0, 0, randomAngle) * Vector3.right;
     }
     #endregion

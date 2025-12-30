@@ -36,6 +36,12 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float _molotovArcHeight = 3f;
     [SerializeField] private GameObject _fireGroundPrefab;
 
+    [Tooltip("화염지대 크기 증가 비율 (0~1). 0이면 크기가 고정됩니다.")]
+    [SerializeField] private float _fireGroundScaleFactor = 0.3f;
+
+    [Tooltip("화염지대 최대 크기 배율 제한")]
+    [SerializeField] private float _fireGroundMaxMultiplier = 1.5f;
+
     [Header("Brick 설정")]
     [SerializeField] private float _brickGravity = 15f;
     [SerializeField] private float _brickBounceDamping = 0.7f;
@@ -190,6 +196,21 @@ public class Projectile : MonoBehaviour
                 break;
 
             case ProjectileMovementType.Molotov:
+                // [v1 참조] 콜라이더를 트리거로 설정하여 물리 충돌 방지
+                Collider2D col = GetComponent<Collider2D>();
+                if (col != null)
+                {
+                    col.isTrigger = true;
+                }
+
+                // [v1 참조] Rigidbody를 Kinematic으로 설정 (물리 엔진 제어)
+                if (_rb != null)
+                {
+                    _rb.bodyType = RigidbodyType2D.Kinematic;
+                    _rb.gravityScale = 0f;
+                    _rb.velocity = Vector2.zero;
+                }
+
                 _molotovStartPosition = transform.position;
                 _molotovTargetPosition = transform.position + _direction * 10f;
                 float dist = Vector2.Distance(new Vector2(_molotovStartPosition.x, _molotovStartPosition.y),
@@ -451,13 +472,22 @@ public class Projectile : MonoBehaviour
         {
             // 포물선 보간
             float t = _molotovElapsedTime / _molotovTravelTime;
+
+            // 수평 이동
             Vector3 horizontalPos = Vector3.Lerp(_molotovStartPosition, _molotovTargetPosition, t);
+
+            // 수직 이동 (포물선)
             float arc = _molotovArcHeight * 4f * t * (1f - t);
             horizontalPos.y = Mathf.Lerp(_molotovStartPosition.y, _molotovTargetPosition.y, t) + arc;
-            transform.position = horizontalPos;
 
-            Vector3 dir = (horizontalPos - transform.position).normalized;
-            if (dir != Vector3.zero) transform.right = dir;
+            // 회전 (위치 변경 전에 계산 - 현재 위치에서 다음 위치로의 방향)
+            Vector3 direction = (horizontalPos - transform.position).normalized;
+            if (direction != Vector3.zero)
+            {
+                transform.right = direction;
+            }
+
+            transform.position = horizontalPos;
         }
     }
 
@@ -466,6 +496,12 @@ public class Projectile : MonoBehaviour
         if (_molotovHasHitGround) return;
         _molotovHasHitGround = true;
 
+        // [전문가 피드백 반영] 화염지대 크기 증가율 보정
+        // 투사체는 누적으로 커지지만, 화염지대는 그보다 덜 커지도록 보정
+        // 예: _effectSizeMultiplier가 2.5라면 -> 1.0 + (1.5 * 0.3) = 1.45배만 적용
+        float adjustedMultiplier = 1.0f + ((_effectSizeMultiplier - 1.0f) * _fireGroundScaleFactor);
+        adjustedMultiplier = Mathf.Clamp(adjustedMultiplier, 0.8f, _fireGroundMaxMultiplier);
+
         // 화염 지대 생성 (풀링 적용 - 전문가 피드백)
         if (ObjectPoolManager.Instance != null)
         {
@@ -473,8 +509,8 @@ public class Projectile : MonoBehaviour
             if (fireGround != null)
             {
                 fireGround.SetPosition(transform.position);
-                // 레벨에 따른 크기 배율 적용
-                fireGround.Init(_damage * 0.5f, 5f, _effectSizeMultiplier);
+                // 보정된 크기 배율 적용
+                fireGround.Init(_damage * 0.5f, 5f, adjustedMultiplier);
             }
         }
         else if (_fireGroundPrefab != null)
@@ -484,8 +520,8 @@ public class Projectile : MonoBehaviour
             FireGround fg = fire.GetComponent<FireGround>();
             if (fg != null)
             {
-                // 레벨에 따른 크기 배율 적용
-                fg.Init(_damage * 0.5f, 5f, _effectSizeMultiplier);
+                // 보정된 크기 배율 적용
+                fg.Init(_damage * 0.5f, 5f, adjustedMultiplier);
             }
             Destroy(fire, 6f);
         }
