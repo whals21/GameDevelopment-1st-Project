@@ -26,7 +26,7 @@ public class BoosAttackRay : MonoBehaviour
         if (boss == null || boss.target == null) return;
 
         // 눈이 보는 방향 갱신
-        currentDir = (boss.target.position - (Vector3)transform.position).normalized;
+        currentDir = (boss.target.position - transform.position).normalized;
     }
 
     // ----------------------
