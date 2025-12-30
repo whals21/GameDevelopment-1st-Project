@@ -9,19 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67827102c60b8ca45968fe4fc9948601, type: 3}
+  m_Script: {fileID: 11500000, guid: 3842fbb2350e6714aa833d2f73e52027, type: 3}
   m_Name: DamageBoostSkill
   m_EditorClassIdentifier: 
   passiveType: 3
-  skillName: "\uACF5\uACA9\uB825 \uC99D\uAC00"
-  description: "\uBAA8\uB4E0 \uC2A4\uD0AC\uC758 \uB370\uBBF8\uC9C0\uAC00 \uC99D\uAC00\uD569\uB2C8\uB2E4."
-  skillIcon: {fileID: 21300000, guid: 003a60f09fff76144851ba8c0a73f4ef, type: 3}
+  skillName: 
+  description: 
+  skillIcon: {fileID: 0}
   effectLevels:
-  - 0.1
-  - 0.15
-  - 0.2
-  - 0.25
-  - 0.3
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
   maxLevel: 5
-  priority: 8
+  priority: 0
   rerollChanceAtMaxLevel: 0.3

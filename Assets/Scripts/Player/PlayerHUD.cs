@@ -22,8 +22,9 @@ public class PlayerHUD : MonoBehaviour
     [Header("레벨 관련")]
     [SerializeField] private TextMeshProUGUI levelText;
 
-    [Header("킬 카운트")]
+    [Header("킬 카운트 & 골드")]
     [SerializeField] private TextMeshProUGUI killCountText;
+    [SerializeField] private TextMeshProUGUI goldText;
 
     [Header("게임 상태 UI")]
     [SerializeField] private GameObject pausePanel;
@@ -38,6 +39,14 @@ public class PlayerHUD : MonoBehaviour
     void Awake()
     {
         Instance = this;
+    }
+
+    void Start()
+    {
+        if (DataManager.Instance != null)
+        {
+            UpdateGold(DataManager.Instance.myData.gold);
+        }
     }
 
     void Update()
@@ -72,7 +81,15 @@ public class PlayerHUD : MonoBehaviour
 
         if (killCountText != null)
         {
-            killCountText.text = $"Kills : {kills}";
+            killCountText.text = $"{kills}";
+        }
+    }
+
+    public void UpdateGold(int amount)
+    {
+        if (goldText != null)
+        {
+            goldText.text = $"{amount}";
         }
     }
 

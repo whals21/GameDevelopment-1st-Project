@@ -9,20 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67827102c60b8ca45968fe4fc9948601, type: 3}
+  m_Script: {fileID: 11500000, guid: 3842fbb2350e6714aa833d2f73e52027, type: 3}
   m_Name: MagnetRangeSkill
   m_EditorClassIdentifier: 
   passiveType: 2
-  skillName: "\uC790\uC11D \uBC94\uC704 \uC99D\uAC00"
-  description: "\uACBD\uD5D8\uCE58 \uBCFC\uC744 \uB04C\uC5B4\uB2F9\uAE30\uB294 \uBC94\uC704\uAC00
-    \uC99D\uAC00\uD569\uB2C8\uB2E4."
-  skillIcon: {fileID: 21300000, guid: 433c8ac11c8471f4c96db28c8cf46f32, type: 3}
+  skillName: 
+  description: 
+  skillIcon: {fileID: 0}
   effectLevels:
-  - 1
-  - 2
-  - 3
-  - 4
-  - 5
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
   maxLevel: 5
-  priority: 4
+  priority: 0
   rerollChanceAtMaxLevel: 0.3

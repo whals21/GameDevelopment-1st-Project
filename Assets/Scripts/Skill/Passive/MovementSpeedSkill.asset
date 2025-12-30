@@ -9,19 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67827102c60b8ca45968fe4fc9948601, type: 3}
+  m_Script: {fileID: 11500000, guid: 3842fbb2350e6714aa833d2f73e52027, type: 3}
   m_Name: MovementSpeedSkill
   m_EditorClassIdentifier: 
   passiveType: 6
-  skillName: "\uC774\uB3D9\uC18D\uB3C4 \uC99D\uAC00"
-  description: "\uD50C\uB808\uC774\uC5B4\uC758 \uC774\uB3D9\uC18D\uB3C4\uAC00 \uC99D\uAC00\uD569\uB2C8\uB2E4."
-  skillIcon: {fileID: 21300000, guid: 9bcb721de4b368043945f3f606af6e93, type: 3}
+  skillName: 
+  description: 
+  skillIcon: {fileID: 0}
   effectLevels:
-  - 0.1
-  - 0.2
-  - 0.3
-  - 0.4
-  - 0.5
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
   maxLevel: 5
-  priority: 6
+  priority: 0
   rerollChanceAtMaxLevel: 0.3
