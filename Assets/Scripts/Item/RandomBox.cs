@@ -2,48 +2,95 @@ using UnityEngine;
 
 public class RandomBox : MonoBehaviour
 {
-    [Header("����")]
+    [Header("���� ����")]
     [SerializeField] private GameObject[] rewardItems; // ���� �����۵�
-    [SerializeField] private float lifeTime = 10f; // 10�� �ڿ� �����
+    [SerializeField] private float lifeTime = 20f;     // �� �μ��� ������� �ð�
 
-    // Ȱ��ȭ�� ������ ����
+    [Header("ü�� ����")]
+    [SerializeField] private float maxHp = 50f;
+    private bool isBroken = false; // �ߺ� �ı� ������
+
+    [SerializeField] private float currentHp;
+
+    [Header("�ǰ� ȿ�� (����)")]
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    private Color originalColor;
+
+    private void Awake()
+    {
+        if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null) originalColor = spriteRenderer.color;
+    }
+
     private void OnEnable()
     {
-        // ���� �ð� �ڿ� ������ ������� ����
+        // ���� �ʱ�ȭ
+        currentHp = maxHp;
+        isBroken = false;
+        if (spriteRenderer != null) spriteRenderer.color = originalColor;
+
+        // �ð� ������ �����
         CancelInvoke("Despawn");
         Invoke("Despawn", lifeTime);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void TakeDamage(float damage)
     {
-        if (collision.CompareTag("Player"))
+        if (isBroken) return;
+
+        currentHp -= damage;
+
+        // �ǰ� ȿ��
+        StartCoroutine(HitFlashRoutine());
+
+        // ü���� 0�� �Ǹ� ���� ����
+        if (currentHp <= 0)
         {
             OpenBox();
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        int layer = collision.gameObject.layer;
+
+        // 9: Projectile, 14: Projectile2, 0: Default
+        if (layer == 9 || layer == 14 || layer == 0)
+        {
+            TakeDamage(10f); // 1ȸ�ǰ� 10������
+            collision.gameObject.SetActive(false);
+        }
+    }
+
+    private System.Collections.IEnumerator HitFlashRoutine()
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = Color.red; // ������
+            yield return new WaitForSeconds(0.1f);
+            spriteRenderer.color = originalColor;
+        }
+    }
+
     private void OpenBox()
     {
-        // ������ ����� ��������� ���� ����
+        isBroken = true;
+
         if (rewardItems.Length > 0)
         {
-            // �������� �ϳ� �̱�
             int index = Random.Range(0, rewardItems.Length);
             GameObject selectedItem = rewardItems[index];
 
-            // ���� ��ġ�� ������ ��ȯ
+            // ������ ��ȯ
             Instantiate(selectedItem, transform.position, Quaternion.identity);
-
-            Debug.Log($"���� ���� {selectedItem.name} ���Դ�");
         }
 
-        // ���ڴ� �����
         Despawn();
     }
 
     private void Despawn()
     {
-        // 오브젝트 풀에 반환 - 12/24 조민희 추가
+        // �Ŵ����� ������ �ݳ�, ������ ��Ȱ��ȭ
         if (ObjectPoolManager.Instance != null)
         {
             ObjectPoolManager.Instance.ReturnRandomBox(this);
@@ -52,6 +99,5 @@ public class RandomBox : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
-
     }
 }

@@ -8,6 +8,9 @@ public class LobbyManager : MonoBehaviour
     public string gameSceneName = "MainScene"; // 이동할 씬 이름
     public GameObject optionPanel;
 
+    [Header("연구소")]
+    public GameObject sciencePanel;
+
     [Header("버튼")]
     public Button continueButton;
 
@@ -42,6 +45,17 @@ public class LobbyManager : MonoBehaviour
         {
             Debug.Log("저장된 파일이 없습니다.");
         }
+    }
+
+    // 연구소 창 켜기
+    public void OnClickOpenScience()
+    {
+        sciencePanel.SetActive(true); // 켜기
+    }
+
+    public void OnClickCloseScience()
+    {
+        sciencePanel.SetActive(false); // 끄기
     }
 
     // 설정 창 켜기

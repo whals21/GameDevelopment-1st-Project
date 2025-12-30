@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.IO;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -39,8 +40,64 @@ public class PlayerStats : MonoBehaviour
 
     void Start()
     {
+        // 연구소 데이터 불러오기
+        string path = Application.persistentDataPath + "/ScienceData.json";
+
+        if (File.Exists(path))
+        {
+            // 내용을 읽어옴
+            string json = File.ReadAllText(path);
+            ScienceData data = JsonUtility.FromJson<ScienceData>(json);
+
+            // ▼▼▼ [수정됨] 레벨 계산 로직 ▼▼▼
+            float bonusDamage = 0f;
+            float bonusHp = 0f;
+            float bonusSpeed = 0f;
+            float bonusRegen = 0f;
+
+            // 현재 'topRowLevel'(윗줄 단계)만큼 반복해서 보너스를 더해줍니다.
+            // 예: 4단계면 0, 1, 2, 3번 노드의 효과를 다 더함
+            for (int i = 0; i < data.topRowLevel; i++)
+            {
+                // 여기 수정하세요! (순서대로 어떤 능력치가 오르는지 정하는 곳)
+                // i % 4 는 0, 1, 2, 3, 0, 1, 2, 3... 순서로 반복된다는 뜻입니다.
+
+                int type = i % 4; // 4가지 패턴 반복
+
+                switch (type)
+                {
+                    case 0: // 1번째 칸: 공격력
+                        bonusDamage += 1.0f; // 공격력 1 증가
+                        break;
+                    case 1: // 2번째 칸: 체력
+                        bonusHp += 10.0f;    // 체력 10 증가
+                        break;
+                    case 2: // 3번째 칸: 이속 (필요하면 쓰세요)
+                        bonusSpeed += 0.5f;
+                        break;
+                    case 3: // 4번째 칸: 체력재생 (필요하면 쓰세요)
+                        bonusRegen += 0.5f;
+                        break;
+                }
+            }
+
+            // 내 능력치에 영구적으로 더해줍니다.
+            damage += bonusDamage;
+            maxHp += bonusHp;
+            speed += bonusSpeed;
+            healthRegenRate += bonusRegen; // 체력재생도 적용
+
+            Debug.Log($"[연구소] 적용 완료! 공격+{bonusDamage}, 체력+{bonusHp}, 이속+{bonusSpeed}, 재생+{bonusRegen}");
+            // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+        }
+
+        // 체력 초기화 (늘어난 최대 체력만큼 현재 체력도 채우기)
         currentHp = maxHp;
-        // 시작 시 UI 갱신
+
+        // 재생 시스템 시작 (연구로 재생력이 생겼을 수도 있으니)
+        SetHealthRegenRate(healthRegenRate);
+
+        // UI 갱신
         if (PlayerHUD.Instance != null)
         {
             PlayerHUD.Instance.UpdateHp(currentHp, maxHp);
