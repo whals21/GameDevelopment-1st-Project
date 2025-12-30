@@ -668,6 +668,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x2048-ASTC 4x4-uicommon-863c8adc-00000000000000000000000000000000-2_26
+      rect:
+        serializedVersion: 2
+        x: 678
+        y: 841
+        width: 203
+        height: 203
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 749e08df085d6f440aead684d6959aba
+      internalID: -2119044578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x2048-ASTC 4x4-uicommon-863c8adc-00000000000000000000000000000000-2_27
+      rect:
+        serializedVersion: 2
+        x: 1405
+        y: 1807
+        width: 119
+        height: 136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8efe833268694646a29e2e0c0699232
+      internalID: -559925118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -698,6 +740,8 @@ TextureImporter:
       sactx-0-2048x2048-ASTC 4x4-uicommon-863c8adc-00000000000000000000000000000000-2_23: 680884718
       sactx-0-2048x2048-ASTC 4x4-uicommon-863c8adc-00000000000000000000000000000000-2_24: -353583405
       sactx-0-2048x2048-ASTC 4x4-uicommon-863c8adc-00000000000000000000000000000000-2_25: 1735634599
+      sactx-0-2048x2048-ASTC 4x4-uicommon-863c8adc-00000000000000000000000000000000-2_26: -2119044578
+      sactx-0-2048x2048-ASTC 4x4-uicommon-863c8adc-00000000000000000000000000000000-2_27: -559925118
       sactx-0-2048x2048-ASTC 4x4-uicommon-863c8adc-00000000000000000000000000000000-2_3: -1098905975
       sactx-0-2048x2048-ASTC 4x4-uicommon-863c8adc-00000000000000000000000000000000-2_4: -281217422
       sactx-0-2048x2048-ASTC 4x4-uicommon-863c8adc-00000000000000000000000000000000-2_5: 1755235588

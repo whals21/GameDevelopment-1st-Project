@@ -118,10 +118,20 @@ public class ExpGem : MonoBehaviour
         ObjectPoolManager.Instance.ReturnExpGem(this);
     }
 
-    // 강제로 자석 모드 활성화 (Magnet 아이템 획득 시 호출)
+    // 강제로 자석 모드 활성화
     public void Magnetize()
     {
-        isBeingAttracted = true;
-        forceMagnetized = true;  // 강제 모드 플래그 설정
+        StartCoroutine(MagnetRoutine());
     }
+
+    private System.Collections.IEnumerator MagnetRoutine()
+    {
+        // 경험치 젬이 사라질 때까지 무한 반복
+        while (gameObject.activeSelf)
+        {
+            isBeingAttracted = true; // 매 프레임 강제 설정
+            yield return null;
+        }
+    }
+
 }
