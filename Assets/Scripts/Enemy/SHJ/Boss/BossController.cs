@@ -46,7 +46,7 @@ public class BossController : MonoBehaviour,IDamageable
     private float attackTimer = 0f;
 
     public Transform PatternsRoot { get; private set; }   // 하위 패턴 루트
-    private BossAttack attackComp;                         // 공격 컴포넌트
+    public BossAttack attackComp;                         // 공격 컴포넌트
     public BoosAttackRay attackRay;
     public BossRange attackRange;
     public BossFirePool FirePool;                          // 총알 풀

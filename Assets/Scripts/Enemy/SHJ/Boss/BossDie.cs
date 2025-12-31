@@ -1,12 +1,16 @@
 using UnityEngine;
+using System.Collections;
 
 public class BossDie : MonoBehaviour
 {
-    private BossController bossController;
+    public BossController bossController;
     private Animator animator;
 
     private float currentHp;
     private bool isDead = false;
+
+    [SerializeField] private float dieAnimationSpeed = 1f;
+    [SerializeField] private float fadeOutDelay = 0.3f;
 
     private void Awake()
     {
@@ -19,6 +23,7 @@ public class BossDie : MonoBehaviour
         currentHp = MaxHp;
         isDead = false;
         gameObject.SetActive(true);
+        if (animator != null) animator.speed = 1f;
     }
 
     public float MaxHp => bossController != null ? bossController.Data.hp : 100;
@@ -39,24 +44,32 @@ public class BossDie : MonoBehaviour
         if (isDead) return;
         isDead = true;
 
+        // 모든 기능 멈춤
         bossController?.SetState(null);
         bossController?.ReturnAllWarningPads();
+        if (bossController?.attackComp != null)
+            bossController.attackComp.enabled = false;
 
-        animator?.SetTrigger("isDie");
+        // Die 애니메이션 재생
+        if (animator != null)
+        {
+            animator.speed = dieAnimationSpeed;
+            animator.SetTrigger("isDie");
+        }
     }
 
     // Animation Event에서 호출
     public void OnDeathAnimationFinished()
     {
         DropItem();
-        bossController?.SetState(null);
-        bossController?.ReturnAllWarningPads();
 
-        // **여기서 보스 완전히 비활성화**
+        // 약간 지연 후 보스 비활성화
         gameObject.SetActive(false);
     }
 
-    private void DropItem()
+   
+
+    public void DropItem()
     {
         Debug.Log("보스 아이템 드랍");
     }
