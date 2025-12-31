@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class LevelUpManager : MonoBehaviour
 {
@@ -171,5 +172,23 @@ public class LevelUpManager : MonoBehaviour
         SkillManager.Instance.ReplaceSkill(baseSkill, evoSkill, 1);
 
         Debug.Log($"[LevelUpManager] {baseSkill.skillName} → {evoSkill.skillName} 진화 완료!");
+    }
+
+    public ItemData GetItemDataBySkillName(string searchName)
+    {
+        // 액티브 목록 검색
+        if (activeItems != null)
+        {
+            foreach (var item in activeItems)
+            {
+                // 이름이 영어 이름과 같은지 확인
+                if (item.skillData != null && item.skillData.skillName == searchName)
+                {
+                    return item; // 데이터 반환
+                }
+            }
+        }
+
+        return null; // 못 찾음
     }
 }
