@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 6978721933034729782}
   m_Layer: 20
   m_Name: Boss
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -218,9 +218,10 @@ MonoBehaviour:
   target: {fileID: 0}
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   rb: {fileID: 5072897593862626767}
   attackCooldown: 5
+  attackComp: {fileID: 0}
   attackRay: {fileID: 3180662328617837772}
   attackRange: {fileID: 3064891439488725057}
   FirePool: {fileID: 2203871407228725533}
@@ -250,6 +251,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcba5b1998e6c0a42872ac667afe7601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bossController: {fileID: 0}
+  dieAnimationSpeed: 1
+  fadeOutDelay: 0.3
 --- !u!114 &2073004488000325298
 MonoBehaviour:
   m_ObjectHideFlags: 0

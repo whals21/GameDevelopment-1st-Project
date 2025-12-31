@@ -5,11 +5,12 @@ public class LevelUpManager : MonoBehaviour
 {
     public static LevelUpManager Instance;
 
-    [Header("������ ����")]
+    [Header("스킬 아이템 데이터")]
     [SerializeField] private ItemData[] activeItems;
     [SerializeField] private ItemData[] passiveItems;
+    [SerializeField] private ItemData[] evoItems;  // 진화 스킬
 
-    [Header("UI ����")]
+    [Header("UI 설정")]
     [SerializeField] private GameObject levelUpPanel;
     [SerializeField] private ItemUI[] itemButtons;
 
@@ -54,10 +55,18 @@ public class LevelUpManager : MonoBehaviour
     {
         List<ItemData> validList = new List<ItemData>();
 
-        // ��Ƽ�� ��ų ��� �˻�
+        // 현재 장착된 액티브 스킬 개수 확인
+        int currentActiveSkillCount = 0;
+        const int MAX_ACTIVE_SKILLS = 6;
+        if (SkillManager.Instance != null)
+        {
+            currentActiveSkillCount = SkillManager.Instance.GetSkillCount();
+        }
+
+        // 액티브 스킬만 검색
         foreach (var item in activeItems)
         {
-            // �Ǽ��� �нú긦 �־��� ��츦 ����� ������ġ
+            // 아이템 타입이 액티브인 것만 추가
             if (item.itemType != ItemType.Active) continue;
             if (item.skillData == null) continue;
 
@@ -65,24 +74,37 @@ public class LevelUpManager : MonoBehaviour
             if (SkillManager.Instance != null)
                 currentLv = SkillManager.Instance.GetSkillLevel(item.skillData);
 
-            // ���� üũ
+            // 레벨 체크
             int maxLevel = item.skillData.levels.Length;
 
-            if (currentLv < maxLevel)
+            // 이미 장착된 스킬이거나 레벨업/진화 가능한 스킬만 추가
+            bool isAlreadyEquipped = currentLv > 0;
+            bool canLevelUp = currentLv < maxLevel;
+            bool canEvolve = EvolutionChecker.CanEvolve(item.skillData, currentLv);
+
+            if (isAlreadyEquipped || canLevelUp || canEvolve)
             {
-                validList.Add(item);
-            }
-            // 진화 가능한 스킬 (최대 레벨 달성 + 진화 조건 충족)_EvolutionChecker.CanEvolve 사용_1230 조민희수정
-            else if (EvolutionChecker.CanEvolve(item.skillData, currentLv))
-            {
+                // 슬롯이 가득 찼고 미장착 스킬이면 제외
+                if (!isAlreadyEquipped && currentActiveSkillCount >= MAX_ACTIVE_SKILLS)
+                {
+                    continue;
+                }
                 validList.Add(item);
             }
         }
 
-        // �нú� ��ų ��� �˻�
+        // 현재 장착된 패시브 스킬 개수 확인
+        int currentPassiveSkillCount = 0;
+        const int MAX_PASSIVE_SKILLS = 6;
+        if (PassiveSkillManager.Instance != null)
+        {
+            currentPassiveSkillCount = PassiveSkillManager.Instance.GetAllOwnedSkills().Count;
+        }
+
+        // 패시브 스킬만 검색
         foreach (var item in passiveItems)
         {
-            // �Ǽ��� ��Ƽ�긦 �־��� ��츦 ����� ������ġ
+            // 아이템 타입이 패시브인 것만 추가
             if (item.itemType != ItemType.Passive) continue;
 
             int currentLv = 0;
@@ -91,11 +113,20 @@ public class LevelUpManager : MonoBehaviour
                 currentLv = PassiveSkillManager.Instance.GetSkillLevel(item.passiveType);
             }
 
-            // ���� üũ
+            // 레벨 체크
             int maxLevel = (item.passiveAmounts != null) ? item.passiveAmounts.Length : 5;
 
-            if (currentLv < maxLevel)
+            // 이미 장착된 스킬이거나 레벨업 가능한 스킬만 추가
+            bool isAlreadyEquipped = currentLv > 0;
+            bool canLevelUp = currentLv < maxLevel;
+
+            if (isAlreadyEquipped || canLevelUp)
             {
+                // 슬롯이 가득 찼고 미장착 스킬이면 제외
+                if (!isAlreadyEquipped && currentPassiveSkillCount >= MAX_PASSIVE_SKILLS)
+                {
+                    continue;
+                }
                 validList.Add(item);
             }
         }
@@ -105,34 +136,21 @@ public class LevelUpManager : MonoBehaviour
 
     public void SelectItem(ItemData selectedItem)
     {
-        int currentLevel = 1; // 표시될 LV
-
-        // 액티브 선택 시
+        // ��Ƽ�� -> ��ų �Ŵ���
         if (selectedItem.itemType == ItemType.Active)
         {
             if (SkillManager.Instance != null)
             {
+                // UpgradeOrEquipSkill 사용_1230 조민희수정
                 SkillManager.Instance.UpgradeOrEquipSkill(selectedItem.skillData);
-                currentLevel = SkillManager.Instance.GetSkillLevel(selectedItem.skillData);
-            }
-
-            if (SkillHUD.Instance != null)
-            {
-                SkillHUD.Instance.UpdateSkillUI(selectedItem.itemName, selectedItem.itemIcon, currentLevel, 0);
             }
         }
-        // 패시브 선택 시
+        // �нú� -> �нú� �Ŵ���
         else
         {
             if (PassiveSkillManager.Instance != null)
             {
                 PassiveSkillManager.Instance.TryAcquireSkill(selectedItem.passiveType);
-                currentLevel = PassiveSkillManager.Instance.GetSkillLevel(selectedItem.passiveType);
-            }
-
-            if (SkillHUD.Instance != null)
-            {
-                SkillHUD.Instance.UpdateSkillUI(selectedItem.itemName, selectedItem.itemIcon, currentLevel, 1);
             }
         }
 

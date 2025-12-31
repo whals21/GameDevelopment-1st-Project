@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 162317878641941893}
   m_Layer: 20
   m_Name: Boss 2
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -215,9 +215,10 @@ MonoBehaviour:
   target: {fileID: 0}
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   rb: {fileID: 5072897593862626767}
   attackCooldown: 5
+  attackComp: {fileID: 0}
   attackRay: {fileID: 3180662328617837772}
   attackRange: {fileID: 3064891439488725057}
   FirePool: {fileID: 2203871407228725533}

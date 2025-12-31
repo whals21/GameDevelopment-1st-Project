@@ -27,6 +27,9 @@ public class PassiveSkillManager : MonoBehaviour
     // 캐싱된 스킬 데이터 (타입, 데이터)
     private Dictionary<PassiveSkillType, PassiveSkillData> skillDataCache = new Dictionary<PassiveSkillType, PassiveSkillData>();
 
+    // 최대 패시브 스킬 수
+    private const int MAX_PASSIVE_SKILLS = 6;
+
     // [성능 최적화] 컴포넌트 캐싱 - 매번 FindObjectOfType 호출 제거
     private PlayerStats _playerStats;
     private PlayerController _playerController;
@@ -84,6 +87,7 @@ public class PassiveSkillManager : MonoBehaviour
             return false;
         }
 
+        // 이미 보유한 스킬이면 레벨업 시도
         if (ownedPassiveSkills.ContainsKey(skillType))
         {
             if (ownedPassiveSkills[skillType] >= skillData.maxLevel)
@@ -96,8 +100,15 @@ public class PassiveSkillManager : MonoBehaviour
             ApplyAllPassiveEffects();
             return true;
         }
+        // 새로운 스킬 획득 시 최대 개수 체크
         else
         {
+            if (ownedPassiveSkills.Count >= MAX_PASSIVE_SKILLS)
+            {
+                Debug.LogWarning($"[PassiveSkillManager] 패시브 스킬 슬롯이 가득 찼습니다 (최대 {MAX_PASSIVE_SKILLS}개)");
+                return false;
+            }
+
             ownedPassiveSkills.Add(skillType, 1);
             OnSkillAcquired?.Invoke(skillData, 1);
             ApplyAllPassiveEffects();

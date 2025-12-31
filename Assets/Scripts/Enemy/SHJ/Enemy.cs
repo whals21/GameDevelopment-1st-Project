@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using static ActtackManager;
 
-
-public class Enemy : MonoBehaviour, IDamageable //12/31추가
+//IDamageable //12/31추가
+public class Enemy : MonoBehaviour, IDamageable
 {
     [Header("������ SO")]
     [SerializeField] private EnemyObject enemyData;

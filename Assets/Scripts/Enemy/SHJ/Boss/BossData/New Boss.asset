@@ -18,4 +18,4 @@ MonoBehaviour:
   detectionRange: 10
   appearTime: 30
   killCountToSpawn: 0
-  playerLV: 0
+  playerLV: 1

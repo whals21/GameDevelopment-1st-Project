@@ -38,12 +38,14 @@ public class GuardianSkill : SkillBase
     /// </summary>
     private void UpdateGuardians()
     {
-        // [v2] 파괴된 가디언 cleanup (null check)
+        // [v2] 파괴되거나 비활성화된 가디언 cleanup
         for (int i = _guardianObjects.Count - 1; i >= 0; i--)
         {
-            if (_guardianObjects[i] == null)
+            GameObject guardian = _guardianObjects[i];
+            // null이거나 비활성화된 가디언 제거
+            if (guardian == null || !guardian.activeInHierarchy)
             {
-                Debug.Log($"[GuardianSkill] Found null guardian at index {i}, removing from list");
+                Debug.Log($"[GuardianSkill] Found invalid guardian at index {i}, removing from list");
                 _guardianObjects.RemoveAt(i);
             }
         }
@@ -97,7 +99,7 @@ public class GuardianSkill : SkillBase
             float range = _data.attackRange * GetSizeMultiplier();
             float knockback = 5f; // 넉백력
             float speed = _data.hoverSpeed; // 회전 속도 (도/초)
-            int enemyLayerMask = LayerMask.GetMask("Enemy");
+            int enemyLayerMask = LayerMask.GetMask("Enemy", "Boss");
 
             guardianTop.Initialize(damage, knockback, range, speed, _playerTransform, enemyLayerMask);
         }
@@ -135,7 +137,7 @@ public class GuardianSkill : SkillBase
         float finalRange = _data.attackRange * GetSizeMultiplier();
         float knockback = 5f;
         float speed = _data.hoverSpeed;
-        int enemyLayerMask = LayerMask.GetMask("Enemy");
+        int enemyLayerMask = LayerMask.GetMask("Enemy", "Boss");
 
         // 여러 마리일 때 서로 겹치지 않게 각도 분배
         float angleStep = 360f / _guardianObjects.Count;
@@ -238,8 +240,8 @@ public class GuardianBehavior : MonoBehaviour
     {
         gameObject.SetActive(true);
 
-        // LayerMask 캐싱
-        _enemyLayerMask = LayerMask.GetMask("Enemy");
+        // LayerMask 캐싱 (Enemy + Boss)
+        _enemyLayerMask = LayerMask.GetMask("Enemy", "Boss");
     }
 
     private void Update()
@@ -266,51 +268,21 @@ public class GuardianBehavior : MonoBehaviour
     /// <summary>
     /// 가장 가까운 적 공격 (TargetingHelper 사용)
     /// </summary>
-    //private void AttackNearestEnemy()
-    //{
-    //    if (_range <= 0) return;
-
-    //    // TargetingHelper로 중복 제거
-    //    Enemy nearest = TargetingHelper.FindNearestEnemy(
-    //        transform.position,
-    //        _range,
-    //        _enemyLayerMask
-    //    );
-
-    //    if (nearest != null)
-    //    {
-    //        // 위임받은 데미지로 공격
-    //        nearest.TakeDamage(_damage);
-    //    }
-    //}//12/31
-    private void AttackNearestEnemy()//12/31
+    private void AttackNearestEnemy()
     {
         if (_range <= 0) return;
 
-        // Physics2D.OverlapCircleNonAlloc으로 반경 내 적 체크
-        Collider2D[] hits = new Collider2D[32];
-        int count = Physics2D.OverlapCircleNonAlloc(transform.position, _range, hits, _enemyLayerMask);
+        // TargetingHelper로 중복 제거
+        Enemy nearest = TargetingHelper.FindNearestEnemy(
+            transform.position,
+            _range,
+            _enemyLayerMask
+        );
 
-        IDamageable nearest = null;
-        float minDist = float.MaxValue;
-
-        for (int i = 0; i < count; i++)
+        if (nearest != null)
         {
             // 위임받은 데미지로 공격
             nearest.TakeDamage(_damage, null);  // GuardianBehavior는 SkillBase가 아니므로 null 전달
-            // // IDamageable 체크
-            // if (hits[i].TryGetComponent<IDamageable>(out var dmg) && dmg.CurrentHP > 0)
-            // {
-            //     float dist = Vector3.Distance(transform.position, ((MonoBehaviour)dmg).transform.position);
-            //     if (dist < minDist)
-            //     {
-            //         minDist = dist;
-            //         nearest = dmg;
-            //     }
-            // }
         }
-
-        // 가장 가까운 적에게 데미지 적용
-        nearest?.TakeDamage(_damage);
     }
 }

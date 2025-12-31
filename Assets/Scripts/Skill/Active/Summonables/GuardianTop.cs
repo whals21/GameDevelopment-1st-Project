@@ -159,25 +159,25 @@ public class GuardianTop : MonoBehaviour
             return;
         }
 
-        if (other.TryGetComponent<Enemy>(out var enemy))
+        if (other.TryGetComponent<IDamageable>(out var damageable))
         {
-            if (enemy.CurrentHP <= 0)
+            if (damageable.CurrentHP <= 0)
             {
                 Debug.Log($"[GuardianTop] 적 이미 사망 - 제외");
                 return;
             }
 
-            Debug.Log($"[GuardianTop] 적 타격 - HP: {enemy.CurrentHP} -> Damage: {_damage}");
+            Debug.Log($"[GuardianTop] 대상 타격 - HP: {damageable.CurrentHP} -> Damage: {_damage}");
 
             // 데미지 (적 내부 쿨타임에 의존)
             // 참고: GuardianSkill에서 이미 TakeDamage를 호출하므로 중복 제거 또는 별도 처리
-            enemy.TakeDamage(_damage, null);
+            damageable.TakeDamage(_damage, null);
 
-            // 넉백
-            if (enemy.TryGetComponent<Rigidbody2D>(out var enemyRb))
+            // 넉백 (Rigidbody2D가 있는 대상만)
+            if (other.TryGetComponent<Rigidbody2D>(out var targetRb))
             {
-                Vector2 knockbackDir = (enemy.transform.position - transform.position).normalized;
-                enemyRb.AddForce(knockbackDir * _knockbackForce, ForceMode2D.Impulse);
+                Vector2 knockbackDir = (other.transform.position - transform.position).normalized;
+                targetRb.AddForce(knockbackDir * _knockbackForce, ForceMode2D.Impulse);
             }
 
             // 3. 히트 이펙트 (풀링 사용 권장)

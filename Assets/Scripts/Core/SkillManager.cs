@@ -24,7 +24,7 @@ public class SkillManager : MonoBehaviour
     // 검색용 Dictionary (O(1) 빠른 조회)
     private Dictionary<SkillData, SkillBase> _skillLookup = new Dictionary<SkillData, SkillBase>();
 
-    private const int MAX_SKILLS = 5;
+    private const int MAX_SKILLS = 6;
     #endregion
 
     #region Unity Lifecycle

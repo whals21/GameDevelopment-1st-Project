@@ -62,8 +62,8 @@ public class AuraSkill : SkillBase
             _playerTransform = PlayerController.Instance.transform;
         }
 
-        // 레이어 마스크 캐싱
-        _enemyLayerMask = LayerMask.GetMask("Enemy","Boss");//12/31
+        // 레이어 마스크 캐싱 (Enemy + Boss)
+        _enemyLayerMask = LayerMask.GetMask("Enemy", "Boss");
 
         // 오라 시각 생성
         CreateAuraVisuals();
@@ -166,30 +166,6 @@ public class AuraSkill : SkillBase
     /// <summary>
     /// 오라 데미지 적용
     /// </summary>
-    //private void ApplyAuraDamage()
-    //{
-    //    if (_playerTransform == null) return;
-
-    //    Vector3 origin = _playerTransform.position;
-    //    float range = _data.attackRange * GetSizeMultiplier();
-    //    float damage = GetFinalDamage();
-
-    //    // 주변 적 탐지 (NonAlloc: 가비지 컬렉션 최소화)
-    //    int hitCount = Physics2D.OverlapCircleNonAlloc(origin, range, _hitBuffer, _enemyLayerMask);
-
-    //    for (int i = 0; i < hitCount; i++)
-    //    {
-    //        if (_hitBuffer[i] != null && _hitBuffer[i].TryGetComponent<Enemy>(out var enemy))
-    //        {
-    //            // 살아있는 적만 피격
-    //            if (enemy.CurrentHP > 0)
-    //            {
-    //                enemy.TakeDamage(damage);
-    //            }
-    //        }
-    //    }
-    //}
-
     private void ApplyAuraDamage()
     {
         if (_playerTransform == null) return;
@@ -198,15 +174,17 @@ public class AuraSkill : SkillBase
         float range = _data.attackRange * GetSizeMultiplier();
         float damage = GetFinalDamage();
 
+        // 주변 적 탐지 (NonAlloc: 가비지 컬렉션 최소화)
         int hitCount = Physics2D.OverlapCircleNonAlloc(origin, range, _hitBuffer, _enemyLayerMask);
 
         for (int i = 0; i < hitCount; i++)
         {
-            if (_hitBuffer[i] != null && _hitBuffer[i].TryGetComponent<IDamageable>(out var target))
+            if (_hitBuffer[i] != null && _hitBuffer[i].TryGetComponent<IDamageable>(out var damageable))
             {
-                if (target.CurrentHP > 0)
+                // 살아있는 대상만 피격
+                if (damageable.CurrentHP > 0)
                 {
-                    enemy.TakeDamage(damage, this);  // Aura 스킬도 통계 기록 (지속 데미지)
+                    damageable.TakeDamage(damage, this);  // Aura 스킬도 통계 기록 (지속 데미지)
                 }
             }
         }

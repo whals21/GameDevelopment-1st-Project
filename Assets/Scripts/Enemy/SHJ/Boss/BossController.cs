@@ -5,27 +5,27 @@ using static ActtackManager;
 
 // ==========================
 // BossController
-// - ·£´ı ÆĞÅÏ ¼±ÅÃ
-// - ÆĞÅÏº° ÃÑ¾Ë Ç® ¿¬µ¿
-// - ¹ßÆÇ Ç® °ü¸®
+// - ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+// - ï¿½ï¿½ï¿½Ïºï¿½ ï¿½Ñ¾ï¿½ Ç® ï¿½ï¿½ï¿½ï¿½
+// - ï¿½ï¿½ï¿½ï¿½ Ç® ï¿½ï¿½ï¿½ï¿½
 // ==========================
 public class BossController : MonoBehaviour,IDamageable
 {
-    private BossState currentState;                  // ÇöÀç »óÅÂ
-    [SerializeField] private int MonsterNumber;     // º¸½º ¹øÈ£
-    [SerializeField] private BossPattern bossPattern; // OS ÆĞÅÏ µ¥ÀÌÅÍ
-    private BossScriptsObject myData;               // º¸½º ±âº» µ¥ÀÌÅÍ
+    private BossState currentState;                  // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    [SerializeField] private int MonsterNumber;     // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£
+    [SerializeField] private BossPattern bossPattern; // OS ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    private BossScriptsObject myData;               // ï¿½ï¿½ï¿½ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public BossScriptsObject Data => myData;
 
-    public Transform target;                         // Å¸°Ù
+    public Transform target;                         // Å¸ï¿½ï¿½
     [SerializeField] private LayerMask playerLayer;
     public Rigidbody2D rb;
     public Rigidbody2D RB => rb;
     public Collider2D Col { get; private set; }
 
-    public int CurrentPatternIndex { get; private set; } // ÇöÀç ÆĞÅÏ ÀÎµ¦½º
+    public int CurrentPatternIndex { get; private set; } // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½
 
-    // ÇöÀç ÆĞÅÏ °ø°İ ¿É¼Ç, ÃÑ¾Ë, µ¥¹ÌÁö, ¹üÀ§ µî
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½É¼ï¿½, ï¿½Ñ¾ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     public BossAttackType CurrentBossAttackOption => bossPattern.BossAttackOption[CurrentPatternIndex];
     public GameObject CurrentBulletPrefab => bossPattern.bulletPrefab[CurrentPatternIndex];
     public int CurrentBulletCount => bossPattern.bulletCount[CurrentPatternIndex];
@@ -35,21 +35,21 @@ public class BossController : MonoBehaviour,IDamageable
     public float CurrentDamage => bossPattern.damage[CurrentPatternIndex];
     public float CurrentDamageMove => bossPattern.damageMove[CurrentPatternIndex];
 
-    // ¹ßÆÇ °ü·Ã
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public GameObject[] WarningPadPrefabs => bossPattern.warningPads;
     private BossFirePool[] firePools;
     public int[] WarningPadCounts => bossPattern.warningPadCount;
     private List<GameObject>[] padPools;
 
-    [Header("ÆĞÅÏ ÄğÅ¸ÀÓ")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½")]
     [SerializeField] private float attackCooldown = 5f;
     private float attackTimer = 0f;
 
-    public Transform PatternsRoot { get; private set; }   // ÇÏÀ§ ÆĞÅÏ ·çÆ®
-    public BossAttack attackComp;                         // °ø°İ ÄÄÆ÷³ÍÆ®
+    public Transform PatternsRoot { get; private set; }   // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®
+    public BossAttack attackComp;                         // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public BoosAttackRay attackRay;
     public BossRange attackRange;
-    public BossFirePool FirePool;                          // ÃÑ¾Ë Ç®
+    public BossFirePool FirePool;                          // ï¿½Ñ¾ï¿½ Ç®
     public BossDie bossDie;
 
 
@@ -59,7 +59,7 @@ public class BossController : MonoBehaviour,IDamageable
     public float MaxHP => myData.hp;
 
     // ==========================
-    // Awake: ÄÄÆ÷³ÍÆ® Ä³½Ì ¹× ÆĞÅÏ ·çÆ® »ı¼º
+    // Awake: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® Ä³ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
     // ==========================
     private void Awake()
     {
@@ -83,7 +83,7 @@ public class BossController : MonoBehaviour,IDamageable
     }
 
     // ==========================
-    // Start: ÃÊ±âÈ­
+    // Start: ï¿½Ê±ï¿½È­
     // ==========================
     private void Start()
     {
@@ -96,15 +96,15 @@ public class BossController : MonoBehaviour,IDamageable
 
         SetState(new BossMove(this));
 
-        InitializePadPool();       // ¹ßÆÇ Ç® ÃÊ±âÈ­
-        CreateAllPatternRoots();   // ÆĞÅÏ ·çÆ® »ı¼º
-        InitializeAllFirePools();           // FirePool ÃÊ±âÈ­
+        InitializePadPool();       // ï¿½ï¿½ï¿½ï¿½ Ç® ï¿½Ê±ï¿½È­
+        CreateAllPatternRoots();   // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+        InitializeAllFirePools();           // FirePool ï¿½Ê±ï¿½È­
         bossDie.Initialize();
         currentHP = myData.hp;
     }
 
     // ==========================
-    // Update: »óÅÂ ¾÷µ¥ÀÌÆ® ¹× ·£´ı °ø°İ
+    // Update: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     // ==========================
     private void Update()
     {
@@ -135,9 +135,9 @@ public class BossController : MonoBehaviour,IDamageable
     }
 
     // ==========================
-    // ÆĞÅÏ º¯°æ
-    // - CurrentPatternIndex º¯°æ
-    // - ÃÑ¾Ë Ç® ÃÊ±âÈ­
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // - CurrentPatternIndex ï¿½ï¿½ï¿½ï¿½
+    // - ï¿½Ñ¾ï¿½ Ç® ï¿½Ê±ï¿½È­
     // ==========================
     public void SetPattern(int index)
     {
@@ -146,14 +146,14 @@ public class BossController : MonoBehaviour,IDamageable
         GameObject prefab = CurrentBulletPrefab;
         int count = CurrentBulletCount;
 
-        // ÀÌ ÆĞÅÏÀº ÃÑ¾Ë ¾È ¾¸ ¡æ ¹«½Ã
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (prefab == null || count <= 0)
         {
-            Debug.Log($"[BossController] Pattern {index} ÃÑ¾Ë ¾øÀ½ ¡æ Ç® »ı¼º ¾ÈÇÔ");
+            Debug.Log($"[BossController] Pattern {index} ï¿½Ñ¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Ç® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
             return;
         }
 
-        // FirePool ¾øÀ¸¸é »ı¼º
+        // FirePool ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (FirePool == null)
         {
             GameObject obj = new GameObject("FirePool");
@@ -161,14 +161,14 @@ public class BossController : MonoBehaviour,IDamageable
             FirePool = obj.AddComponent<BossFirePool>();
         }
 
-        //  ÇÙ½É: ÆĞÅÏ ÀÎµ¦½º¿¡ ¸Â´Â °ªÀ¸·Î Ç® ÃÊ±âÈ­
+        //  ï¿½Ù½ï¿½: ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ç® ï¿½Ê±ï¿½È­
         FirePool.Initialize(prefab, count, this);
 
-        Debug.Log($"[BossController] Pattern {index} ÃÑ¾Ë Ç® ÁØºñ ¿Ï·á ({prefab.name} x {count})");
+        Debug.Log($"[BossController] Pattern {index} ï¿½Ñ¾ï¿½ Ç® ï¿½Øºï¿½ ï¿½Ï·ï¿½ ({prefab.name} x {count})");
     }
 
     // ==========================
-    // ¹ßÆÇ Ç® ÃÊ±âÈ­
+    // ï¿½ï¿½ï¿½ï¿½ Ç® ï¿½Ê±ï¿½È­
     // ==========================
     private void InitializePadPool()
     {
@@ -197,7 +197,7 @@ public class BossController : MonoBehaviour,IDamageable
     }
 
     // ==========================
-    // ¹ßÆÇ °¡Á®¿À±â/¹İÈ¯
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½È¯
     // ==========================
     public List<GameObject> GetWarningPads(int type, int count)
     {
@@ -206,7 +206,7 @@ public class BossController : MonoBehaviour,IDamageable
 
         if (type < 0 || type >= padPools.Length)
         {
-            Debug.LogWarning($"WarningPad type ¹üÀ§ ¿À·ù type={type}");
+            Debug.LogWarning($"WarningPad type ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ type={type}");
             return result;
         }
 
@@ -217,7 +217,7 @@ public class BossController : MonoBehaviour,IDamageable
 
         if (available < count)
         {
-            Debug.LogWarning($"WarningPad ºÎÁ· type={type} ¿äÃ»={count} ½ÇÁ¦={available}");
+            Debug.LogWarning($"WarningPad ï¿½ï¿½ï¿½ï¿½ type={type} ï¿½ï¿½Ã»={count} ï¿½ï¿½ï¿½ï¿½={available}");
             return result;
         }
 
@@ -254,14 +254,14 @@ public class BossController : MonoBehaviour,IDamageable
             obj.transform.SetParent(transform);
 
             BossFirePool pool = obj.AddComponent<BossFirePool>();
-            pool.Initialize(prefab, count, this); // ¿©±â¼­ BossController ³Ñ±è
+            pool.Initialize(prefab, count, this); // ï¿½ï¿½ï¿½â¼­ BossController ï¿½Ñ±ï¿½
 
             firePools[i] = pool;
         }
     }
 
     // ==========================
-    // ÇöÀç ÆĞÅÏ ÃÑ¾Ë ºÒ·Á¿À±â
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½
     // ==========================
     public GameObject GetCurrentPatternBullet()
     {
@@ -269,7 +269,7 @@ public class BossController : MonoBehaviour,IDamageable
 
         if (pool == null)
         {
-            Debug.LogWarning($"Pattern {CurrentPatternIndex} ÃÑ¾Ë Ç® ¾øÀ½");
+            Debug.LogWarning($"Pattern {CurrentPatternIndex} ï¿½Ñ¾ï¿½ Ç® ï¿½ï¿½ï¿½ï¿½");
             return null;
         }
 
@@ -277,7 +277,7 @@ public class BossController : MonoBehaviour,IDamageable
     }
 
     // ==========================
-    // ·£´ı °ø°İ ½ÇÇà
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     // ==========================
     private void TryStartRandomAttack()
     {
@@ -288,13 +288,13 @@ public class BossController : MonoBehaviour,IDamageable
         }
 
         int patternCount = bossPattern.BossAttackOption.Length;
-        SetPattern(Random.Range(0, patternCount)); // ÆĞÅÏ ¼±ÅÃ + FirePool ÃÊ±âÈ­
+        SetPattern(Random.Range(0, patternCount)); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ + FirePool ï¿½Ê±ï¿½È­
 
         attackComp.TryStartAttack(CurrentBossAttackOption);
     }
 
     // ==========================
-    // ÆĞÅÏ ·çÆ® »ı¼º
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
     // ==========================
     private void CreateAllPatternRoots()
     {
@@ -337,17 +337,17 @@ public class BossController : MonoBehaviour,IDamageable
         return pattern;
     }
 
-    //º¸½º µ¥¹ÌÁö ¿¬°á
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     private void InitializeComponents()
     {
-        // BossDie ¿¬°á
+        // BossDie ï¿½ï¿½ï¿½ï¿½
         bossDie = GetComponent<BossDie>();
         if (bossDie == null)
         {
             bossDie = gameObject.AddComponent<BossDie>();
         }
 
-        // ÆĞÅÏ ·çÆ® ¿¬°á
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         PatternsRoot = transform.Find("Patterns");
         if (PatternsRoot == null)
         {
@@ -360,25 +360,31 @@ public class BossController : MonoBehaviour,IDamageable
 
     public void SetTargetAutomatically()
     {
-        if (target != null) return; // ÀÌ¹Ì ¼³Á¤µÇ¾î ÀÖÀ¸¸é ¹«½Ã
+        if (target != null) return; // ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         if (PlayerStats.Instance != null)
         {
             target = PlayerStats.Instance.transform;
-            Debug.Log($"[{name}] Å¸°Ù ÀÚµ¿ ¼³Á¤ ¿Ï·á: {target.name}");
+            Debug.Log($"[{name}] Å¸ï¿½ï¿½ ï¿½Úµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½: {target.name}");
         }
         else
         {
-            Debug.LogWarning($"[{name}] PlayerStats.Instance°¡ Á¸ÀçÇÏÁö ¾Ê¾Æ Å¸°Ù ¼³Á¤ ½ÇÆĞ");
+            Debug.LogWarning($"[{name}] PlayerStats.Instanceï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         }
     }
 
-    public void TakeDamage(float damage, bool isCritical = false)
+    public void TakeDamage(float damage, SkillBase source = null, bool isCritical = false)
     {
         currentHP -= damage;
         currentHP = Mathf.Max(currentHP, 0f);
 
-        // µ¥¹ÌÁö ÅØ½ºÆ®
+        // [ì¡°ë¯¼í¬ ì¶”ê°€] ìŠ¤í‚¬ í†µê³„ ê¸°ë¡ (ì†ŒìŠ¤ê°€ ìˆì„ ë•Œë§Œ)
+        if (source != null && source.Data != null && StatisticsManager.Instance != null)
+        {
+            StatisticsManager.Instance.RecordDamage(source.Data.skillName, damage);
+        }
+
+        // ë°ë¯¸ì§€ í…ìŠ¤íŠ¸
         if (ObjectPoolManager.Instance != null)
         {
             DamageText text = ObjectPoolManager.Instance.GetDamageText();
@@ -388,7 +394,7 @@ public class BossController : MonoBehaviour,IDamageable
 
       
 
-        // Á×À½ Ã¼Å©
+        // ï¿½ï¿½ï¿½ï¿½ Ã¼Å©
         if (currentHP <= 0f)
         {
             if (bossDie != null)

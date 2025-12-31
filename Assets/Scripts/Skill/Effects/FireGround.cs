@@ -152,19 +152,19 @@ public class FireGround : MonoBehaviour
     /// </summary>
     private void DealDamage()
     {
-        // LayerMask가 설정되지 않았으면 자동 감지
+        // LayerMask가 설정되지 않았으면 자동 감지 (Enemy + Boss)
         if (_enemyLayerMask == 0)
         {
-            _enemyLayerMask = LayerMask.GetMask("Enemy");
+            _enemyLayerMask = LayerMask.GetMask("Enemy", "Boss");
         }
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, _radius, _enemyLayerMask);
 
         foreach (Collider2D enemyCol in hitEnemies)
         {
-            if (enemyCol.TryGetComponent<Enemy>(out Enemy enemy))
+            if (enemyCol.TryGetComponent<IDamageable>(out var damageable))
             {
-                enemy.TakeDamage(_damage, _source);  // source 전달로 통계 기록
+                damageable.TakeDamage(_damage, _source);  // source 전달로 통계 기록
             }
         }
     }

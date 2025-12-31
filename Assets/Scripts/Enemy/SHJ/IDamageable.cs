@@ -6,5 +6,7 @@ public interface IDamageable
 {
 
     float CurrentHP { get; }
-    public void TakeDamage(float damage, bool isCritical = false);
+    // source 파라미터 포함_조민희 01/01 추가
+    void TakeDamage(float damage, SkillBase source = null, bool isCritical = false);
+
 }
