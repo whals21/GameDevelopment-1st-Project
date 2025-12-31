@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour, IDamageable //12/31추가
     public Collider2D col { get; private set; }
 
     [SerializeField] public float AttackDelay;
-    public float Delay=> Data.attackDelay;
+    public float Delay => Data.attackDelay;
     [SerializeField] private float AttackRange;
     public float Range => Data.attackRange;
     public GameObject ProjectilePrefab => Data.projectilePrefab;
@@ -113,7 +113,7 @@ public class Enemy : MonoBehaviour, IDamageable //12/31추가
         FindPlayer();
 
         EnemyShooter shooter = GetComponent<EnemyShooter>();
-        
+
     }
     public void FindPlayer()
     {
@@ -136,8 +136,8 @@ public class Enemy : MonoBehaviour, IDamageable //12/31추가
             target = null;
         }
 
-       
-       
+
+
 
 
     }
@@ -149,16 +149,9 @@ public class Enemy : MonoBehaviour, IDamageable //12/31추가
         return distance <= Range;
     }
     // 데미지 받기
-    //TakeDamage에 SkillBase source 파라미터 추가 (통계 시스템 연동)_조민희
-    public void TakeDamage(float damage, SkillBase source = null,bool isCritical = false)
+    public void TakeDamage(float damage, bool isCritical = false)
     {
         currentHP -= damage;//12/31
-
-        // [조민희 추가] 스킬 통계 기록 (소스가 있을 때만)
-        if (source != null && source.Data != null && StatisticsManager.Instance != null)
-        {
-            StatisticsManager.Instance.RecordDamage(source.Data.skillName, damage);
-        }
 
         if (ObjectPoolManager.Instance != null)
         {

@@ -11,7 +11,7 @@ public class BossDie : MonoBehaviour
 
     [SerializeField] private float dieAnimationSpeed = 1f;
     [SerializeField] private float fadeOutDelay = 0.3f;
-
+    [SerializeField] private GameObject[] treasureChests;
     private void Awake()
     {
         bossController = GetComponent<BossController>();
@@ -67,10 +67,19 @@ public class BossDie : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-   
+
 
     public void DropItem()
     {
-        Debug.Log("보스 아이템 드랍");
+        if (treasureChests == null || treasureChests.Length == 0) return;
+
+        foreach (var chestPrefab in treasureChests)
+        {
+            if (chestPrefab != null)
+            {
+                // 보스 위치 기준 생성
+                Instantiate(chestPrefab, transform.position, Quaternion.identity);
+            }
+        }
     }
 }

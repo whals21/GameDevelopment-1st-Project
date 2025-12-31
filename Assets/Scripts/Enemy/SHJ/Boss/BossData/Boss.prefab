@@ -221,6 +221,7 @@ MonoBehaviour:
     m_Bits: 0
   rb: {fileID: 5072897593862626767}
   attackCooldown: 5
+  attackComp: {fileID: 0}
   attackRay: {fileID: 3180662328617837772}
   attackRange: {fileID: 3064891439488725057}
   FirePool: {fileID: 2203871407228725533}
@@ -250,6 +251,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcba5b1998e6c0a42872ac667afe7601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bossController: {fileID: 0}
+  dieAnimationSpeed: 1
+  fadeOutDelay: 0.3
+  treasureChests:
+  - {fileID: 8238552834587993004, guid: d04fe200f24b89d45b06f31c646c4ddc, type: 3}
 --- !u!114 &2073004488000325298
 MonoBehaviour:
   m_ObjectHideFlags: 0
