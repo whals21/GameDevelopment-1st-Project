@@ -2,14 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// v2 ObjectPoolManager - 통합 투사체 시스템
-///
-/// v2 아키텍처를 위한 오브젝트 풀링 관리자입니다.
-///
-/// 주요 특징:
-/// - 통합 Projectile 풀 (ProjectileMovementType으로 모든 동작 지원)
-/// - GuardianTop, Drone, LightningStrike, RPGExplosion, FireGround는 별도 풀 유지
-/// - 코드 중복 제거 (ValidateAndGetPool<T> 패턴)
+/// 모든 게임 오브젝트(적, 투사체, 이펙트, 아이템 등)의 오브젝트 풀을 통합 관리하는 매니저
 /// </summary>
 public class ObjectPoolManager : MonoBehaviour
 {
@@ -33,6 +26,7 @@ public class ObjectPoolManager : MonoBehaviour
     [Header("Effects")]
     public LightningStrike lightningPrefab;
     public FireGround fireGroundPrefab;
+    public ExplosionEffect explosionPrefab;
 
     [Header("Items & UI")]
     public ExpGem expGemPrefab;
@@ -48,6 +42,7 @@ public class ObjectPoolManager : MonoBehaviour
     public int dronePoolSize = 5;
     public int lightningPoolSize = 30;
     public int fireGroundPoolSize = 50;
+    public int explosionPoolSize = 30;
     public int expGemPoolSize = 200;
     public int damageTextPoolSize = 50;
     public int randomBoxPoolSize = 10;
@@ -68,6 +63,7 @@ public class ObjectPoolManager : MonoBehaviour
     // 이펙트 풀
     private ObjectPool<LightningStrike> _lightningPool;
     private ObjectPool<FireGround> _fireGroundPool;
+    private ObjectPool<ExplosionEffect> _explosionPool;
 
     // 아이템/UI 풀
     private ObjectPool<ExpGem> _expGemPool;
@@ -132,6 +128,9 @@ public class ObjectPoolManager : MonoBehaviour
         if (fireGroundPrefab != null)
             _fireGroundPool = new ObjectPool<FireGround>(fireGroundPrefab, fireGroundPoolSize, transform);
 
+        if (explosionPrefab != null)
+            _explosionPool = new ObjectPool<ExplosionEffect>(explosionPrefab, explosionPoolSize, transform);
+
         // 아이템/UI
         if (expGemPrefab != null)
             _expGemPool = new ObjectPool<ExpGem>(expGemPrefab, expGemPoolSize, transform);
@@ -147,7 +146,7 @@ public class ObjectPoolManager : MonoBehaviour
     #region Unified Projectile (v2)
     /// <summary>
     /// 통합 투사체 가져오기
-    /// ProjectileMovementType에 따라 모든 투사체 타입을 지원합니다.
+    /// ProjectileMovementType에 따라 모든 투사체 타입을 지원
     /// </summary>
     public Projectile GetProjectile()
     {
@@ -252,8 +251,27 @@ public class ObjectPoolManager : MonoBehaviour
     public void ReturnFireGround(FireGround fireGround)
     {
         if (fireGround == null) return;
-        // OnDisable에서 ResetForReuse() 자동 호출 (캡슐화 - 전문가 피드백)
+        // OnDisable에서 ResetForReuse() 자동 호출 (캡슐화)
         _fireGroundPool?.Return(fireGround);
+    }
+    #endregion
+
+    #region Explosion
+    public ExplosionEffect GetExplosion()
+    {
+        var explosion = ValidateAndGetPool(_explosionPool, "ExplosionEffect")?.Get();
+        if (explosion != null)
+        {
+            explosion.gameObject.SetActive(true);
+        }
+        return explosion;
+    }
+
+    public void ReturnExplosion(ExplosionEffect explosion)
+    {
+        if (explosion == null) return;
+        explosion.gameObject.SetActive(false);
+        _explosionPool?.Return(explosion);
     }
     #endregion
 

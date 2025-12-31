@@ -2,14 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// 스킬 매니저 (v2 리팩토링)
-/// 이전 SkillManager의 God Class 문제를 해결한 깔끔한 매니저입니다.
-/// 역할: 스킬 목록 관리, UpdateSkill() 호출만 담당.
-///
-/// 변경사항:
-/// - 싱글톤 패턴 사용 (플레이어가 1명이므로 SkillManager도 1개)
-/// - List + Dictionary 하이브리드 (순회 + 검색 최적화)
-/// - Factory 패턴 사용 (OCP 준수)
+/// 스킬 목록 관리, 스킬 장착/해제/레벨업, UpdateSkill() 호출을 담당하는 매니저
+/// List와 Dictionary 하이브리드로 순회와 검색을 최적화
 /// </summary>
 public class SkillManager : MonoBehaviour
 {
@@ -61,8 +55,8 @@ public class SkillManager : MonoBehaviour
 
     #region Public API - 스킬 장착/해제
     /// <summary>
-    /// 새로운 스킬을 장착합니다.
-    /// Factory를 통해 적절한 스킬 컴포넌트를 생성합니다.
+    /// 새로운 스킬을 장착
+    /// Factory를 통해 적절한 스킬 컴포넌트를 생성
     /// </summary>
     /// <param name="data">스킬 데이터</param>
     /// <param name="level">시작 레벨</param>
@@ -107,7 +101,7 @@ public class SkillManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 스킬을 제거합니다.
+    /// 스킬을 제거
     /// </summary>
     /// <param name="skill">제거할 스킬</param>
     public void RemoveSkill(SkillBase skill)
@@ -128,7 +122,7 @@ public class SkillManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 특정 스킬 데이터를 가진 스킬을 제거합니다 (O(1)).
+    /// 특정 스킬 데이터를 가진 스킬을 제거 (O(1)).
     /// </summary>
     /// <param name="data">제거할 스킬 데이터</param>
     public void RemoveSkill(SkillData data)
@@ -142,7 +136,7 @@ public class SkillManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 모든 스킬을 제거합니다.
+    /// 모든 스킬을 제거
     /// </summary>
     public void ClearAllSkills()
     {
@@ -157,7 +151,7 @@ public class SkillManager : MonoBehaviour
 
     #region Public API - 스킬 조회
     /// <summary>
-    /// 현재 장착된 스킬 개수를 반환합니다.
+    /// 현재 장착된 스킬 개수를 반환
     /// </summary>
     public int GetSkillCount()
     {
@@ -165,7 +159,7 @@ public class SkillManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 특정 스킬 데이터의 레벨을 반환합니다 (O(1)).
+    /// 특정 스킬 데이터의 레벨을 반환 (O(1)).
     /// </summary>
     /// <param name="data">스킬 데이터</param>
     /// <returns>레벨 (없으면 0)</returns>
@@ -182,7 +176,7 @@ public class SkillManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 특정 타입의 스킬이 장착되어 있는지 확인합니다.
+    /// 특정 타입의 스킬이 장착되어 있는지 확인
     /// </summary>
     /// <param name="skillType">스킬 타입</param>
     /// <returns>장착되어 있으면 true</returns>
@@ -199,7 +193,7 @@ public class SkillManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 모든 활성 스킬을 반환합니다.
+    /// 모든 활성 스킬을 반환
     /// </summary>
     public IReadOnlyList<SkillBase> GetAllSkills()
     {
@@ -209,7 +203,7 @@ public class SkillManager : MonoBehaviour
 
     #region Public API - 스킬 레벨업
     /// <summary>
-    /// 스킬을 레벨업하거나 새로 장착합니다 (O(1)).
+    /// 스킬을 레벨업하거나 새로 장착 (O(1)).
     /// </summary>
     /// <param name="skillData">레벨업/장착할 스킬 데이터</param>
     public void UpgradeOrEquipSkill(SkillData skillData)
@@ -232,7 +226,7 @@ public class SkillManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 스킬을 교체합니다 (진화 시 사용).
+    /// 스킬을 교체 (스킬진화 시 사용).
     /// </summary>
     /// <param name="oldSkill">제거할 기존 스킬</param>
     /// <param name="newSkill">장착할 새 스킬</param>

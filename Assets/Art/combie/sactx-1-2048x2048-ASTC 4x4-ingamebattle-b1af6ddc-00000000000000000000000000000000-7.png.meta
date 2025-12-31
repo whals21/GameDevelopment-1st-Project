@@ -3176,7 +3176,7 @@ TextureImporter:
         width: 712
         height: 186
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3184,6 +3184,48 @@ TextureImporter:
       bones: []
       spriteID: a70c71b567a16d946bcb463839daa136
       internalID: 136923465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_146
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 1875
+        width: 526
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e049e6dc87a5b148a54b7fb44a62977
+      internalID: -382325819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_147
+      rect:
+        serializedVersion: 2
+        x: 722
+        y: 1456
+        width: 947
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 068bb21ec30663042b02d63de5750de5
+      internalID: -960772776
       vertices: []
       indices: 
       edges: []
@@ -3252,6 +3294,8 @@ TextureImporter:
       sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_143: -810800103
       sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_144: -1422470699
       sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_145: 136923465
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_146: -382325819
+      sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_147: -960772776
       sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_15: -1491270428
       sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_16: -1999163618
       sactx-1-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-7_17: -230859144

@@ -1,13 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 스킬 데이터 컨테이너 (ScriptableObject)
-/// 모든 스킬의 스탯, 레벨 데이터, 진화 정보를 담습니다.
-///
-/// [v2 리팩토링]
-/// - 유산 코드(evoRequirements) 제거
-/// - OnValidate로 데이터 무결성 검사 추가
-/// - IsType() 헬퍼 메서드 추가
+/// 스킬 스탯, 레벨 데이터, 진화 정보를 담는 ScriptableObject
 /// </summary>
 [CreateAssetMenu(fileName = "New Skill", menuName = "Survivor/Skill Data")]
 public class SkillData : ScriptableObject
@@ -123,7 +117,7 @@ public class SkillData : ScriptableObject
 
     #region Helper Methods
     /// <summary>
-    /// 현재 스킬이 특정 타입이 유효한지 확인합니다.
+    /// 현재 스킬이 특정 타입이 유효한지 확인
     /// </summary>
     public bool IsType(SkillType type)
     {

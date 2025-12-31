@@ -173,7 +173,7 @@ TextureImporter:
         width: 156
         height: 152
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -181,6 +181,48 @@ TextureImporter:
       bones: []
       spriteID: 704a308df1e52604aaaf4f4f40c81e3c
       internalID: 1148415682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_3
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 533
+        width: 159
+        height: 137
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3209c87bb0247774487d5312a822cb60
+      internalID: 2054163698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_4
+      rect:
+        serializedVersion: 2
+        x: 1888
+        y: 871
+        width: 152
+        height: 138
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0a7a251e9d00ea4c8de87e5f189003c
+      internalID: 805938559
       vertices: []
       indices: 
       edges: []
@@ -199,6 +241,8 @@ TextureImporter:
       InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_0: 7738121176900807749
       InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_1: -1938636905
       InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_2: 1148415682
+      InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_3: 2054163698
+      InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_4: 805938559
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

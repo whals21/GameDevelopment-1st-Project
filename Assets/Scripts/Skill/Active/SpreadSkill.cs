@@ -1,22 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 분산 스킬 - 다중 방향 투사체 발사
-/// 데이터 주도 설계로 다양한 분산 패턴을 지원합니다.
-///
-/// 지원하는 스킬 유형 (데이터로 설정):
-/// - 단일 타겟팅: 가장 가까운 적에게 1발 발사
-/// - 다중 발사: 360도 분산으로 여러 발 발사 (예: Tri-Laser, SpiralShot)
-/// - 공전 투사체: 플레이어 주변을 공전하며 공격 (예: MagneticDart)
-///
-/// 성능 최적화:
-/// - PlayerController.Instance로 빠른 플레이어 참조
-/// - Physics2D.OverlapCircleNonAlloc로 반경 내 적만 탐색
-///
-/// 설계 원칙:
-/// - 문자열 분기 제거 (하드코딩 없음)
-/// - 데이터 주도 설계 (모든 특성은 SkillData로 설정)
-/// - 코드 중복 제거 (통합된 발사 메서드)
+/// 단일 타겟팅, 360도 다중 발사, 공전 투사체 등 다양한 분산 패턴을 지원하는 투사체 스킬
 /// </summary>
 [SkillType(SkillType.Spread)]
 public class SpreadSkill : SkillBase
@@ -46,7 +31,7 @@ public class SpreadSkill : SkillBase
     #region Core Loop
     /// <summary>
     /// 분산 스킬 실행
-    /// 데이터에 정의된 발사 패턴에 따라 투사체를 발사합니다.
+    /// 데이터에 정의된 발사 패턴에 따라 투사체를 발사
     /// </summary>
     protected override void Execute()
     {
@@ -82,8 +67,8 @@ public class SpreadSkill : SkillBase
     }
 
     /// <summary>
-    /// 가장 가까운 적의 방향을 찾습니다.
-    /// 타겟이 없으면 기본 방향(우측)을 반환합니다.
+    /// 가장 가까운 적의 방향을 탐색
+    /// 타겟이 없으면 기본 방향(우측)을 반환
     /// </summary>
     private Vector3 FindNearestEnemyDirection(Vector3 origin)
     {
@@ -120,7 +105,7 @@ public class SpreadSkill : SkillBase
     }
 
     /// <summary>
-    /// 투사체를 생성합니다. (통합 메서드 - 코드 중복 제거)
+    /// 투사체를 생성 (통합 메서드 - 코드 중복 제거)
     /// </summary>
     /// <param name="direction">발사 방향</param>
     /// <param name="orbitIndex">공전 인덱스 (-1이면 공전 안 함, 0+이면 공전 모드)</param>

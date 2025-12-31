@@ -1,8 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 투사체 이동 방식
-/// v1의 각기 다른 투사체 클래스들을 통합하기 위한 열거형
+/// 투사체 이동 방식을 정의하는 열거형
 /// </summary>
 public enum ProjectileMovementType
 {

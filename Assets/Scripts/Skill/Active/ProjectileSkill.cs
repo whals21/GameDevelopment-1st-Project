@@ -2,13 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// 투사체 스킬 구현
-/// 적을 타겟팅하고 투사체를 발사합니다.
-///
-/// 성능 최적화:
-/// - Physics.OverlapSphere로 반경 내 적만 탐색
-/// - LayerMask로 불필요한 콜라이더 필터링
-/// - PlayerController.Instance로 빠른 플레이어 참조
+/// 적을 타겟팅하여 투사체를 발사하는 스킬
+/// 레벨에 따라 투사체 수와 크기가 증가
 /// </summary>
 public class ProjectileSkill : SkillBase
 {
@@ -56,14 +51,28 @@ public class ProjectileSkill : SkillBase
         // 가장 가까운 적 찾기
         Transform target = FindNearestEnemy();
 
+        // 기본 방향 결정: 타겟이 있으면 타겟 방향, 없으면 플레이어 좌우 랜덤
+        Vector3 baseDirection;
+        if (target != null)
+        {
+            // 타겟 방향
+            baseDirection = (target.position - transform.position).normalized;
+        }
+        else
+        {
+            // 플레이어 좌우 랜덤 각도 (-45도 ~ +45도)
+            float randomAngle = Random.Range(-45f, 45f);
+            baseDirection = Quaternion.Euler(0, 0, randomAngle) * Vector3.right;
+        }
+
         // 투사체 발사
         int projectileCount = GetProjectileCount();
 
         for (int i = 0; i < projectileCount; i++)
         {
-            // 각 투사체마다 개별적으로 랜덤한 수평 방향 생성 (-60도 ~ +60도)
-            Vector3 randomDirection = GetRandomHorizontalDirection(60f);
-            SpawnProjectile(randomDirection);
+            // 기본 방향을 중심으로 확산각 적용
+            Vector3 fireDirection = CalculateSpreadDirection(baseDirection, i, projectileCount, _data.defaultSpreadAngle);
+            SpawnProjectile(fireDirection);
         }
     }
 
@@ -115,7 +124,7 @@ public class ProjectileSkill : SkillBase
         }
 
         // 데이터에서 이동 방식 가져와서 투사체 초기화
-        projectile.Setup(direction, damage, speed, _data.movementType);
+        projectile.Setup(direction, damage, speed, _data.movementType, this);  // 통계 기록용 source 전달
 
         // 시각 효과 설정 (v2) - SkillData에서 스프라이트, 색상, 크기 적용
         Debug.Log($"[ProjectileSkill] {_data.skillName} - sprite: {_data.projectileSprite?.name ?? "null"}, color: {_data.projectileColor}, scale: {_data.projectileScale * visualScale}");
@@ -129,8 +138,8 @@ public class ProjectileSkill : SkillBase
     #region Targeting
 
     /// <summary>
-    /// OverlapSphere를 활용한 근처 적 캐싱 (핵심 최적화)
-    /// 플레이어 주변 반경 내의 적만 검색하여 성능을 최적화합니다.
+    /// OverlapSphere를 활용한 근처 적 캐싱 
+    /// 플레이어 주변 반경 내의 적만 검색하여 성능을 최적화
     /// </summary>
     //private void UpdateEnemyCache()//12/31수정
     //{
@@ -216,7 +225,7 @@ public class ProjectileSkill : SkillBase
     #region Utility
     /// <summary>
     /// 투사체 확산 방향 계산
-    /// 매개변수로 확산각을 받아 기획자가 데이터로 조정 가능하게 합니다.
+    /// 매개변수로 확산각을 받아 기획자가 데이터로 조정 가능하게 한다.
     /// </summary>
     private Vector3 CalculateSpreadDirection(Vector3 baseDirection, int index, int totalCount, float spreadAngle)
     {
@@ -231,7 +240,7 @@ public class ProjectileSkill : SkillBase
 
     /// <summary>
     /// 랜덤한 수평 방향 반환
-    /// 매개변수로 받은 각도 범위 내에서 랜덤한 방향을 반환합니다.
+    /// 매개변수로 받은 각도 범위 내에서 랜덤한 방향을 반환한다.
     /// </summary>
     /// <param name="angleRange">각도 범위 (예: 60f이면 -30도 ~ +30도)</param>
     private Vector3 GetRandomHorizontalDirection(float angleRange = 60f)

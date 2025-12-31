@@ -1,8 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 스킬 타입 열거형
-/// 각 타입은 다른 동작 방식을 가집니다
+/// 스킬 동작 방식을 정의하는 열거형
 /// </summary>
 public enum SkillType
 {

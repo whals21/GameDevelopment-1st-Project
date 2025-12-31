@@ -1,15 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// v2 Drone - 리팩토링 버전
-///
-/// 전문가 피드백 반영:
-/// 1. Update/FixedUpdate 통합 (지터 방지)
-/// 2. 공격 로직 추가 (TargetingHelper + ObjectPool)
-/// 3. 공전 효과 복원 (이전 DroneBehavior)
-/// 4. Kinematic 모드 (GuardianTop과 통일)
-///
-/// 본질: "플레이어 주변을 공전하며 적에게 미사일 발사"
+/// 플레이어 주변을 공전하며 가장 가까운 적에게 투사체를 발사하는 드론
 /// </summary>
 public class Drone : MonoBehaviour
 {
@@ -64,7 +56,7 @@ public class Drone : MonoBehaviour
     }
 
     /// <summary>
-    /// 비활성화 시 자동 리셋 (캡슐화 - 전문가 피드백)
+    /// 비활성화 시 자동 리셋 (캡슐화)
     /// ObjectPool.Return()에서 SetActive(false) 호출 시 자동으로 실행됨
     /// </summary>
     private void OnDisable()

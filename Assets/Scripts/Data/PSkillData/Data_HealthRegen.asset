@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 1
   itemName: "\uCC44\uB825 \uC7AC\uC0DD"
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 21300000, guid: 72f7620c69bd61042b7a6c6f5e4306f4, type: 3}
   itemDesc: 
   skillData: {fileID: 0}
   passiveType: 5

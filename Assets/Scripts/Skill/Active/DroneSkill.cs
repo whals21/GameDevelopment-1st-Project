@@ -2,19 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// 드론 스킬 구현
-/// 자율적으로 적을 찾아 공격하는 드론을 소환합니다.
-/// 레벨에 따라 소환되는 드론의 수가 증가합니다.
-///
-/// 성능 최적화:
-/// - PlayerController.Instance로 빠른 플레이어 참조
-/// - 로컬 좌표계 사용으로 불필요한 연산 제거
-/// - Physics2D.OverlapCircleNonAlloc로 반경 내 적만 탐색
-///
-/// 확장성:
-/// - 레벨에 따른 다중 소환 지원
-/// - 데이터 위임 패턴 (계산은 부모, 행동은 자식)
-/// - 데이터 주도 설계 (호버링 파라미터 ScriptableObject화)
+/// 플레이어 주변을 공전하며 적을 공격하는 드론을 소환하고 관리하는 스킬
 /// </summary>
 public class DroneSkill : SkillBase
 {
@@ -45,7 +33,7 @@ public class DroneSkill : SkillBase
     }
 
     /// <summary>
-    /// 드론 소환수를 관리하고 스탯을 업데이트합니다.
+    /// 드론 소환수를 관리하고 스탯을 업데이트
     /// </summary>
     private void UpdateDrones()
     {
@@ -68,8 +56,8 @@ public class DroneSkill : SkillBase
     }
 
     /// <summary>
-    /// 레벨에 따른 목표 드론 수를 반환합니다.
-    /// 뱀서류 게임 패턴: 레벨업 시 소환수 증가
+    /// 레벨에 따른 목표 드론 수를 반환
+    /// 레벨업 시 드론 수 증가
     /// </summary>
     private int GetTargetDroneCount()
     {
@@ -99,14 +87,14 @@ public class DroneSkill : SkillBase
             float projectileSpeed = _data.projectileSpeed;
             int enemyLayerMask = LayerMask.GetMask("Enemy");
 
-            drone.Initialize(_playerTransform, damage, cooldown, radius, speed, projectileSpeed, enemyLayerMask, _data);
+            drone.Initialize(_playerTransform, damage, cooldown, radius, speed, projectileSpeed, enemyLayerMask, _data, _currentLevel);
         }
 
         _droneObjects.Add(droneObj);
     }
 
     /// <summary>
-    /// 가장 최근에 생성된 드론을 제거합니다.
+    /// 가장 최근에 생성된 드론을 제거
     /// </summary>
     private void RemoveDrone()
     {
@@ -124,7 +112,7 @@ public class DroneSkill : SkillBase
     }
 
     /// <summary>
-    /// 모든 드론의 스탯을 업데이트합니다.
+    /// 모든 드론의 스탯을 업데이트
     /// Drone 컴포넌트를 사용하여 스탯 업데이트
     /// </summary>
     private void UpdateAllDroneStats()
@@ -137,8 +125,8 @@ public class DroneSkill : SkillBase
             if (_droneObjects[i] != null &&
                 _droneObjects[i].TryGetComponent<Drone>(out var drone))
             {
-                // Drone 스탯 업데이트
-                drone.UpdateStats(finalDamage, finalCooldown, _data.hoverSpeed);
+                // Drone 스탯 업데이트 (레벨 포함)
+                drone.UpdateStats(finalDamage, finalCooldown, _data.hoverSpeed, _currentLevel);
             }
         }
     }
@@ -176,7 +164,7 @@ public class DroneSkill : SkillBase
 
 /// <summary>
 /// 드론 동작 컴포넌트
-/// 드론이 플레이어 주변을 호버링하며 적을 공격합니다.
+/// 드론이 플레이어 주변을 호버링하며 적을 공격
 ///
 /// 설계 원칙:
 /// - 플레이어의 자식으로 생성되므로 PlayerController 참조 불필요
@@ -202,8 +190,8 @@ public class DroneBehavior : MonoBehaviour
 
 
     /// <summary>
-    /// 스탯을 설정합니다.
-    /// DroneSkill에서 계산된 값을 받습니다.
+    /// 스탯을 설정
+    /// DroneSkill에서 계산된 값을 받아 사용
     /// </summary>
     public void SetStats(float damage, float cooldown, SkillData data)
     {
@@ -213,8 +201,8 @@ public class DroneBehavior : MonoBehaviour
     }
 
     /// <summary>
-    /// 초기 각도 오프셋을 설정합니다.
-    /// 여러 마리가 서로 겹치지 않게 배치하기 위함입니다.
+    /// 초기 각도 오프셋을 설정
+    /// 여러 마리가 서로 겹치지 않게 배치
     /// </summary>
     public void SetOffsetAngle(float offset)
     {

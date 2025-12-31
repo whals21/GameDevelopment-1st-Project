@@ -2,18 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// 가디언 스킬 구현
-/// 플레이어 주변을 회전하며 적을 공격하는 가디언을 소환합니다.
-/// 레벨에 따라 소환되는 가디언의 수가 증가합니다.
-///
-/// 성능 최적화:
-/// - PlayerController.Instance로 빠른 플레이어 참조
-/// - 로컬 좌표계 사용으로 불필요한 연산 제거
-/// - Physics2D.OverlapCircleNonAlloc로 반경 내 적만 탐색
-///
-/// 확장성:
-/// - 레벨에 따른 다중 소환 지원
-/// - 데이터 위임 패턴 (계산은 부모, 행동은 자식)
+/// 플레이어 주변을 회전하며 적을 공격하는 가디언을 소환하는 스킬
+/// 레벨에 따라 소환되는 가디언의 수가 증가
 /// </summary>
 public class GuardianSkill : SkillBase
 {
@@ -44,7 +34,7 @@ public class GuardianSkill : SkillBase
     }
 
     /// <summary>
-    /// 가디언 소환수를 관리하고 스탯을 업데이트합니다.
+    /// 가디언 소환수를 관리하고 스탯을 업데이트
     /// </summary>
     private void UpdateGuardians()
     {
@@ -80,7 +70,7 @@ public class GuardianSkill : SkillBase
     }
 
     /// <summary>
-    /// 레벨에 따른 목표 가디언 수를 반환합니다.
+    /// 레벨에 따른 목표 가디언 수를 반환
     /// 레벨에 정비례하게 가디언 수 증가 (최대 5레벨)
     /// </summary>
     private int GetTargetGuardianCount()
@@ -90,7 +80,7 @@ public class GuardianSkill : SkillBase
     }
 
     /// <summary>
-    /// 단일 가디언을 생성합니다.
+    /// 단일 가디언을 생성
     /// </summary>
     private void CreateSingleGuardian()
     {
@@ -116,7 +106,7 @@ public class GuardianSkill : SkillBase
     }
 
     /// <summary>
-    /// 가장 최근에 생성된 가디언을 제거합니다.
+    /// 가장 최근에 생성된 가디언을 제거
     /// </summary>
     private void RemoveGuardian()
     {
@@ -136,7 +126,7 @@ public class GuardianSkill : SkillBase
     }
 
     /// <summary>
-    /// 모든 가디언의 스탯을 업데이트합니다.
+    /// 모든 가디언의 스탯을 업데이트
     /// GuardianTop 컴포넌트를 사용하여 스탯 업데이트
     /// </summary>
     private void UpdateAllGuardianStats()
@@ -197,7 +187,7 @@ public class GuardianSkill : SkillBase
 
 /// <summary>
 /// 가디언 동작 컴포넌트
-/// 가디언 오브젝트에 붙어서 회전 및 공격을 담당합니다.
+/// 가디언 오브젝트에 붙어서 회전 및 공격을 담당
 ///
 /// 설계 원칙:
 /// - 플레이어의 자식으로 생성되므로 PlayerController 참조 불필요
@@ -225,7 +215,7 @@ public class GuardianBehavior : MonoBehaviour
 
     /// <summary>
     /// 스탯을 설정합니다.
-    /// GuardianSkill에서 계산된 값을 받습니다.
+    /// GuardianSkill에서 계산된 값을 받아 사용한다
     /// </summary>
     public void SetStats(float damage, float range, float cooldown)
     {
@@ -235,8 +225,8 @@ public class GuardianBehavior : MonoBehaviour
     }
 
     /// <summary>
-    /// 초기 각도 오프셋을 설정합니다.
-    /// 여러 마리가 서로 겹치지 않게 배치하기 위함입니다.
+    /// 초기 각도 오프셋을 설정
+    /// 여러 마리가 서로 겹치지 않게 배치
     /// </summary>
     public void SetOffsetAngle(float offset)
     {
@@ -276,49 +266,21 @@ public class GuardianBehavior : MonoBehaviour
     /// <summary>
     /// 가장 가까운 적 공격 (TargetingHelper 사용)
     /// </summary>
-    //private void AttackNearestEnemy()
-    //{
-    //    if (_range <= 0) return;
-
-    //    // TargetingHelper로 중복 제거
-    //    Enemy nearest = TargetingHelper.FindNearestEnemy(
-    //        transform.position,
-    //        _range,
-    //        _enemyLayerMask
-    //    );
-
-    //    if (nearest != null)
-    //    {
-    //        // 위임받은 데미지로 공격
-    //        nearest.TakeDamage(_damage);
-    //    }
-    //}//12/31
-    private void AttackNearestEnemy()//12/31
+    private void AttackNearestEnemy()
     {
         if (_range <= 0) return;
 
-        // Physics2D.OverlapCircleNonAlloc으로 반경 내 적 체크
-        Collider2D[] hits = new Collider2D[32];
-        int count = Physics2D.OverlapCircleNonAlloc(transform.position, _range, hits, _enemyLayerMask);
+        // TargetingHelper로 중복 제거
+        Enemy nearest = TargetingHelper.FindNearestEnemy(
+            transform.position,
+            _range,
+            _enemyLayerMask
+        );
 
-        IDamageable nearest = null;
-        float minDist = float.MaxValue;
-
-        for (int i = 0; i < count; i++)
+        if (nearest != null)
         {
-            // IDamageable 체크
-            if (hits[i].TryGetComponent<IDamageable>(out var dmg) && dmg.CurrentHP > 0)
-            {
-                float dist = Vector3.Distance(transform.position, ((MonoBehaviour)dmg).transform.position);
-                if (dist < minDist)
-                {
-                    minDist = dist;
-                    nearest = dmg;
-                }
-            }
+            // 위임받은 데미지로 공격
+            nearest.TakeDamage(_damage, null);  // GuardianBehavior는 SkillBase가 아니므로 null 전달
         }
-
-        // 가장 가까운 적에게 데미지 적용
-        nearest?.TakeDamage(_damage);
     }
 }

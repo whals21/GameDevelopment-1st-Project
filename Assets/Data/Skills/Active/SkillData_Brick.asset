@@ -59,7 +59,7 @@ MonoBehaviour:
     additionalProjectiles: 0
     projectileSpeedMultiplier: 1
     projectileSizeMultiplier: 1
-    projectileScaleIncrease: 1.1
+    projectileScaleIncrease: 0
     upgradeDescription: 
   - level: 3
     damageMultiplier: 1.7
@@ -75,7 +75,7 @@ MonoBehaviour:
     additionalProjectiles: 1
     projectileSpeedMultiplier: 1
     projectileSizeMultiplier: 1
-    projectileScaleIncrease: 1.4
+    projectileScaleIncrease: 0
     upgradeDescription: 
   - level: 5
     damageMultiplier: 2.8
@@ -83,7 +83,7 @@ MonoBehaviour:
     additionalProjectiles: 2
     projectileSpeedMultiplier: 1
     projectileSizeMultiplier: 1
-    projectileScaleIncrease: 1.6
+    projectileScaleIncrease: 0
     upgradeDescription: 
   evoSkill: {fileID: 11400000, guid: 20571e6f019a7284194cc28d92d639c8, type: 2}
   evoRequiredLevel: 5

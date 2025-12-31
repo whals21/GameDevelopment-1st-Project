@@ -2,15 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// v2 ObjectPool - 제네릭 오브젝트 풀
-///
-/// 전문가 피드백:
-/// - 간결하고 완벽한 구조
-/// - MonoBehaviour를 상속받지 않아 가벼움 (순수 C# 클래스)
-/// - Queue를 사용한 선입선출(FIFO) 로직은 풀링의 표준
-/// - Get()에서 풀이 비면 바로 생성하는 로직은 메모리 할당 최소화 + 유연성 제공
-///
-/// 역할: "데이터 구조"만 담당, 비즈니스 로직은 각 클래스에 위임
+/// MonoBehaviour 오브젝트를 위한 제네릭 오브젝트 풀 (풀에서 가져오기, 반환, 크기 관리)
 /// </summary>
 /// <typeparam name="T">MonoBehaviour를 상속받은 타입</typeparam>
 public class ObjectPool<T> where T : MonoBehaviour

@@ -2,20 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// RPG 스킬 구현
-/// 가장 가까운 적에게 유도 로켓을 발사합니다.
-/// 레벨에 따라 한 번에 발사하는 로켓 수가 증가합니다.
-///
-/// 성능 최적화:
-/// - TargetingHelper로 타겟팅 로직 재사용 (코드 중복 제거)
-/// - PlayerController.Instance로 빠른 플레이어 참조
-/// - LayerMask 캐싱으로 불필요한 콜라이더 필터링
-/// - 적 캐싱으로 불필요한 탐색 최소화
-///
-/// 확장성:
-/// - 레벨에 따른 로켓 수 증가
-/// - 데이터 주도 설계 (rapidFireInterval, defaultSpreadAngle 등)
-/// - 수학적 단순화 (균등 분할 공식)
+/// 가장 가까운 적에게 유도 로켓을 발사하는 스킬. 레벨에 따라 발사 수 증가
 /// </summary>
 public class RPGSkill : SkillBase
 {
@@ -54,7 +41,7 @@ public class RPGSkill : SkillBase
 
     /// <summary>
     /// RPG 스킬 발동
-    /// 현재 타겟에게 로켓을 발사합니다.
+    /// 현재 타겟에게 로켓을 발사한다.
     /// </summary>
     protected override void Execute()
     {
@@ -110,7 +97,7 @@ public class RPGSkill : SkillBase
         Vector3 targetPos = _currentTarget.transform.position;
         Vector3 direction = (targetPos - _playerTransform.position).normalized;
 
-        // 통합된 각도 계산 공식 (수학적 단순화)
+        // 통합된 각도 계산 
         if (totalCount > 1)
         {
             float totalSpread = _data.defaultSpreadAngle;
@@ -135,7 +122,7 @@ public class RPGSkill : SkillBase
     #region Targeting
     /// <summary>
     /// 타겟 업데이트 (TargetingHelper 사용)
-    /// 일정 주기로 가장 가까운 적을 찾습니다.
+    /// 일정 주기로 가장 가까운 적을 탐색
     /// </summary>
     private void UpdateTarget()
     {
@@ -159,7 +146,7 @@ public class RPGSkill : SkillBase
 
     #region Stats Calculation
     /// <summary>
-    /// 다중 발사체 각도 오프셋을 계산합니다.
+    /// 다중 발사체 각도 오프셋을 계산
     /// 수학적 단순화: 모든 개수를 하나의 공식으로 처리
     ///
     /// 공식: (인덱스 / (전체-1) - 0.5) * 전체각도
@@ -173,7 +160,7 @@ public class RPGSkill : SkillBase
     }
 
     /// <summary>
-    /// 레벨에 따른 로켓 수를 반환합니다.
+    /// 레벨에 따른 로켓 수를 반환
     /// </summary>
     private int GetRocketCount()
     {
@@ -183,7 +170,7 @@ public class RPGSkill : SkillBase
     }
 
     /// <summary>
-    /// 투사체 속도를 반환합니다.
+    /// 투사체 속도를 반환
     /// </summary>
     private float GetProjectileSpeed()
     {
@@ -194,7 +181,7 @@ public class RPGSkill : SkillBase
     }
 
     /// <summary>
-    /// 레벨별 추가 투사체 수를 가져옵니다.
+    /// 레벨별 추가 투사체 수를 가져온다.
     /// </summary>
     private int GetAdditionalProjectiles()
     {

@@ -2,12 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// 적 타겟팅을 위한 정적 헬퍼 클래스
-/// 모든 스킬에서 재사용 가능한 타겟팅 로직을 제공합니다.
-///
-/// DRY Principle: 타겟팅 로직 중복 제거
-/// Performance: SqrMagnitude 사용, 정적 버퍼로 GC 최소화
-/// Safety: float.MaxValue로 초기 최솟값 설정
+/// 적 타겟팅 로직 중복 제거를 위한 정적 헬퍼 클래스 (가장 가까운 적 찾기, 반경 내 모든 적 찾기)
 /// </summary>
 public static class TargetingHelper
 {
@@ -15,8 +10,8 @@ public static class TargetingHelper
     private static Collider2D[] _buffer = new Collider2D[BUFFER_SIZE];
 
     /// <summary>
-    /// 반경 내의 가장 가까운 적을 찾습니다.
-    /// SqrMagnitude를 사용하여 루트 연산을 제거합니다.
+    /// 반경 내의 가장 가까운 적을 탐색
+    /// SqrMagnitude를 사용하여 루트 연산을 제거해 성능 최적화
     /// </summary>
     /// <param name="origin">탐색 원점</param>
     /// <param name="radius">탐색 반경</param>
@@ -48,8 +43,8 @@ public static class TargetingHelper
     }
 
     /// <summary>
-    /// 반경 내의 모든 적을 찾습니다.
-    /// In-place 패턴으로 메모리 할당을 최소화합니다.
+    /// 반경 내의 모든 적을 탐색
+    /// In-place 패턴으로 메모리 할당을 최소화
     /// </summary>
     /// <param name="origin">탐색 원점</param>
     /// <param name="radius">탐색 반경</param>

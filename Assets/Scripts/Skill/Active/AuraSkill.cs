@@ -1,17 +1,8 @@
 using UnityEngine;
 
 /// <summary>
-/// 오라 스킬 (v2 리팩토링 - 코드리뷰 반영)
-///
-/// v2 변경사항:
-/// - UpdateSkill 오버라이드로 연속 실행 구현 (플레이어 추적, 지속 데미지)
-/// - new Material 제거, 공용 Material 사용 (GC 방지)
-/// - 색상/두께 데이터 주도화
-///
-/// 특징:
-/// - 유일하게 "지속적인(Continuous)" 속성을 가지는 스킬
-/// - 쿨타임과 상관없이 매 프레임 실행되어 플레이어를 추적
-/// - Forcefield 팔각형 시각 효과 (내부 + 외부 이중 오라 Lv3+)
+/// 플레이어 주변에 지속되는 오라를 생성하여 범위 내 적에게 주기적 데미지를 입히는 스킬
+/// 레벨 3 이상부터 외부 오라가 추가됨
 /// </summary>
 [SkillType(SkillType.Aura)]
 public class AuraSkill : SkillBase
@@ -72,7 +63,7 @@ public class AuraSkill : SkillBase
         }
 
         // 레이어 마스크 캐싱
-        _enemyLayerMask = LayerMask.GetMask("Enemy","Boss");//12/31
+        _enemyLayerMask = LayerMask.GetMask("Enemy");
 
         // 오라 시각 생성
         CreateAuraVisuals();
@@ -88,9 +79,9 @@ public class AuraSkill : SkillBase
 
     #region Core Loop
     /// <summary>
-    /// 오라 업데이트 루프 (v2: 지속시간 시스템 추가)
-    /// Aura는 지속 효과이므로 매 프레임 업데이트를 수행합니다.
-    /// activeDuration 동안 활성화된 후, 쿨타임을 기다리고 다시 활성화됩니다.
+    /// 오라 업데이트 루프 
+    /// Aura는 지속 효과이므로 매 프레임 업데이트를 수행
+    /// activeDuration 동안 활성화된 후, 쿨타임을 기다리고 다시 활성화
     /// </summary>
     public override void UpdateSkill()
     {
@@ -175,30 +166,6 @@ public class AuraSkill : SkillBase
     /// <summary>
     /// 오라 데미지 적용
     /// </summary>
-    //private void ApplyAuraDamage()
-    //{
-    //    if (_playerTransform == null) return;
-
-    //    Vector3 origin = _playerTransform.position;
-    //    float range = _data.attackRange * GetSizeMultiplier();
-    //    float damage = GetFinalDamage();
-
-    //    // 주변 적 탐지 (NonAlloc: 가비지 컬렉션 최소화)
-    //    int hitCount = Physics2D.OverlapCircleNonAlloc(origin, range, _hitBuffer, _enemyLayerMask);
-
-    //    for (int i = 0; i < hitCount; i++)
-    //    {
-    //        if (_hitBuffer[i] != null && _hitBuffer[i].TryGetComponent<Enemy>(out var enemy))
-    //        {
-    //            // 살아있는 적만 피격
-    //            if (enemy.CurrentHP > 0)
-    //            {
-    //                enemy.TakeDamage(damage);
-    //            }
-    //        }
-    //    }
-    //}
-
     private void ApplyAuraDamage()
     {
         if (_playerTransform == null) return;
@@ -207,15 +174,17 @@ public class AuraSkill : SkillBase
         float range = _data.attackRange * GetSizeMultiplier();
         float damage = GetFinalDamage();
 
+        // 주변 적 탐지 (NonAlloc: 가비지 컬렉션 최소화)
         int hitCount = Physics2D.OverlapCircleNonAlloc(origin, range, _hitBuffer, _enemyLayerMask);
 
         for (int i = 0; i < hitCount; i++)
         {
-            if (_hitBuffer[i] != null && _hitBuffer[i].TryGetComponent<IDamageable>(out var target))
+            if (_hitBuffer[i] != null && _hitBuffer[i].TryGetComponent<Enemy>(out var enemy))
             {
-                if (target.CurrentHP > 0)
+                // 살아있는 적만 피격
+                if (enemy.CurrentHP > 0)
                 {
-                    target.TakeDamage(damage);
+                    enemy.TakeDamage(damage, this);  // Aura 스킬도 통계 기록 (지속 데미지)
                 }
             }
         }

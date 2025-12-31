@@ -4,17 +4,17 @@ using UnityEngine;
 using static ActtackManager;
 
 
-public class Enemy : MonoBehaviour, IDamageable //12/31추가
+public class Enemy : MonoBehaviour
 {
     [Header("������ SO")]
     [SerializeField] private EnemyObject enemyData;
     public EnemyObject Data => enemyData;
 
-    public Transform Transform => transform;
+
     public int MaxHP => Data.EnemyHP;
     [Header("ü��")]
-    [SerializeField] private float currentHP;//12/31
-    public float CurrentHP => currentHP;
+    [SerializeField] private int currentHP;
+    public int CurrentHP => currentHP;
 
     [Header("�̵�")]
     [SerializeField] private float moveSpeed;
@@ -149,9 +149,16 @@ public class Enemy : MonoBehaviour, IDamageable //12/31추가
         return distance <= Range;
     }
     // 데미지 받기
-    public void TakeDamage(float damage, bool isCritical = false)   
+    //TakeDamage에 SkillBase source 파라미터 추가 (통계 시스템 연동)_조민희
+    public void TakeDamage(float damage, SkillBase source = null,bool isCritical = false)
     {
-        currentHP -= damage;//12/31
+        currentHP -= (int)damage;
+
+        // [조민희 추가] 스킬 통계 기록 (소스가 있을 때만)
+        if (source != null && source.Data != null && StatisticsManager.Instance != null)
+        {
+            StatisticsManager.Instance.RecordDamage(source.Data.skillName, damage);
+        }
 
         if (ObjectPoolManager.Instance != null)
         {
@@ -196,6 +203,12 @@ public class Enemy : MonoBehaviour, IDamageable //12/31추가
                 gem.transform.position = transform.position;
             }
         }
+
+
+
+       
+      
+
 
 
         // 경험치 드롭 (나중에 구현)

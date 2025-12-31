@@ -4,13 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>
-/// 패시브 스킬 관리 시스템 (v2 리팩토링 - 최종 버전)
-///
-/// v2 변경사항:
-/// - 덮어쓰기 버그 수정: 보너스 변수 누적 후 한 번에 적용
-/// - 컴포넌트 캐싱으로 성능 최적화
-/// - Invoke/Reflection 제거, 직접 호출 방식
-/// - 유동적인 maxLevel 지원
+/// 패시브 스킬 획득, 레벨 관리, 플레이어 스탯 보너스 적용 시스템
 /// </summary>
 public class PassiveSkillManager : MonoBehaviour
 {

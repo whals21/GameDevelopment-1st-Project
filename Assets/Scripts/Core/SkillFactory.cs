@@ -3,9 +3,7 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// 스킬 생성 전담 팩토리 클래스
-/// SkillType에 따라 적절한 스킬 컴포넌트를 생성합니다.
-/// OCP 준수: 새 스킬 타입 추가 시 이곳에만 등록하면 됩니다.
+/// SkillType에 따라 적절한 스킬 컴포넌트를 생성하는 팩토리 클래스
 /// </summary>
 public static class SkillFactory
 {
@@ -14,7 +12,7 @@ public static class SkillFactory
 
     /// <summary>
     /// 스킬 타입 매핑 테이블 초기화
-    /// 새 스킬 타입 추가 시 여기에 등록하세요.
+    /// 새 스킬 타입 추가 시 여기에 등록
     /// </summary>
     static SkillFactory()
     {
@@ -33,7 +31,7 @@ public static class SkillFactory
 
     #region Public API
     /// <summary>
-    /// 새로운 스킬 인스턴스를 생성합니다.
+    /// 새로운 스킬 인스턴스를 생성
     /// </summary>
     /// <param name="owner">스킬이 부착될 게임 오브젝트</param>
     /// <param name="data">스킬 데이터</param>
@@ -71,8 +69,8 @@ public static class SkillFactory
     }
 
     /// <summary>
-    /// 런타임에 새로운 스킬 타입을 등록합니다.
-    /// 모드/플러그인 확장용입니다.
+    /// 런타임에 새로운 스킬 타입을 등록
+    /// 모드/플러그인 확장용
     /// </summary>
     /// <param name="skillType">스킬 타입</param>
     /// <param name="componentType">스킬 컴포넌트 타입 (SkillBase를 상속받아야 함)</param>
@@ -97,7 +95,7 @@ public static class SkillFactory
     }
 
     /// <summary>
-    /// 현재 등록된 모든 스킬 타입을 반환합니다.
+    /// 현재 등록된 모든 스킬 타입을 반환
     /// </summary>
     public static IReadOnlyDictionary<SkillType, Type> GetAllRegisteredTypes()
     {
