@@ -117,7 +117,7 @@ public class SkillData : ScriptableObject
 
     #region Helper Methods
     /// <summary>
-    /// 현재 스킬이 특정 타입이 유효한지 확인합니다.
+    /// 현재 스킬이 특정 타입이 유효한지 확인
     /// </summary>
     public bool IsType(SkillType type)
     {

@@ -79,9 +79,9 @@ public class AuraSkill : SkillBase
 
     #region Core Loop
     /// <summary>
-    /// 오라 업데이트 루프 (v2: 지속시간 시스템 추가)
-    /// Aura는 지속 효과이므로 매 프레임 업데이트를 수행합니다.
-    /// activeDuration 동안 활성화된 후, 쿨타임을 기다리고 다시 활성화됩니다.
+    /// 오라 업데이트 루프 
+    /// Aura는 지속 효과이므로 매 프레임 업데이트를 수행
+    /// activeDuration 동안 활성화된 후, 쿨타임을 기다리고 다시 활성화
     /// </summary>
     public override void UpdateSkill()
     {

@@ -11,8 +11,8 @@ public static class EvolutionChecker
     #region Public API
 
     /// <summary>
-    /// 현재 장착된 스킬 중 진화 가능한 스킬 목록을 반환합니다.
-    /// 데이터 주도 설계로 모든 진화를 자동으로 탐지합니다.
+    /// 현재 장착된 스킬 중 진화 가능한 스킬 목록을 반환
+    /// 데이터 주도 설계로 모든 진화를 자동으로 탐지
     /// </summary>
     /// <returns>진화 가능한 스킬 목록</returns>
     public static List<EvolutionOption> GetAvailableEvolutions()
@@ -59,7 +59,7 @@ public static class EvolutionChecker
     }
 
     /// <summary>
-    /// 특정 스킬이 진화 가능한지 확인합니다.
+    /// 특정 스킬이 진화 가능한지 확인
     /// </summary>
     /// <param name="skillData">확인할 스킬 데이터</param>
     /// <param name="currentLevel">현재 레벨</param>
@@ -83,7 +83,7 @@ public static class EvolutionChecker
     }
 
     /// <summary>
-    /// 진화를 실행합니다.
+    /// 진화를 실행
     /// </summary>
     /// <param name="fromSkillInstance">현재 장착된 스킬 인스턴스</param>
     /// <returns>성공 여부</returns>
@@ -125,8 +125,8 @@ public static class EvolutionChecker
     #region Private Methods - 조건 확인
 
     /// <summary>
-    /// 진화에 필요한 레벨을 반환합니다.
-    /// SkillData.evoRequiredLevel을 사용하며, 0이면 기본값 5를 반환합니다.
+    /// 진화에 필요한 레벨을 반환
+    /// SkillData.evoRequiredLevel을 사용하며, 0이면 기본값 5를 반환
     /// </summary>
     private static int GetRequiredLevel(SkillData skillData)
     {
@@ -138,8 +138,8 @@ public static class EvolutionChecker
     }
 
     /// <summary>
-    /// 필요한 패시브 스킬을 보유하고 있는지 확인합니다.
-    /// v2: SkillData.evoRequiredPassives(PassiveSkillType[])를 직접 사용합니다.
+    /// 필요한 패시브 스킬을 보유하고 있는지 확인
+    /// v2: SkillData.evoRequiredPassives(PassiveSkillType[])를 직접 사용
     /// </summary>
     private static bool HasRequiredPassives(SkillData skillData)
     {
@@ -165,8 +165,7 @@ public static class EvolutionChecker
     }
 
     /// <summary>
-    /// 커스텀 진화 조건을 확인합니다.
-    /// 추후 확장 가능: 특정 아이템 보유, 특정 스킬 조합 등.
+    /// 커스텀 진화 조건을 확인
     /// </summary>
     private static bool MeetsCustomRequirements(SkillData skillData)
     {
@@ -177,7 +176,7 @@ public static class EvolutionChecker
     }
 
     /// <summary>
-    /// 진화 설명 텍스트를 생성합니다.
+    /// 진화 설명 텍스트를 생성
     /// </summary>
     private static string BuildEvolutionDescription(SkillData from, SkillData to)
     {
@@ -211,7 +210,7 @@ public static class EvolutionChecker
 
 /// <summary>
 /// 진화 가능한 스킬 옵션 정보
-/// UI에서 진화 선택지를 표시할 때 사용합니다.
+/// UI에서 진화 선택지를 표시할 때 사용
 /// </summary>
 [System.Serializable]
 public class EvolutionOption

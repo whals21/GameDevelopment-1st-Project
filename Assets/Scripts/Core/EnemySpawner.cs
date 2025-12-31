@@ -108,8 +108,8 @@ public class EnemySpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// 장애물을 피하는 안전한 스폰 위치를 찾습니다.
-    /// 최대 10번 시도하여 장애물이 없는 위치를 반환합니다.
+    /// 장애물을 피하는 안전한 스폰 위치를 탐색
+    /// 최대 10번 시도하여 장애물이 없는 위치를 반환
     /// </summary>
     private Vector2 GetSafeSpawnPosition()
     {

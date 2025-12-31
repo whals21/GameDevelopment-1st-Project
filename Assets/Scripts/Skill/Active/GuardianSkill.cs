@@ -34,7 +34,7 @@ public class GuardianSkill : SkillBase
     }
 
     /// <summary>
-    /// 가디언 소환수를 관리하고 스탯을 업데이트합니다.
+    /// 가디언 소환수를 관리하고 스탯을 업데이트
     /// </summary>
     private void UpdateGuardians()
     {
@@ -70,7 +70,7 @@ public class GuardianSkill : SkillBase
     }
 
     /// <summary>
-    /// 레벨에 따른 목표 가디언 수를 반환합니다.
+    /// 레벨에 따른 목표 가디언 수를 반환
     /// 레벨에 정비례하게 가디언 수 증가 (최대 5레벨)
     /// </summary>
     private int GetTargetGuardianCount()
@@ -80,7 +80,7 @@ public class GuardianSkill : SkillBase
     }
 
     /// <summary>
-    /// 단일 가디언을 생성합니다.
+    /// 단일 가디언을 생성
     /// </summary>
     private void CreateSingleGuardian()
     {
@@ -106,7 +106,7 @@ public class GuardianSkill : SkillBase
     }
 
     /// <summary>
-    /// 가장 최근에 생성된 가디언을 제거합니다.
+    /// 가장 최근에 생성된 가디언을 제거
     /// </summary>
     private void RemoveGuardian()
     {
@@ -126,7 +126,7 @@ public class GuardianSkill : SkillBase
     }
 
     /// <summary>
-    /// 모든 가디언의 스탯을 업데이트합니다.
+    /// 모든 가디언의 스탯을 업데이트
     /// GuardianTop 컴포넌트를 사용하여 스탯 업데이트
     /// </summary>
     private void UpdateAllGuardianStats()
@@ -187,7 +187,7 @@ public class GuardianSkill : SkillBase
 
 /// <summary>
 /// 가디언 동작 컴포넌트
-/// 가디언 오브젝트에 붙어서 회전 및 공격을 담당합니다.
+/// 가디언 오브젝트에 붙어서 회전 및 공격을 담당
 ///
 /// 설계 원칙:
 /// - 플레이어의 자식으로 생성되므로 PlayerController 참조 불필요
@@ -215,7 +215,7 @@ public class GuardianBehavior : MonoBehaviour
 
     /// <summary>
     /// 스탯을 설정합니다.
-    /// GuardianSkill에서 계산된 값을 받습니다.
+    /// GuardianSkill에서 계산된 값을 받아 사용한다
     /// </summary>
     public void SetStats(float damage, float range, float cooldown)
     {
@@ -225,8 +225,8 @@ public class GuardianBehavior : MonoBehaviour
     }
 
     /// <summary>
-    /// 초기 각도 오프셋을 설정합니다.
-    /// 여러 마리가 서로 겹치지 않게 배치하기 위함입니다.
+    /// 초기 각도 오프셋을 설정
+    /// 여러 마리가 서로 겹치지 않게 배치
     /// </summary>
     public void SetOffsetAngle(float offset)
     {

@@ -46,7 +46,7 @@ public class LightningSkill : SkillBase
 
     /// <summary>
     /// 번개 스킬 발동
-    /// 레벨에 따라 여러 적에게 번개를 떨어뜨립니다.
+    /// 레벨에 따라 여러 적에게 번개 발사
     /// </summary>
     protected override void Execute()
     {
@@ -70,7 +70,7 @@ public class LightningSkill : SkillBase
 
     /// <summary>
     /// 번개 생성 시퀀스
-    /// 여러 번개를 순차적으로 발사합니다.
+    /// 여러 번개를 순차적으로 발사
     /// </summary>
     private IEnumerator SpawnLightningSequence(List<Enemy> targets)
     {
@@ -131,7 +131,7 @@ public class LightningSkill : SkillBase
     #region Enemy Targeting
     /// <summary>
     /// 적 캐시 업데이트 (TargetingHelper 사용)
-    /// 일정 주기로 플레이어 주변 적만 탐색합니다.
+    /// 일정 주기로 플레이어 주변 적만 탐색
     /// </summary>
     private void UpdateEnemyCache()
     {
@@ -152,8 +152,8 @@ public class LightningSkill : SkillBase
     }
 
     /// <summary>
-    /// 적 리스트에서 무작위로 N명 선택합니다.
-    /// In-place sampling으로 GC 할당을 최소화합니다.
+    /// 적 리스트에서 무작위로 N명 선택
+    /// In-place sampling으로 GC 할당을 최소화
     /// </summary>
     private List<Enemy> GetRandomTargets(List<Enemy> enemies, int count)
     {
@@ -183,7 +183,7 @@ public class LightningSkill : SkillBase
 
     #region Stats Calculation
     /// <summary>
-    /// 레벨에 따른 번개 수를 반환합니다.
+    /// 레벨에 따른 번개 수를 반환
     /// 기본값 + 레벨별 추가 개수
     /// </summary>
     private int GetLightningCount()
@@ -194,7 +194,7 @@ public class LightningSkill : SkillBase
     }
 
     /// <summary>
-    /// 레벨별 추가 투사체 수를 가져옵니다.
+    /// 레벨별 추가 투사체 수를 가져온다.
     /// </summary>
     private int GetAdditionalProjectiles()
     {

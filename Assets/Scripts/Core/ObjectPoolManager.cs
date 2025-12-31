@@ -146,7 +146,7 @@ public class ObjectPoolManager : MonoBehaviour
     #region Unified Projectile (v2)
     /// <summary>
     /// 통합 투사체 가져오기
-    /// ProjectileMovementType에 따라 모든 투사체 타입을 지원합니다.
+    /// ProjectileMovementType에 따라 모든 투사체 타입을 지원
     /// </summary>
     public Projectile GetProjectile()
     {
@@ -251,7 +251,7 @@ public class ObjectPoolManager : MonoBehaviour
     public void ReturnFireGround(FireGround fireGround)
     {
         if (fireGround == null) return;
-        // OnDisable에서 ResetForReuse() 자동 호출 (캡슐화 - 전문가 피드백)
+        // OnDisable에서 ResetForReuse() 자동 호출 (캡슐화)
         _fireGroundPool?.Return(fireGround);
     }
     #endregion

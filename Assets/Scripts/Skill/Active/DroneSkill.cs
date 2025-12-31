@@ -33,7 +33,7 @@ public class DroneSkill : SkillBase
     }
 
     /// <summary>
-    /// 드론 소환수를 관리하고 스탯을 업데이트합니다.
+    /// 드론 소환수를 관리하고 스탯을 업데이트
     /// </summary>
     private void UpdateDrones()
     {
@@ -56,8 +56,8 @@ public class DroneSkill : SkillBase
     }
 
     /// <summary>
-    /// 레벨에 따른 목표 드론 수를 반환합니다.
-    /// 뱀서류 게임 패턴: 레벨업 시 소환수 증가
+    /// 레벨에 따른 목표 드론 수를 반환
+    /// 레벨업 시 드론 수 증가
     /// </summary>
     private int GetTargetDroneCount()
     {
@@ -94,7 +94,7 @@ public class DroneSkill : SkillBase
     }
 
     /// <summary>
-    /// 가장 최근에 생성된 드론을 제거합니다.
+    /// 가장 최근에 생성된 드론을 제거
     /// </summary>
     private void RemoveDrone()
     {
@@ -112,7 +112,7 @@ public class DroneSkill : SkillBase
     }
 
     /// <summary>
-    /// 모든 드론의 스탯을 업데이트합니다.
+    /// 모든 드론의 스탯을 업데이트
     /// Drone 컴포넌트를 사용하여 스탯 업데이트
     /// </summary>
     private void UpdateAllDroneStats()
@@ -161,7 +161,7 @@ public class DroneSkill : SkillBase
 
 /// <summary>
 /// 드론 동작 컴포넌트
-/// 드론이 플레이어 주변을 호버링하며 적을 공격합니다.
+/// 드론이 플레이어 주변을 호버링하며 적을 공격
 ///
 /// 설계 원칙:
 /// - 플레이어의 자식으로 생성되므로 PlayerController 참조 불필요
@@ -185,8 +185,8 @@ public class DroneBehavior : MonoBehaviour
     private int _enemyLayerMask;
 
     /// <summary>
-    /// 스탯을 설정합니다.
-    /// DroneSkill에서 계산된 값을 받습니다.
+    /// 스탯을 설정
+    /// DroneSkill에서 계산된 값을 받아 사용
     /// </summary>
     public void SetStats(float damage, float cooldown, SkillData data)
     {
@@ -196,8 +196,8 @@ public class DroneBehavior : MonoBehaviour
     }
 
     /// <summary>
-    /// 초기 각도 오프셋을 설정합니다.
-    /// 여러 마리가 서로 겹치지 않게 배치하기 위함입니다.
+    /// 초기 각도 오프셋을 설정
+    /// 여러 마리가 서로 겹치지 않게 배치
     /// </summary>
     public void SetOffsetAngle(float offset)
     {

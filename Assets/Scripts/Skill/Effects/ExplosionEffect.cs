@@ -62,7 +62,7 @@ public class ExplosionEffect : MonoBehaviour
 
     /// <summary>
     /// 비활성화 시 자동 리셋
-    /// ObjectPool.Return()에서 SetActive(false) 호출 시 자동으로 실행됨
+    /// ObjectPool.Return()에서 SetActive(false) 호출 시 자동으로 실행
     /// </summary>
     private void OnDisable()
     {

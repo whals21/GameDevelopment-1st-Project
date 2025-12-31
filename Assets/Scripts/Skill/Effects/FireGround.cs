@@ -61,7 +61,7 @@ public class FireGround : MonoBehaviour
     }
 
     /// <summary>
-    /// 비활성화 시 자동 리셋 (캡슐화 - 전문가 피드백)
+    /// 비활성화 시 자동 리셋 (캡슐화)
     /// ObjectPool.Return()에서 SetActive(false) 호출 시 자동으로 실행됨
     /// </summary>
     private void OnDisable()

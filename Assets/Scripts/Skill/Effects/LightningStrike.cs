@@ -68,7 +68,7 @@ public class LightningStrike : MonoBehaviour
 
     /// <summary>
     /// 비활성화 시 자동 리셋 (캡슐화 - 전문가 피드백)
-    /// ObjectPool.Return()에서 SetActive(false) 호출 시 자동으로 실행됨
+    /// ObjectPool.Return()에서 SetActive(false) 호출 시 자동으로 실행
     /// </summary>
     private void OnDisable()
     {
@@ -78,7 +78,7 @@ public class LightningStrike : MonoBehaviour
 
     #region Public Methods
     /// <summary>
-    /// 위치 설정 (전문가 피드백: 데미지 제거, 위치만 전달)
+    /// 위치 설정 
     /// </summary>
     public void SetPosition(Vector3 position)
     {

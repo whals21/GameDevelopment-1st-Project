@@ -10,8 +10,8 @@ public static class TargetingHelper
     private static Collider2D[] _buffer = new Collider2D[BUFFER_SIZE];
 
     /// <summary>
-    /// 반경 내의 가장 가까운 적을 찾습니다.
-    /// SqrMagnitude를 사용하여 루트 연산을 제거합니다.
+    /// 반경 내의 가장 가까운 적을 탐색
+    /// SqrMagnitude를 사용하여 루트 연산을 제거해 성능 최적화
     /// </summary>
     /// <param name="origin">탐색 원점</param>
     /// <param name="radius">탐색 반경</param>
@@ -43,8 +43,8 @@ public static class TargetingHelper
     }
 
     /// <summary>
-    /// 반경 내의 모든 적을 찾습니다.
-    /// In-place 패턴으로 메모리 할당을 최소화합니다.
+    /// 반경 내의 모든 적을 탐색
+    /// In-place 패턴으로 메모리 할당을 최소화
     /// </summary>
     /// <param name="origin">탐색 원점</param>
     /// <param name="radius">탐색 반경</param>

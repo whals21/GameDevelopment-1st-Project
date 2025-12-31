@@ -15,7 +15,7 @@ public abstract class SkillBase : MonoBehaviour
     #region Cached Stats (상태 캐싱)
     /// <summary>
     /// 계산된 스탯을 캐싱해두는 필드들
-    /// 레벨 변경 시 한 번만 재계산되어 성능을 최적화합니다.
+    /// 레벨 변경 시 한 번만 재계산되어 성능을 최적화
     /// </summary>
     private float _cachedDamage;
     private float _cachedCooldown;
@@ -30,7 +30,7 @@ public abstract class SkillBase : MonoBehaviour
 
     /// <summary>
     /// 스킬 데이터 (읽기 전용)
-    /// 원칙: SkillData는 런타임에 변경되지 않습니다.
+    /// 원칙: SkillData는 런타임에 변경되지 않음.
     /// </summary>
     public SkillData Data => _data;
 
@@ -67,8 +67,8 @@ public abstract class SkillBase : MonoBehaviour
 
     #region Core Loop
     /// <summary>
-    /// 매니저가 매 프레임 호출합니다.
-    /// 쿨다운을 관리하고, 시점이 되면 Execute()를 호출합니다.
+    /// 매니저가 매 프레임 호출
+    /// 쿨다운을 관리하고, 시점이 되면 Execute()를 호출
     /// </summary>
     public virtual void UpdateSkill()
     {
@@ -116,7 +116,7 @@ public abstract class SkillBase : MonoBehaviour
 
     /// <summary>
     /// 실제 스킬 효과 발동
-    /// 각 스킬마다 다른 방식으로 구현합니다.
+    /// 각 스킬마다 다른 방식으로 구현
     /// </summary>
     protected abstract void Execute();
     #endregion
@@ -124,7 +124,7 @@ public abstract class SkillBase : MonoBehaviour
     #region Level Management
     /// <summary>
     /// 스킬 레벨 설정
-    /// 레벨 변경 시 스탯이 자동으로 재계산되어 캐싱됩니다.
+    /// 레벨 변경 시 스탯이 자동으로 재계산되어 캐싱
     /// </summary>
     /// <param name="newLevel">새 레벨</param>
     public virtual void SetLevel(int newLevel)
@@ -152,9 +152,9 @@ public abstract class SkillBase : MonoBehaviour
     #region Stats Calculation (State Caching)
 
     /// <summary>
-    /// 모든 스탯을 재계산하여 캐싱합니다.
-    /// 레벨 변경이나 초기화 시 한 번만 호출됩니다.
-    /// 복잡한 계산 로직이 모두 여기에 집중됩니다.
+    /// 모든 스탯을 재계산하여 캐싱
+    /// 레벨 변경이나 초기화 시 한 번만 호출
+    /// 복잡한 계산 로직이 모두 여기에 집중
     /// </summary>
     private void RecalculateStats()
     {

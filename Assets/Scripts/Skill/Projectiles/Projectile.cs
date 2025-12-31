@@ -507,7 +507,7 @@ public class Projectile : MonoBehaviour
         if (_molotovHasHitGround) return;
         _molotovHasHitGround = true;
 
-        // [전문가 피드백 반영] 화염지대 크기 증가율 보정
+        // 화염지대 크기 증가율 보정
         // 투사체는 누적으로 커지지만, 화염지대는 그보다 덜 커지도록 보정
         // 예: _effectSizeMultiplier가 2.5라면 -> 1.0 + (1.5 * 0.3) = 1.45배만 적용
         float adjustedMultiplier = 1.0f + ((_effectSizeMultiplier - 1.0f) * _fireGroundScaleFactor);
