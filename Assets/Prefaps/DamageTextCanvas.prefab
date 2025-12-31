@@ -85,7 +85,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &1904833945180647171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,9 +119,10 @@ MonoBehaviour:
   moveSpeed: 2
   lifeTime: 1
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  normalSize: 30
+  normalSize: 50
+  playerColor: {r: 1, g: 0, b: 1, a: 1}
   critColor: {r: 1, g: 0, b: 0, a: 1}
-  critSize: 45
+  critSize: 70
 --- !u!1 &3796100474432072128
 GameObject:
   m_ObjectHideFlags: 0

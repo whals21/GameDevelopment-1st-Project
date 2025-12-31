@@ -143,6 +143,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x2048-ASTC 4x4-giftpack-eba63d11-00000000000000000000000000000000-5_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 580
+        width: 962
+        height: 486
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38bc02caa4507dd4f908a68084729a4a
+      internalID: -1981787178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x2048-ASTC 4x4-giftpack-eba63d11-00000000000000000000000000000000-5_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 10
+        width: 1080
+        height: 569
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a0f7675b3d85ee44b5ef6249909b391
+      internalID: -341309311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -155,6 +197,8 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       sactx-0-2048x2048-ASTC 4x4-giftpack-eba63d11-00000000000000000000000000000000-5_0: -260865279
+      sactx-0-2048x2048-ASTC 4x4-giftpack-eba63d11-00000000000000000000000000000000-5_1: -1981787178
+      sactx-0-2048x2048-ASTC 4x4-giftpack-eba63d11-00000000000000000000000000000000-5_2: -341309311
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
