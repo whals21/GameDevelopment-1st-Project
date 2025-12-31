@@ -90,7 +90,7 @@ public class BossController : MonoBehaviour
         InitializePadPool();       // 발판 풀 초기화
         CreateAllPatternRoots();   // 패턴 루트 생성
         InitializeAllFirePools();           // FirePool 초기화
-
+        bossDie.Initialize();
 
     }
 

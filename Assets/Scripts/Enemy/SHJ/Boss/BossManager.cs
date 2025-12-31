@@ -86,7 +86,7 @@ public class BossManager : MonoBehaviour
             // 이미 스폰된 보스면 건너뛰기
             if (bossSpawnedFlags[i]) continue;
 
-            Debug.Log($"[Boss Check] 보스: {bossData.name} | 레벨: {cachedPlayerLevel}/{bossData.playerLV}, 킬: {cachedKillCount}/{bossData.killCountToSpawn}, 시간: {elapsedTime}/{bossData.appearTime}");
+            
 
             if (cachedPlayerLevel >= bossData.playerLV &&
                 cachedKillCount >= bossData.killCountToSpawn &&
@@ -94,7 +94,7 @@ public class BossManager : MonoBehaviour
             {
                 bossSpawnedFlags[i] = true; // 이 보스는 이제 스폰됨
                 currentBossIndex = i;
-                Debug.Log($"[Boss Spawn] 보스 {bossData.name} 출현 조건 만족! 스폰 시작");
+                
                 SpawnBoss(bossData);
             }
         }
@@ -115,7 +115,7 @@ public class BossManager : MonoBehaviour
         if (bossCtrl != null)
         {
             activeBosses.Add(bossCtrl);
-            Debug.Log($"[Boss Spawned] {bossObj.name} 위치: {spawnPos}");
+           
         }
     }
 }
