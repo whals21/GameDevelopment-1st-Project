@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class BossHit : MonoBehaviour
 {
-    private BossController bossController;
     private BossDie bossDie;
     private SpriteRenderer sr;
     private Color originalColor;
@@ -13,29 +12,35 @@ public class BossHit : MonoBehaviour
 
     private void Awake()
     {
-        bossController = GetComponent<BossController>();
-        bossDie = GetComponent<BossDie>();
+        // 부모에서 BossDie 찾기
+        bossDie = GetComponentInParent<BossDie>();
+
         sr = GetComponentInChildren<SpriteRenderer>();
         if (sr != null)
             originalColor = sr.color;
+
+        if (bossDie == null)
+            Debug.LogError("BossHit: BossDie 없음");
     }
 
-    public float OnHit(float damage)
+    // 플레이어 공격이 직접 호출하는 함수
+    public void TakeDamage(float damage, bool isCritical = false)
     {
-        if (bossDie == null) return 0;
+        Debug.Log($"[BossHit] TakeDamage 호출됨: {damage}");
 
-        // 실제로 들어가는 데미지
-        float actualDamage = Mathf.Min(damage, bossDie.CurrentHp); // CurrentHp는 BossDie에 getter 추가 필요
-        bossDie.TakeDamage(damage);
+        if (bossDie == null)
+        {
+            Debug.LogError("[BossHit] bossDie == null");
+            return;
+        }
 
-        // 피격 플래시
+        bossDie.TakeDamage(damage, isCritical);
+
         if (sr != null)
         {
             StopAllCoroutines();
             StartCoroutine(FlashRoutine());
         }
-
-        return actualDamage;
     }
 
     private IEnumerator FlashRoutine()
@@ -47,6 +52,7 @@ public class BossHit : MonoBehaviour
             sr.color = originalColor;
             yield return new WaitForSeconds(flashDuration);
         }
+
         sr.color = originalColor;
     }
 }

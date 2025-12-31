@@ -4,13 +4,13 @@ using UnityEngine;
 using static ActtackManager;
 
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDamageable //12/31추가
 {
     [Header("������ SO")]
     [SerializeField] private EnemyObject enemyData;
     public EnemyObject Data => enemyData;
 
-
+    public Transform Transform => transform;
     public int MaxHP => Data.EnemyHP;
     [Header("ü��")]
     [SerializeField] private int currentHP;

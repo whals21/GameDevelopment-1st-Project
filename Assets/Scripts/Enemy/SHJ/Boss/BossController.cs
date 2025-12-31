@@ -51,6 +51,13 @@ public class BossController : MonoBehaviour
     public BossRange attackRange;
     public BossFirePool FirePool;                          // 총알 풀
     public BossDie bossDie;
+
+
+
+    [SerializeField] private float currentHP;
+    public float CurrentHP => currentHP;
+    public float MaxHP => myData.hp;
+
     // ==========================
     // Awake: 컴포넌트 캐싱 및 패턴 루트 생성
     // ==========================
@@ -71,6 +78,8 @@ public class BossController : MonoBehaviour
         }
         InitializeComponents();
         SetTargetAutomatically();
+        bossDie = GetComponent<BossDie>();
+
     }
 
     // ==========================
@@ -91,7 +100,7 @@ public class BossController : MonoBehaviour
         CreateAllPatternRoots();   // 패턴 루트 생성
         InitializeAllFirePools();           // FirePool 초기화
         bossDie.Initialize();
-
+        currentHP = myData.hp;
     }
 
     // ==========================
@@ -347,14 +356,7 @@ public class BossController : MonoBehaviour
             PatternsRoot = patterns.transform;
         }
     }
-    public void TakeDamageFromPlayer(float damage)
-    {
-        // 보스 체력 감소 처리
-        if (bossDie != null)
-        {
-            bossDie.TakeDamage(damage);
-        }
-    }
+
 
     public void SetTargetAutomatically()
     {
@@ -370,6 +372,8 @@ public class BossController : MonoBehaviour
             Debug.LogWarning($"[{name}] PlayerStats.Instance가 존재하지 않아 타겟 설정 실패");
         }
     }
+
+ 
 }
 
 

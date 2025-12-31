@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4629488403984877960}
   - component: {fileID: 3064891439488725057}
   - component: {fileID: 3180662328617837772}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Ranges
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2111243630784802372}
   - component: {fileID: 2203871407228725533}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Patterns
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,10 +121,11 @@ GameObject:
   - component: {fileID: 5068693639065735349}
   - component: {fileID: 6618743957519961566}
   - component: {fileID: 3119733504128500574}
+  - component: {fileID: 2073004488000325298}
   - component: {fileID: 5072897593862626767}
   - component: {fileID: 162317878641941893}
   - component: {fileID: 6978721933034729782}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,6 +225,7 @@ MonoBehaviour:
   attackRange: {fileID: 3064891439488725057}
   FirePool: {fileID: 2203871407228725533}
   bossDie: {fileID: 3119733504128500574}
+  currentHP: 0
 --- !u!114 &6618743957519961566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,6 +250,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcba5b1998e6c0a42872ac667afe7601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2073004488000325298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8748780080106262039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b72c67ef9b2eb294ba14fc1124505bc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashDuration: 0.06
+  flashCount: 5
 --- !u!50 &5072897593862626767
 Rigidbody2D:
   serializedVersion: 4

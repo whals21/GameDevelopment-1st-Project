@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4629488403984877960}
   - component: {fileID: 3064891439488725057}
   - component: {fileID: 3180662328617837772}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Ranges
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2111243630784802372}
   - component: {fileID: 2203871407228725533}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Patterns
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 6618743957519961566}
   - component: {fileID: 5072897593862626767}
   - component: {fileID: 162317878641941893}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Boss 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -213,12 +213,16 @@ MonoBehaviour:
   MonsterNumber: 1
   bossPattern: {fileID: 11400000, guid: 38d94b7aadcee5c45999f47755140de2, type: 2}
   target: {fileID: 0}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
   rb: {fileID: 5072897593862626767}
   attackCooldown: 5
   attackRay: {fileID: 3180662328617837772}
   attackRange: {fileID: 3064891439488725057}
   FirePool: {fileID: 2203871407228725533}
   bossDie: {fileID: 0}
+  currentHP: 0
 --- !u!114 &6618743957519961566
 MonoBehaviour:
   m_ObjectHideFlags: 0
