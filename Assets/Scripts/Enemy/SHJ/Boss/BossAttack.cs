@@ -484,7 +484,7 @@ class BossAttackPattern002 : BossAttackBase
             Vector2 dir = (fireTargets[i] - fireOrigin).normalized;
 
             BossBullet bullet = bulletObj.GetComponent<BossBullet>();
-            bullet.Fire(dir);
+            bullet.FireTargeted(dir,fireTargets[i]);
         }
 
         finished = true;
@@ -563,59 +563,31 @@ class BossAttackPattern003 : BossAttackBase
 
     public override void Execute()
     {
-        // 경고 발판 반환
+        // 발판 반환 (패턴002처럼)
         foreach (var pad in warningPads)
             boss.ReturnWarningPad(pad);
         warningPads.Clear();
 
-        // 발판 위치에서 총알 생성 + 제자리 유지
-        for (int i = 0; i < firePads.Length; i++)
+        // 발판 위치에서 총알 생성 + 순간 등장
+        for (int i = 0; i <= firePads.Length; i++)
         {
             GameObject bulletObj = firePool.GetBullet();
-            if (bulletObj == null)
-                continue;
+            if (bulletObj == null) continue;
 
             bulletObj.transform.position = firePads[i];
-            Rigidbody2D rb = bulletObj.GetComponent<Rigidbody2D>();
-            if (rb != null)
-                rb.velocity = Vector2.zero;
 
-            // 플레이어 데미지 체크 코루틴 시작
             BossBullet bullet = bulletObj.GetComponent<BossBullet>();
             if (bullet != null)
             {
-                bullet.StartCoroutine(DamageAreaRoutine(bulletObj.transform.position, 1.5f, boss.CurrentDamage));
+                bullet.FireBlink(0.2f); // 0.2초 정도 깜빡임 후 자동 반환
             }
-
-          
-           
         }
 
         finished = true;
     }
 
     // 일정 시간 동안 발판 영역 내 플레이어 감지 및 데미지
-    private IEnumerator DamageAreaRoutine(Vector2 center, float duration, float damage)
-    {
-        float elapsed = 0f;
-        float checkInterval = 0.1f;
-
-        while (elapsed < duration)
-        {
-            Collider2D hit = Physics2D.OverlapCircle(center, 0.5f, LayerMask.GetMask("Player"));
-            if (hit != null)
-            {
-                PlayerStats stats = hit.GetComponent<PlayerStats>();
-                if (stats != null)
-                {
-                    stats.TakeDamage(damage);
-                }
-            }
-
-            elapsed += checkInterval;
-            yield return new WaitForSeconds(checkInterval);
-        }
-    }
+    
 
     protected override void OnAttackTick() { }
 

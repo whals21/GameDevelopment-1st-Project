@@ -120,12 +120,10 @@ GameObject:
   - component: {fileID: 2262442228748969269}
   - component: {fileID: 5068693639065735349}
   - component: {fileID: 6618743957519961566}
-  - component: {fileID: 3119733504128500574}
   - component: {fileID: 5072897593862626767}
   - component: {fileID: 162317878641941893}
-  - component: {fileID: 6978721933034729782}
   m_Layer: 0
-  m_Name: Boss
+  m_Name: Boss 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -189,7 +187,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1318412455, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+  m_Sprite: {fileID: -207556361, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -212,18 +210,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 698fe0c48f1dd304e87e359c92908752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterNumber: 0
-  bossPattern: {fileID: 11400000, guid: 4f63030bf78cea447a043c22d48e477a, type: 2}
+  MonsterNumber: 1
+  bossPattern: {fileID: 11400000, guid: 38d94b7aadcee5c45999f47755140de2, type: 2}
   target: {fileID: 0}
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 0
   rb: {fileID: 5072897593862626767}
   attackCooldown: 5
   attackRay: {fileID: 3180662328617837772}
   attackRange: {fileID: 3064891439488725057}
   FirePool: {fileID: 2203871407228725533}
-  bossDie: {fileID: 3119733504128500574}
+  bossDie: {fileID: 0}
 --- !u!114 &6618743957519961566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,18 +229,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a544f53f81fa95747989ecebc052a205, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3119733504128500574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8748780080106262039}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcba5b1998e6c0a42872ac667afe7601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!50 &5072897593862626767
@@ -320,24 +303,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.64, y: 0.64}
   m_EdgeRadius: 0
---- !u!95 &6978721933034729782
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8748780080106262039}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: bb50ed6ebcda93542bf498580de95c6f, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
