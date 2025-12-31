@@ -4,17 +4,17 @@ using UnityEngine;
 using static ActtackManager;
 
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDamageable //12/31추가
 {
     [Header("������ SO")]
     [SerializeField] private EnemyObject enemyData;
     public EnemyObject Data => enemyData;
 
-
+    public Transform Transform => transform;
     public int MaxHP => Data.EnemyHP;
     [Header("ü��")]
-    [SerializeField] private int currentHP;
-    public int CurrentHP => currentHP;
+    [SerializeField] private float currentHP;//12/31
+    public float CurrentHP => currentHP;
 
     [Header("�̵�")]
     [SerializeField] private float moveSpeed;
@@ -149,9 +149,9 @@ public class Enemy : MonoBehaviour
         return distance <= Range;
     }
     // 데미지 받기
-    public void TakeDamage(float damage, bool isCritical = false)
+    public void TakeDamage(float damage, bool isCritical = false)   
     {
-        currentHP -= (int)damage;
+        currentHP -= damage;//12/31
 
         if (ObjectPoolManager.Instance != null)
         {
@@ -196,12 +196,6 @@ public class Enemy : MonoBehaviour
                 gem.transform.position = transform.position;
             }
         }
-
-
-
-       
-      
-
 
 
         // 경험치 드롭 (나중에 구현)

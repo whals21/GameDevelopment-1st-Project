@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -273,5 +274,35 @@ public abstract class SkillBase : MonoBehaviour
     {
         // 자식 클래스에서 필요시 구현
     }
+    #endregion
+
+    #region [IDamageable 처리용] Targeting & Damage
+
+    protected List<IDamageable> FindTargets(float radius, int maxCount = int.MaxValue)
+    {
+        List<IDamageable> targets = new List<IDamageable>();
+        if (PlayerController.Instance == null) return targets;
+
+        Vector3 origin = PlayerController.Instance.transform.position;
+
+        Collider2D[] hits = new Collider2D[128];
+        int hitCount = Physics2D.OverlapCircleNonAlloc(origin, radius, hits, LayerMask.GetMask("Enemy"));
+
+        for (int i = 0; i < hitCount && targets.Count < maxCount; i++)
+        {
+            if (hits[i].TryGetComponent<IDamageable>(out var dmg))
+            {
+                if (dmg.CurrentHP > 0)
+                    targets.Add(dmg);
+            }
+        }
+        return targets;
+    }
+
+    protected void ApplyDamage(IDamageable target, float damage)
+    {
+        target?.TakeDamage(damage);
+    }
+
     #endregion
 }

@@ -1,84 +1,76 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 
-// ==========================
-// BossDie
-// - 보스 체력 관리
-// - 플레이어 공격 연동
-// - 사망 시 처리 + 아이템 드랍 자리
-// ==========================
 public class BossDie : MonoBehaviour
 {
-    private BossController bossController;  // 보스 컨트롤러
+    public BossController bossController;
+    private Animator animator;
+
     private float currentHp;
+    private bool isDead = false;
+
+    [SerializeField] private float dieAnimationSpeed = 1f;
+    [SerializeField] private float fadeOutDelay = 0.3f;
 
     private void Awake()
     {
         bossController = GetComponent<BossController>();
-        if (bossController == null)
-        {
-            Debug.LogError("BossDie: BossController가 없어요!");
-        }
+        animator = GetComponentInChildren<Animator>();
     }
 
-    private void Start()
+    public void Initialize()
     {
-        if (bossController != null && bossController.Data != null)
-        {
-            // 초기 체력 세팅
-            currentHp = bossController.Data.hp;
-        }
+        currentHp = MaxHp;
+        isDead = false;
+        gameObject.SetActive(true);
+        if (animator != null) animator.speed = 1f;
     }
 
-    /// <summary>
-    /// 플레이어가 보스를 공격할 때 호출
-    /// </summary>
-    /// <param name="damage">플레이어 공격력</param>
+    public float MaxHp => bossController != null ? bossController.Data.hp : 100;
+
     public void TakeDamage(float damage)
     {
-        if (currentHp <= 0) return; // 이미 죽은 상태
+        if (isDead) return;
 
         currentHp -= damage;
+        currentHp = Mathf.Clamp(currentHp, 0, MaxHp);
 
-        // 체력 0 이하 시 사망 처리
-        if (currentHp <= 0)
-        {
-            currentHp = 0;
+        if (currentHp <= 0f)
             Die();
-        }
-
-        // 디버그 로그 또는 체력 UI 업데이트 가능
-        Debug.Log($"Boss {bossController.name} HP: {currentHp}/{bossController.Data.hp}");
     }
 
-    /// <summary>
-    /// 보스 사망 처리
-    /// </summary>
-    private void Die()
+    public void Die()
     {
-        Debug.Log($"Boss {bossController.name} 사망!");
+        if (isDead) return;
+        isDead = true;
 
-        //보스 상태 종료
-        bossController.SetState(null);
+        // 모든 기능 멈춤
+        bossController?.SetState(null);
+        bossController?.ReturnAllWarningPads();
+        if (bossController?.attackComp != null)
+            bossController.attackComp.enabled = false;
 
-        //발판 정리
-        bossController.ReturnAllWarningPads();
+        // Die 애니메이션 재생
+        if (animator != null)
+        {
+            animator.speed = dieAnimationSpeed;
+            animator.SetTrigger("isDie");
+        }
+    }
 
-        //보스 비활성화
-        gameObject.SetActive(false);
-
-        //아이템 드랍
+    // Animation Event에서 호출
+    public void OnDeathAnimationFinished()
+    {
         DropItem();
 
-        // 5. 플레이어 경험치 보상 등 처리 가능 (나중에)
-        // TODO: 경험치 지급
+        // 약간 지연 후 보스 비활성화
+        gameObject.SetActive(false);
     }
 
-    
-    /// 보스 사망 시 아이템 드랍 처리
-    private void DropItem()
+   
+
+    public void DropItem()
     {
-       
-        Debug.Log("아이템 드랍 처리 자리");
+        Debug.Log("보스 아이템 드랍");
     }
 }

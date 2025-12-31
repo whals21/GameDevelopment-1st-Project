@@ -132,6 +132,31 @@ public class ProjectileSkill : SkillBase
     /// OverlapSphere를 활용한 근처 적 캐싱 (핵심 최적화)
     /// 플레이어 주변 반경 내의 적만 검색하여 성능을 최적화합니다.
     /// </summary>
+    //private void UpdateEnemyCache()//12/31수정
+    //{
+    //    _enemyCacheTimer += Time.deltaTime;
+    //    if (_enemyCacheTimer >= ENEMY_CACHE_INTERVAL)
+    //    {
+    //        _enemyCacheTimer = 0f;
+
+    //        if (_playerTransform == null) return;
+
+    //        // 반경 내의 적 콜라이더만 탐색 (전체 씬 검색 대비 성능 향상)
+    //        float searchRadius = _data.enemySearchRadius > 0 ? _data.enemySearchRadius : 20f;
+    //        Collider[] hitColliders = Physics.OverlapSphere(_playerTransform.position, searchRadius, _enemyLayerMask);
+
+    //        // 리스트로 변환 (Null 체크 유리)
+    //        _cachedEnemies.Clear();
+    //        foreach (var col in hitColliders)
+    //        {
+    //            Enemy enemy = col.GetComponent<Enemy>();
+    //            if (enemy != null && enemy.CurrentHP > 0)
+    //            {
+    //                _cachedEnemies.Add(enemy);
+    //            }
+    //        }
+    //    }
+    //}
     private void UpdateEnemyCache()
     {
         _enemyCacheTimer += Time.deltaTime;
@@ -141,18 +166,23 @@ public class ProjectileSkill : SkillBase
 
             if (_playerTransform == null) return;
 
-            // 반경 내의 적 콜라이더만 탐색 (전체 씬 검색 대비 성능 향상)
             float searchRadius = _data.enemySearchRadius > 0 ? _data.enemySearchRadius : 20f;
             Collider[] hitColliders = Physics.OverlapSphere(_playerTransform.position, searchRadius, _enemyLayerMask);
 
-            // 리스트로 변환 (Null 체크 유리)
             _cachedEnemies.Clear();
             foreach (var col in hitColliders)
             {
-                Enemy enemy = col.GetComponent<Enemy>();
-                if (enemy != null && enemy.CurrentHP > 0)
+                // IDamageable 기반으로 캐싱
+                IDamageable damageable = col.GetComponent<IDamageable>();
+                if (damageable != null)
                 {
-                    _cachedEnemies.Add(enemy);
+                    // Enemy 타입만 원하면 캐스팅 후 HP 체크 가능
+                    Enemy enemy = damageable as Enemy;
+                    if (enemy != null && enemy.CurrentHP > 0)
+                    {
+                        _cachedEnemies.Add(enemy);
+                    }
+                    // 보스 포함 등 다른 IDamageable도 필요하면 여기서 처리
                 }
             }
         }

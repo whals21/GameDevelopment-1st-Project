@@ -42,7 +42,7 @@ public class DataManager : MonoBehaviour
         // UI표시
         if (PlayerHUD.Instance != null)
         {
-            PlayerHUD.Instance.UpdateGold(myData.gold);
+            //PlayerHUD.Instance.UpdateGold(myData.gold);/12/31 오류가 떠서 잠시 주석으로 만듬/
         }
     }
 

@@ -9,7 +9,7 @@ using static ActtackManager;
 // - 패턴별 총알 풀 연동
 // - 발판 풀 관리
 // ==========================
-public class BossController : MonoBehaviour
+public class BossController : MonoBehaviour,IDamageable
 {
     private BossState currentState;                  // 현재 상태
     [SerializeField] private int MonsterNumber;     // 보스 번호
@@ -18,6 +18,7 @@ public class BossController : MonoBehaviour
     public BossScriptsObject Data => myData;
 
     public Transform target;                         // 타겟
+    [SerializeField] private LayerMask playerLayer;
     public Rigidbody2D rb;
     public Rigidbody2D RB => rb;
     public Collider2D Col { get; private set; }
@@ -45,11 +46,18 @@ public class BossController : MonoBehaviour
     private float attackTimer = 0f;
 
     public Transform PatternsRoot { get; private set; }   // 하위 패턴 루트
-    private BossAttack attackComp;                         // 공격 컴포넌트
+    public BossAttack attackComp;                         // 공격 컴포넌트
     public BoosAttackRay attackRay;
     public BossRange attackRange;
     public BossFirePool FirePool;                          // 총알 풀
     public BossDie bossDie;
+
+
+
+    [SerializeField] private float currentHP;
+    public float CurrentHP => currentHP;
+    public float MaxHP => myData.hp;
+
     // ==========================
     // Awake: 컴포넌트 캐싱 및 패턴 루트 생성
     // ==========================
@@ -69,6 +77,9 @@ public class BossController : MonoBehaviour
             PatternsRoot = patterns.transform;
         }
         InitializeComponents();
+        SetTargetAutomatically();
+        bossDie = GetComponent<BossDie>();
+
     }
 
     // ==========================
@@ -88,6 +99,8 @@ public class BossController : MonoBehaviour
         InitializePadPool();       // 발판 풀 초기화
         CreateAllPatternRoots();   // 패턴 루트 생성
         InitializeAllFirePools();           // FirePool 초기화
+        bossDie.Initialize();
+        currentHP = myData.hp;
     }
 
     // ==========================
@@ -343,13 +356,47 @@ public class BossController : MonoBehaviour
             PatternsRoot = patterns.transform;
         }
     }
-    public void TakeDamageFromPlayer(float damage)
+
+
+    public void SetTargetAutomatically()
     {
-        // 보스 체력 감소 처리
-        if (bossDie != null)
+        if (target != null) return; // 이미 설정되어 있으면 무시
+
+        if (PlayerStats.Instance != null)
         {
-            bossDie.TakeDamage(damage);
+            target = PlayerStats.Instance.transform;
+            Debug.Log($"[{name}] 타겟 자동 설정 완료: {target.name}");
         }
+        else
+        {
+            Debug.LogWarning($"[{name}] PlayerStats.Instance가 존재하지 않아 타겟 설정 실패");
+        }
+    }
+
+    public void TakeDamage(float damage, bool isCritical = false)
+    {
+        currentHP -= damage;
+        currentHP = Mathf.Max(currentHP, 0f);
+
+        // 데미지 텍스트
+        if (ObjectPoolManager.Instance != null)
+        {
+            DamageText text = ObjectPoolManager.Instance.GetDamageText();
+            if (text != null)
+                text.Init(damage, isCritical, transform.position);
+        }
+
+      
+
+        // 죽음 체크
+        if (currentHP <= 0f)
+        {
+            if (bossDie != null)
+                bossDie.Die();
+        }
+
+
+
     }
 }
 

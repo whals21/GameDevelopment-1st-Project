@@ -113,29 +113,41 @@ public class LightningSkill : SkillBase
     /// <summary>
     /// 개별 번개 생성
     /// </summary>
-    private void SpawnLightningStrike(Enemy target)
+    //private void SpawnLightningStrike(Enemy target)
+    //{
+    //    if (target == null) return;
+
+    //    // 오브젝트 풀링 사용
+    //    LightningStrike lightning = null;
+    //    if (ObjectPoolManager.Instance != null)
+    //    {
+    //        lightning = ObjectPoolManager.Instance.GetLightning();
+    //    }
+
+    //    if (lightning != null)
+    //    {
+    //        // v2: 논리와 시각 분리 - 위치만 설정, 데미지는 별도 처리
+    //        float damage = GetFinalDamage();
+    //        lightning.SetPosition(target.transform.position);
+    //        target.TakeDamage(damage);
+    //    }
+    //    else
+    //    {
+    //        // 풀이 없으면 직접 데미지 처리 (폴백)
+    //        target.TakeDamage(GetFinalDamage());
+    //    }
+    //}//12/31
+
+    private void SpawnLightningStrike(IDamageable target)
     {
         if (target == null) return;
 
-        // 오브젝트 풀링 사용
-        LightningStrike lightning = null;
-        if (ObjectPoolManager.Instance != null)
-        {
-            lightning = ObjectPoolManager.Instance.GetLightning();
-        }
+        // 오브젝트 풀링 처리 (시각 효과)
+        LightningStrike lightning = ObjectPoolManager.Instance?.GetLightning();
+        lightning?.SetPosition((target as MonoBehaviour)?.transform.position ?? Vector3.zero);
 
-        if (lightning != null)
-        {
-            // v2: 논리와 시각 분리 - 위치만 설정, 데미지는 별도 처리
-            float damage = GetFinalDamage();
-            lightning.SetPosition(target.transform.position);
-            target.TakeDamage(damage);
-        }
-        else
-        {
-            // 풀이 없으면 직접 데미지 처리 (폴백)
-            target.TakeDamage(GetFinalDamage());
-        }
+        // 데미지 적용
+        target.TakeDamage(GetFinalDamage());
     }
     #endregion
 
@@ -144,6 +156,24 @@ public class LightningSkill : SkillBase
     /// 적 캐시 업데이트 (TargetingHelper 사용)
     /// 일정 주기로 플레이어 주변 적만 탐색합니다.
     /// </summary>
+    //private void UpdateEnemyCache()12//31
+    //{
+    //    _enemyCacheTimer += Time.deltaTime;
+    //    if (_enemyCacheTimer >= ENEMY_CACHE_INTERVAL)
+    //    {
+    //        _enemyCacheTimer = 0f;
+
+    //        if (_playerTransform == null) return;
+
+    //        // 사정거리 내의 적만 탐색
+    //        float searchRadius = _data.attackRange > 0 ? _data.attackRange : 15f;
+    //        Vector3 origin = _playerTransform.position;
+
+    //        // TargetingHelper로 중복 제거 (결과를 바로 _cachedEnemies에 담음)
+    //        TargetingHelper.FindAllEnemies(origin, searchRadius, _enemyLayerMask, _cachedEnemies);
+    //    }
+    //}
+    private List<IDamageable> _cachedTargets = new List<IDamageable>();//12/31
     private void UpdateEnemyCache()
     {
         _enemyCacheTimer += Time.deltaTime;
@@ -153,15 +183,20 @@ public class LightningSkill : SkillBase
 
             if (_playerTransform == null) return;
 
-            // 사정거리 내의 적만 탐색
             float searchRadius = _data.attackRange > 0 ? _data.attackRange : 15f;
-            Vector3 origin = _playerTransform.position;
+            Collider2D[] hits = Physics2D.OverlapCircleAll(_playerTransform.position, searchRadius, _enemyLayerMask);
 
-            // TargetingHelper로 중복 제거 (결과를 바로 _cachedEnemies에 담음)
-            TargetingHelper.FindAllEnemies(origin, searchRadius, _enemyLayerMask, _cachedEnemies);
+            _cachedTargets.Clear();
+            foreach (var col in hits)
+            {
+                IDamageable damageable = col.GetComponent<IDamageable>();
+                if (damageable != null)
+                {
+                    _cachedTargets.Add(damageable);
+                }
+            }
         }
-    }
-
+    }//12/31
     /// <summary>
     /// 적 리스트에서 무작위로 N명 선택합니다.
     /// In-place sampling으로 GC 할당을 최소화합니다.

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b7dd72fabd82c7449a9432eb78a2eb1, type: 3}
-  m_Name: New Boss
+  m_Name: New Boss 2
   m_EditorClassIdentifier: 
-  bossPrefab: {fileID: 8748780080106262039, guid: caf772dda376dd74791daf3430bedf00, type: 3}
+  bossPrefab: {fileID: 8748780080106262039, guid: 142288c6a20a8264f9cc7bb1791ceedd, type: 3}
   hp: 50
   move: 1
   detectionRange: 10
-  appearTime: 30
+  appearTime: 0
   killCountToSpawn: 0
-  playerLV: 0
+  playerLV: 10
