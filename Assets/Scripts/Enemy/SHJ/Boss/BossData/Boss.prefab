@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4629488403984877960}
   - component: {fileID: 3064891439488725057}
   - component: {fileID: 3180662328617837772}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Ranges
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2111243630784802372}
   - component: {fileID: 2203871407228725533}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Patterns
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 5072897593862626767}
   - component: {fileID: 162317878641941893}
   - component: {fileID: 6978721933034729782}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
