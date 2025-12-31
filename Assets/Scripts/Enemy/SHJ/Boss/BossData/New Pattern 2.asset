@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 12a726b19303fe34a997fa64902b7121, type: 3}
-  m_Name: New Pattern
+  m_Name: New Pattern 2
   m_EditorClassIdentifier: 
-  BossAttackOption: 000000000000000000000000
+  BossAttackOption: 000000000100000002000000
   attackRayLength:
   - 300
-  - 300
-  - 300
+  - 0
+  - 0
   attackRange:
   - 0
-  - 0
+  - 20
   - 0
   damage:
   - 20
@@ -27,17 +27,17 @@ MonoBehaviour:
   - 20
   damageMove:
   - 50
-  - 50
-  - 50
+  - 0
+  - 0
   delayAfter:
   - 3
   - 3
   - 3
   bulletPrefab:
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  bulletCount: 000000000000000000000000
+  - {fileID: 4580022208843392257, guid: 997546503db05ac4aa122881658963e2, type: 3}
+  - {fileID: 4580022208843392257, guid: 997546503db05ac4aa122881658963e2, type: 3}
+  bulletCount: 000000000500000006000000
   warningPads:
   - {fileID: 6361049014533627461, guid: ff90cade94cf9bb428cf8a75fe50731b, type: 3}
   - {fileID: 6361049014533627461, guid: 085864e01603c574581e9112e42e19aa, type: 3}

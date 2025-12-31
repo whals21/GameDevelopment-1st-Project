@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyCore : MonoBehaviour
-{
+{ 
     [SerializeField] private EnemyObject enemyData;
     public EnemyObject Data => enemyData;
     public int MaxHP => Data.EnemyHP;
