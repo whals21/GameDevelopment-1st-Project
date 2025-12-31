@@ -2,19 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// 드론 스킬 구현
-/// 자율적으로 적을 찾아 공격하는 드론을 소환합니다.
-/// 레벨에 따라 소환되는 드론의 수가 증가합니다.
-///
-/// 성능 최적화:
-/// - PlayerController.Instance로 빠른 플레이어 참조
-/// - 로컬 좌표계 사용으로 불필요한 연산 제거
-/// - Physics2D.OverlapCircleNonAlloc로 반경 내 적만 탐색
-///
-/// 확장성:
-/// - 레벨에 따른 다중 소환 지원
-/// - 데이터 위임 패턴 (계산은 부모, 행동은 자식)
-/// - 데이터 주도 설계 (호버링 파라미터 ScriptableObject화)
+/// 플레이어 주변을 공전하며 적을 공격하는 드론을 소환하고 관리하는 스킬
 /// </summary>
 public class DroneSkill : SkillBase
 {
@@ -99,7 +87,7 @@ public class DroneSkill : SkillBase
             float projectileSpeed = _data.projectileSpeed;
             int enemyLayerMask = LayerMask.GetMask("Enemy");
 
-            drone.Initialize(_playerTransform, damage, cooldown, radius, speed, projectileSpeed, enemyLayerMask, _data);
+            drone.Initialize(_playerTransform, damage, cooldown, radius, speed, projectileSpeed, enemyLayerMask, _data, _currentLevel);
         }
 
         _droneObjects.Add(droneObj);
@@ -137,8 +125,8 @@ public class DroneSkill : SkillBase
             if (_droneObjects[i] != null &&
                 _droneObjects[i].TryGetComponent<Drone>(out var drone))
             {
-                // Drone 스탯 업데이트
-                drone.UpdateStats(finalDamage, finalCooldown, _data.hoverSpeed);
+                // Drone 스탯 업데이트 (레벨 포함)
+                drone.UpdateStats(finalDamage, finalCooldown, _data.hoverSpeed, _currentLevel);
             }
         }
     }

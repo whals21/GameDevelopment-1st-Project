@@ -2,14 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// 스킬 매니저 (v2 리팩토링)
-/// 이전 SkillManager의 God Class 문제를 해결한 깔끔한 매니저입니다.
-/// 역할: 스킬 목록 관리, UpdateSkill() 호출만 담당.
-///
-/// 변경사항:
-/// - 싱글톤 패턴 사용 (플레이어가 1명이므로 SkillManager도 1개)
-/// - List + Dictionary 하이브리드 (순회 + 검색 최적화)
-/// - Factory 패턴 사용 (OCP 준수)
+/// 스킬 목록 관리, 스킬 장착/해제/레벨업, UpdateSkill() 호출을 담당하는 매니저
+/// List와 Dictionary 하이브리드로 순회와 검색을 최적화
 /// </summary>
 public class SkillManager : MonoBehaviour
 {

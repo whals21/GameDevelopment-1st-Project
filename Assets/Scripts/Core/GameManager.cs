@@ -4,14 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// 게임 매니저 (v2 리팩토링)
-/// 게임의 전체 상태, 시간, 페이즈를 관리합니다.
-///
-/// v2 변경사항:
-/// - 이벤트 이름 규칙 준수 (OnGameStateChanged → GameStateChanged)
-/// - 매직 넘버 제거 (initialLevelUpDelay SerializeField)
-/// - Start()에서 자동 시작 제거 (타이틀 화면 연동 지원)
-/// - Time.timeScale 설정 명확화
+/// 게임 상태(Playing, Paused, GameOver, Victory)를 관리하고 게임 시간, 레벨업 UI, 통계 보고서를 제어하는 매니저
 /// </summary>
 public class GameManager : MonoBehaviour
 {

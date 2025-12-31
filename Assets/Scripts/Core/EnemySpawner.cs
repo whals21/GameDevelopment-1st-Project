@@ -1,13 +1,8 @@
 using UnityEngine;
 
 /// <summary>
-/// 적 스포너 (v2 리팩토링)
-///
-/// v2 변경사항:
-/// - FindWithTag 제거, 싱글톤 패턴 사용
-/// - 장애물 충돌 회피 (GetSafeSpawnPosition)
-/// - ObjectPoolManager Null 체크
-/// - 카운트 동기화 안전성 강화
+/// 플레이어 주변에 적을 주기적으로 스폰하고 최대 적 수를 관리하는 스포너
+/// 장애물을 피하는 안전한 스폰 위치를 자동 탐색
 /// </summary>
 public class EnemySpawner : MonoBehaviour
 {

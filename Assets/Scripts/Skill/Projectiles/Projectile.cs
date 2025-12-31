@@ -2,15 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// 통합 투사체 클래스 (v2)
-/// v1의 각기 다른 투사체 클래스들을 ProjectileMovementType으로 통합
-/// - Straight: 기본 직선 이동
-/// - Boomerang: 전진 후 반대 방향으로 회귀
-/// - Homing: 적 추적 유도
-/// - Orbit: 플레이어 주변 공전 (MagneticDart)
-/// - Molotov: 포물선 비행 후 지면 폭발
-/// - Brick: 중력 기반 포물선 + 바운스
-/// - Soccer: 화면 밖 재발사 + 튕김
+/// 다양한 이동 방식(직선, 부메랑, 유도, 공전, 포물선 등)을 지원하는 통합 투사체
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 public class Projectile : MonoBehaviour

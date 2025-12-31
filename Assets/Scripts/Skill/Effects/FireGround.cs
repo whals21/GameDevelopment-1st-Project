@@ -2,14 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// v2 FireGround - 화염 지대 지속 데미지 이펙트
-///
-/// 전문가 피드백 반영:
-/// 1. Invoke 제거 - 코루틴으로 통합 관리
-/// 2. ObjectPool 풀링 적용
-/// 3. 단일 코루틴으로 생명주기 관리
-///
-/// 본질: "특정 위치에 화염 지대 생성, 범위 내 적에게 지속 데미지"
+/// 특정 위치에 화염 지대를 생성하여 범위 내 적에게 지속 데미지를 입히는 이펙트
 /// </summary>
 public class FireGround : MonoBehaviour
 {

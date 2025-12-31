@@ -2,17 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// v2 ExplosionEffect - 순수 시각 효과 (VFX Only)
-///
-/// RPG 로켓 충돌 시 폭발 애니메이션을 재생합니다.
-/// LightningStrike와 동일한 구조로 구현되었습니다.
-///
-/// 전문가 피드백 반영:
-/// - 논리와 시각의 분리: 매니저가 데미지 처리, 이펙트는 시각만 담당
-/// - SRP 준수: 단일 책임 (폭발 애니메이션만)
-/// - ObjectPool 풀링 지원
-///
-/// 본질: "폭발 스프라이트 애니메이션 + 소리 + 자동 풀 반납"
+/// 폭발 스프라이트 애니메이션과 사운드를 재생하는 VFX 컴포넌트
 /// </summary>
 public class ExplosionEffect : MonoBehaviour
 {

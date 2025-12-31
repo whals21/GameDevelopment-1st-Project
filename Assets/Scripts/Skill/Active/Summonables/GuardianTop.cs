@@ -1,16 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// v2 GuardianTop - 리팩토링 버전
-///
-/// 전문가 피드백 반영:
-/// 1. Kinematic 모드 (스크립트 제어와 물리 엔진 충돌 방지)
-/// 2. 간소화된 충돌 감지 (OnTriggerEnter2D 하나만 사용)
-/// 3. Resources.Load 제거 (풀링 시스템 사용 권장)
-/// 4. 데이터 주도 설계 (Initialize 메서드로 주입)
-/// 5. 불안정한 타이머 로직 제거
-///
-/// 본질: "회전하며 적에게 데미지 + 넉백"
+/// 플레이어 주변을 원형 궤도로 회전하며 적에게 데미지와 넉백을 가하는 가디언 톱니바퀴
 /// </summary>
 public class GuardianTop : MonoBehaviour
 {

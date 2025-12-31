@@ -2,14 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// v2 ObjectPoolManager - 통합 투사체 시스템
-///
-/// v2 아키텍처를 위한 오브젝트 풀링 관리자입니다.
-///
-/// 주요 특징:
-/// - 통합 Projectile 풀 (ProjectileMovementType으로 모든 동작 지원)
-/// - GuardianTop, Drone, LightningStrike, RPGExplosion, FireGround는 별도 풀 유지
-/// - 코드 중복 제거 (ValidateAndGetPool<T> 패턴)
+/// 모든 게임 오브젝트(적, 투사체, 이펙트, 아이템 등)의 오브젝트 풀을 통합 관리하는 매니저
 /// </summary>
 public class ObjectPoolManager : MonoBehaviour
 {

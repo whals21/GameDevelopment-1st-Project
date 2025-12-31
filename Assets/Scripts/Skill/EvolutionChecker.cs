@@ -4,17 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>
-/// 진화 가능 여부 판정 유틸리티 (v2 리팩토링 - 최종 수정본)
-///
-/// v2 변경사항 (전문가 피드백 반영):
-/// 1. 문자열 매칭 제거 -> SkillType 사용 (지역화 안전)
-/// 2. 리플렉션 제거 -> SkillManager 공개 API 사용 (캡슐화 준수)
-/// 3. 데이터 주도형 진화 로직 적용 (SkillData.evoSkill 기반)
-/// 4. Type Mismatch 수정 -> fromSkillInstance (SkillBase) 추가
-///
-/// 사용법:
-/// var evolutions = EvolutionChecker.GetAvailableEvolutions();
-/// foreach (var evo in evolutions) { EvolutionChecker.ExecuteEvolution(evo.fromSkillInstance); }
+/// SkillData.evoSkill 기반으로 스킬 진화 가능 여부 판정 및 실행 유틸리티
 /// </summary>
 public static class EvolutionChecker
 {

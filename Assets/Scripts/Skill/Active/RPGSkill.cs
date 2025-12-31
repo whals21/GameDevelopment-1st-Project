@@ -2,20 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// RPG 스킬 구현
-/// 가장 가까운 적에게 유도 로켓을 발사합니다.
-/// 레벨에 따라 한 번에 발사하는 로켓 수가 증가합니다.
-///
-/// 성능 최적화:
-/// - TargetingHelper로 타겟팅 로직 재사용 (코드 중복 제거)
-/// - PlayerController.Instance로 빠른 플레이어 참조
-/// - LayerMask 캐싱으로 불필요한 콜라이더 필터링
-/// - 적 캐싱으로 불필요한 탐색 최소화
-///
-/// 확장성:
-/// - 레벨에 따른 로켓 수 증가
-/// - 데이터 주도 설계 (rapidFireInterval, defaultSpreadAngle 등)
-/// - 수학적 단순화 (균등 분할 공식)
+/// 가장 가까운 적에게 유도 로켓을 발사하는 스킬. 레벨에 따라 발사 수 증가
 /// </summary>
 public class RPGSkill : SkillBase
 {

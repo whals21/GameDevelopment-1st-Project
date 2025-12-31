@@ -3,19 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// 번개 스킬 구현
-/// 사정거리 내의 무작위 적에게 번개를 떨어뜨립니다.
-/// 레벨에 따라 한 번에 떨어뜨리는 번개의 수가 증가합니다.
-///
-/// 성능 최적화:
-/// - PlayerController.Instance로 빠른 플레이어 참조
-/// - Physics2D.OverlapCircleNonAlloc로 반경 내 적만 탐색
-/// - LayerMask로 불필요한 콜라이더 필터링
-/// - 적 캐싱으로 불필요한 탐색 최소화
-///
-/// 확장성:
-/// - 레벨에 따른 번개 수 증가
-/// - 데이터 주도 설계 (strikeDelay, lightningCount 등)
+/// 사정거리 내의 무작위 적에게 번개를 떨어뜨리는 스킬
+/// 레벨에 따라 한 번에 떨어뜨리는 번개의 수가 증가
 /// </summary>
 public class LightningSkill : SkillBase
 {

@@ -3,9 +3,7 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// 스킬 생성 전담 팩토리 클래스
-/// SkillType에 따라 적절한 스킬 컴포넌트를 생성합니다.
-/// OCP 준수: 새 스킬 타입 추가 시 이곳에만 등록하면 됩니다.
+/// SkillType에 따라 적절한 스킬 컴포넌트를 생성하는 팩토리 클래스
 /// </summary>
 public static class SkillFactory
 {

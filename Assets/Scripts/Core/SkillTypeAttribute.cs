@@ -2,14 +2,7 @@ using UnityEngine;
 using System;
 
 /// <summary>
-/// 스킬 클래스에 타입 정보를 선언적으로 부여하는 속성
-/// 각 스킬 클래스에 이 속성을 추가하여 SkillType과 매핑합니다.
-///
-/// 사용 예시:
-/// <code>
-/// [SkillType(SkillType.Projectile)]
-/// public class ProjectileSkill : SkillBase { ... }
-/// </code>
+/// 스킬 클래스에 타입 정보를 선언적으로 부여하여 SkillType과 매핑하는 속성
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 public class SkillTypeAttribute : Attribute

@@ -2,13 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// 투사체 스킬 구현
-/// 적을 타겟팅하고 투사체를 발사합니다.
-///
-/// 성능 최적화:
-/// - Physics.OverlapSphere로 반경 내 적만 탐색
-/// - LayerMask로 불필요한 콜라이더 필터링
-/// - PlayerController.Instance로 빠른 플레이어 참조
+/// 적을 타겟팅하여 투사체를 발사하는 스킬
+/// 레벨에 따라 투사체 수와 크기가 증가
 /// </summary>
 public class ProjectileSkill : SkillBase
 {

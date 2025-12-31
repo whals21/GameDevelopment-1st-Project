@@ -1,14 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 모든 스킬의 기본 클래스 (Abstract)
-/// 모든 스킬은 이 클래스를 상속받아야 합니다.
-/// 매니저는 SkillBase만 바라보며, 구체적인 구현은 자식 클래스에 위임합니다.
-///
-/// 성능 최적화: 상태 캐싱 (State Caching)
-/// - 스탯 계산은 레벨 변경 시 한 번만 수행되어 캐싱됩니다.
-/// - GetFinalDamage() 등의 메서드는 O(1)로 캐시된 값을 반환합니다.
-/// - 뱀서류 게임에서 1초에 수십 발의 총알이 발사되어도 성능 저하가 없습니다.
+/// 모든 스킬의 기본 추상 클래스. 스킬 생명주기, 쿨타임 관리, 레벨별 스탯 캐싱 제공
 /// </summary>
 public abstract class SkillBase : MonoBehaviour
 {

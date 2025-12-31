@@ -2,12 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// 적 타겟팅을 위한 정적 헬퍼 클래스
-/// 모든 스킬에서 재사용 가능한 타겟팅 로직을 제공합니다.
-///
-/// DRY Principle: 타겟팅 로직 중복 제거
-/// Performance: SqrMagnitude 사용, 정적 버퍼로 GC 최소화
-/// Safety: float.MaxValue로 초기 최솟값 설정
+/// 적 타겟팅 로직 중복 제거를 위한 정적 헬퍼 클래스 (가장 가까운 적 찾기, 반경 내 모든 적 찾기)
 /// </summary>
 public static class TargetingHelper
 {

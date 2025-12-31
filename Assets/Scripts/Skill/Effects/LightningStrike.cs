@@ -2,14 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// v2 LightningStrike - 순수 시각 효과 (VFX Only)
-///
-/// 전문가 피드백 반영:
-/// 1. 논리와 시각의 분리: 매니저가 데미지 처리, 이펙트는 시각만 담당
-/// 2. SRP 준수: 단일 책임 (번개 애니메이션만)
-/// 3. LightningEffect.cs와 기능 중복 해결
-///
-/// 본질: "번개 스프라이트 애니메이션 + 소리 + 빛 효과"
+/// 번개 스프라이트 애니메이션, 사운드, 광원 효과를 재생하는 VFX 컴포넌트
 /// </summary>
 public class LightningStrike : MonoBehaviour
 {

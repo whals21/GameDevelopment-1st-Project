@@ -2,18 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// 가디언 스킬 구현
-/// 플레이어 주변을 회전하며 적을 공격하는 가디언을 소환합니다.
-/// 레벨에 따라 소환되는 가디언의 수가 증가합니다.
-///
-/// 성능 최적화:
-/// - PlayerController.Instance로 빠른 플레이어 참조
-/// - 로컬 좌표계 사용으로 불필요한 연산 제거
-/// - Physics2D.OverlapCircleNonAlloc로 반경 내 적만 탐색
-///
-/// 확장성:
-/// - 레벨에 따른 다중 소환 지원
-/// - 데이터 위임 패턴 (계산은 부모, 행동은 자식)
+/// 플레이어 주변을 회전하며 적을 공격하는 가디언을 소환하는 스킬
+/// 레벨에 따라 소환되는 가디언의 수가 증가
 /// </summary>
 public class GuardianSkill : SkillBase
 {

@@ -2,8 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// 세션 통계 데이터 (게임 결과용)
-/// 스킬별 총 피해량, DPS, 적중 횟수를 담습니다.
+/// 게임 결과용 스킬 세션 통계 데이터 (총 피해량, DPS, 적중 횟수)
 /// </summary>
 [System.Serializable]
 public class SkillSessionData
@@ -25,7 +24,7 @@ public class SkillSessionData
 }
 
 /// <summary>
-/// 인스펙터 표시용 스킬 통계 (직렬화 가능)
+/// 인스펙터 표시용 직렬화 가능한 스킬 통계
 /// </summary>
 [System.Serializable]
 public class SkillStatDisplay
@@ -37,13 +36,7 @@ public class SkillStatDisplay
 }
 
 /// <summary>
-/// 게임 세션 통계 관리자
-/// 스킬별 총 피해량과 DPS를 기록합니다.
-///
-/// 전문가 피드백 반영:
-/// - 데미지는 적이 죽은 순간(OnDisable)이 아니라 데미지를 입힌 순간(TakeDamage)에 계산
-/// - DPS = 총 피해량 / 게임 플레이 시간
-/// - SkillBase source를 통해 누가 때렸는지 추적
+/// 스킬별 총 피해량, DPS, 적중 횟수를 기록하고 게임 종료 시 통계 보고서를 생성하는 매니저
 /// </summary>
 public class StatisticsManager : MonoBehaviour
 {
