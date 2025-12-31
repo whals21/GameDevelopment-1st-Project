@@ -239,7 +239,7 @@ public class GuardianBehavior : MonoBehaviour
         gameObject.SetActive(true);
 
         // LayerMask 캐싱
-        _enemyLayerMask = LayerMask.GetMask("Enemy");
+        _enemyLayerMask = LayerMask.GetMask("Enemy","Boss");
     }
 
     private void Update()

@@ -131,22 +131,18 @@ public class LightningSkill : SkillBase
     {
         if (target == null) return;
 
-        // 오브젝트 풀링 처리 (시각 효과)
         LightningStrike lightning = ObjectPoolManager.Instance?.GetLightning();
-        lightning?.SetPosition((target as MonoBehaviour)?.transform.position ?? Vector3.zero);
 
-        if (lightning != null)
-        {
-            // v2: 논리와 시각 분리 - 위치만 설정, 데미지는 별도 처리
-            float damage = GetFinalDamage();
-            lightning.SetPosition(target.transform.position);
-            target.TakeDamage(damage, this);  // 통계 기록을 위해 source 전달
-        }
-        else
-        {
-            // 풀이 없으면 직접 데미지 처리 (폴백)
-            target.TakeDamage(GetFinalDamage(), this);
-        }
+        // 위치 설정
+        Vector3 pos = Vector3.zero;
+        MonoBehaviour mb = target as MonoBehaviour;
+        if (mb != null)
+            pos = mb.transform.position;
+
+        lightning?.SetPosition(pos);
+
+        float damage = GetFinalDamage();
+        target.TakeDamage(damage, this); // source 전달
     }
     #endregion
 
