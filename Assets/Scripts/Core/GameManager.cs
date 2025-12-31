@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("게임 시작 후 초기 레벨업 UI 표시까지의 대기 시간")]
     [SerializeField] private float initialLevelUpDelay = 3f;
 
+    [Tooltip("게임 승리까지 필요한 시간 (분 단위, 0이면 무제한)")]
+    [SerializeField] private float victoryTimeMinutes = 15f;
+
     [Header("References")]
     [Tooltip("레벨업 매니저 참조 (자동 할당됨)")]
     [SerializeField] private LevelUpManager levelUpManager;
@@ -114,6 +117,12 @@ public class GameManager : MonoBehaviour
         {
             GameTime += Time.deltaTime;
             OnGameTimeUpdated?.Invoke(GameTime);
+
+            // 승리 조건 체크 (0이면 무제한)
+            if (victoryTimeMinutes > 0f && GameTime >= victoryTimeMinutes * 60f)
+            {
+                Victory();
+            }
         }
     }
     #endregion

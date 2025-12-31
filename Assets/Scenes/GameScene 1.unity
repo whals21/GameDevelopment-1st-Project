@@ -2480,6 +2480,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialLevelUpDelay: 3
+  victoryTimeMinutes: 15
   levelUpManager: {fileID: 792838653}
   dataManager: {fileID: 1686091348}
   player: {fileID: 152268700}
@@ -14931,9 +14932,4 @@ SceneRoots:
   - {fileID: 395440763}
   - {fileID: 1802692920}
   - {fileID: 1172447868}
-  - {fileID: 1637577416}
-  - {fileID: 941912402}
-  - {fileID: 2091226174}
-  - {fileID: 2009376826}
-  - {fileID: 895241141}
   - {fileID: 482995871}
