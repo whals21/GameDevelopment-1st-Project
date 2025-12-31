@@ -17,7 +17,7 @@ public class ScienceNode : MonoBehaviour
     public float value; // 증가 수치
 
     [Header("해금 조건 (아랫줄용)")]
-    public int requiredLevel;      // 윗줄이 몇 단계여야 해금되는가?
+    public int requiredLevel; // 윗줄이 몇 단계여야 해금되는가?
 
     [Header("UI 연결 (드래그 앤 드롭)")]
     public Button myButton; // 버튼
@@ -48,7 +48,7 @@ public class ScienceNode : MonoBehaviour
             iconImage.color = Color.white;
             if (lockObj != null) lockObj.SetActive(false);
             if (purchasedObj != null) purchasedObj.SetActive(true);
-            myButton.interactable = false; // 이미 산 건 클릭 금지
+            myButton.interactable = true; // 이미 산 건 클릭 금지 (수정)
         }
         else if (isUnlocked)
         {

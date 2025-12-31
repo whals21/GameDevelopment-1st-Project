@@ -16,7 +16,7 @@ public class LobbyManager : MonoBehaviour
 
     private void Start()
     {
-        // 저장된 데이터가 없으면 이어하기 버튼 비활성화 (클릭 불가)
+        // 저장된 데이터가 없으면 이어하기 버튼 비활성화
         if (SaveManager.Instance != null && !SaveManager.Instance.HasSaveData())
         {
             continueButton.interactable = false; // 클릭 불가능하게 만듦
@@ -40,10 +40,6 @@ public class LobbyManager : MonoBehaviour
         if (SaveManager.Instance != null && SaveManager.Instance.LoadGame())
         {
             SceneManager.LoadScene(gameSceneName);
-        }
-        else
-        {
-            Debug.Log("저장된 파일이 없습니다.");
         }
     }
 

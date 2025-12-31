@@ -143,9 +143,37 @@ public class ScienceManager : MonoBehaviour
     // 초기화 버튼용
     public void OnClickReset()
     {
-        myData.gold = 1000;
+        int refundAmount = 0;
+
+        // 모든 노드확인, 가격 합산
+        foreach (var node in allNodes)
+        {
+            // 윗줄
+            if (node.nodeType == ScienceNode.NodeType.Stat)
+            {
+                if (node.nodeId < myData.topRowLevel)
+                {
+                    refundAmount += node.price;
+                }
+            }
+            // 아랫줄
+            else
+            {
+                if (myData.purchasedSpecials.Contains(node.nodeId))
+                {
+                    refundAmount += node.price;
+                }
+            }
+        }
+
+        // 환불 금액 추가
+        myData.gold += refundAmount;
+
+        // 레벨 초기화
         myData.topRowLevel = 0;
         myData.purchasedSpecials.Clear();
+
+        // 저장 및 갱신
         SaveData();
         UpdateUI();
     }

@@ -278,7 +278,7 @@ TextureImporter:
         width: 122
         height: 115
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -286,6 +286,27 @@ TextureImporter:
       bones: []
       spriteID: e830d16a98c6e794282056bbb5b92408
       internalID: 1788107814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-3_8
+      rect:
+        serializedVersion: 2
+        x: 744
+        y: 1749
+        width: 526
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3edc03e466097134d87007a599ba5486
+      internalID: 586444025
       vertices: []
       indices: 
       edges: []
@@ -309,6 +330,7 @@ TextureImporter:
       sactx-0-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-3_5: 1134454414
       sactx-0-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-3_6: 169628538
       sactx-0-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-3_7: 1788107814
+      sactx-0-2048x2048-ASTC 4x4-ingamebattle-b1af6ddc-00000000000000000000000000000000-3_8: 586444025
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

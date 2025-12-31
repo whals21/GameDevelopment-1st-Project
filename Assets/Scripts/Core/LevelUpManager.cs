@@ -72,7 +72,7 @@ public class LevelUpManager : MonoBehaviour
             {
                 validList.Add(item);
             }
-            // 2. 진화 가능한 스킬 (최대 레벨 달성 + 진화 조건 충족)_EvolutionChecker.CanEvolve 사용_1230 조민희수정
+            // 진화 가능한 스킬 (최대 레벨 달성 + 진화 조건 충족)_EvolutionChecker.CanEvolve 사용_1230 조민희수정
             else if (EvolutionChecker.CanEvolve(item.skillData, currentLv))
             {
                 validList.Add(item);
@@ -105,21 +105,34 @@ public class LevelUpManager : MonoBehaviour
 
     public void SelectItem(ItemData selectedItem)
     {
-        // ��Ƽ�� -> ��ų �Ŵ���
+        int currentLevel = 1; // 표시될 LV
+
+        // 액티브 선택 시
         if (selectedItem.itemType == ItemType.Active)
         {
             if (SkillManager.Instance != null)
             {
-                // UpgradeOrEquipSkill 사용_1230 조민희수정
                 SkillManager.Instance.UpgradeOrEquipSkill(selectedItem.skillData);
+                currentLevel = SkillManager.Instance.GetSkillLevel(selectedItem.skillData);
+            }
+
+            if (SkillHUD.Instance != null)
+            {
+                SkillHUD.Instance.UpdateSkillUI(selectedItem.itemName, selectedItem.itemIcon, currentLevel, 0);
             }
         }
-        // �нú� -> �нú� �Ŵ���
+        // 패시브 선택 시
         else
         {
             if (PassiveSkillManager.Instance != null)
             {
                 PassiveSkillManager.Instance.TryAcquireSkill(selectedItem.passiveType);
+                currentLevel = PassiveSkillManager.Instance.GetSkillLevel(selectedItem.passiveType);
+            }
+
+            if (SkillHUD.Instance != null)
+            {
+                SkillHUD.Instance.UpdateSkillUI(selectedItem.itemName, selectedItem.itemIcon, currentLevel, 1);
             }
         }
 
