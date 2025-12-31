@@ -65,6 +65,7 @@ public class Projectile : MonoBehaviour
     private Transform _owner;
     private Transform _target;
     private float _lifetime;
+    private SkillBase _source;  // 통계 기록용 source (발사한 스킬)
 
     // Boomerang용
     private Vector3 _boomerangStartPosition;
@@ -88,6 +89,7 @@ public class Projectile : MonoBehaviour
     private float _brickVerticalVelocity;
     private bool _brickIsRising;
     private int _brickCurrentHits;
+    private bool _brickHasDeactivated;  // [v1 참조] 충돌 중복 방지 플래그
 
     // Soccer용
     private int _soccerCurrentBounces;
@@ -148,6 +150,7 @@ public class Projectile : MonoBehaviour
         _molotovHasHitGround = false;
         _brickIsRising = true;
         _brickCurrentHits = 0;
+        _brickHasDeactivated = false;  // [v1 참조] 비활성화 플래그 초기화
         _soccerCurrentBounces = 0;
         _soccerRelaunchCount = 0;
         _soccerIsRecalculating = false;
@@ -164,12 +167,13 @@ public class Projectile : MonoBehaviour
     /// <summary>
     /// 투사체 설정
     /// </summary>
-    public void Setup(Vector3 direction, float damage, float speed, ProjectileMovementType moveType = ProjectileMovementType.Straight)
+    public void Setup(Vector3 direction, float damage, float speed, ProjectileMovementType moveType = ProjectileMovementType.Straight, SkillBase source = null)
     {
         _direction = direction.normalized;
         _damage = damage;
         _speed = speed;
         _moveType = moveType;
+        _source = source;  // 통계 기록용 source 저장
 
         transform.right = _direction;
 
@@ -219,6 +223,21 @@ public class Projectile : MonoBehaviour
                 break;
 
             case ProjectileMovementType.Brick:
+                // [v1 참조] 콜라이더를 트리거로 설정
+                Collider2D brickCol = GetComponent<Collider2D>();
+                if (brickCol != null)
+                {
+                    brickCol.isTrigger = true;
+                }
+
+                // [v1 참조] Rigidbody를 Kinematic으로 설정
+                if (_rb != null)
+                {
+                    _rb.bodyType = RigidbodyType2D.Kinematic;
+                    _rb.gravityScale = 0f;
+                    _rb.velocity = Vector2.zero;
+                }
+
                 _brickHorizontalVelocity = new Vector3(_direction.x * _speed * 0.5f, 0, 0);
                 _brickVerticalVelocity = _speed * 0.8f;
                 break;
@@ -510,7 +529,7 @@ public class Projectile : MonoBehaviour
             {
                 fireGround.SetPosition(transform.position);
                 // 보정된 크기 배율 적용
-                fireGround.Init(_damage * 0.5f, 5f, adjustedMultiplier);
+                fireGround.Init(_damage * 0.5f, 5f, adjustedMultiplier, _source);
             }
         }
         else if (_fireGroundPrefab != null)
@@ -521,7 +540,7 @@ public class Projectile : MonoBehaviour
             if (fg != null)
             {
                 // 보정된 크기 배율 적용
-                fg.Init(_damage * 0.5f, 5f, adjustedMultiplier);
+                fg.Init(_damage * 0.5f, 5f, adjustedMultiplier, _source);
             }
             Destroy(fire, 6f);
         }
@@ -533,10 +552,23 @@ public class Projectile : MonoBehaviour
     #region Brick
     private void UpdateBrick()
     {
-        // 중력 기반 물리
+        // [v1 참조] 중력 기반 물리
         if (_brickIsRising)
         {
+            // 상승 단계: 수직 속도 감소
             _brickVerticalVelocity -= _brickGravity * Time.deltaTime;
+
+            // 위치 업데이트
+            Vector3 movement = (_brickHorizontalVelocity + Vector3.up * _brickVerticalVelocity) * Time.deltaTime;
+            transform.position += movement;
+
+            // 회전 (날아가는 방향으로)
+            if (movement != Vector3.zero)
+            {
+                transform.right = movement.normalized;
+            }
+
+            // 하강 시작 체크
             if (_brickVerticalVelocity <= 0)
             {
                 _brickIsRising = false;
@@ -544,26 +576,36 @@ public class Projectile : MonoBehaviour
         }
         else
         {
+            // 하강 단계: 중력으로 가속
             _brickVerticalVelocity -= _brickGravity * Time.deltaTime;
+
+            // 위치 업데이트
+            Vector3 movement = (_brickHorizontalVelocity + Vector3.up * _brickVerticalVelocity) * Time.deltaTime;
+            transform.position += movement;
+
+            // 회전 (낙하 방향으로)
+            if (movement != Vector3.zero)
+            {
+                transform.right = movement.normalized;
+            }
+
+            // [v1 참조] 지면 체크 (y < -10)
+            if (transform.position.y < -10f)
+            {
+                OnBrickHitGround();
+            }
         }
 
-        Vector3 movement = (_brickHorizontalVelocity + Vector3.up * _brickVerticalVelocity) * Time.deltaTime;
-        transform.position += movement;
-
-        if (movement != Vector3.zero)
+        // [v1 참조] 스크린 밖으로 나가면 비활성화
+        if (transform.position.y < -10f || Mathf.Abs(transform.position.x) > 20f)
         {
-            transform.right = movement.normalized;
-        }
-
-        // 지면 체크 (간소화)
-        if (transform.position.y < -5f)
-        {
-            OnBrickHitGround();
+            ReturnToPoolOrDestroy();
         }
     }
 
     private void OnBrickHitGround()
     {
+        // 튕김 효과
         _brickIsRising = false;
         _brickVerticalVelocity = -_brickVerticalVelocity * _brickBounceDamping;
         _brickVerticalVelocity = Mathf.Max(_brickVerticalVelocity, _brickBounceMinSpeed);
@@ -636,6 +678,12 @@ public class Projectile : MonoBehaviour
     #region Collision
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // [v1 참조] Brick 충돌 중복 방지
+        if (_moveType == ProjectileMovementType.Brick && _brickHasDeactivated)
+        {
+            return;
+        }
+
         // Soccer 튕김 간격 체크
         if (_moveType == ProjectileMovementType.Soccer)
         {
@@ -648,7 +696,13 @@ public class Projectile : MonoBehaviour
             Enemy enemy = collision.GetComponent<Enemy>();
             if (enemy != null && enemy.CurrentHP > 0)
             {
-                enemy.TakeDamage(_damage);
+                enemy.TakeDamage(_damage, _source);  // 통계 기록용 source 전달
+
+                // [v2] 폭발 이펙트 생성 (RPG/Homing 타입)
+                if (_moveType == ProjectileMovementType.Homing)
+                {
+                    SpawnExplosionEffect();
+                }
 
                 // [v2] 관통 효과 체크
                 if (_penetrationCount > 0)
@@ -664,6 +718,7 @@ public class Projectile : MonoBehaviour
                         _brickCurrentHits++;
                         if (_brickCurrentHits >= _brickMaxHits)
                         {
+                            _brickHasDeactivated = true;  // [v1 참조] 중복 방지 플래그 설정
                             ReturnToPoolOrDestroy();
                             return;
                         }
@@ -716,6 +771,17 @@ public class Projectile : MonoBehaviour
                     break;
             }
         }
+    }
+    #endregion
+
+    #region Effects
+    /// <summary>
+    /// 폭발 이펙트 생성 (RPG/Homing 타입 충돌 시)
+    /// LightningStrike와 동일한 방식으로 ObjectPool에서 가져옵니다.
+    /// </summary>
+    private void SpawnExplosionEffect()
+    {
+        ObjectPoolManager.Instance?.GetExplosion()?.SetPosition(transform.position);
     }
     #endregion
 

@@ -3,28 +3,28 @@ using System.Collections;
 
 public class FieldItem : MonoBehaviour
 {
-    public enum ItemType // ¾ÆÀÌÅÛ Á¾·ù
+    public enum ItemType // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         Magnet,
         Heal,
         Bomb
     }
 
-    [Header("¾ÆÀÌÅÛ ¼³Á¤")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     public ItemType type;
-    public float healAmount = 20f; // Èú·®
+    public float healAmount = 20f; // ï¿½ï¿½ï¿½ï¿½
     public float bombDamage = 9999f;
     private bool canPickup = false;
 
     private void OnEnable()
     {
-        canPickup = false; // Àá±İ
-        StartCoroutine(EnablePickupRoutine()); // ÄğÅ¸ÀÓ ½ÃÀÛ
+        canPickup = false; // ï¿½ï¿½ï¿½
+        StartCoroutine(EnablePickupRoutine()); // ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     }
 
     IEnumerator EnablePickupRoutine()
     {
-        yield return new WaitForSeconds(0.5f); // 0.5ÃÊ ´ë±â
+        yield return new WaitForSeconds(0.5f); // 0.5ï¿½ï¿½ ï¿½ï¿½ï¿½
         canPickup = true;
     }
 
@@ -39,22 +39,22 @@ public class FieldItem : MonoBehaviour
         }
     }
 
-    // ¾ÆÀÌÅÛ È¿°ú ¹ßµ¿
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ ï¿½ßµï¿½
     private void ApplyEffect()
     {
         switch (type)
         {
             case ItemType.Magnet:
-                Debug.Log("ÀÚ¼® ¹ßµ¿, °æÇèÄ¡ ²ø¾î¿À±â");
+                Debug.Log("ï¿½Ú¼ï¿½ ï¿½ßµï¿½, ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 
-                // "Exp" ÅÂ±×¸¦ °¡Áø ¸ğµç °æÇèÄ¡µéÀ» Ã£±â
+                // "Exp" ï¿½Â±×¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½
                 GameObject[] gems = GameObject.FindGameObjectsWithTag("Exp");
 
                 foreach (GameObject gem in gems)
                 {
                     ExpGem expScript = gem.GetComponent<ExpGem>();
 
-                    //  Magnetize ½ÇÇà
+                    //  Magnetize ï¿½ï¿½ï¿½ï¿½
                     if (expScript != null)
                     {
                         expScript.Magnetize();
@@ -63,7 +63,7 @@ public class FieldItem : MonoBehaviour
                 break;
 
             case ItemType.Heal:
-                Debug.Log("Ã¼·Â È¸º¹");
+                Debug.Log("Ã¼ï¿½ï¿½ È¸ï¿½ï¿½");
 
                 if (GameManager.Instance.player != null)
                 {
@@ -71,30 +71,30 @@ public class FieldItem : MonoBehaviour
 
                     if (playerStats != null)
                     {
-                        playerStats.Heal(healAmount); // ¾Æ±î ¸¸µç ÇÔ¼ö È£Ãâ!
+                        playerStats.Heal(healAmount); // ï¿½Æ±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ È£ï¿½ï¿½!
                     }
                 }
                 break;
 
             case ItemType.Bomb:
-                Debug.Log("ÆøÅº ¹ßµ¿");
+                Debug.Log("ï¿½ï¿½Åº ï¿½ßµï¿½");
 
                 if (PlayerHUD.Instance != null)
                 {
                     PlayerHUD.Instance.TriggerFlashEffect();
                 }
-                // ¸Ê¿¡ ÀÖ´Â ¸ğµç Enemy ÅÂ±×¸¦ Ã£À½
+                // ï¿½Ê¿ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ Enemy ï¿½Â±×¸ï¿½ Ã£ï¿½ï¿½
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
-                // ÇÏ³ª¾¿ µ¥¹ÌÁö¸¦ ÁÜ
+                // ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
                 foreach (GameObject enemyObj in enemies)
                 {
                     Enemy enemyScript = enemyObj.GetComponent<Enemy>();
 
                     if (enemyScript != null)
                     {
-                        // TakeDamage ÇÔ¼ö È£Ãâ
-                        enemyScript.TakeDamage(bombDamage, true);
+                        // TakeDamage í•¨ìˆ˜ í˜¸ì¶œ (source=null, isCritical=true)_ì¡°ë¯¼í¬
+                        enemyScript.TakeDamage(bombDamage, null, true);
                     }
                 }
                 break;

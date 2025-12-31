@@ -179,7 +179,8 @@ public class GuardianTop : MonoBehaviour
             Debug.Log($"[GuardianTop] 적 타격 - HP: {enemy.CurrentHP} -> Damage: {_damage}");
 
             // 데미지 (적 내부 쿨타임에 의존)
-            enemy.TakeDamage(_damage);
+            // 참고: GuardianSkill에서 이미 TakeDamage를 호출하므로 중복 제거 또는 별도 처리
+            enemy.TakeDamage(_damage, null);
 
             // 넉백
             if (enemy.TryGetComponent<Rigidbody2D>(out var enemyRb))

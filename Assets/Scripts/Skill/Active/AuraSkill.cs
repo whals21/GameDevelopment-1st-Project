@@ -193,7 +193,7 @@ public class AuraSkill : SkillBase
                 // 살아있는 적만 피격
                 if (enemy.CurrentHP > 0)
                 {
-                    enemy.TakeDamage(damage);
+                    enemy.TakeDamage(damage, this);  // Aura 스킬도 통계 기록 (지속 데미지)
                 }
             }
         }

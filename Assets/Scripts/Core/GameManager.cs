@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// 게임 매니저 (v2 리팩토링)
@@ -174,7 +175,38 @@ public class GameManager : MonoBehaviour
         IsGameRunning = false;
         Time.timeScale = 0f;
 
-        Debug.Log("[GameManager] 게임 오버");
+        Debug.Log("[GameManager] 게임 오버!");
+
+        // [v2 추가] 통계 시스템 연동
+        ShowStatistics();
+    }
+
+    /// <summary>
+    /// [v2 추가] 통계 보고서 표시
+    /// </summary>
+    private void ShowStatistics()
+    {
+        if (StatisticsManager.Instance == null)
+        {
+            Debug.LogWarning("[GameManager] StatisticsManager를 찾을 수 없습니다.");
+            return;
+        }
+
+        // 통계 보고서 요청
+        List<SkillSessionData> report = StatisticsManager.Instance.GetReport(GameTime);
+
+        // 콘솔로그 출력 (디버깅용)
+        Debug.Log($"[Statistics] ========== 게임 종료 (플레이 시간: {GameTime:F1}초) ==========");
+        Debug.Log($"[Statistics] 총 피해량: {StatisticsManager.Instance.GetTotalDamage():F0}");
+        Debug.Log($"[Statistics] 총 적중 횟수: {StatisticsManager.Instance.GetTotalHits()}");
+
+        foreach (var skillData in report)
+        {
+            Debug.Log($"[Statistics] {skillData.skillName}: Total {skillData.totalDamage:F0}, DPS: {skillData.dps:F1}, Hits: {skillData.hitCount}");
+        }
+
+        // TODO: UI에 전달 (예시)
+        // UIManager.Instance.ShowResultScreen(report);
     }
 
     /// <summary>

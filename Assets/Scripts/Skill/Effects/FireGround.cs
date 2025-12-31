@@ -28,6 +28,7 @@ public class FireGround : MonoBehaviour
     private float _duration;
     private float _radius;
     private int _enemyLayerMask;
+    private SkillBase _source;  // 통계 기록용 source
 
     // 상태
     private Coroutine _lifeCycleCoroutine;
@@ -80,11 +81,12 @@ public class FireGround : MonoBehaviour
     /// <summary>
     /// 화염 지대 초기화
     /// </summary>
-    public void Init(float damage, float duration, float radiusMultiplier = 1f)
+    public void Init(float damage, float duration, float radiusMultiplier = 1f, SkillBase source = null)
     {
         _damage = damage;
         _duration = duration;
         _radius = _defaultRadius * radiusMultiplier;
+        _source = source;  // 통계 기록용 source 저장
 
         // 콜라이더 반경 설정
         if (_collider != null)
@@ -169,7 +171,7 @@ public class FireGround : MonoBehaviour
         {
             if (enemyCol.TryGetComponent<Enemy>(out Enemy enemy))
             {
-                enemy.TakeDamage(_damage);
+                enemy.TakeDamage(_damage, _source);  // source 전달로 통계 기록
             }
         }
     }
@@ -222,6 +224,7 @@ public class FireGround : MonoBehaviour
         _damage = 0f;
         _duration = 0f;
         _radius = 0f;
+        _source = null;  // source 리셋
 
         if (_fireParticles != null)
         {

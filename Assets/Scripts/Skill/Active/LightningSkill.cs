@@ -129,12 +129,12 @@ public class LightningSkill : SkillBase
             // v2: 논리와 시각 분리 - 위치만 설정, 데미지는 별도 처리
             float damage = GetFinalDamage();
             lightning.SetPosition(target.transform.position);
-            target.TakeDamage(damage);
+            target.TakeDamage(damage, this);  // 통계 기록을 위해 source 전달
         }
         else
         {
             // 풀이 없으면 직접 데미지 처리 (폴백)
-            target.TakeDamage(GetFinalDamage());
+            target.TakeDamage(GetFinalDamage(), this);
         }
     }
     #endregion

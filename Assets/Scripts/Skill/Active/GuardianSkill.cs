@@ -290,7 +290,7 @@ public class GuardianBehavior : MonoBehaviour
         if (nearest != null)
         {
             // 위임받은 데미지로 공격
-            nearest.TakeDamage(_damage);
+            nearest.TakeDamage(_damage, null);  // GuardianBehavior는 SkillBase가 아니므로 null 전달
         }
     }
 }

@@ -149,9 +149,16 @@ public class Enemy : MonoBehaviour
         return distance <= Range;
     }
     // 데미지 받기
-    public void TakeDamage(float damage, bool isCritical = false)
+    //TakeDamage에 SkillBase source 파라미터 추가 (통계 시스템 연동)_조민희
+    public void TakeDamage(float damage, SkillBase source = null,bool isCritical = false)
     {
         currentHP -= (int)damage;
+
+        // [조민희 추가] 스킬 통계 기록 (소스가 있을 때만)
+        if (source != null && source.Data != null && StatisticsManager.Instance != null)
+        {
+            StatisticsManager.Instance.RecordDamage(source.Data.skillName, damage);
+        }
 
         if (ObjectPoolManager.Instance != null)
         {

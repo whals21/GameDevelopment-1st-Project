@@ -56,14 +56,28 @@ public class ProjectileSkill : SkillBase
         // 가장 가까운 적 찾기
         Transform target = FindNearestEnemy();
 
+        // 기본 방향 결정: 타겟이 있으면 타겟 방향, 없으면 플레이어 좌우 랜덤
+        Vector3 baseDirection;
+        if (target != null)
+        {
+            // 타겟 방향
+            baseDirection = (target.position - transform.position).normalized;
+        }
+        else
+        {
+            // 플레이어 좌우 랜덤 각도 (-45도 ~ +45도)
+            float randomAngle = Random.Range(-45f, 45f);
+            baseDirection = Quaternion.Euler(0, 0, randomAngle) * Vector3.right;
+        }
+
         // 투사체 발사
         int projectileCount = GetProjectileCount();
 
         for (int i = 0; i < projectileCount; i++)
         {
-            // 각 투사체마다 개별적으로 랜덤한 수평 방향 생성 (-60도 ~ +60도)
-            Vector3 randomDirection = GetRandomHorizontalDirection(60f);
-            SpawnProjectile(randomDirection);
+            // 기본 방향을 중심으로 확산각 적용
+            Vector3 fireDirection = CalculateSpreadDirection(baseDirection, i, projectileCount, _data.defaultSpreadAngle);
+            SpawnProjectile(fireDirection);
         }
     }
 
@@ -115,7 +129,7 @@ public class ProjectileSkill : SkillBase
         }
 
         // 데이터에서 이동 방식 가져와서 투사체 초기화
-        projectile.Setup(direction, damage, speed, _data.movementType);
+        projectile.Setup(direction, damage, speed, _data.movementType, this);  // 통계 기록용 source 전달
 
         // 시각 효과 설정 (v2) - SkillData에서 스프라이트, 색상, 크기 적용
         Debug.Log($"[ProjectileSkill] {_data.skillName} - sprite: {_data.projectileSprite?.name ?? "null"}, color: {_data.projectileColor}, scale: {_data.projectileScale * visualScale}");
