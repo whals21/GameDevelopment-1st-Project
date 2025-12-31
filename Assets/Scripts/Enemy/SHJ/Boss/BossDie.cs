@@ -1,54 +1,36 @@
 using UnityEngine;
 
-public class BossDie : MonoBehaviour, IDamageable
+public class BossDie : MonoBehaviour
 {
-    public Transform Transform => transform;
     private BossController bossController;
     private Animator animator;
 
     private float currentHp;
-    public float CurrentHp => currentHp;
-    public float MaxHp => bossController.Data.hp;
-
     private bool isDead = false;
 
     private void Awake()
     {
         bossController = GetComponent<BossController>();
         animator = GetComponentInChildren<Animator>();
-
-        if (bossController == null)
-            Debug.LogError("BossDie: BossController 없음");
-        if (animator == null)
-            Debug.LogError("BossDie: Animator 없음");
     }
 
-    /// <summary>
-    /// BossController에서 Data 세팅 후 반드시 호출
-    /// </summary>
     public void Initialize()
     {
         currentHp = MaxHp;
         isDead = false;
+        gameObject.SetActive(true);
     }
 
-    // IDamageable 구현
-    public void TakeDamage(float damage, bool isCritical = false)
+    public float MaxHp => bossController != null ? bossController.Data.hp : 100;
+
+    public void TakeDamage(float damage)
     {
         if (isDead) return;
 
         currentHp -= damage;
         currentHp = Mathf.Clamp(currentHp, 0, MaxHp);
 
-        // 데미지 텍스트 (Enemy와 동일)
-        if (ObjectPoolManager.Instance != null)
-        {
-            DamageText text = ObjectPoolManager.Instance.GetDamageText();
-            if (text != null)
-                text.Init(damage, isCritical, transform.position);
-        }
-
-        if (currentHp <= 0)
+        if (currentHp <= 0f)
             Die();
     }
 
@@ -57,16 +39,20 @@ public class BossDie : MonoBehaviour, IDamageable
         if (isDead) return;
         isDead = true;
 
-        bossController.SetState(null);
-        bossController.ReturnAllWarningPads();
+        bossController?.SetState(null);
+        bossController?.ReturnAllWarningPads();
 
-        animator.SetTrigger("isDie");
+        animator?.SetTrigger("isDie");
     }
 
-    // Animation Event
+    // Animation Event에서 호출
     public void OnDeathAnimationFinished()
     {
         DropItem();
+        bossController?.SetState(null);
+        bossController?.ReturnAllWarningPads();
+
+        // **여기서 보스 완전히 비활성화**
         gameObject.SetActive(false);
     }
 

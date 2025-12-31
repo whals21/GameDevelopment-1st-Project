@@ -11,13 +11,19 @@ public class BossDieState : StateMachineBehaviour
     {
         bossDie = animator.GetComponentInParent<BossDie>();
     }
-
-    // Die 상태 종료 시 (핵심)
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (bossDie != null)
         {
-            bossDie.OnDeathAnimationFinished();
+            bossDie.OnDeathAnimationFinished(); // 여기서 보스 숨기기
         }
     }
+    //// Die 상태 종료 시 (핵심)
+    //public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    //{
+    //    if (bossDie != null)
+    //    {
+    //        bossDie.OnDeathAnimationFinished();
+    //    }
+    //}
 }

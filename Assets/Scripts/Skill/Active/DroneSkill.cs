@@ -32,7 +32,7 @@ public class DroneSkill : SkillBase
         // 싱글톤으로 빠른 플레이어 참조
         if (PlayerController.Instance != null)
         {
-            _playerTransform = PlayerController.Instance.transform;
+            _playerTransform = PlayerController.Instance?.transform;//12/31
         }
     }
     #endregion
@@ -169,6 +169,9 @@ public class DroneSkill : SkillBase
         _droneObjects.Clear();
     }
     #endregion
+
+
+
 }
 
 /// <summary>
@@ -195,6 +198,8 @@ public class DroneBehavior : MonoBehaviour
 
     // LayerMask 캐싱
     private int _enemyLayerMask;
+
+
 
     /// <summary>
     /// 스탯을 설정합니다.
@@ -245,7 +250,8 @@ public class DroneBehavior : MonoBehaviour
         if (_attackTimer >= attackInterval)
         {
             _attackTimer = 0f;
-            FireAtEnemy();
+            //FireAtEnemy();//12/31
+            ApplyDamageToNearestEnemy();//12/31
         }
     }
 
@@ -300,4 +306,37 @@ public class DroneBehavior : MonoBehaviour
             projectile.SetSprite(_data.projectileSprite, _data.projectileColor, _data.projectileScale);
         }
     }
+
+    #region 12/31
+    private void ApplyDamageToNearestEnemy()
+    {
+        Vector3 worldPos = transform.position;
+        var targets = new List<IDamageable>();
+        Collider2D[] hits = new Collider2D[32];
+        int count = Physics2D.OverlapCircleNonAlloc(worldPos, _data.enemySearchRadius, hits, _enemyLayerMask);
+
+        for (int i = 0; i < count; i++)
+        {
+            if (hits[i].TryGetComponent<IDamageable>(out var dmg) && dmg.CurrentHP > 0)
+                targets.Add(dmg);
+        }
+
+        if (targets.Count == 0) return;
+
+        // 가장 가까운 적 찾기
+        IDamageable nearest = null;
+        float minDist = float.MaxValue;
+        foreach (var t in targets)
+        {
+            float dist = Vector3.Distance(worldPos, ((MonoBehaviour)t).transform.position);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                nearest = t;
+            }
+        }
+
+        nearest?.TakeDamage(_damage);
+    }
+    #endregion
 }

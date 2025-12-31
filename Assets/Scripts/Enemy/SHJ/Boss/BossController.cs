@@ -9,7 +9,7 @@ using static ActtackManager;
 // - 패턴별 총알 풀 연동
 // - 발판 풀 관리
 // ==========================
-public class BossController : MonoBehaviour
+public class BossController : MonoBehaviour,IDamageable
 {
     private BossState currentState;                  // 현재 상태
     [SerializeField] private int MonsterNumber;     // 보스 번호
@@ -373,7 +373,31 @@ public class BossController : MonoBehaviour
         }
     }
 
- 
+    public void TakeDamage(float damage, bool isCritical = false)
+    {
+        currentHP -= damage;
+        currentHP = Mathf.Max(currentHP, 0f);
+
+        // 데미지 텍스트
+        if (ObjectPoolManager.Instance != null)
+        {
+            DamageText text = ObjectPoolManager.Instance.GetDamageText();
+            if (text != null)
+                text.Init(damage, isCritical, transform.position);
+        }
+
+      
+
+        // 죽음 체크
+        if (currentHP <= 0f)
+        {
+            if (bossDie != null)
+                bossDie.Die();
+        }
+
+
+
+    }
 }
 
 

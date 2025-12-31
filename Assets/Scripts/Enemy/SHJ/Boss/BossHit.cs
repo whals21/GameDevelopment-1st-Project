@@ -34,7 +34,7 @@ public class BossHit : MonoBehaviour
             return;
         }
 
-        bossDie.TakeDamage(damage, isCritical);
+      
 
         if (sr != null)
         {

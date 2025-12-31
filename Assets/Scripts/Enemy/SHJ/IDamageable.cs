@@ -5,6 +5,6 @@ using UnityEngine;
 public interface IDamageable
 {
 
-    Transform Transform { get; }
+    float CurrentHP { get; }
     public void TakeDamage(float damage, bool isCritical = false);
 }

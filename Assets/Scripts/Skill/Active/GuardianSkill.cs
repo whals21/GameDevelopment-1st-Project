@@ -276,21 +276,49 @@ public class GuardianBehavior : MonoBehaviour
     /// <summary>
     /// 가장 가까운 적 공격 (TargetingHelper 사용)
     /// </summary>
-    private void AttackNearestEnemy()
+    //private void AttackNearestEnemy()
+    //{
+    //    if (_range <= 0) return;
+
+    //    // TargetingHelper로 중복 제거
+    //    Enemy nearest = TargetingHelper.FindNearestEnemy(
+    //        transform.position,
+    //        _range,
+    //        _enemyLayerMask
+    //    );
+
+    //    if (nearest != null)
+    //    {
+    //        // 위임받은 데미지로 공격
+    //        nearest.TakeDamage(_damage);
+    //    }
+    //}//12/31
+    private void AttackNearestEnemy()//12/31
     {
         if (_range <= 0) return;
 
-        // TargetingHelper로 중복 제거
-        Enemy nearest = TargetingHelper.FindNearestEnemy(
-            transform.position,
-            _range,
-            _enemyLayerMask
-        );
+        // Physics2D.OverlapCircleNonAlloc으로 반경 내 적 체크
+        Collider2D[] hits = new Collider2D[32];
+        int count = Physics2D.OverlapCircleNonAlloc(transform.position, _range, hits, _enemyLayerMask);
 
-        if (nearest != null)
+        IDamageable nearest = null;
+        float minDist = float.MaxValue;
+
+        for (int i = 0; i < count; i++)
         {
-            // 위임받은 데미지로 공격
-            nearest.TakeDamage(_damage);
+            // IDamageable 체크
+            if (hits[i].TryGetComponent<IDamageable>(out var dmg) && dmg.CurrentHP > 0)
+            {
+                float dist = Vector3.Distance(transform.position, ((MonoBehaviour)dmg).transform.position);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    nearest = dmg;
+                }
+            }
         }
+
+        // 가장 가까운 적에게 데미지 적용
+        nearest?.TakeDamage(_damage);
     }
 }
