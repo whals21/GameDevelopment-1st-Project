@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 9060212891239161094}
   - component: {fileID: 6338660918458555229}
   - component: {fileID: 1387150356156697381}
-  - component: {fileID: 2939155532130027861}
+  - component: {fileID: -6004863176859504157}
+  - component: {fileID: -330772441483115416}
   m_Layer: 0
   m_Name: MagneticDart
   m_TagString: Untagged
@@ -226,7 +227,34 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
---- !u!114 &2939155532130027861
+--- !u!50 &-6004863176859504157
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2864860492614333976}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &-330772441483115416
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -235,19 +263,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 2864860492614333976}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 803cbc4d60ab4dd48949d10ca898865a, type: 3}
+  m_Script: {fileID: 11500000, guid: d13fb0704865cae4183957e0c27771ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseOrbitRadius: 1
-  maxOrbitRadius: 7
-  expansionSpeed: 1
-  baseRotationSpeed: 180
-  damage: 15
-  enemyLayer:
+  _enemyLayer:
     serializedVersion: 2
-    m_Bits: 256
-  enemyProjectileLayer:
+    m_Bits: 1048832
+  _obstacleLayer:
     serializedVersion: 2
-    m_Bits: 1024
-  trailRenderer: {fileID: 1387150356156697381}
-  spriteRenderer: {fileID: 9060212891239161094}
+    m_Bits: 0
+  _maxLifetime: 5
+  _boomerangMaxDistance: 8
+  _boomerangReturnSpeedMult: 1.2
+  _boomerangRotationSpeed: 720
+  _orbitBaseRadius: 1
+  _orbitMaxRadius: 5
+  _orbitExpansionSpeed: 1
+  _orbitBaseRotationSpeed: 180
+  _molotovArcHeight: 3
+  _fireGroundPrefab: {fileID: 0}
+  _fireGroundScaleFactor: 0.3
+  _fireGroundMaxMultiplier: 1.5
+  _brickGravity: 15
+  _brickBounceDamping: 0.7
+  _brickBounceMinSpeed: 3
+  _brickMaxHits: 3
+  _soccerMaxBounces: 5
+  _soccerSpawnRadius: 3
+  _soccerMaxRelaunchCount: 3

@@ -4496,8 +4496,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 303a6b8cf99345a48894d23e29451ba2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testSkills: []
-  testSkillLevels: 
+  testSkills:
+  - {fileID: 11400000, guid: 20571e6f019a7284194cc28d92d639c8, type: 2}
+  - {fileID: 11400000, guid: b184065ba4ffacf45adac9e891f1b773, type: 2}
+  testSkillLevels: 0100000001000000
 --- !u!1001 &472087750
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7008,6 +7010,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activeItems:
   - {fileID: 11400000, guid: a551f99f4475a774992e448377ec9e62, type: 2}
+  - {fileID: 11400000, guid: 0828cd2730e03ff469e4dd442a12ce71, type: 2}
   passiveItems:
   - {fileID: 11400000, guid: d5969ad1c7b5bfe4cb3454994f5f36a1, type: 2}
   evoItems:

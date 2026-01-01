@@ -164,7 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 1048832
   _obstacleLayer:
     serializedVersion: 2
     m_Bits: 0
@@ -178,6 +178,8 @@ MonoBehaviour:
   _orbitBaseRotationSpeed: 180
   _molotovArcHeight: 3
   _fireGroundPrefab: {fileID: 2388024931358325485, guid: 8664922d214edbb4aa247e3cd2eac423, type: 3}
+  _fireGroundScaleFactor: 0.3
+  _fireGroundMaxMultiplier: 1.5
   _brickGravity: 15
   _brickBounceDamping: 0.7
   _brickBounceMinSpeed: 3

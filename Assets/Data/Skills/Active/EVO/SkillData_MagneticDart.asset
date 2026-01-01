@@ -15,7 +15,7 @@ MonoBehaviour:
   skillName: MagneticDart
   description: 
   icon: {fileID: 21300000, guid: cd28851ef10a3c74f9c48ba202686ad3, type: 3}
-  skillType: 6
+  skillType: 0
   prefab: {fileID: 2864860492614333976, guid: d8520391d9cb41e41bc43b34bf539751, type: 3}
   damage: 10
   cooldown: 1
@@ -33,13 +33,17 @@ MonoBehaviour:
   isOrbiting: 1
   initialAngleOffset: 0
   penetrationCount: 0
+  projectileLifetime: 0
   strikeDelay: 0.15
   rapidFireInterval: 0.1
   defaultSpreadAngle: 15
   projectileSprite: {fileID: 21300000, guid: cd28851ef10a3c74f9c48ba202686ad3, type: 3}
   projectileColor: {r: 1, g: 1, b: 1, a: 1}
   projectileScale: 1
+  activeDuration: 5
   damageInterval: 0.2
+  innerAuraColor: {r: 0, g: 1, b: 1, a: 0.5}
+  outerAuraColor: {r: 0, g: 0.5, b: 1, a: 0.5}
   levels:
   - level: 1
     damageMultiplier: 1
