@@ -1934,12 +1934,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1559872897}
-  - {fileID: 2056551077}
-  - {fileID: 1661433122}
-  - {fileID: 1952330339}
   - {fileID: 1203924559}
   - {fileID: 1093029374}
   - {fileID: 2067865584}
+  - {fileID: 2056551077}
+  - {fileID: 1661433122}
+  - {fileID: 1952330339}
   m_Father: {fileID: 1802692920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2804,9 +2804,9 @@ MonoBehaviour:
   m_fontSize: 40
   m_fontSizeBase: 40
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 0
-  m_fontSizeMax: 0
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 30
+  m_fontSizeMax: 35
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -5323,12 +5323,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1994526695}
-  - {fileID: 1133694332}
-  - {fileID: 533797680}
-  - {fileID: 1609473605}
   - {fileID: 1565792434}
   - {fileID: 753868268}
   - {fileID: 1194339126}
+  - {fileID: 1133694332}
+  - {fileID: 533797680}
+  - {fileID: 1609473605}
   m_Father: {fileID: 1802692920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -6939,7 +6939,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1733189376, guid: 07601a8b1d0f55e438a23fa2949e324c, type: 3}
+  m_Sprite: {fileID: -882619633, guid: 8203e56ccdd43874b97821907b73b8e1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9674,14 +9674,14 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 635783651}
-  - {fileID: 671185195}
-  - {fileID: 1886889081}
-  - {fileID: 1975469456}
   - {fileID: 96821380}
   - {fileID: 562614309}
   - {fileID: 400844376}
   - {fileID: 2092624382}
   - {fileID: 1372956243}
+  - {fileID: 671185195}
+  - {fileID: 1886889081}
+  - {fileID: 1975469456}
   m_Father: {fileID: 1802692920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -10364,23 +10364,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1157261444}
   m_CullTransparentMesh: 1
---- !u!1 &1172447866
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1172447868}
-  - component: {fileID: 1172447869}
-  m_Layer: 5
-  m_Name: Icon
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!114 &1172447867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10411,34 +10394,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!4 &1172447868
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1172447866}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1172447869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1172447866}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2e0ee0a4260c244c8e940dab30491f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pads: []
 --- !u!1 &1194339125
 GameObject:
   m_ObjectHideFlags: 0
@@ -13784,9 +13739,9 @@ MonoBehaviour:
   m_fontSize: 40
   m_fontSizeBase: 40
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 0
-  m_fontSizeMax: 0
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 30
+  m_fontSizeMax: 35
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -15408,9 +15363,9 @@ MonoBehaviour:
   m_fontSize: 40
   m_fontSizeBase: 40
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 0
-  m_fontSizeMax: 0
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 30
+  m_fontSizeMax: 35
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -18398,5 +18353,4 @@ SceneRoots:
   - {fileID: 658782166}
   - {fileID: 395440763}
   - {fileID: 1802692920}
-  - {fileID: 1172447868}
   - {fileID: 482995871}

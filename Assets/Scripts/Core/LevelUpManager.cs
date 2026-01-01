@@ -169,31 +169,46 @@ public class LevelUpManager : MonoBehaviour
     public void SelectItem(ItemData selectedItem)
     {
         // 액티브 스킬 -> 스킬 매니저
+        int currentLevel = 1; // LV 표시
+
+        // 엑티브 선택시
         if (selectedItem.itemType == ItemType.Active)
         {
             if (SkillManager.Instance != null)
             {
-                // 진화 스킬인지 확인 (evoItems에 있는지 체크)
-                if (IsEvolutionSkill(selectedItem))
-                {
-                    ExecuteEvolutionForItem(selectedItem);
-                }
-                else
-                {
-                    // 일반 스킬 레벨업 또는 장착
-                    SkillManager.Instance.UpgradeOrEquipSkill(selectedItem.skillData);
-                }
+                // 획득하거나 강화함
+                SkillManager.Instance.UpgradeOrEquipSkill(selectedItem.skillData);
+
+                // UI 갱신
+                currentLevel = SkillManager.Instance.GetSkillLevel(selectedItem.skillData);
+            }
+
+            // 윗줄에 알려줄 코드
+            if (SkillHUD.Instance != null)
+            {
+                SkillHUD.Instance.UpdateSkillUI(selectedItem.itemName, selectedItem.itemIcon, currentLevel, 0);
             }
         }
-        // 패시브 스킬 -> 패시브 매니저
+        // 패시브 선택시
         else
         {
             if (PassiveSkillManager.Instance != null)
             {
+                // 획득, 강화
                 PassiveSkillManager.Instance.TryAcquireSkill(selectedItem.passiveType);
+
+                // 갱신
+                currentLevel = PassiveSkillManager.Instance.GetSkillLevel(selectedItem.passiveType);
+            }
+
+            // 아랫줄에 알려줄 코드
+            if (SkillHUD.Instance != null)
+            {
+                SkillHUD.Instance.UpdateSkillUI(selectedItem.itemName, selectedItem.itemIcon, currentLevel, 1);
             }
         }
 
+        // 게임 재개
         levelUpPanel.SetActive(false);
         Time.timeScale = 1f;
     }
