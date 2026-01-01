@@ -22,14 +22,10 @@ public class BossDieState : StateMachineBehaviour
     }
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        var bossDie = animator.GetComponentInParent<BossDie>();
         if (bossDie != null)
         {
-            // 죽은 보스 숨기기
-            bossDie.DropItem();
-            bossDie.gameObject.SetActive(false);
-
-            // 절대 Initialize() 호출하지 않음
-            // HP, 상태 등 초기화는 Spawn/리셋 시점에만
+            bossDie.OnDeathAnimationFinished();
         }
     }
     //// Die 상태 종료 시 (핵심)
