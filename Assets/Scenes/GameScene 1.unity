@@ -4496,10 +4496,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 303a6b8cf99345a48894d23e29451ba2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testSkills:
-  - {fileID: 11400000, guid: 20571e6f019a7284194cc28d92d639c8, type: 2}
-  - {fileID: 11400000, guid: b184065ba4ffacf45adac9e891f1b773, type: 2}
-  testSkillLevels: 0100000001000000
+  testSkills: []
+  testSkillLevels: 01000000
 --- !u!1001 &472087750
 PrefabInstance:
   m_ObjectHideFlags: 0
