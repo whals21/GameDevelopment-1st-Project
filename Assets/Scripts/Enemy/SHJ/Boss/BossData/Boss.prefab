@@ -124,6 +124,8 @@ GameObject:
   - component: {fileID: 2073004488000325298}
   - component: {fileID: 5072897593862626767}
   - component: {fileID: 162317878641941893}
+  - component: {fileID: -6690490955594889744}
+  - component: {fileID: 8489778088674141646}
   - component: {fileID: 6978721933034729782}
   m_Layer: 20
   m_Name: Boss
@@ -190,7 +192,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1318412455, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+  m_Sprite: {fileID: 1335004811, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -221,6 +223,7 @@ MonoBehaviour:
     m_Bits: 0
   rb: {fileID: 5072897593862626767}
   attackCooldown: 5
+  attackComp: {fileID: 0}
   attackRay: {fileID: 3180662328617837772}
   attackRange: {fileID: 3064891439488725057}
   FirePool: {fileID: 2203871407228725533}
@@ -250,6 +253,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcba5b1998e6c0a42872ac667afe7601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bossController: {fileID: 0}
+  dieAnimationSpeed: 1
+  fadeOutDelay: 0.3
 --- !u!114 &2073004488000325298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,6 +342,36 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.64, y: 0.64}
   m_EdgeRadius: 0
+--- !u!114 &-6690490955594889744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8748780080106262039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c29cff538c195c249b69c6f2236de67b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Library: []
+  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: 13935fed37bfb464ea1841309f94a425, type: 3}
+--- !u!114 &8489778088674141646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8748780080106262039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CategoryHash: 3.3377335e-38
+  m_labelHash: 2.259605e-29
+  m_SpriteKey: 0
+  m_SpriteHash: 835691615
 --- !u!95 &6978721933034729782
 Animator:
   serializedVersion: 5

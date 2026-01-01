@@ -122,6 +122,10 @@ GameObject:
   - component: {fileID: 6618743957519961566}
   - component: {fileID: 5072897593862626767}
   - component: {fileID: 162317878641941893}
+  - component: {fileID: -463432117504741461}
+  - component: {fileID: -925636168943050113}
+  - component: {fileID: -1206559628477541586}
+  - component: {fileID: 6302486550712402508}
   m_Layer: 20
   m_Name: Boss 2
   m_TagString: Untagged
@@ -218,6 +222,7 @@ MonoBehaviour:
     m_Bits: 0
   rb: {fileID: 5072897593862626767}
   attackCooldown: 5
+  attackComp: {fileID: 0}
   attackRay: {fileID: 3180662328617837772}
   attackRange: {fileID: 3064891439488725057}
   FirePool: {fileID: 2203871407228725533}
@@ -307,3 +312,69 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.64, y: 0.64}
   m_EdgeRadius: 0
+--- !u!114 &-463432117504741461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8748780080106262039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcba5b1998e6c0a42872ac667afe7601, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bossController: {fileID: 0}
+  dieAnimationSpeed: 1
+  fadeOutDelay: 0.3
+--- !u!114 &-925636168943050113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8748780080106262039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c29cff538c195c249b69c6f2236de67b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Library: []
+  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: 4a333de4cd629764ab38248f40ed563e, type: 3}
+--- !u!114 &-1206559628477541586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8748780080106262039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CategoryHash: 0
+  m_labelHash: 0
+  m_SpriteKey: 0
+  m_SpriteHash: 684127717
+--- !u!95 &6302486550712402508
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8748780080106262039}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bb50ed6ebcda93542bf498580de95c6f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
