@@ -421,19 +421,15 @@ public class Projectile : MonoBehaviour
     #region Homing
     private void UpdateHoming()
     {
-        // 타겟이 없으면 재검색
-        if (_target == null)
-        {
-            FindHomingTarget();
-        }
-
-        // 타겟 방향으로 이동
-        if (_target != null)
+        // 타겟이 유효하면 추적
+        if (_target != null && _target.gameObject.activeInHierarchy)
         {
             Vector3 targetDir = (_target.position - transform.position).normalized;
             _velocity = targetDir * _speed;
             transform.right = targetDir;
         }
+        // 타겟이 없거나 죽었으면 마지막 방향으로 계속 이동 (재검색하지 않음)
+        // → 자연스럽게 화면 밖으로 사라짐
 
         transform.position += _velocity * Time.deltaTime;
     }
