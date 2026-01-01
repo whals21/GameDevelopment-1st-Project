@@ -98,6 +98,13 @@ public class PassiveSkillManager : MonoBehaviour
             int newLevel = ++ownedPassiveSkills[skillType];
             OnSkillLevelUp?.Invoke(skillData, newLevel);
             ApplyAllPassiveEffects();
+
+            // HUD 업데이트 (Passive 스킬이므로 skillType = 1)
+            if (SkillHUD.Instance != null)
+            {
+                SkillHUD.Instance.UpdateSkillUI(skillData.skillName, skillData.skillIcon, newLevel, 1);
+            }
+
             return true;
         }
         // 새로운 스킬 획득 시 최대 개수 체크
@@ -112,6 +119,13 @@ public class PassiveSkillManager : MonoBehaviour
             ownedPassiveSkills.Add(skillType, 1);
             OnSkillAcquired?.Invoke(skillData, 1);
             ApplyAllPassiveEffects();
+
+            // HUD 업데이트 (Passive 스킬이므로 skillType = 1)
+            if (SkillHUD.Instance != null)
+            {
+                SkillHUD.Instance.UpdateSkillUI(skillData.skillName, skillData.skillIcon, 1, 1);
+            }
+
             return true;
         }
     }

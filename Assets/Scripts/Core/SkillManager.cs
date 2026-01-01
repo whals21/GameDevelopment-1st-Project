@@ -95,6 +95,12 @@ public class SkillManager : MonoBehaviour
         _skillList.Add(newSkill);
         _skillLookup[data] = newSkill;
 
+        // HUD 업데이트 (Active 스킬이므로 skillType = 0)
+        if (SkillHUD.Instance != null)
+        {
+            SkillHUD.Instance.UpdateSkillUI(data.skillName, data.icon, level, 0);
+        }
+
         Debug.Log($"[SkillManager] {data.skillName} 스킬 장착 완료 (레벨: {level})");
 
         return newSkill;
@@ -216,6 +222,13 @@ public class SkillManager : MonoBehaviour
             // 이미 있으면 레벨업 (최대 레벨 5 체크)
             int newLevel = Mathf.Min(skill.CurrentLevel + 1, 5);
             skill.SetLevel(newLevel);
+
+            // HUD 업데이트 (Active 스킬이므로 skillType = 0)
+            if (SkillHUD.Instance != null)
+            {
+                SkillHUD.Instance.UpdateSkillUI(skillData.skillName, skillData.icon, newLevel, 0);
+            }
+
             Debug.Log($"[SkillManager] {skillData.skillName} 스킬 레벨업: {newLevel}");
         }
         else
