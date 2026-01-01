@@ -28,29 +28,29 @@ public class BossDie : MonoBehaviour
 
     public float MaxHp => bossController != null ? bossController.Data.hp : 100;
 
-    public void TakeDamage(float damage)
-    {
-        if (isDead) return;
+    // public void TakeDamage(float damage)
+    // {
+    //     if (isDead) return;
 
-        currentHp -= damage;
-        currentHp = Mathf.Clamp(currentHp, 0, MaxHp);
+    //     currentHp -= damage;
+    //     currentHp = Mathf.Clamp(currentHp, 0, MaxHp);
 
-        if (currentHp <= 0f)
-            Die();
-    }
+    //     if (currentHp <= 0f)
+    //         Die();
+    // }
 
     public void Die()
     {
         if (isDead) return;
         isDead = true;
 
-        // ¸ðµç ±â´É ¸ØÃã
+        // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         bossController?.SetState(null);
         bossController?.ReturnAllWarningPads();
         if (bossController?.attackComp != null)
             bossController.attackComp.enabled = false;
 
-        // Die ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
+        // Die ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½
         if (animator != null)
         {
             animator.speed = dieAnimationSpeed;
@@ -58,12 +58,12 @@ public class BossDie : MonoBehaviour
         }
     }
 
-    // Animation Event¿¡¼­ È£Ãâ
+    // Animation Eventï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½
     public void OnDeathAnimationFinished()
     {
         DropItem();
 
-        // ¾à°£ Áö¿¬ ÈÄ º¸½º ºñÈ°¼ºÈ­
+        // ï¿½à°£ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
         gameObject.SetActive(false);
     }
 
@@ -71,6 +71,6 @@ public class BossDie : MonoBehaviour
 
     public void DropItem()
     {
-        Debug.Log("º¸½º ¾ÆÀÌÅÛ µå¶ø");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½");
     }
 }

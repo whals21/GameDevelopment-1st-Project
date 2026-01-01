@@ -682,13 +682,13 @@ public class Projectile : MonoBehaviour
             if (Time.time - _soccerLastBounceTime < 0.1f) return;
         }
 
-        // 적 충돌
+        // 적 충돌 (Enemy 또는 Boss)
         if (((1 << collision.gameObject.layer) & _enemyLayer) != 0)
         {
-            Enemy enemy = collision.GetComponent<Enemy>();
-            if (enemy != null && enemy.CurrentHP > 0)
+            // IDamageable 인터페이스로 통합 처리 (Enemy, Boss 모두 지원)
+            if (collision.TryGetComponent<IDamageable>(out var damageable) && damageable.CurrentHP > 0)
             {
-                enemy.TakeDamage(_damage, _source);  // 통계 기록용 source 전달
+                damageable.TakeDamage(_damage, _source);  // 통계 기록용 source 전달
 
                 // [v2] 폭발 이펙트 생성 (RPG/Homing 타입)
                 if (_moveType == ProjectileMovementType.Homing)

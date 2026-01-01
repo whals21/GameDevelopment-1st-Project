@@ -140,14 +140,14 @@ MonoBehaviour:
   target: {fileID: 0}
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   rb: {fileID: 7084428395681503782}
   attackCooldown: 5
   attackComp: {fileID: 0}
   attackRay: {fileID: 0}
   attackRange: {fileID: 0}
   FirePool: {fileID: 0}
-  bossDie: {fileID: 0}
+  treasureChestPrefab: {fileID: 0}
   currentHP: 0
 --- !u!50 &7084428395681503782
 Rigidbody2D:
