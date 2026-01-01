@@ -50,9 +50,10 @@ public class BossController : MonoBehaviour,IDamageable
     public BoosAttackRay attackRay;
     public BossRange attackRange;
     public BossFirePool FirePool;                          // �Ѿ� Ǯ
-    public BossDie bossDie;
 
-
+    [Header("Treasure Chest")]
+    [Tooltip("보스 사망 시 생성할 보물상자 프리팹")]
+    [SerializeField] private GameObject treasureChestPrefab;
 
     [SerializeField] private float currentHP;
     public float CurrentHP => currentHP;
@@ -76,10 +77,7 @@ public class BossController : MonoBehaviour,IDamageable
             patterns.transform.SetParent(transform);
             PatternsRoot = patterns.transform;
         }
-        InitializeComponents();
         SetTargetAutomatically();
-        bossDie = GetComponent<BossDie>();
-
     }
 
     // ==========================
@@ -99,7 +97,6 @@ public class BossController : MonoBehaviour,IDamageable
         InitializePadPool();       // ���� Ǯ �ʱ�ȭ
         CreateAllPatternRoots();   // ���� ��Ʈ ����
         InitializeAllFirePools();           // FirePool �ʱ�ȭ
-        bossDie.Initialize();
         currentHP = myData.hp;
     }
 
@@ -337,27 +334,6 @@ public class BossController : MonoBehaviour,IDamageable
         return pattern;
     }
 
-    //���� ������ ����
-    private void InitializeComponents()
-    {
-        // BossDie ����
-        bossDie = GetComponent<BossDie>();
-        if (bossDie == null)
-        {
-            bossDie = gameObject.AddComponent<BossDie>();
-        }
-
-        // ���� ��Ʈ ����
-        PatternsRoot = transform.Find("Patterns");
-        if (PatternsRoot == null)
-        {
-            GameObject patterns = new GameObject("Patterns");
-            patterns.transform.SetParent(transform);
-            PatternsRoot = patterns.transform;
-        }
-    }
-
-
     public void SetTargetAutomatically()
     {
         if (target != null) return; // �̹� �����Ǿ� ������ ����
@@ -392,17 +368,39 @@ public class BossController : MonoBehaviour,IDamageable
                 text.Init(damage, isCritical, transform.position);
         }
 
-      
-
-        // ���� üũ
+        // 사망 체크
         if (currentHP <= 0f)
         {
-            if (bossDie != null)
-                bossDie.Die();
+            Die();
+        }
+    }
+
+    // 0101 조민희 추가
+    /// <summary>
+    /// 보스 사망 처리
+    /// </summary>
+    private void Die()
+    {
+        // 보물상자 스폰
+        SpawnTreasureChest();
+
+        // 보스 오브젝트 비활성화
+        gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// 보물상자 생성
+    /// </summary>
+    private void SpawnTreasureChest()
+    {
+        if (treasureChestPrefab == null)
+        {
+            return;
         }
 
-
-
+        // 보스 위치에 보물상자 생성
+        Vector3 spawnPosition = transform.position;
+        Instantiate(treasureChestPrefab, spawnPosition, Quaternion.identity);
     }
 }
 

@@ -225,7 +225,7 @@ MonoBehaviour:
   attackRay: {fileID: 3180662328617837772}
   attackRange: {fileID: 3064891439488725057}
   FirePool: {fileID: 2203871407228725533}
-  bossDie: {fileID: 3119733504128500574}
+  treasureChestPrefab: {fileID: 1516497633523899979, guid: 2f1b5e0fd5e97f244bd949267e91cf97, type: 3}
   currentHP: 0
 --- !u!114 &6618743957519961566
 MonoBehaviour:
