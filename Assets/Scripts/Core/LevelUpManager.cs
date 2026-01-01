@@ -137,24 +137,46 @@ public class LevelUpManager : MonoBehaviour
 
     public void SelectItem(ItemData selectedItem)
     {
-        // ��Ƽ�� -> ��ų �Ŵ���
+        int currentLevel = 1; // LV 표시
+
+        // 엑티브 선택시
         if (selectedItem.itemType == ItemType.Active)
         {
             if (SkillManager.Instance != null)
             {
-                // UpgradeOrEquipSkill 사용_1230 조민희수정
+                // 획득하거나 강화함
                 SkillManager.Instance.UpgradeOrEquipSkill(selectedItem.skillData);
+
+                // UI 갱신
+                currentLevel = SkillManager.Instance.GetSkillLevel(selectedItem.skillData);
+            }
+
+            // 윗줄에 알려줄 코드
+            if (SkillHUD.Instance != null)
+            {
+                SkillHUD.Instance.UpdateSkillUI(selectedItem.itemName, selectedItem.itemIcon, currentLevel, 0);
             }
         }
-        // �нú� -> �нú� �Ŵ���
+        // 패시브 선택시
         else
         {
             if (PassiveSkillManager.Instance != null)
             {
+                // 획득, 강화
                 PassiveSkillManager.Instance.TryAcquireSkill(selectedItem.passiveType);
+
+                // 갱신
+                currentLevel = PassiveSkillManager.Instance.GetSkillLevel(selectedItem.passiveType);
+            }
+
+            // 아랫줄에 알려줄 코드
+            if (SkillHUD.Instance != null)
+            {
+                SkillHUD.Instance.UpdateSkillUI(selectedItem.itemName, selectedItem.itemIcon, currentLevel, 1);
             }
         }
 
+        // 게임 재개
         levelUpPanel.SetActive(false);
         Time.timeScale = 1f;
     }

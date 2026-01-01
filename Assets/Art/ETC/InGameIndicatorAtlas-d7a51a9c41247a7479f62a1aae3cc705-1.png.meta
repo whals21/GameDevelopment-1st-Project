@@ -215,7 +215,7 @@ TextureImporter:
         width: 152
         height: 138
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -223,6 +223,27 @@ TextureImporter:
       bones: []
       spriteID: a0a7a251e9d00ea4c8de87e5f189003c
       internalID: 805938559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_5
+      rect:
+        serializedVersion: 2
+        x: 1559
+        y: 690
+        width: 129
+        height: 158
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f2d4fa783f8e32499b54774451ffa50
+      internalID: -29590686
       vertices: []
       indices: 
       edges: []
@@ -243,6 +264,7 @@ TextureImporter:
       InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_2: 1148415682
       InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_3: 2054163698
       InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_4: 805938559
+      InGameIndicatorAtlas-d7a51a9c41247a7479f62a1aae3cc705-1_5: -29590686
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
