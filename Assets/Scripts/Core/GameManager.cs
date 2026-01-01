@@ -220,6 +220,12 @@ public class GameManager : MonoBehaviour
         IsGameRunning = false;
         Time.timeScale = 0f;
 
+        // PlayerHUD에 승리 UI 표시 요청
+        if (PlayerHUD.Instance != null)
+        {
+            PlayerHUD.Instance.ShowVictoryUI();
+        }
+
         Debug.Log("[GameManager] 게임 승리!");
     }
     #endregion

@@ -89,29 +89,34 @@ public class RouletteManager : MonoBehaviour
         isSpinning = true;
         highlighter.SetActive(true);
 
-        int currentIndex = 0; // 현재 불 들어온 칸 번호
-        float elapsed = 0f; // 흐른 시간
-        float speed = 0.05f; // 불빛 이동 속도 (낮을수록 빠름)
+        int currentIndex = 0; // 현재 순서
+        int lastIndex = 0;    // 실제로 불이 켜진 마지막 칸
+
+        float elapsed = 0f;
+        float speed = 0.05f;
 
         while (elapsed < spinDuration)
         {
-            // 하이라이트를 현재 슬롯 위치로 이동
+            // 하이라이트 이동
             highlighter.transform.position = slots[currentIndex].transform.position;
+
+            // 방금 불 켜진 칸
+            lastIndex = currentIndex;
 
             // 다음 칸으로 번호 이동
             currentIndex++;
             if (currentIndex >= slots.Count) currentIndex = 0;
 
-            // 시간 계산 (점점 느려지게 하고 싶으면 speed를 늘리면 됨)
+            // 시간 계산
             elapsed += speed;
             yield return new WaitForSecondsRealtime(speed);
 
-            // 시간이 지날수록 조금씩 느려지게 연출 (선택사항)
+            // 점점 느려지게
             if (elapsed > spinDuration * 0.7f) speed += 0.01f;
         }
 
         // 결과창 띄우기
-        ShowResult(currentIndex);
+        ShowResult(lastIndex);
 
         isSpinning = false;
     }

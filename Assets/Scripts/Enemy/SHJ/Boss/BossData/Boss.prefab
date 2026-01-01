@@ -254,7 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bossController: {fileID: 5068693639065735349}
-  dieAnimationSpeed: 1
+  dieAnimationSpeed: 0.1
   fadeOutDelay: 0.3
 --- !u!114 &2073004488000325298
 MonoBehaviour:

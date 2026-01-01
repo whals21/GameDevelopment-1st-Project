@@ -16,6 +16,6 @@ MonoBehaviour:
   itemName: MagneticDart
   itemIcon: {fileID: 21300000, guid: cd28851ef10a3c74f9c48ba202686ad3, type: 3}
   itemDesc: 
-  skillData: {fileID: 11400000, guid: 20571e6f019a7284194cc28d92d639c8, type: 2}
+  skillData: {fileID: 11400000, guid: b184065ba4ffacf45adac9e891f1b773, type: 2}
   passiveType: 0
   passiveAmounts: []

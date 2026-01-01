@@ -74,20 +74,36 @@ public class LevelUpManager : MonoBehaviour
             if (SkillManager.Instance != null)
                 currentLv = SkillManager.Instance.GetSkillLevel(item.skillData);
 
+            // 이미 진화된 스킬이면 제외 (진화 스킬이 이미 장착되어 있는지 확인)
+            if (item.skillData.evoSkill != null && SkillManager.Instance != null)
+            {
+                int evoSkillLevel = SkillManager.Instance.GetSkillLevel(item.skillData.evoSkill);
+                if (evoSkillLevel > 0)
+                {
+                    continue; // 진화 스킬이 이미 장착되어 있으면 기본 스킬 제외
+                }
+            }
+
             // 레벨 체크
             int maxLevel = item.skillData.levels.Length;
 
-            // 이미 장착된 스킬이거나 레벨업 가능한 스킬만 추가
+            // 맥스 레벨을 넘으면 기본 스킬은 제외
+            if (currentLv > maxLevel)
+            {
+                continue; // 기본 스킬 선택지에서 제외
+            }
+
+            // 장착된 스킬이거나 레벨업 가능한 스킬만 추가
             bool isAlreadyEquipped = currentLv > 0;
             bool canLevelUp = currentLv < maxLevel;
 
             if (isAlreadyEquipped || canLevelUp)
             {
-                // 슬롯이 가득 찼고 미장착 스킬이면 제외
-                if (!isAlreadyEquipped && currentActiveSkillCount >= MAX_ACTIVE_SKILLS)
-                {
-                    continue;
-                }
+                validList.Add(item);
+            }
+            // 미장착 스킬은 슬롯이 남았을 때만 추가
+            else if (currentActiveSkillCount < MAX_ACTIVE_SKILLS)
+            {
                 validList.Add(item);
             }
 
@@ -98,8 +114,20 @@ public class LevelUpManager : MonoBehaviour
                 ItemData evoItemData = FindEvoItem(item.skillData.evoSkill);
                 if (evoItemData != null && !validList.Contains(evoItemData))
                 {
-                    validList.Add(evoItemData);
-                    Debug.Log($"[LevelUpManager] 진화 스킬 추가: {item.skillData.skillName} → {evoItemData.skillData.skillName}");
+                    // 진화 스킬도 맥스 레벨 체크
+                    int evoCurrentLv = 0;
+                    if (SkillManager.Instance != null && evoItemData.skillData != null)
+                    {
+                        evoCurrentLv = SkillManager.Instance.GetSkillLevel(evoItemData.skillData);
+                    }
+                    int evoMaxLevel = evoItemData.skillData != null ? evoItemData.skillData.levels.Length : 5;
+
+                    // 진화 스킬이 맥스 레벨을 넘지 않았으면 추가
+                    if (evoCurrentLv <= evoMaxLevel)
+                    {
+                        validList.Add(evoItemData);
+                        Debug.Log($"[LevelUpManager] 진화 스킬 추가: {item.skillData.skillName} → {evoItemData.skillData.skillName}");
+                    }
                 }
                 else if (evoItemData == null)
                 {
@@ -169,46 +197,31 @@ public class LevelUpManager : MonoBehaviour
     public void SelectItem(ItemData selectedItem)
     {
         // 액티브 스킬 -> 스킬 매니저
-        int currentLevel = 1; // LV 표시
-
-        // 엑티브 선택시
         if (selectedItem.itemType == ItemType.Active)
         {
             if (SkillManager.Instance != null)
             {
-                // 획득하거나 강화함
-                SkillManager.Instance.UpgradeOrEquipSkill(selectedItem.skillData);
-
-                // UI 갱신
-                currentLevel = SkillManager.Instance.GetSkillLevel(selectedItem.skillData);
-            }
-
-            // 윗줄에 알려줄 코드
-            if (SkillHUD.Instance != null)
-            {
-                SkillHUD.Instance.UpdateSkillUI(selectedItem.itemName, selectedItem.itemIcon, currentLevel, 0);
+                // 진화 스킬인지 확인 (evoItems에 있는지 체크)
+                if (IsEvolutionSkill(selectedItem))
+                {
+                    ExecuteEvolutionForItem(selectedItem);
+                }
+                else
+                {
+                    // 일반 스킬 레벨업 또는 장착
+                    SkillManager.Instance.UpgradeOrEquipSkill(selectedItem.skillData);
+                }
             }
         }
-        // 패시브 선택시
+        // 패시브 스킬 -> 패시브 매니저
         else
         {
             if (PassiveSkillManager.Instance != null)
             {
-                // 획득, 강화
                 PassiveSkillManager.Instance.TryAcquireSkill(selectedItem.passiveType);
-
-                // 갱신
-                currentLevel = PassiveSkillManager.Instance.GetSkillLevel(selectedItem.passiveType);
-            }
-
-            // 아랫줄에 알려줄 코드
-            if (SkillHUD.Instance != null)
-            {
-                SkillHUD.Instance.UpdateSkillUI(selectedItem.itemName, selectedItem.itemIcon, currentLevel, 1);
             }
         }
 
-        // 게임 재개
         levelUpPanel.SetActive(false);
         Time.timeScale = 1f;
     }

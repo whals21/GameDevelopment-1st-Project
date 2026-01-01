@@ -16,6 +16,6 @@ MonoBehaviour:
   itemName: ForceBarrier
   itemIcon: {fileID: 21300000, guid: af0a07fd780c17044929142fadeea1ca, type: 3}
   itemDesc: 
-  skillData: {fileID: 11400000, guid: 20571e6f019a7284194cc28d92d639c8, type: 2}
+  skillData: {fileID: 11400000, guid: c505e2c6e34d52a418b852d0ffbf2e68, type: 2}
   passiveType: 0
   passiveAmounts: []

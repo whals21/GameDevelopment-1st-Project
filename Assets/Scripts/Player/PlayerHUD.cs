@@ -20,32 +20,26 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private Transform playerTransform; // 이펙트 터질 위치
 
     [Header("레벨 관련")]
-    public TextMeshProUGUI levelText;       //12/29
+    [SerializeField] public TextMeshProUGUI levelText;  // BossManager에서 접근 필요
+
+    [Header("골드 관련")]
+    [SerializeField] private TextMeshProUGUI goldText;
+
+    [Header("플래시 이펙트")]
+    [SerializeField] private GameObject flashPanel;
 
     [Header("킬 카운트")]
-    public TextMeshProUGUI killCountText;   //12/29
+    [SerializeField] public TextMeshProUGUI killCountText;  // BossManager에서 접근 필요
 
     [Header("게임 상태 UI")]
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject victoryPanel;
-
-    [Header("이펙트 UI")]
-    [SerializeField] private UnityEngine.UI.Image flashPanel;
-
     private int kills = 0;
 
     void Awake()
     {
         Instance = this;
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            TogglePauseUI();
-        }
     }
 
     public void UpdateHp(float currentHp, float maxHp)
@@ -188,37 +182,30 @@ public class PlayerHUD : MonoBehaviour
     {
         TogglePauseUI();
     }
-    public void TriggerFlashEffect()
+
+    // 골드 업데이트 (DataManager에서 호출)
+    public void UpdateGold(int gold)
     {
-        // 판넬이 연결되어 있을 때만 작동
-        if (flashPanel != null)
+        if (goldText != null)
         {
-            // 코루틴 실행
-            StartCoroutine(FlashRoutine());
+            goldText.text = $"Gold: {gold}";
         }
     }
-    IEnumerator FlashRoutine()
+
+    // 폭탄 사용 시 플래시 이펙트 (FieldItem에서 호출)
+    public void TriggerFlashEffect()
     {
-        // 순식간에 하얗게 변함
-        flashPanel.color = new Color(1, 1, 1, 0.8f);
-
-        // 0.5초 동안 서서히 투명해짐
-        float duration = 0.5f; // 지속 시간
-        float time = 0;
-
-        while (time < duration)
+        if (flashPanel != null)
         {
-            time += Time.deltaTime;
-
-            // 시간이 지날수록 알파값(투명도)을 0.8 -> 0으로 줄임
-            float alpha = Mathf.Lerp(0.8f, 0f, time / duration);
-            flashPanel.color = new Color(1, 1, 1, alpha);
-
-            yield return null;
+            StartCoroutine(FlashEffectRoutine());
         }
+    }
 
-        // 확실하게 투명하게 만들기
-        flashPanel.color = new Color(1, 1, 1, 0f);
+    IEnumerator FlashEffectRoutine()
+    {
+        flashPanel.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        flashPanel.SetActive(false);
     }
 
 }

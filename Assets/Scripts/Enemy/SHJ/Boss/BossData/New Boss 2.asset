@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: New Boss 2
   m_EditorClassIdentifier: 
   bossPrefab: {fileID: 8748780080106262039, guid: 142288c6a20a8264f9cc7bb1791ceedd, type: 3}
-  hp: 5
+  hp: 1500
   move: 1
   detectionRange: 10
-  appearTime: 15
+  appearTime: 360
   killCountToSpawn: 0
   playerLV: 10

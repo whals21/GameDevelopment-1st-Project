@@ -173,11 +173,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3ba00eff910d134884478d467553b99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyData: {fileID: 11400000, guid: a4e2a2613c00f1f448d7c94e16724578, type: 2}
+  enemyData: {fileID: 11400000, guid: 5f5ecb3b1f76d92489921c7b11288a09, type: 2}
   currentHP: 0
   moveSpeed: 0
   target: {fileID: 0}
+  AttackDelay: 0
+  AttackRange: 0
+  stopDistance: 3
   point: {fileID: 6779023673177729199}
+  tier: 0
 --- !u!114 &3679355159310101951
 MonoBehaviour:
   m_ObjectHideFlags: 0
