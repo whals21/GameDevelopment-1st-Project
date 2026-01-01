@@ -384,8 +384,11 @@ public class BossController : MonoBehaviour,IDamageable
         // 보물상자 스폰
         SpawnTreasureChest();
 
-        // 보스 오브젝트 비활성화
-        gameObject.SetActive(false);
+        // 여기서 끄지 마라
+        // gameObject.SetActive(false);
+
+        // BossDie에게 위임
+        GetComponent<BossDie>()?.Die();
     }
 
     /// <summary>
