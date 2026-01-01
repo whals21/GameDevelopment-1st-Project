@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class LevelUpManager : MonoBehaviour
 {
@@ -78,12 +77,11 @@ public class LevelUpManager : MonoBehaviour
             // 레벨 체크
             int maxLevel = item.skillData.levels.Length;
 
-            // 이미 장착된 스킬이거나 레벨업/진화 가능한 스킬만 추가
+            // 이미 장착된 스킬이거나 레벨업 가능한 스킬만 추가
             bool isAlreadyEquipped = currentLv > 0;
             bool canLevelUp = currentLv < maxLevel;
-            bool canEvolve = EvolutionChecker.CanEvolve(item.skillData, currentLv);
 
-            if (isAlreadyEquipped || canLevelUp || canEvolve)
+            if (isAlreadyEquipped || canLevelUp)
             {
                 // 슬롯이 가득 찼고 미장착 스킬이면 제외
                 if (!isAlreadyEquipped && currentActiveSkillCount >= MAX_ACTIVE_SKILLS)
@@ -91,6 +89,22 @@ public class LevelUpManager : MonoBehaviour
                     continue;
                 }
                 validList.Add(item);
+            }
+
+            // 진화 조건 충족 시 진화 스킬 추가
+            if (EvolutionChecker.CanEvolve(item.skillData, currentLv))
+            {
+                // evoItems에서 진화 스킬 ItemData 찾기
+                ItemData evoItemData = FindEvoItem(item.skillData.evoSkill);
+                if (evoItemData != null && !validList.Contains(evoItemData))
+                {
+                    validList.Add(evoItemData);
+                    Debug.Log($"[LevelUpManager] 진화 스킬 추가: {item.skillData.skillName} → {evoItemData.skillData.skillName}");
+                }
+                else if (evoItemData == null)
+                {
+                    Debug.LogWarning($"[LevelUpManager] 진화 스킬 ItemData를 찾을 수 없음: {item.skillData.evoSkill?.skillName}");
+                }
             }
         }
 
@@ -135,18 +149,43 @@ public class LevelUpManager : MonoBehaviour
         return validList;
     }
 
+    /// <summary>
+    /// evoItems 배열에서 진화 스킬에 해당하는 ItemData를 찾음
+    /// </summary>
+    private ItemData FindEvoItem(SkillData evoSkillData)
+    {
+        if (evoSkillData == null || evoItems == null) return null;
+
+        foreach (var evoItem in evoItems)
+        {
+            if (evoItem != null && evoItem.skillData == evoSkillData)
+            {
+                return evoItem;
+            }
+        }
+        return null;
+    }
+
     public void SelectItem(ItemData selectedItem)
     {
-        // ��Ƽ�� -> ��ų �Ŵ���
+        // 액티브 스킬 -> 스킬 매니저
         if (selectedItem.itemType == ItemType.Active)
         {
             if (SkillManager.Instance != null)
             {
-                // UpgradeOrEquipSkill 사용_1230 조민희수정
-                SkillManager.Instance.UpgradeOrEquipSkill(selectedItem.skillData);
+                // 진화 스킬인지 확인 (evoItems에 있는지 체크)
+                if (IsEvolutionSkill(selectedItem))
+                {
+                    ExecuteEvolutionForItem(selectedItem);
+                }
+                else
+                {
+                    // 일반 스킬 레벨업 또는 장착
+                    SkillManager.Instance.UpgradeOrEquipSkill(selectedItem.skillData);
+                }
             }
         }
-        // �нú� -> �нú� �Ŵ���
+        // 패시브 스킬 -> 패시브 매니저
         else
         {
             if (PassiveSkillManager.Instance != null)
@@ -160,35 +199,73 @@ public class LevelUpManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 스킬 진화 처리
+    /// 해당 아이템이 진화 스킬인지 확인
     /// </summary>
-    private void EvolveSkill(SkillData baseSkill)
+    private bool IsEvolutionSkill(ItemData item)
     {
-        if (baseSkill == null || baseSkill.evoSkill == null) return;
-
-        SkillData evoSkill = baseSkill.evoSkill;
-
-        // 기존 스킬 제거하고 진화 스킬로 교체
-        SkillManager.Instance.ReplaceSkill(baseSkill, evoSkill, 1);
-
-        Debug.Log($"[LevelUpManager] {baseSkill.skillName} → {evoSkill.skillName} 진화 완료!");
+        if (evoItems == null) return false;
+        foreach (var evoItem in evoItems)
+        {
+            if (evoItem == item) return true;
+        }
+        return false;
     }
 
-    public ItemData GetItemDataBySkillName(string searchName)
+    /// <summary>
+    /// 진화 스킬 선택 시 기존 스킬을 찾아 진화 실행
+    /// </summary>
+    private void ExecuteEvolutionForItem(ItemData evoItem)
     {
-        // 액티브 목록 검색
+        if (SkillManager.Instance == null || evoItem.skillData == null) return;
+
+        // 모든 장착 스킬을 순회하며 이 진화 스킬로 진화 가능한 스킬 찾기
+        var allSkills = SkillManager.Instance.GetAllSkills();
+        foreach (var skill in allSkills)
+        {
+            if (skill != null && skill.Data != null &&
+                skill.Data.evoSkill == evoItem.skillData &&
+                EvolutionChecker.CanEvolve(skill.Data, skill.CurrentLevel))
+            {
+                EvolutionChecker.ExecuteEvolution(skill);
+                Debug.Log($"[LevelUpManager] {skill.Data.skillName} → {evoItem.skillData.skillName} 진화 완료!");
+                return;
+            }
+        }
+
+        Debug.LogWarning($"[LevelUpManager] 진화 가능한 기존 스킬을 찾을 수 없습니다: {evoItem.skillData.skillName}");
+    }
+
+    /// <summary>
+    /// 스킬 이름으로 ItemData를 찾음 (StatisticsUIPanel용)
+    /// </summary>
+    public ItemData GetItemDataBySkillName(string skillName)
+    {
+        if (string.IsNullOrEmpty(skillName)) return null;
+
+        // activeItems 검색
         if (activeItems != null)
         {
             foreach (var item in activeItems)
             {
-                // 이름이 영어 이름과 같은지 확인
-                if (item.skillData != null && item.skillData.skillName == searchName)
+                if (item != null && item.skillData != null && item.skillData.skillName == skillName)
                 {
-                    return item; // 데이터 반환
+                    return item;
                 }
             }
         }
 
-        return null; // 못 찾음
+        // evoItems 검색
+        if (evoItems != null)
+        {
+            foreach (var item in evoItems)
+            {
+                if (item != null && item.skillData != null && item.skillData.skillName == skillName)
+                {
+                    return item;
+                }
+            }
+        }
+
+        return null;
     }
 }

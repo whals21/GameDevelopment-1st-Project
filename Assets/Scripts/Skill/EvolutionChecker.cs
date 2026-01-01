@@ -66,19 +66,40 @@ public static class EvolutionChecker
     /// <returns>진화 가능하면 true</returns>
     public static bool CanEvolve(SkillData skillData, int currentLevel)
     {
-        if (skillData == null) return false;
-        if (skillData.evoSkill == null) return false;
+        if (skillData == null)
+        {
+            Debug.LogWarning("[EvolutionChecker] skillData가 null입니다.");
+            return false;
+        }
+        if (skillData.evoSkill == null)
+        {
+            // 진화 설정 없는 스킬 (디버깅 노이즈 방지를 위해 로그 생략)
+            return false;
+        }
 
         // 1. 레벨 조건 확인
         int requiredLevel = GetRequiredLevel(skillData);
-        if (currentLevel < requiredLevel) return false;
+        if (currentLevel < requiredLevel)
+        {
+            Debug.Log($"[EvolutionChecker] {skillData.skillName}: 레벨 부족 (현재: {currentLevel}, 필요: {requiredLevel})");
+            return false;
+        }
 
         // 2. 패시브 조건 확인 (필요시)
-        if (!HasRequiredPassives(skillData)) return false;
+        if (!HasRequiredPassives(skillData))
+        {
+            Debug.Log($"[EvolutionChecker] {skillData.skillName}: 패시브 조건 불충족");
+            return false;
+        }
 
         // 3. 추가 조건 확인 (evoRequirements 배열 기반)
-        if (!MeetsCustomRequirements(skillData)) return false;
+        if (!MeetsCustomRequirements(skillData))
+        {
+            Debug.Log($"[EvolutionChecker] {skillData.skillName}: 커스텀 조건 불충족");
+            return false;
+        }
 
+        Debug.Log($"[EvolutionChecker] {skillData.skillName}: 진화 가능! → {skillData.evoSkill.skillName}");
         return true;
     }
 
@@ -154,11 +175,18 @@ public static class EvolutionChecker
 
             foreach (var passiveType in skillData.evoRequiredPassives)
             {
-                if (!PassiveSkillManager.Instance.HasSkill(passiveType))
+                bool hasSkill = PassiveSkillManager.Instance.HasSkill(passiveType);
+                Debug.Log($"[EvolutionChecker] {skillData.skillName}: 패시브 체크 {passiveType} = {hasSkill}");
+
+                if (!hasSkill)
                 {
                     return false;
                 }
             }
+        }
+        else
+        {
+            Debug.Log($"[EvolutionChecker] {skillData.skillName}: 패시브 조건 없음");
         }
 
         return true; // 패시브 조건 없음 또는 모두 충족
