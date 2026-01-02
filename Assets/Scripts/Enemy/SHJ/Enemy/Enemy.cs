@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static ActtackManager;
+
 
 //IDamageable //12/31추가
 public class Enemy : MonoBehaviour, IDamageable
@@ -55,13 +55,13 @@ public class Enemy : MonoBehaviour, IDamageable
 
     GameManager gameManager;
     DataManager dataManager;
+    private Animator animator;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
-        anim = GetComponentInChildren<Animator>();
         col = GetComponent<Collider2D>();
-
+        animator = GetComponentInChildren<Animator>();
         // enemyData가 할당되어 있는 경우에만 초기화
         if (enemyData != null)
         {
@@ -179,10 +179,13 @@ public class Enemy : MonoBehaviour, IDamageable
             Die();
         }
     }
-
+    private bool isDead = false; // 사망 플래그
     // 사망 처리
     private void Die()
     {
+        if (isDead) return;
+        isDead = true;
+
         PlayerHUD.Instance?.AddKill();
 
         if (PlayerHUD.Instance != null)
@@ -190,7 +193,12 @@ public class Enemy : MonoBehaviour, IDamageable
             PlayerHUD.Instance.AddKill();
         }
 
-        // EnemySpawner에 알림
+        if (anim != null)
+        {
+            anim.SetTrigger("isDie");
+        }
+
+            // EnemySpawner에 알림
         if (GameManager.Instance != null)
         {
             int tier = GameManager.Instance.currentTierIndex;

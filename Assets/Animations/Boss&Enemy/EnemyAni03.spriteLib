@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5e6fedc2472449cead18ef23b5cb30d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Library:
+  - m_Name: Idle
+    m_Hash: 1008081451
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: Boss_Idle01-1
+      m_Hash: 479182378
+      m_Sprite: {fileID: 1881229186, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1881229186, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+    - m_Name: Boss_Idle01-2
+      m_Hash: 92729232
+      m_Sprite: {fileID: 1321065538, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1321065538, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+    - m_Name: Boss_Idle01-3
+      m_Hash: 847372038
+      m_Sprite: {fileID: -1573115383, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -1573115383, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+    - m_Name: Boss_Idle01-4
+      m_Hash: 753224357
+      m_Sprite: {fileID: 381297714, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 381297714, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+    - m_Name: Boss_Idle01-5
+      m_Hash: 467827251
+      m_Sprite: {fileID: 1881229186, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1881229186, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 5
+  - m_Name: Die
+    m_Hash: 20298039
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: Boss_Die01-1
+      m_Hash: 384595721
+      m_Sprite: {fileID: 1881229186, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1881229186, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+    - m_Name: Boss_Die01-2
+      m_Hash: 266675891
+      m_Sprite: {fileID: 1321065538, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1321065538, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+    - m_Name: Boss_Die01-3
+      m_Hash: 954340901
+      m_Sprite: {fileID: -1573115383, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -1573115383, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+    - m_Name: Boss_Die01-4
+      m_Hash: 646349702
+      m_Sprite: {fileID: 1781895108, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1781895108, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+    - m_Name: Boss_Die01-5
+      m_Hash: 293712656
+      m_Sprite: {fileID: -878359658, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -878359658, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+    - m_Name: Boss_Die01-6
+      m_Hash: 143188650
+      m_Sprite: {fileID: 1988933841, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1988933841, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+    - m_Name: Boss_Die01-7
+      m_Hash: 1066390076
+      m_Sprite: {fileID: -47751810, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -47751810, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+    - m_Name: Boss_Die01-8
+      m_Hash: 791728045
+      m_Sprite: {fileID: 1159979070, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1159979070, guid: 3cdf2740b4aa2a845b6a8f583bd1ebbc, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 8
+  m_PrimaryLibraryGUID: 
+  m_ModificationHash: 639028849388421004
+  m_Version: 1

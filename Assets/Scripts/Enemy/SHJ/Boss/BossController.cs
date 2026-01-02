@@ -5,9 +5,10 @@ using static ActtackManager;
 
 // ==========================
 // BossController
-// - ���� ���� ����
-// - ���Ϻ� �Ѿ� Ǯ ����
-// - ���� Ǯ ����
+// 개별적인 보스의 뇌역할
+// 나는 이런 기능을 받아서 개별적으로 행동을 한다
+// ex)BossManager의 능력치 정보를 가져다옴
+// ex)enum의 종류에 따라 어떤 방식으로 공격패턴을 할지 가져옴
 // ==========================
 public class BossController : MonoBehaviour,IDamageable
 {

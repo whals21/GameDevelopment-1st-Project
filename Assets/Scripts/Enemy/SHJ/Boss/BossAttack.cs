@@ -8,9 +8,9 @@ using UnityEngine;
 // ----------------------
 public enum BossAttackType
 {
-    Pattern001,
-    Pattern002,
-    Pattern003
+    Pattern001Ray,
+    Pattern001Range,
+    Pattern001None
 }
 
 // ----------------------
@@ -86,9 +86,9 @@ public static class BossAttackPatternFactory
     private static Dictionary<BossAttackType, Func<IBossAttack>> table
         = new Dictionary<BossAttackType, Func<IBossAttack>>()
     {
-        { BossAttackType.Pattern001, () => new BossAttackPattern001()} ,  // 예시 1개 등록 
-        { BossAttackType.Pattern002, () => new BossAttackPattern002()} ,
-        { BossAttackType.Pattern003, () => new BossAttackPattern003()} ,
+        { BossAttackType.Pattern001Ray, () => new BossAttackPattern001()} ,  // 예시 1개 등록 
+        { BossAttackType.Pattern001Range, () => new BossAttackPattern002()} ,
+        { BossAttackType.Pattern001None, () => new BossAttackPattern003()} ,
     };
 
     public static IBossAttack Create(BossAttackType type)

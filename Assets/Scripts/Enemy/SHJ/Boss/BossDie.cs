@@ -67,7 +67,7 @@ public class BossDie : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-   
+
 
     public void DropItem()
     {

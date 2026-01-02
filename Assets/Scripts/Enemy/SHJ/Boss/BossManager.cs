@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//보스메니저, 보스 등장타이밍, 보스의 능력치 역할
+//메인 시스템이 보스들한테 능력치 및 등장할 타이밍(시간,킬수,LV) 관리
 public class BossManager : MonoBehaviour
 {
     [Header("보스 데이터 배열")]
