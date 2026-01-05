@@ -16,6 +16,6 @@ MonoBehaviour:
   hp: 1500
   move: 1
   detectionRange: 10
-  appearTime: 360
+  appearTime: 60
   killCountToSpawn: 0
   playerLV: 10
